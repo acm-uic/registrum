@@ -1,4 +1,4 @@
-# {{TEAMNAME}} Final Project
+# Dream Team Final Project
 
 TODO: Fill out this file with the following information
 
