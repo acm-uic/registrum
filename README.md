@@ -58,3 +58,7 @@ functionality you will be adding.
 
 By the time you get to the end of the final project, this section should have a full set of
 instructions for how to spin up your app.
+
+# Sources
+Client Skeleton cloned from https://github.com/alexchomiak/goto-react-app-2.0 
+Server Skeleton cloned from https://github.com/microsoft/TypeScript-Node-Starter
