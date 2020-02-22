@@ -1,64 +1,72 @@
 # Dream Team Final Project
 
-TODO: Fill out this file with the following information
-
 ## Description
 
-TODO: An English language description of what your application does, intended for a developer
-audience. Pretend this is the real `README.md` for your app that will show up on GitHub: what do you
-want people to know about it? What does it do? Why should they use it/check it out/hack on it? This
-should be approximately two paragraphs. Take a look at the description of your favorite software
-repository for inspiration.
+The application will allow users to subscribe and receive notifications from classes at UIC based on when the class opens/closes. It is very similar in function to the Coursicle/Seatcheck applications that students have used in the past to keep an eye on classes they want to get into.
 
-## Authors
+-   Push notifications from PWA (Android for now)
+-   Application will be written in typescript
 
-TODO: List group members, each group member must EITHER be marked "web programming novice" OR list a
-specialization - you don't need to implement it all yourself, but you do need to be in charge of
-getting it described and added. Your expertise self-evaluation is completely on the honor system.
+## Authors, Specialization
 
-For instance:
+| Member           | Web dev level                   | Specialization  |
+| ---------------- | ------------------------------- | --------------- |
+| Arshad Narmawala | Done a couple projects in React | Mobile, Devops  |
+| Alex Chomiak     | Fullstack engineer at a startup | Devops, Cloud   |
+| Jigar Patel      | Intern at Amazon                | Frontend, Cloud |
+| Clark Chen       | Novice now, expert next week    | Mobile,Security |
+| Bharat Middha    | Intern at Microsoft             | Devops, Cloud   |
 
-| Member           | Web dev level                   | Specialization |
-| ---------------- | ------------------------------- | -------------- |
-| Arshad Narmawala | Done a couple projects in React | Mobile         |
-| Alex Chomiak     |                                 |                |
-| Jigar Patel      |                                 |                |
-| Clark Chen       |                                 |                |
-| Bharat Middha    |                                 |                |
+## Questions for checkpoint 1
+
+Test Cases are written in tests file within api
+Test Cases are as follows for now:
+
+-   Authentication Tests
+    -   Logs user incorrectly using email, password
+    -   Logs user out correctly
+    -   Cannot log in with incorrect email
+    -   Cannot login with an incorrect password
+    -   Error with status code 401 when attempting to log out when not logged in
+    -   Can't log in when already logged in, error thrown
+-   Class Tests
+    -   Correctly add class to user watch list
+    -   Correctly remove class from user watch list
+    -   Correctly retrieves list of class subjects from Banner DB
+    -   Correctly retrieves classes for given subject
+
+Security Evaluation
+
+-   What things would an attacker potentially want to do using our app that we wouldn’t want them to do?
+    -   Making too many API requests
+        -   Possibly implement API rate limiting
+        -   API Response Caching
+    -   XSS Attacks through username & password fields
+    -   Session hijacking
+    -   Unauthorized page access
+    -   CSRF - Cross-Site Request Forgery
+    -   Attacks to query class microservice (Manipulating API to instruct microservices to spam requests to Banner)
+-   What best practices will we follow security wise for this assignment?
+    -   How will we accomplish them?
+        -   Implement security rules on db side to prevent unauthorized http calls
+        -   Add user authentication
+        -   Use a front end framework that escapes characters for XSS
 
 ## Deliverables for checkpoint 2
 
-Outline in English what the deliverables will be for checkpoint 2. Provide a concise list that is
-amenable to being translated into specific tests. Pro-tip: if you write that concise list here, you
-should be able to easily translate it into a collection of test suites.
-
-For each specialization, you must list specific checkpoints that are relevant to that particular specialization.
+We will have basic CRUD functionality ready by allowing for user login/registration. And some form of user profile manipulation
 
 ## Deliverables for checkpoint 4
 
-Outline in English what the deliverables will be for checkpoint 4. Reminder that this is not _due_
-until checkpoint 2, but failing to plan is planning to fail.
-
-For each specialization, you must list specific checkpoints that are relevant to that particular specialization.
+Basic microservice functionality, client completion, completed API.
 
 ## Deliverables for final project
 
-Outline in English what the deliverables will be for the final checkpoint. This will should be
-similar to the **Description** above, but written out as an explicit checklist rather than a human
-readable description. Reminder that this is not _due_ until checkpoint 4, but failing to plan is
-planning to fail.
-
-For each specialization, you must list specific checkpoints that are relevant to that particular specialization.
-
-## Specialization deliverables
-
-For each student/team adding a specialization, name that specialization and describe what
-functionality you will be adding.
+The full application will be completed with an API, Microservice and React/Typescript client
 
 # Installation
 
-By the time you get to the end of the final project, this section should have a full set of
-instructions for how to spin up your app.
+TODO: Write Instructions
 
 # Sources
 
