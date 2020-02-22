@@ -2,7 +2,6 @@
 
 TODO: Fill out this file with the following information
 
-
 ## Description
 
 TODO: An English language description of what your application does, intended for a developer
@@ -19,11 +18,13 @@ getting it described and added. Your expertise self-evaluation is completely on 
 
 For instance:
 
-| Member | Web dev level | Specialization |
-| --- | --- | --- |
-| Ned the Novice | web programming novice | |
-| Isaac the Intermediate | Took IT 202, built something in php once | I want to learn about website performance so I will be adding performance tests and keeping a performance log. |
-| Edith the Expert | Interned as a web dev for the last 2 semesters | I will containerize the app and configure it to run within Kubernetes, integrate it with a CI/CD platform so that the deployed version is updated once all tests pass, and I will run a load test with several synthetic long-session users to demonstrate rolling updates to the code. |
+| Member           | Web dev level                   | Specialization |
+| ---------------- | ------------------------------- | -------------- |
+| Arshad Narmawala | Done a couple projects in React | Mobile         |
+| Alex Chomiak     |                                 |                |
+| Jigar Patel      |                                 |                |
+| Clark Chen       |                                 |                |
+| Bharat Middha    |                                 |                |
 
 ## Deliverables for checkpoint 2
 
@@ -35,7 +36,7 @@ For each specialization, you must list specific checkpoints that are relevant to
 
 ## Deliverables for checkpoint 4
 
-Outline in English what the deliverables will be for checkpoint 4. Reminder that this is not *due*
+Outline in English what the deliverables will be for checkpoint 4. Reminder that this is not _due_
 until checkpoint 2, but failing to plan is planning to fail.
 
 For each specialization, you must list specific checkpoints that are relevant to that particular specialization.
@@ -44,7 +45,7 @@ For each specialization, you must list specific checkpoints that are relevant to
 
 Outline in English what the deliverables will be for the final checkpoint. This will should be
 similar to the **Description** above, but written out as an explicit checklist rather than a human
-readable description. Reminder that this is not *due* until checkpoint 4, but failing to plan is
+readable description. Reminder that this is not _due_ until checkpoint 4, but failing to plan is
 planning to fail.
 
 For each specialization, you must list specific checkpoints that are relevant to that particular specialization.
@@ -58,3 +59,8 @@ functionality you will be adding.
 
 By the time you get to the end of the final project, this section should have a full set of
 instructions for how to spin up your app.
+
+# Sources
+
+Client Skeleton cloned from https://github.com/alexchomiak/goto-react-app-2.0
+Server Skeleton cloned from https://github.com/microsoft/TypeScript-Node-Starter

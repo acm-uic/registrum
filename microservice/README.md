@@ -1,0 +1,1 @@
+Stripped Down Typescript Node Starter Project
