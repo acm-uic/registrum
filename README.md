@@ -15,7 +15,7 @@ The application will allow users to subscribe and receive notifications from cla
 | Alex Chomiak     | Fullstack engineer at a startup | Devops, Cloud   |
 | Jigar Patel      | Intern at Amazon                | Frontend, Cloud |
 | Clark Chen       | Novice now, expert next week    | Mobile,Security |
-| Bharat Middha    | Intern at Microsoft             | Devops, Cloud   |
+| Bharat Middha    | Done a couple projects in React | Devops, Cloud   |
 
 ## Questions for checkpoint 1
 
