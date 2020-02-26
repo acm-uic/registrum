@@ -21,8 +21,17 @@ module.exports = {
             use: ['style-loader', 'css-loader']
         },
         {
-            test: /\.scss$/,
-            use: ['style-loader', 'css-loader', { loader: 'sass-loader', options: { loadPaths: ['src/styles/*'] } }]
+            test: /\.s[ac]ss$/i,
+            use: [
+                'style-loader',
+                'css-loader',
+                {
+                    loader: 'sass-loader',
+                    options: {
+                        sassOptions: { includePaths: ['src/styles/*'] }
+                    }
+                }
+            ]
         },
         {
             test: /\.(gif|png|jpe?g|svg)$/i,
