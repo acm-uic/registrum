@@ -13,7 +13,7 @@ The application will allow users to subscribe and receive notifications from cla
 | ---------------- | ------------------------------- | --------------- |
 | Arshad Narmawala | Done a couple projects in React | Mobile, Devops  |
 | Alex Chomiak     | Fullstack engineer at a startup | Devops, Cloud   |
-| Jigar Patel      | Intern at Amazon                | Frontend, Cloud |
+| Jigar Patel      | Done full stack projects w/ node & vue                 | Frontend, Cloud |
 | Clark Chen       | Novice now, expert next week    | Mobile,Security |
 | Bharat Middha    | Done a couple projects in React | Devops, Cloud   |
 
