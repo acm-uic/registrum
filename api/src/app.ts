@@ -13,6 +13,17 @@ require("dotenv").config()
 app.set("port", process.env.PORT)
 console.log(process.env.PORT)
 
+const cors = require("cors")({ origin: true });
+app.use(cors);
+app.options("*", cors);
+
+
+// * Express configuration
+app.use(compression())
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }))
+
+
 // Connect to MongoDB
 const mongoUrl = process.env.MONGODB_URI || "mongodb://localhost/cs494Final"
 mongoose.Promise = globalThis.Promise
@@ -21,16 +32,14 @@ mongoose
     .connect(mongoUrl, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true })
     .then(() => {
         /** ready to use. The `mongoose.connect()` promise resolves to undefined. */
+        console.log("connected to mongoDB")
     })
     .catch(err => {
         console.log("MongoDB connection error. Please make sure MongoDB is running. " + err)
         process.exit()
-    })
+})
 
-// * Express configuration
-app.use(compression())
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true }))
+
 
 // * Initialize Redis Client and Redis Session Store
 const redis = require("redis")
@@ -47,10 +56,13 @@ app.use(
     })
 )
 
+
 // * Setup express-flash for route messaging
 app.use(flash())
 
 // * Bind Routes to app
 require("./routes")(app)
+
+// app.use('/', expressRoutes)
 
 export default app
