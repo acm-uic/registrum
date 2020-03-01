@@ -51,15 +51,24 @@ router.post("/add", async (req: Request, res: Response) => {
     //------------------------------------------------------
 })
 
-router.post("/remove", (req: Request, res: Response) => {
+router.post("/remove", async (req: Request, res: Response) => {
     // TODO: Write route that removes class from users list of watched classes
 
     const userEmail = req.body.email
     const classToRemove = req.body.class;
     console.log(classToRemove);
 
-    const document = User.find({email: userEmail });
-    console.log(document);
+
+    try {
+        
+        const document = await User.find({email: userEmail }).lean();
+        const parsedDoc = JSON.parse(document)
+        console.log("document: " + parsedDoc );
+
+
+    } catch (error) {
+        console.log(error)
+    }
 
     //------------------------------------------------------
     // { thoughts }
@@ -68,7 +77,7 @@ router.post("/remove", (req: Request, res: Response) => {
     //delete that class
     //------------------------------------------------------
 
-    res.status(501).send("TODO")
+    res.status(200).send("TODO")
 })
 
 router.get("/subjects", (req: Request, res: Response) => {
