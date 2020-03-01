@@ -60,12 +60,15 @@ router.post("/remove", async (req: Request, res: Response) => {
 
 
     try {
-        
-        const document = await User.find({email: userEmail }).lean();
-        const parsedDoc = JSON.parse(document)
-        console.log("document: " + parsedDoc );
-
-
+        await User.find({email: userEmail }).lean().then(
+            data => {
+                const parsedDoc = JSON.stringify(data)
+                console.log("data: " + parsedDoc );
+                res.status(200).json(data)
+            }
+        ).catch(
+            error => res.json({ error: error.message })
+        );
     } catch (error) {
         console.log(error)
     }
@@ -77,7 +80,7 @@ router.post("/remove", async (req: Request, res: Response) => {
     //delete that class
     //------------------------------------------------------
 
-    res.status(200).send("TODO")
+    //res.status(200).send("TODO")
 })
 
 router.get("/subjects", (req: Request, res: Response) => {
