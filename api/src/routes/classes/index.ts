@@ -1,8 +1,9 @@
 import express, { Router, Request, Response } from "express"
 import User from "../models/User"
 
-const router = express.Router()
 // * All routes under /classes/*
+const router = express.Router()
+
 
 router.get("/userlist", (req: Request, res: Response) => {
     // TODO: Write route that returns list of users watched classes
@@ -12,41 +13,60 @@ router.get("/userlist", (req: Request, res: Response) => {
 router.post("/add", async (req: Request, res: Response) => {
     // TODO: Write route that adds class to users list of watched classes
 
+    //* get user's email before making post request
+    const userEmail = req.body.email;
+    const classes = req.body.classes;
 
+    //* classes are sent in seperated by commas --> need to separate them by commas into an array
+    const classesSplit = classes.split(',');
+
+    //------------------------------------------------------
     try {
     
         const newEntry = new User({
-            email: "jigar.moyo@gmail.com",
+            email: userEmail,
             password: "test1234",
-            listOfClasses: ["CS 494", "CS 401", "CS 341"]
+            listOfClasses: classesSplit
         });
 
         await newEntry.save();
 
     } catch (error) {
-        console.log("error adding entry");
+        console.log("error adding entry: " +  error);
     }
+    //------------------------------------------------------
 
-    res.status(200).send("Testing")
+    res.status(200).send("Testing add functionality")
 
-    // { thoughts }
+        // { thoughts }
 
-    //validate subject and course 
-    //should we check if course is actually offered?
+        //validate subject and course 
+        //should we check if course is actually offered?
 
-    //get authinticated user 
-    //nest the class under user's collection
-    //check if user has a collection --> else make a new collection    
+        //check if user authinticated or not
+
+        //get authinticated user 
+        //nest the class under user's collection
+        //check if user has a collection --> else make a new collection 
+    //------------------------------------------------------
 })
 
 router.post("/remove", (req: Request, res: Response) => {
     // TODO: Write route that removes class from users list of watched classes
 
-    // { thoughts }
+    const userEmail = req.body.email
+    const classToRemove = req.body.class;
+    console.log(classToRemove);
 
+    const document = User.find({email: userEmail });
+    console.log(document);
+
+    //------------------------------------------------------
+    // { thoughts }
     //get authinticated user 
     //get the nested the class under user's collection    
     //delete that class
+    //------------------------------------------------------
 
     res.status(501).send("TODO")
 })
