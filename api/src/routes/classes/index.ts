@@ -98,9 +98,6 @@ router.post("/remove", async (req: Request, res: Response) => {
     //TODO: add user authintication
 
 
-    //! FIXME: fix bug --> doen't work when listOfClasses array has leading/tailing spaces in string
-    //TODO: possible bug solution --> remove leading/tailing spaces when adding classes after delimiting by commas
-
     const userEmail = req.body.email
     const classToRemove = req.body.class;
     console.log(classToRemove);
@@ -134,7 +131,6 @@ router.post("/remove", async (req: Request, res: Response) => {
     //delete that class
     //------------------------------------------------------
 
-    //res.status(200).send("TODO")
 })
 
 router.get("/subjects", async (req: Request, res: Response) => {
