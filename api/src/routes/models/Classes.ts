@@ -1,6 +1,4 @@
-import mongoose from 'mongoose';
-
-const { Schema, model } = mongoose;
+import { Document, Schema, model } from 'mongoose';
 
 // * typescript interface for class info
 export interface Classes extends Document {
@@ -17,4 +15,4 @@ const ClassSchema: Schema = new Schema({
 });
 
 // Export the model
-export default mongoose.model<Classes>('Classes', ClassSchema);
+export default model<Classes>('Classes', ClassSchema);
