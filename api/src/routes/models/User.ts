@@ -1,9 +1,9 @@
-import { Document, Schema, model } from 'mongoose';
+import { Document, Schema, model } from 'mongoose'
 
 // * typescript interface for user info
-export interface User extends Document {
-    email: string;
-    password: string;
+export interface IUser extends Document {
+    email: string
+    password: string
     listOfClasses: string[]
 }
 
@@ -12,7 +12,7 @@ const UserSchema: Schema = new Schema({
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     listOfClasses: { type: Array, required: true }
-});
+})
 
 // Export the model
-export default model<User>('User', UserSchema);
+export default model<IUser>('User', UserSchema)

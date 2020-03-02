@@ -1,7 +1,21 @@
 import passport from 'passport'
 import Local from 'passport-local'
-import User from '../models/User'
+import User, { IUser } from '../models/User'
 import { validatePassword } from './util'
+
+// * Setup serialization and Deserialization functions
+passport.serializeUser((user: IUser, done) => {
+    done(null, user._id)
+})
+
+passport.deserializeUser(async (id, done) => {
+    try {
+        const user = await User.findOne({ _id: id })
+        done(null, user)
+    } catch (err) {
+        done(err)
+    }
+})
 
 // * Setup Passport Strategies
 passport.use(
