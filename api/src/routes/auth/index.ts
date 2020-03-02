@@ -1,20 +1,23 @@
-import { Router, Request, Response } from "express"
+import { Router, Request, Response } from 'express'
+import passport from 'passport'
 
+// * Bind Passport stategies
+import './passport'
 
 const router = Router()
 
 // * All routes under /auth/*
-router.post("/login", (req: Request, res: Response) => {
+router.post('/login', (req: Request, res: Response) => {
     // TODO: Login with traditional Local Strategy
-    res.status(501).send("TODO")
+    res.status(501).send('TODO')
 })
 
-router.post("/loginGoogle", (req: Request, res: Response) => {
+router.post('/loginGoogle', (req: Request, res: Response) => {
     // TODO: Login with passport Google strategy ?
-    res.status(501).send("TODO")
+    res.status(501).send('TODO')
 })
 
-router.get("/logout", (req: Request, res: Response) => {
+router.get('/logout', (req: Request, res: Response) => {
     // * If session exists, destroy session, otherwise send error
     if (req.session.user)
         req.session.destroy(() => {
@@ -22,5 +25,8 @@ router.get("/logout", (req: Request, res: Response) => {
         })
     else res.status(401).send({ error: "You cannot logout if you aren't logged in!" })
 })
+
+// * Registration route
+router.post('/signup', (req: Request, res: Response) => {})
 
 module.exports = router
