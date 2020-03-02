@@ -1,9 +1,9 @@
 import express, { Router, Request, Response } from "express"
 import User from "../models/User"
+import Classes from "../models/Classes"
 
 // * All routes under /classes/*
 const router = express.Router()
-
 
 router.get("/userlist", async (req: Request, res: Response) => {
     // TODO: Write route that returns list of users watched classes
@@ -106,20 +106,44 @@ router.post("/remove", async (req: Request, res: Response) => {
     //res.status(200).send("TODO")
 })
 
-router.get("/subjects", (req: Request, res: Response) => {
+router.get("/subjects", async (req: Request, res: Response) => {
     // TODO: Write route that grabs class subjects list from Banner DB and returns them
     //using dummy data from mongoDB --> will be retriving the data from microservice
-    
-    console.log("testing")
+    //make a separate Data Model
 
-    res.status(200).send("TODO")
+    const allDocs = {};
+    const allData = await Classes.find(allDocs);
+    const subjectsArray = [];
+    
+    for (let index = 0; index < allData.length; index++) {
+        const element = allData[index];
+        // console.log("element: " + element.subjectName );
+        subjectsArray.push(element.subjectName)
+    }
+
+    res.status(200).send("TODO: " + subjectsArray)
 })
 
-router.get("/list/:subject", (req: Request, res: Response) => {
+//* example get request --> http://localhost:8080/classes/list/CS
+router.get("/list/:subjectCodeName", async (req: Request, res: Response) => {
     // TODO: Write route that grabs class list for provided subject from Banner DB and returns them
     //using dummy data from mongoDB --> will be retriving the data from microservice
 
-    res.status(501).send("TODO")
+    const subjectParam = req.params.subjectCodeName;
+    console.log(subjectParam)
+
+    const allDocs = {};
+    const allData = await Classes.find(allDocs);
+    let classesArray = [];
+    
+    for (let index = 0; index < allData.length; index++) {
+        const element = allData[index];
+        if(subjectParam == element.codeName){
+            classesArray = element.subjectClasses;
+        }
+    }
+
+    res.status(200).send("TODO: " + classesArray)
 })
 
 module.exports = router
