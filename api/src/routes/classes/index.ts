@@ -6,7 +6,8 @@ import Classes from "../models/Classes"
 const router = express.Router()
 
 router.get("/userlist", async (req: Request, res: Response) => {
-    // TODO: Write route that returns list of users watched classes
+    //TODO: Write route that returns list of users watched classes
+    //TODO: add user authintication
 
     const userEmail = req.query.email;
     let jsonClassList = null;
@@ -23,27 +24,53 @@ router.get("/userlist", async (req: Request, res: Response) => {
     res.status(200).send("test: listing users's watched classes: " + jsonClassList);
 })
 
+//* POST request params --> email and classes
 router.post("/add", async (req: Request, res: Response) => {
-    // TODO: Write route that adds class to users list of watched classes
+    //TODO: Write route that adds class to users list of watched classes
+    //TODO: add user authintication
     
     //* get user's email before making post request
     const userEmail = req.body.email;
     const classes = req.body.classes;
 
-    //FIXME: fix this by sending classes in an array or JSON object with request 
+    //! FIXME: fix this by sending classes in an array or JSON object with request instead of separated by commas
+
     //* classes are sent in seperated by commas --> need to separate them by commas into an array
     const classesSplit = classes.split(',');
+    for (let index = 0; index < classesSplit.length; index++) {
+        classesSplit[index] = classesSplit[index].trim();
+    }
 
     //------------------------------------------------------
     try {
-    
-        const newEntry = new User({
-            email: userEmail,
-            password: "test1234",
-            listOfClasses: classesSplit
-        });
 
-        await newEntry.save();
+        const document = await User.find({email: userEmail }).lean();
+
+        //* will be undefined if couldn't find user
+        if(document[0] == undefined){
+                
+            const newEntry = new User({
+                email: userEmail,
+                password: "test1234",
+                listOfClasses: classesSplit
+            });
+
+            await newEntry.save();
+        }else{
+
+            console.log("Else case: user already exists so adding class --> " + userEmail );
+
+            const document = await User.find({email: userEmail }).lean();
+            let studentsClasses = document[0].listOfClasses;
+            studentsClasses = studentsClasses.concat(classesSplit);
+            console.log(studentsClasses)
+    
+            await User.updateOne({ email: userEmail }, {
+                listOfClasses: studentsClasses
+            })
+
+        }
+
 
     } catch (error) {
         console.log("error adding entry: " +  error);
@@ -65,9 +92,13 @@ router.post("/add", async (req: Request, res: Response) => {
     //------------------------------------------------------
 })
 
+//* POST request params --> email and class
 router.post("/remove", async (req: Request, res: Response) => {
     //TODO: Write route that removes class from users list of watched classes
-    //TODO: fix bug --> doen't work when listOfClasses array has leading/tailing spaces in string
+    //TODO: add user authintication
+
+
+    //! FIXME: fix bug --> doen't work when listOfClasses array has leading/tailing spaces in string
     //TODO: possible bug solution --> remove leading/tailing spaces when adding classes after delimiting by commas
 
     const userEmail = req.body.email
