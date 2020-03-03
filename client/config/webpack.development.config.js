@@ -14,7 +14,6 @@ require('../scripts/refresh')
 const path = require('path')
 const settings = require('./settings')
 const production = require('./webpack.production.config')
-const DashboardPlugin = require('webpack-dashboard/plugin')
 
 module.exports = {
     ...production,
@@ -40,5 +39,5 @@ module.exports = {
             }
         }
     },
-    plugins: [...production.plugins, new DashboardPlugin()]
+    plugins: [...production.plugins]
 }
