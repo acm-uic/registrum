@@ -16,7 +16,9 @@
         "watch-debug": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"yellow.bold,green.bold\" \"npm run watch-ts\" \"npm run serve-debug\""
     },
     "dependencies": {
+        "@types/bcrypt": "^3.0.0",
         "async": "^3.2.0",
+        "bcrypt": "^4.0.1",
         "bcrypt-nodejs": "^0.0.3",
         "body-parser": "^1.19.0",
         "compression": "^1.7.4",
@@ -38,6 +40,7 @@
         "redis": "^3.0.2",
         "request": "^2.88.2",
         "request-promise": "^4.2.5",
+        "uuid": "^7.0.1",
         "winston": "^3.2.1"
     },
     "devDependencies": {

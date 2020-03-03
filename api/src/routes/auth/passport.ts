@@ -2,7 +2,8 @@ import passport from 'passport'
 import Local from 'passport-local'
 import User, { IUser } from '../models/User'
 import { validatePassword } from './util'
-
+import bcrypt from 'bcrypt'
+import { NextFunction, Request, Response } from 'express'
 // * Setup serialization and Deserialization functions
 passport.serializeUser((user: IUser, done) => {
     done(null, user._id)
@@ -19,7 +20,7 @@ passport.deserializeUser(async (id, done) => {
 
 // * Setup Passport Strategies
 passport.use(
-    new Local.Strategy(async (email, password, done) => {
+    new Local.Strategy({ usernameField: 'email' }, async (email, password, done) => {
         try {
             const user = await User.findOne({ email })
 
@@ -29,7 +30,7 @@ passport.use(
             }
 
             // * Check if password is correct
-            if (!validatePassword(password)) {
+            if (!(await bcrypt.compare(password, user.password))) {
                 return done(null, false, { message: 'Invalid email or password!' })
             }
 
@@ -40,3 +41,11 @@ passport.use(
         }
     })
 )
+
+export const isAuthenticated = (req: Request, res: Response, next: NextFunction) => {
+    if (req.isAuthenticated()) {
+        next()
+    } else {
+        res.status(401).send('Error, Not logged in')
+    }
+}

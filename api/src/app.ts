@@ -65,4 +65,9 @@ require('./routes')(app)
 
 // app.use('/', expressRoutes)
 
+// * Drop classes collection
+mongoose.connection.db.dropCollection('Classes', function(err, result) {
+    // * Populate list of classes
+})
+
 export default app
