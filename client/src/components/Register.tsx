@@ -5,7 +5,8 @@ import { Button, TextField } from "@material-ui/core";
 const useStyles = makeStyles(({ spacing }) =>
   createStyles({
     paper: {
-      padding: spacing(2)
+      padding: spacing(2),
+      height: "350px"
     },
     title: {
       marginBottom: spacing(1)
