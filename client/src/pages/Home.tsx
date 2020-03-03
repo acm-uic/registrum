@@ -10,11 +10,16 @@
  */
 
 import React, { FC } from 'react'
+import { makeStyles, createStyles, FormGroup, FormControl } from '@material-ui/core/'
 
-export const Home: FC = () => {
+const useStyles = makeStyles(({}) => createStyles({}))
+
+export const : FC = () => {
+    const classes = useStyles()
+
     return (
         <div>
-            <h1>Application Client</h1>
+            <FormGroup></FormGroup>
         </div>
     )
 }
