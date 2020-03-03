@@ -1,0 +1,29 @@
+name: Docker CD
+
+on:
+  release:
+    tags:
+      - v*
+    types: [published]
+
+jobs:
+  publish-client:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: client - build and publish image
+      run: |
+        pushd ./client
+        docker build -t docker.pkg.github.com/${{ github.repository }}/client:$(echo ${{ github.ref }} | sed 's/refs\/tags\///g') .
+        echo ${{ secrets.GITHUB_TOKEN }} | docker login docker.pkg.github.com --username ${{ github.actor }} --password-stdin
+        docker push docker.pkg.github.com/${{ github.repository }}/client:$(echo ${{ github.ref }} | sed 's/refs\/tags\///g')
+  publish-api:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: api - build and publish image
+      run: |
+        pushd ./api
+        docker build -t docker.pkg.github.com/${{ github.repository }}/api:$(echo ${{ github.ref }} | sed 's/refs\/tags\///g') .
+        echo ${{ secrets.GITHUB_TOKEN }} | docker login docker.pkg.github.com --username ${{ github.actor }} --password-stdin
+        docker push docker.pkg.github.com/${{ github.repository }}/api:$(echo ${{ github.ref }} | sed 's/refs\/tags\///g')

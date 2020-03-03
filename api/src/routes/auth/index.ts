@@ -81,4 +81,4 @@ router.post("/signup", async (req: Request, res: Response) => {
     })
 })
 
-module.exports = router
+export default router

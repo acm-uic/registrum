@@ -65,4 +65,4 @@ router.post('/remove', isAuthenticated, async (req: Request, res: Response) => {
 // router.get('/list/:subjectCodeName', async (req: Request, res: Response) => {
 //     // TODO: Write route that grabs class list for provided subject from Banner DB and returns them
 // })
-module.exports = router
+export default router

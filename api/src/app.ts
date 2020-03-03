@@ -5,6 +5,8 @@ import bodyParser from "body-parser"
 import flash from "express-flash"
 import mongoose from "mongoose"
 import passport from "passport"
+import morgan from "morgan"
+import router from "./routes"
 
 // *  Create Express server
 const app = express()
@@ -13,6 +15,9 @@ const app = express()
 require("dotenv").config()
 app.set("port", process.env.PORT || 4000)
 console.log(process.env.PORT)
+const redisUrl = process.env.REDIS_URL || "redis://localhost"
+const mongoUrl = process.env.MONGODB_URI || "mongodb://localhost/cs494Final"
+const baseUrl = process.env.BASE_URL || "/"
 
 const cors = require("cors")({ origin: true })
 app.use(cors)
@@ -24,7 +29,6 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
 // Connect to MongoDB
-const mongoUrl = process.env.MONGODB_URI || "mongodb://localhost/cs494Final"
 mongoose.Promise = globalThis.Promise
 
 mongoose
@@ -43,9 +47,17 @@ mongoose
         process.exit()
     })
 
+// * Logger
+app.use(morgan('tiny'))
+
+// * Express configuration
+app.use(compression())
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }))
+
 // * Initialize Redis Client and Redis Session Store
 const redis = require("redis")
-const redisClient = redis.createClient()
+const redisClient = redis.createClient(redisUrl)
 const RedisStore = require("connect-redis")(session)
 
 // * Setup Express Session
@@ -66,7 +78,7 @@ app.use(passport.session())
 app.use(flash())
 
 // * Bind Routes to app
-require("./routes")(app)
+app.use(baseUrl, router)
 
 // app.use('/', expressRoutes)
 

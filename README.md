@@ -1,5 +1,7 @@
 # Dream Team Final Project
 
+![Node CI](https://github.com/ckanich-classrooms/final-project-dream-team-1/workflows/Node%20CI/badge.svg) ![Docker CI](https://github.com/ckanich-classrooms/final-project-dream-team-1/workflows/Docker%20CI/badge.svg) ![Docker CD](https://github.com/ckanich-classrooms/final-project-dream-team-1/workflows/Docker%20CD/badge.svg)
+
 ## Description
 
 The application will allow users to subscribe and receive notifications from classes at UIC based on when the class opens/closes. It is very similar in function to the Coursicle/Seatcheck applications that students have used in the past to keep an eye on classes they want to get into.
@@ -13,7 +15,7 @@ The application will allow users to subscribe and receive notifications from cla
 | ---------------- | ------------------------------- | --------------- |
 | Arshad Narmawala | Done a couple projects in React | Mobile, Devops  |
 | Alex Chomiak     | Fullstack engineer at a startup | Devops, Cloud   |
-| Jigar Patel      | Intern at Amazon                | Frontend, Cloud |
+| Jigar Patel      | Done full stack projects w/ node & vue                 | Frontend, Cloud |
 | Clark Chen       | Novice now, expert next week    | Mobile,Security |
 | Bharat Middha    | Done a couple projects in React | Devops, Cloud   |
 
