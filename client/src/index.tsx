@@ -26,9 +26,13 @@ import './styles/index.scss'
 import { Class } from './models/interfaces/Class'
 ;(async () => {
     try {
+        // * Check if we can retrieve classes
         const classes = (await axios.get('/api/classes/userlist')) as Class[]
         store.dispatch(setClasses(classes))
-    } catch (err) {}
+    } catch (err) {
+        // * Otherwise set classes to null
+        store.dispatch(setClasses(null))
+    }
 
     ReactDOM.render(
         <Provider store={store}>
