@@ -9,33 +9,33 @@
  * Author Github: https://github.com/alexchomiak
  */
 
-import React, { FC } from 'react'
-import { makeStyles, createStyles, Grid, FormControl } from '@material-ui/core/'
+import React, { FC } from "react";
+import { makeStyles, createStyles, Grid } from "@material-ui/core/";
 
-import SignIn from '@components/SignIn'
-import Register from '@components/Register'
+import SignIn from "@components/Register";
+import Register from "@components/SignIn";
 
 const useStyles = makeStyles(({}) =>
-    createStyles({
-        gridItems: {
-            margin: '100px 0 100px 0'
-        }
-    })
-)
+  createStyles({
+    gridItems: {
+      margin: "100px 0 100px 0"
+    }
+  })
+);
 
 export const Home: FC = () => {
-    const classes = useStyles()
+  const classes = useStyles();
 
-    return (
-        <div>
-            <Grid container spacing={6} justify="center">
-                <Grid item xs={12} md={4} className={classes.gridItems}>
-                    <Register />
-                </Grid>
-                <Grid item xs={12} md={4} className={classes.gridItems}>
-                    <SignIn />
-                </Grid>
-            </Grid>
-        </div>
-    )
-}
+  return (
+    <div>
+      <Grid container spacing={6} justify="center">
+        <Grid item xs={12} md={4} className={classes.gridItems}>
+          <Register />
+        </Grid>
+        <Grid item xs={12} md={4} className={classes.gridItems}>
+          <SignIn />
+        </Grid>
+      </Grid>
+    </div>
+  );
+};

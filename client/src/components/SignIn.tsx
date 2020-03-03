@@ -1,24 +1,7 @@
-import React, { FC } from 'react'
-import { Paper, makeStyles, createStyles, Typography } from '@material-ui/core'
-
-const useStyles = makeStyles(({}) =>
-    createStyles({
-        paper: {
-            backgroundColor: 'blue'
-        }
-    })
-)
+import React, { FC } from "react";
 
 const SignIn: FC = () => {
-    const classes = useStyles()
+  return <>Register</>;
+};
 
-    return (
-        <>
-            <Paper className={classes.paper}>
-                <Typography variant="h4"></Typography>
-            </Paper>
-        </>
-    )
-}
-
-export default SignIn
+export default SignIn;
