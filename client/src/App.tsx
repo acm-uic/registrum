@@ -11,11 +11,15 @@
 
 import React, { FC } from 'react'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
-import { Home } from '@pages/Home'
+import Home from '@pages/Home'
+import Classes from '@pages/Classes'
+import Account from '@pages/Account'
 
 export const App: FC = () => {
     return (
         <Router>
+            <Route exact path="/classes" component={Classes} />
+            <Route exact path="/account" component={Account} />
             <Route exact path="/" component={Home} />
         </Router>
     )
