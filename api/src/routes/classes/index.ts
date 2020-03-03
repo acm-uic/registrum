@@ -27,4 +27,4 @@ router.get("/list/:subject", (req: Request, res: Response) => {
     res.status(501).send("TODO")
 })
 
-module.exports = router
+export default router
