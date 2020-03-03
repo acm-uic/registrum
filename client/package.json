@@ -5,7 +5,7 @@
         "refresh": "node ./scripts/refresh.js",
         "build": "webpack --config ./config/webpack.production.config.js",
         "buildlib": "webpack --config ./config/webpack.library.config.js",
-        "test": "jest"
+        "test": "jest --passWithNoTests"
     },
     "author": "",
     "license": "ISC",
