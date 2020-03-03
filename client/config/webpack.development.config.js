@@ -4,7 +4,7 @@
  * Author: Alex Chomiak
  *
  * Last Modified: Sunday, 5th January 2020 3:14:44 pm
- * Modified By: Alex Chomiak 
+ * Modified By: Alex Chomiak
  *
  * Author Github: https://github.com/alexchomiak
  */

@@ -27,25 +27,18 @@ const Register: FC = () => {
     const [password, setPassword] = useState('')
 
     const handleSignUp = async () => {
-        const response = await axios.post('http://localhost:4000/auth/signup', {
-            email,
-            password,
-            lastname,
-            firstname
-        })
-
-        if (response.status == 200) {
-            await axios.post(
-                'http://localhost:4000/auth/login',
-                {
-                    email,
-                    password
-                },
-                {
-                    withCredentials: true
-                }
-            )
-        }
+        const response = await axios.post(
+            '/api/auth/signup',
+            {
+                email,
+                password,
+                lastname,
+                firstname
+            },
+            {
+                withCredentials: true
+            }
+        )
     }
 
     const handleChangeFirstName = (e: React.ChangeEvent<HTMLInputElement>) => {

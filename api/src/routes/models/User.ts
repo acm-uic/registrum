@@ -13,8 +13,8 @@ export interface UserObject extends Document {
 
 // * Schema for user's info
 const UserSchema: Schema = new Schema({
-    firstname: { type: String, required: true, unique: true },
-    lastname: { type: String, required: true, unique: true },
+    firstname: { type: String, required: true },
+    lastname: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     classes: [
