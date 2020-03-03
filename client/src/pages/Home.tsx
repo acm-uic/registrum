@@ -10,16 +10,32 @@
  */
 
 import React, { FC } from 'react'
-import { makeStyles, createStyles, FormGroup, FormControl } from '@material-ui/core/'
+import { makeStyles, createStyles, Grid, FormControl } from '@material-ui/core/'
 
-const useStyles = makeStyles(({}) => createStyles({}))
+import SignIn from '@components/SignIn'
+import Register from '@components/Register'
 
-export const : FC = () => {
+const useStyles = makeStyles(({}) =>
+    createStyles({
+        gridItems: {
+            margin: '100px 0 100px 0'
+        }
+    })
+)
+
+export const Home: FC = () => {
     const classes = useStyles()
 
     return (
         <div>
-            <FormGroup></FormGroup>
+            <Grid container spacing={6} justify="center">
+                <Grid item xs={12} md={4} className={classes.gridItems}>
+                    <Register />
+                </Grid>
+                <Grid item xs={12} md={4} className={classes.gridItems}>
+                    <SignIn />
+                </Grid>
+            </Grid>
         </div>
     )
 }
