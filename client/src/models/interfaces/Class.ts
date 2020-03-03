@@ -1,4 +1,4 @@
 export interface Class {
-  number: number
-  title: number
+    number: number
+    title: number
 }
