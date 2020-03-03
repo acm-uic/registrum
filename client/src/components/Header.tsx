@@ -6,9 +6,6 @@ import Typography from '@material-ui/core/Typography'
 import IconButton from '@material-ui/core/IconButton'
 import MenuIcon from '@material-ui/icons/Menu'
 import AccountCircle from '@material-ui/icons/AccountCircle'
-import Switch from '@material-ui/core/Switch'
-import FormControlLabel from '@material-ui/core/FormControlLabel'
-import FormGroup from '@material-ui/core/FormGroup'
 import MenuItem from '@material-ui/core/MenuItem'
 import Menu from '@material-ui/core/Menu'
 import { Button } from '@material-ui/core'
@@ -27,9 +24,9 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 )
 
-export default function Header() {
+export function Header() {
     const classes = useStyles()
-    const [auth, setAuth] = React.useState(false)
+    const [auth] = React.useState(false)
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
     const open = Boolean(anchorEl)
 
@@ -54,7 +51,7 @@ export default function Header() {
                         <MenuIcon />
                     </IconButton>
                     <Typography variant="h6" className={classes.title}>
-                        Photos
+                        Registrum
                     </Typography>
                     {auth ? (
                         <div>
@@ -94,3 +91,5 @@ export default function Header() {
         </div>
     )
 }
+
+export default Header
