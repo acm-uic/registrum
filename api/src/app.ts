@@ -11,7 +11,7 @@ const app = express()
 
 // * Retrieve environment variables
 require('dotenv').config()
-app.set('port', process.env.PORT)
+app.set('port', process.env.PORT || 4000)
 console.log(process.env.PORT)
 
 const cors = require('cors')({ origin: true })
@@ -32,6 +32,11 @@ mongoose
     .then(() => {
         /** ready to use. The `mongoose.connect()` promise resolves to undefined. */
         console.log('connected to mongoDB')
+
+        // // * Drop classes collection
+        // mongoose.connection.db.dropCollection('users', function(err, result) {
+        //     // * Populate list of classes
+        // })
     })
     .catch(err => {
         console.log('MongoDB connection error. Please make sure MongoDB is running. ' + err)
@@ -64,10 +69,5 @@ app.use(flash())
 require('./routes')(app)
 
 // app.use('/', expressRoutes)
-
-// * Drop classes collection
-mongoose.connection.db.dropCollection('Classes', function(err, result) {
-    // * Populate list of classes
-})
 
 export default app
