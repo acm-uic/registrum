@@ -21,4 +21,4 @@ router.get("/logout", (req: Request, res: Response) => {
     else res.status(401).send({ error: "You cannot logout if you aren't logged in!" })
 })
 
-module.exports = router
+export default router
