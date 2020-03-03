@@ -13,15 +13,17 @@ import React, { FC } from 'react'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import { Home } from '@pages/Home'
 import Header from '@components/Header'
-import ManageClases from '@pages/ManageClasses'
+
+import ClassesList from '@components/ClassesList'
 
 export const App: FC = () => {
     return (
         <>
             <Header />
             <Router>
-                <Route exact path="/" component={ManageClases} />
+                <Route exact path="/" component={Home} />
             </Router>
+            <ClassesList />
         </>
     )
 }

@@ -1,14 +1,14 @@
-import { Document, Schema, model } from 'mongoose'
+import { Document, Schema, model } from "mongoose"
 
-const ObjectID = require('mongoose')
+const ObjectID = require("mongoose")
 
 // * typescript interface for user info
 export interface UserObject extends Document {
-    firstname: string
-    lastname: string
-    email: string
-    password: string
-    classes: typeof Schema.Types.ObjectId[]
+    firstname: string;
+    lastname: string;
+    email: string;
+    password: string;
+    classes: typeof Schema.Types.ObjectId[];
 }
 
 // * Schema for user's info
@@ -30,4 +30,4 @@ const UserSchema: Schema = new Schema({
 })
 
 // Export the model
-export default model<UserObject>('User', UserSchema)
+export default model<UserObject>("User", UserSchema)

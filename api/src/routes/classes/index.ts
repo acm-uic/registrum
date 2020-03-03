@@ -1,23 +1,23 @@
-import express, { Router, Request, Response } from 'express'
-import User, { UserObject } from '../models/User'
-import Classes from '../models/Class'
-import passport from 'passport'
-import { isAuthenticated } from '../auth/passport'
-import { v4 as uuidv4 } from 'uuid'
+import express, { Router, Request, Response } from "express"
+import User, { UserObject } from "../models/User"
+import Classes from "../models/Class"
+import passport from "passport"
+import { isAuthenticated } from "../auth/passport"
+import { v4 as uuidv4 } from "uuid"
 
 // * All routes under /classes/*
 const router = express.Router()
-router.get('/userlist', isAuthenticated, async (req: Request, res: Response) => {
+router.get("/userlist", isAuthenticated, async (req: Request, res: Response) => {
     if (req.user) {
         const user = req.user as UserObject
         res.status(200).send(user.classes)
     } else {
-        res.status(401).send({ error: 'Not Authenticated' })
+        res.status(401).send({ error: "Not Authenticated" })
     }
 })
 
 //* POST request params --> email and classes
-router.post('/add', isAuthenticated, async (req: Request, res: Response) => {
+router.post("/add", isAuthenticated, async (req: Request, res: Response) => {
     // * get user's email before making post request
     const { subject, number } = req.body
     const id = uuidv4()
@@ -26,15 +26,15 @@ router.post('/add', isAuthenticated, async (req: Request, res: Response) => {
     try {
         console.log(user)
         await User.updateOne({ _id: user._id }, { $push: { classes: { subject, number, id } } })
-        res.status(200).send('OK')
+        res.status(200).send("OK")
     } catch (err) {
         console.log(err.message)
-        res.status(500).send('Error Updating User')
+        res.status(500).send("Error Updating User")
     }
 })
 
 //* POST request params --> email and class
-router.post('/remove', isAuthenticated, async (req: Request, res: Response) => {
+router.post("/remove", isAuthenticated, async (req: Request, res: Response) => {
     //TODO: Write route that removes class from users list of watched classes
     //TODO: add user authintication
 
@@ -50,9 +50,9 @@ router.post('/remove', isAuthenticated, async (req: Request, res: Response) => {
             }
         )
     } catch (err) {
-        res.status(400).send('Error')
+        res.status(400).send("Error")
     }
-    res.status(200).send('OK')
+    res.status(200).send("OK")
 })
 
 // router.get('/subjects', async (req: Request, res: Response) => {
