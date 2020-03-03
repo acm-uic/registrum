@@ -4,7 +4,7 @@
  * Author: Alex Chomiak
  *
  * Last Modified: Friday, 3rd January 2020 2:23:38 pm
- * Modified By: Alex Chomiak 
+ * Modified By: Alex Chomiak
  *
  * Author Github: https://github.com/alexchomiak
  */
@@ -20,8 +20,8 @@ module.exports = {
     includeReactInBundle: false,
     includeReduxInBundle: false,
     // * Dev server settings
-    port: 3001,
-    apiProxyUrl: 'https://localhost:4000',
+    port: 3000,
+    apiProxyUrl: 'http://localhost:4000',
     // * Alias Resolution paths, add paths here to avoid relative path hell for imports!
     aliases: {
         // ! Run npm run refresh to update the tsconfig when changing these!!

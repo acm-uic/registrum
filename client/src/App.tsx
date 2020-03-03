@@ -11,11 +11,22 @@
 
 import React, { FC } from 'react'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
-import { Home } from './pages/Home'
+import { Home } from '@pages/Home'
+import Header from '@components/Header'
+
+import { useSelector } from 'react-redux'
+import ManageClases from '@pages/ManageClasses'
+
 export const App: FC = () => {
+    const classes = useSelector(state => state)
+
     return (
-        <Router>
-            <Route exact path="/" component={Home} />
-        </Router>
+        <>
+            <Header />
+            <Router>
+                <Route exact path="/" component={Home} />
+            </Router>
+            <ManageClases />
+        </>
     )
 }

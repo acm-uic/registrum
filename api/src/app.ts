@@ -48,7 +48,7 @@ mongoose
     })
 
 // * Logger
-app.use(morgan('tiny'))
+app.use(morgan("tiny"))
 
 // * Express configuration
 app.use(compression())

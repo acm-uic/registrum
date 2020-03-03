@@ -1,4 +1,4 @@
-import { Document, Schema, model } from 'mongoose'
+import { Document, Schema, model } from "mongoose"
 
 // export interface IClass extends Document {
 //     subject: string
@@ -32,9 +32,9 @@ import { Document, Schema, model } from 'mongoose'
 // })
 
 export interface ClassObject extends Document {
-    subject: string
-    course: number
-    id: string
+    subject: string;
+    course: number;
+    id: string;
 }
 
 const ClassSchema: Schema = new Schema({
@@ -43,4 +43,4 @@ const ClassSchema: Schema = new Schema({
     id: String
 })
 
-export default model<ClassObject>('Class', ClassSchema)
+export default model<ClassObject>("Class", ClassSchema)
