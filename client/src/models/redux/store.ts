@@ -12,10 +12,11 @@
 import { createStore, applyMiddleware, combineReducers } from 'redux'
 import thunk from 'redux-thunk' // * Redux-Thunk middleware, used for asynchronous events that effect state (api calls)
 import { Reducer } from './reducers/reducer'
-
+import { Auth } from './reducers/auth'
 // * Bind reducers into single object
 const reducers = combineReducers<Reducer<any>>({
     // ! Add more reducers in this object
+    Auth
 })
 
 // * Declare state interface (This gets the compiler to shutup when referencing any objects)
