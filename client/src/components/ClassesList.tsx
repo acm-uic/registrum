@@ -4,9 +4,7 @@ import { Class } from 'models/interfaces/Class'
 import { useSelector } from 'react-redux'
 
 const ClassesList: FC = () => {
-    const classList = useSelector(state => state)
-
-    return <>{JSON.stringify(classList)}</>
+    return <div></div>
 }
 
 export default ClassesList

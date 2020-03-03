@@ -4,6 +4,7 @@ import { Paper, makeStyles, createStyles, Typography, FormGroup } from '@materia
 import { Button, TextField } from '@material-ui/core'
 import { store } from '../models/redux/store'
 import { setClasses } from '../models/redux/actions/auth'
+import { Class } from './models/interfaces/Class'
 import axios from 'axios'
 
 const useStyles = makeStyles(({ spacing }) =>

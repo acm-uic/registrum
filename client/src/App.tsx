@@ -14,16 +14,19 @@ import { BrowserRouter as Router, Route } from 'react-router-dom'
 import { Home } from '@pages/Home'
 import Header from '@components/Header'
 
-import ClassesList from '@components/ClassesList'
+import { useSelector } from 'react-redux'
+import ManageClases from '@pages/ManageClasses'
 
 export const App: FC = () => {
+    const classes = useSelector(state => state)
+
     return (
         <>
             <Header />
             <Router>
                 <Route exact path="/" component={Home} />
             </Router>
-            <ClassesList />
+            <ManageClases />
         </>
     )
 }
