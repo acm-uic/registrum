@@ -41,8 +41,8 @@ Security Evaluation
 
 - What things would an attacker potentially want to do using our app that we wouldn’t want them to do?
   - Making too many API requests
-  - Possibly implement API rate limiting
-  - API Response Caching
+    - Possibly implement API rate limiting
+    - API Response Caching
   - XSS Attacks through username & password fields
   - Session hijacking
   - Unauthorized page access
@@ -50,9 +50,9 @@ Security Evaluation
   - Attacks to query class microservice (Manipulating API to instruct microservices to spam requests to Banner)
 - What best practices will we follow security wise for this assignment?
   - How will we accomplish them?
-  - Implement security rules on db side to prevent unauthorized http calls
-  - Add user authentication
-  - Use a front end framework that escapes characters for XSS
+    - Implement security rules on db side to prevent unauthorized http calls
+    - Add user authentication
+    - Use a front end framework that escapes characters for XSS
 
 ## Deliverables for checkpoint 2
 
