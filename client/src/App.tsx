@@ -13,13 +13,14 @@ import React, { FC } from 'react'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import { Home } from '@pages/Home'
 import Header from '@components/Header'
+import ManageClases from '@pages/ManageClasses'
 
 export const App: FC = () => {
     return (
         <>
             <Header />
             <Router>
-                <Route exact path="/" component={Home} />
+                <Route exact path="/" component={ManageClases} />
             </Router>
         </>
     )
