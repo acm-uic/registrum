@@ -4,7 +4,7 @@
  * Author: Alex Chomiak
  *
  * Last Modified: Thursday, 12th December 2019 2:20:15 am
- * Modified By: Alex Chomiak 
+ * Modified By: Alex Chomiak
  *
  * Author Github: https://github.com/alexchomiak
  */
@@ -12,10 +12,6 @@
 export interface Action {
     type: string
     payload: any
-}
-
-export interface ActionCreator {
-    (...args: any[]): Action
 }
 
 export interface ThunkActionCreator {
