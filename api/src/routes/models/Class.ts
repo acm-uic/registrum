@@ -31,7 +31,7 @@ import { Document, Schema, model } from 'mongoose'
 //     creditHours: Number
 // })
 
-export interface IClass extends Document {
+export interface ClassObject extends Document {
     subject: string
     course: number
     id: string
@@ -43,4 +43,4 @@ const ClassSchema: Schema = new Schema({
     id: String
 })
 
-export default model<IClass>('Class', ClassSchema)
+export default model<ClassObject>('Class', ClassSchema)

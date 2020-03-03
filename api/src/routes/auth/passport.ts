@@ -1,11 +1,11 @@
 import passport from 'passport'
 import Local from 'passport-local'
-import User, { IUser } from '../models/User'
+import User, { UserObject } from '../models/User'
 import bcrypt from 'bcrypt'
 import { NextFunction, Request, Response } from 'express'
 
 // * Setup serialization and Deserialization functions
-passport.serializeUser((user: IUser, done) => {
+passport.serializeUser((user: UserObject, done) => {
     done(null, user._id)
 })
 

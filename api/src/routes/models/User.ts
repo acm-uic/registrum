@@ -3,7 +3,7 @@ import { Document, Schema, model } from 'mongoose'
 const ObjectID = require('mongoose')
 
 // * typescript interface for user info
-export interface IUser extends Document {
+export interface UserObject extends Document {
     firstname: string
     lastname: string
     email: string
@@ -30,4 +30,4 @@ const UserSchema: Schema = new Schema({
 })
 
 // Export the model
-export default model<IUser>('User', UserSchema)
+export default model<UserObject>('User', UserSchema)

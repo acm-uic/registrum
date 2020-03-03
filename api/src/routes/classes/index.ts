@@ -1,5 +1,5 @@
 import express, { Router, Request, Response } from 'express'
-import User, { IUser } from '../models/User'
+import User, { UserObject } from '../models/User'
 import Classes from '../models/Class'
 import passport from 'passport'
 import { isAuthenticated } from '../auth/passport'
@@ -9,7 +9,7 @@ import { v4 as uuidv4 } from 'uuid'
 const router = express.Router()
 router.get('/userlist', isAuthenticated, async (req: Request, res: Response) => {
     if (req.user) {
-        const user = req.user as IUser
+        const user = req.user as UserObject
         res.status(200).send(user.classes)
     } else {
         res.status(401).send({ error: 'Not Authenticated' })
@@ -22,7 +22,7 @@ router.post('/add', isAuthenticated, async (req: Request, res: Response) => {
     const { subject, number } = req.body
     const id = uuidv4()
 
-    const user = req.user as IUser
+    const user = req.user as UserObject
     try {
         console.log(user)
         await User.updateOne({ _id: user._id }, { $push: { classes: { subject, number, id } } })
@@ -40,7 +40,7 @@ router.post('/remove', isAuthenticated, async (req: Request, res: Response) => {
 
     try {
         const { _id } = req.body
-        const user = req.user as IUser
+        const user = req.user as UserObject
         await User.updateOne(
             {
                 _id: user._id
