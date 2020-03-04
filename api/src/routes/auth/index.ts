@@ -1,38 +1,38 @@
-import { Router, Request, Response } from "express"
-import passport from "passport"
-import User from "../models/User"
-import bcrypt from "bcrypt"
+import { Router, Request, Response } from 'express'
+import passport from 'passport'
+import User from '../models/User'
+import bcrypt from 'bcrypt'
 // * Bind Passport stategies
-import "./passport"
-import { isAuthenticated } from "./passport"
-import { userInfo } from "os"
+import './passport'
+import { isAuthenticated } from './passport'
+import { userInfo } from 'os'
 
 const router = Router()
 
-const getUserDataToClient = (userData => {
-    var result=JSON.parse(JSON.stringify(userData))
+const stripData = data => {
+    const result = JSON.parse(JSON.stringify(data))
     delete result['password']
     return result
-})
+}
 
 // * All routes under /auth/*
-router.get("/", isAuthenticated, (req: Request, res: Response) => {
-    res.status(200).send("OK")
+router.get('/', isAuthenticated, (req: Request, res: Response) => {
+    res.status(200).send('OK')
 })
 
 router.post(
-    "/login",
-    passport.authenticate("local", { failureFlash: true }),
-    async (req: Request, res: Response) => res.status(200).json(getUserDataToClient(await User.findOne({"email":req.body.email})))
-    
+    '/login',
+    passport.authenticate('local', { failureFlash: true }),
+    async (req: Request, res: Response) =>
+        res.status(200).json(stripData(await User.findOne({ email: req.body.email })))
 )
 
-router.post("/loginGoogle", (req: Request, res: Response) => {
+router.post('/loginGoogle', (req: Request, res: Response) => {
     // TODO: Login with passport Google strategy ?
-    res.status(501).send("TODO")
+    res.status(501).send('TODO')
 })
 
-router.get("/logout", isAuthenticated, (req: Request, res: Response) => {
+router.get('/logout', isAuthenticated, (req: Request, res: Response) => {
     // * If session exists, destroy session, otherwise send error
     if (req.session.user)
         req.session.destroy(() => {
@@ -42,14 +42,14 @@ router.get("/logout", isAuthenticated, (req: Request, res: Response) => {
 })
 
 // * Registration route
-router.post("/signup", async (req: Request, res: Response) => {
+router.post('/signup', async (req: Request, res: Response) => {
     // * Grab needed elements from request body
     const { firstname, lastname, email, password } = req.body
 
     // * Check if user already exists
     const test = await User.findOne({ email })
     if (test) {
-        res.status(400).send("Email already exists!")
+        res.status(400).send('Email already exists!')
         return
     }
 
@@ -75,16 +75,16 @@ router.post("/signup", async (req: Request, res: Response) => {
         await user.save()
     } catch (err) {
         console.error(err.message)
-        res.status(401).send("Error during registration")
+        res.status(401).send('Error during registration')
         return
     }
 
     // * Login User
     req.login(user, err => {
         if (err) {
-            res.status(401).send("Error logging in")
+            res.status(401).send('Error logging in')
         } else {
-            res.status(200).json(getUserDataToClient(user))
+            res.status(200).json(stripData(user))
         }
     })
 })
