@@ -17,7 +17,7 @@ app.set("port", process.env.PORT || 4000)
 console.log(process.env.PORT)
 const redisUrl = process.env.REDIS_URL || "redis://localhost"
 const mongoUrl = process.env.MONGODB_URI || "mongodb://localhost/cs494Final"
-const baseUrl = process.env.BASE_URL || "/"
+const baseUrl = process.env.BASE_URL || "/api"
 
 const cors = require("cors")({ origin: true })
 app.use(cors)
