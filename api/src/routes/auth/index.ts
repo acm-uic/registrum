@@ -76,7 +76,10 @@ router.post("/signup", async (req: Request, res: Response) => {
         if (err) {
             res.status(401).send("Error logging in")
         } else {
-            res.status(200).send("OK")
+            var result=JSON.parse(JSON.stringify(user))
+            delete result['password']
+            console.log(result)
+            res.status(200).json(result)
         }
     })
 })
