@@ -21,6 +21,7 @@ router.get("/", isAuthenticated, (req: Request, res: Response) => {
     res.status(200).send("OK")
 })
 
+/* Login by passport.authenticate */
 router.post(
     "/login",
     passport.authenticate("local", { failureFlash: true }),
@@ -28,13 +29,16 @@ router.post(
     
 )
 
+/* Login by Google - WIP to allow Student to signin with their school account*/
 router.post("/loginGoogle", (req: Request, res: Response) => {
     // TODO: Login with passport Google strategy ?
     res.status(501).send("TODO")
 })
 
+/* Logout Route */
 router.get("/logout", isAuthenticated, (req: Request, res: Response) => {
     // * If session exists, destroy session, otherwise send error
+    console.log("Logout"+req.session.user)
     if (req.session.user)
         req.session.destroy(() => {
             res.status(200).end()
@@ -85,6 +89,7 @@ router.post("/signup", async (req: Request, res: Response) => {
         if (err) {
             res.status(401).send("Error logging in")
         } else {
+            /* Return user data is successfully signup */
             res.status(200).json(getUserDataToClient(user))
         }
     })
