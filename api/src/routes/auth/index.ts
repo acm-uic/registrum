@@ -36,7 +36,10 @@ router.post("/loginGoogle", (req: Request, res: Response) => {
 })
 
 /* Logout Route: Validation handled by passport */
-router.get("/logout", isAuthenticated, (req: Request, res: Response) => res.send("OK"))
+router.get("/logout", isAuthenticated, (req: Request, res: Response) => {
+    req.logout()
+    res.send("OK")
+})
 
 // * Registration route
 router.post("/signup", async (req: Request, res: Response) => {
