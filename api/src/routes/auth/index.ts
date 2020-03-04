@@ -9,6 +9,7 @@ import { userInfo } from "os"
 
 const router = Router()
 
+/* Remove data shouldn't be sent to client E.g. password */
 const getUserDataToClient = (userData => {
     var result=JSON.parse(JSON.stringify(userData))
     delete result['password']
