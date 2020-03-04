@@ -5,8 +5,15 @@ import bcrypt from "bcrypt"
 // * Bind Passport stategies
 import "./passport"
 import { isAuthenticated } from "./passport"
+import { userInfo } from "os"
 
 const router = Router()
+
+const getUserDataToClient = (userData => {
+    var result=JSON.parse(JSON.stringify(userData))
+    delete result['password']
+    return result
+})
 
 // * All routes under /auth/*
 router.get("/", isAuthenticated, (req: Request, res: Response) => {
@@ -16,7 +23,8 @@ router.get("/", isAuthenticated, (req: Request, res: Response) => {
 router.post(
     "/login",
     passport.authenticate("local", { failureFlash: true }),
-    (req: Request, res: Response) => res.status(200).send("OK")
+    async (req: Request, res: Response) => res.status(200).json(getUserDataToClient(await User.findOne({"email":req.body.email})))
+    
 )
 
 router.post("/loginGoogle", (req: Request, res: Response) => {
@@ -76,10 +84,7 @@ router.post("/signup", async (req: Request, res: Response) => {
         if (err) {
             res.status(401).send("Error logging in")
         } else {
-            var result=JSON.parse(JSON.stringify(user))
-            delete result['password']
-            console.log(result)
-            res.status(200).json(result)
+            res.status(200).json(getUserDataToClient(user))
         }
     })
 })
