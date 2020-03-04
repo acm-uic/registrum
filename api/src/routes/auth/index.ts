@@ -35,16 +35,8 @@ router.post("/loginGoogle", (req: Request, res: Response) => {
     res.status(501).send("TODO")
 })
 
-/* Logout Route */
-router.get("/logout", isAuthenticated, (req: Request, res: Response) => {
-    // * If session exists, destroy session, otherwise send error
-    console.log("Logout"+req.session.user)
-    if (req.session.user)
-        req.session.destroy(() => {
-            res.status(200).end()
-        })
-    else res.status(401).send({ error: "You cannot logout if you aren't logged in!" })
-})
+/* Logout Route: Validation handled by passport */
+router.get("/logout", isAuthenticated, (req: Request, res: Response) => res.send("OK"))
 
 // * Registration route
 router.post("/signup", async (req: Request, res: Response) => {
