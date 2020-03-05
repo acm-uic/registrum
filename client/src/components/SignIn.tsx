@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 
 import { Button, Modal, Form } from 'react-bootstrap'
 
+import { signIn } from '@utils/functions/authentication'
+
 const SignIn = () => {
     const [show, toggleShow] = useState(false)
 
@@ -51,8 +53,14 @@ const SignIn = () => {
                 <Modal.Footer>
                     <Button
                         variant="primary"
-                        onClick={(e: React.ChangeEvent<HTMLInputElement>) => {
+                        onClick={async (e: React.MouseEvent<HTMLButtonElement>) => {
                             e.preventDefault()
+
+                            toggleShow(false)
+                            setEmail('')
+                            setPassword('')
+
+                            await signIn(email, password)
                         }}
                     >
                         Login

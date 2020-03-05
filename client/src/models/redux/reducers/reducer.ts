@@ -9,6 +9,6 @@
  * Author Github: https://github.com/alexchomiak
  */
 import { Action } from '../actions/action'
-export interface Reducer<stateInterface> {
-    (state: stateInterface, action: Action): stateInterface
+export interface Reducer<T> {
+    (state: T, action: Action): T
 }

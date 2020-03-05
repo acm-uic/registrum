@@ -1,7 +1,9 @@
 import { Class } from './Class'
 
 export interface User {
-    firstname: string | null
-    lastname: string | null
+    _id: string
+    firstname: string
+    lastname: string
+    email: string
     classes: Class[]
 }
