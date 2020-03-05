@@ -1,8 +1,8 @@
-FROM node:12-alpine AS base
+FROM node:12-buster AS base
 WORKDIR /usr/src/app
 COPY package*.json ./
 
-RUN apk add python3 && npm ci
+RUN npm ci
 COPY . .
 RUN npm run build --if-present
 RUN npm run test --if-present
