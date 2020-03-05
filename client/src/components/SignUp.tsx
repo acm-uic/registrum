@@ -17,7 +17,7 @@ const SignUp = () => {
             <Button variant="primary" onClick={() => toggleShow(!show)}>
                 Register
             </Button>
-            ˚
+
             <Modal show={show} onHide={() => toggleShow(!show)} centered>
                 <Modal.Header closeButton>
                     <Modal.Title>Sign Un</Modal.Title>
