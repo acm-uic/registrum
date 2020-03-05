@@ -14,6 +14,9 @@ import ReactDOM from 'react-dom'
 import { App } from './App'
 import { Provider } from 'react-redux'
 
+import 'react-app-polyfill/ie11'
+import 'bootstrap/dist/css/bootstrap.css'
+
 // ! Configure Redux Store
 import { store } from './models/redux/store'
 

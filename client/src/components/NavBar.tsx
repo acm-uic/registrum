@@ -9,13 +9,18 @@ import NavDropdown from 'react-bootstrap/NavDropdown'
 import Nav from 'react-bootstrap/Nav'
 
 import { User } from '@interfaces/User'
+import SignIn from '@components/SignIn'
+import UICLogo from '@assets/UICLogo.png'
 
 const NavBar = () => {
     const firstname = useSelector((state: User) => state.firstname)
 
     return (
-        <Navbar bg="light" expand="lg" className="align-middle">
-            <Navbar.Brand href="/">Registrum</Navbar.Brand>
+        <Navbar bg="dark" expand="lg" className="align-middle">
+            <Navbar.Brand href="/">
+                <img alt="UIC Logo" src={UICLogo} width={30} className="d-inline-block align-top" />{' '}
+                <b className="text-white">Registrum</b>
+            </Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="mr-auto">
@@ -24,7 +29,9 @@ const NavBar = () => {
 
                 <Nav>
                     {firstname == null ? (
-                        <></>
+                        <>
+                            <SignIn />
+                        </>
                     ) : (
                         <NavDropdown title={'Arshad' /*Name */} id="basic-nav-dropdown" alignRight>
                             <NavDropdown.Item href="/account">
