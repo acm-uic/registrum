@@ -10,7 +10,7 @@ const router = Router()
 
 /* Remove data shouldn't be sent to client E.g. password */
 const stripData = userData => {
-    var result = JSON.parse(JSON.stringify(userData))
+    let result = JSON.parse(JSON.stringify(userData))
     delete result['password']
     return result
 }
