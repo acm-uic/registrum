@@ -21,8 +21,8 @@ import NavBar from '@components/NavBar'
 export const App: FC = () => {
     return (
         <>
-            <NavBar />
             <Router>
+                <NavBar />
                 <Route exact path="/classes" component={Classes} />
                 <Route exact path="/account" component={Account} />
                 <Route exact path="/" component={Home} />
