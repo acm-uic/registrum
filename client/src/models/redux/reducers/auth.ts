@@ -1,19 +1,23 @@
 import { Reducer } from './reducer'
 
-import { Class } from '../../interfaces/Class'
+import { User } from '@interfaces/User'
 
 export interface AuthState {
-    classes: Class[] | null
+    user: User | null
+    loading: boolean
+    error: string
 }
 
 const initialState: AuthState = {
-    classes: null
+    user: null,
+    loading: false,
+    error: ''
 }
 
 export const Auth: Reducer<AuthState> = (state = initialState, action) => {
     switch (action.type) {
-        case 'SET_CLASSES':
-            return { ...state, classes: action.payload }
+        case 'SIGN_IN':
+            return { ...state, user: action.payload.user as User, error: action.payload.error }
         default:
             return state
     }

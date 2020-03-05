@@ -8,18 +8,3 @@
  * 
  * Author Github: https://github.com/alexchomiak
  */
-
-// * Normalizes fontsize for REM, 1REM = 10px
-html {
-    font-size: 62.5%;
-}
-
-// * App font file
-@font-face {
-    font-family: 'Nunito';
-    src: url('/Nunito.ttf');
-}
-
-body {
-    background: $backgroundColor;
-}

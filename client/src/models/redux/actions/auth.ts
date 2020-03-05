@@ -1,6 +1,18 @@
 import { Action } from './action'
-import { Class } from '../../interfaces/Class'
-export const setClasses = (classes: Class[] | null): Action => ({
-    type: 'SET_CLASSES',
-    payload: classes
-})
+import { User } from '@interfaces/User'
+
+export const template = (): Action => {
+    return {
+        payload: null,
+        type: ''
+    }
+}
+export const userSignIn = (user: User | null, error?: string): Action => {
+    console.debug('userSignIn - User', user)
+    console.debug('userSignIn - Error', error)
+
+    return {
+        payload: { user, error },
+        type: 'SIGN_IN'
+    }
+}

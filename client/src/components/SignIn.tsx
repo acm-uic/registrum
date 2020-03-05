@@ -1,88 +1,72 @@
-import React, { FC, useState } from 'react'
+import React, { useState } from 'react'
 
-import { Paper, makeStyles, createStyles, Typography, FormGroup } from '@material-ui/core'
-import { Button, TextField } from '@material-ui/core'
-import { store } from '../models/redux/store'
-import { setClasses } from '../models/redux/actions/auth'
-import { Class } from './models/interfaces/Class'
-import axios from 'axios'
+import { Button, Modal, Form } from 'react-bootstrap'
 
-const useStyles = makeStyles(({ spacing }) =>
-    createStyles({
-        paper: {
-            padding: spacing(2),
-            height: '350px'
-        },
-        title: {
-            marginBottom: spacing(1)
-        },
-        input: {
-            marginBottom: spacing(1)
-        }
-    })
-)
+import { signIn } from '@utils/functions/authentication'
 
-const SignIn: FC = () => {
-    const classes = useStyles()
+const SignIn = () => {
+    const [show, toggleShow] = useState(false)
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
-    const handleLogin = async () => {
-        await axios.post(
-            '/api/auth/login',
-            {
-                email,
-                password
-            },
-            { withCredentials: true }
-        )
-
-        try {
-            // * Check if we can retrieve classes
-            const classes = (await axios.get('/api/classes/userlist')) as Class[]
-            store.dispatch(setClasses(classes))
-        } catch (err) {
-            // * Otherwise set classes to null
-            store.dispatch(setClasses(null))
-        }
-    }
-
-    const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setEmail(e.target.value)
-    }
-
-    const handlePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setPassword(e.target.value)
-    }
-
     return (
         <>
-            <Paper className={classes.paper}>
-                <Typography variant="h4" className={classes.title}>
-                    Sign In
-                </Typography>
+            <Button variant="primary" onClick={() => toggleShow(!show)}>
+                Log In
+            </Button>
 
-                <FormGroup>
-                    <TextField
-                        className={classes.input}
-                        label="Email Address"
-                        aria-describedby="Email Address"
-                        helperText="We will never share your emails with external parties."
-                        value={email}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleEmail(e)}
-                    />
-                    <TextField
-                        className={classes.input}
-                        label="Password"
-                        type="password"
-                        aria-describedby="Password"
-                        value={password}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => handlePassword(e)}
-                    />
-                    <Button onClick={handleLogin}> Sign In</Button>
-                </FormGroup>
-            </Paper>
+            <Modal show={show} onHide={() => toggleShow(!show)} centered>
+                <Modal.Header closeButton>
+                    <Modal.Title>Sign In</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form>
+                        <Form.Group>
+                            <Form.Label>Email address</Form.Label>
+                            <Form.Control
+                                type="email"
+                                placeholder="Enter email"
+                                value={email}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                    setEmail(e.target.value)
+                                }}
+                            />
+                            <Form.Text className="text-muted">
+                                We'll never share your email with anyone else.
+                            </Form.Text>
+                        </Form.Group>
+
+                        <Form.Group>
+                            <Form.Label>Password</Form.Label>
+                            <Form.Control
+                                type="password"
+                                placeholder="Password"
+                                value={password}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                    setPassword(e.target.value)
+                                }}
+                            />
+                        </Form.Group>
+                    </Form>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button
+                        variant="primary"
+                        onClick={async (e: React.MouseEvent<HTMLButtonElement>) => {
+                            e.preventDefault()
+
+                            toggleShow(false)
+                            setEmail('')
+                            setPassword('')
+
+                            await signIn(email, password)
+                        }}
+                    >
+                        Login
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </>
     )
 }
