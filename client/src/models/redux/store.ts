@@ -13,6 +13,7 @@ import { createStore, applyMiddleware, combineReducers } from 'redux'
 import thunk from 'redux-thunk' // * Redux-Thunk middleware, used for asynchronous events that effect state (api calls)
 import { Reducer } from './reducers/reducer'
 import { Auth } from './reducers/auth'
+import { composeWithDevTools } from 'redux-devtools-extension'
 // * Bind reducers into single object
 const reducers = combineReducers<Reducer<any>>({
     // ! Add more reducers in this object
@@ -23,5 +24,5 @@ const reducers = combineReducers<Reducer<any>>({
 export type State = {} & { [prop: string]: any }
 
 // * Configure store
-export const store = createStore(reducers, {}, applyMiddleware(thunk))
+export const store = createStore(reducers, {}, composeWithDevTools(applyMiddleware(thunk)))
 console.log('Configured Store', store.getState())
