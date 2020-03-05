@@ -11,7 +11,9 @@ import Nav from 'react-bootstrap/Nav'
 
 import { User } from '@interfaces/User'
 import SignIn from '@components/SignIn'
+import SignUp from '@components/SignUp'
 import UICLogo from '@assets/UICLogo.png'
+import { signIn, signOut } from '@utils/functions/authentication'
 
 const NavBar = () => {
     const user: User | null = useSelector((state: any) => state.Auth.user)
@@ -35,6 +37,7 @@ const NavBar = () => {
                 <Nav>
                     {user == null ? (
                         <>
+                            <SignUp />
                             <SignIn />
                         </>
                     ) : (
@@ -44,7 +47,12 @@ const NavBar = () => {
                                 {'  '}Account
                             </NavDropdown.Item>
                             <NavDropdown.Divider />
-                            <NavDropdown.Item>
+                            <NavDropdown.Item
+                                onClick={async (e: any) => {
+                                    e.preventDefault()
+                                    await signOut()
+                                }}
+                            >
                                 <FontAwesomeIcon icon={faSignOutAlt} />
                                 {'  '}Sign Out
                             </NavDropdown.Item>
