@@ -4,7 +4,29 @@ import { Button, Modal, Form } from 'react-bootstrap'
 
 import { signIn } from '@utils/functions/authentication'
 
-const SignIn = () => {
+interface ModalButton {
+    variant:
+        | 'primary'
+        | 'secondary'
+        | 'success'
+        | 'danger'
+        | 'warning'
+        | 'info'
+        | 'dark'
+        | 'light'
+        | 'link'
+        | 'outline-primary'
+        | 'outline-secondary'
+        | 'outline-success'
+        | 'outline-danger'
+        | 'outline-warning'
+        | 'outline-info'
+        | 'outline-dark'
+        | 'outline-light'
+    size: 'sm' | 'lg'
+}
+
+const SignIn = ({ size, variant }: ModalButton) => {
     const [show, toggleShow] = useState(false)
 
     const [email, setEmail] = useState('')
@@ -12,7 +34,7 @@ const SignIn = () => {
 
     return (
         <>
-            <Button variant="primary" onClick={() => toggleShow(!show)}>
+            <Button variant={variant} size={size} onClick={() => toggleShow(!show)}>
                 Log In
             </Button>
 
