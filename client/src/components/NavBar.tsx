@@ -8,9 +8,9 @@ import { Link } from 'react-router-dom'
 import { Navbar, NavDropdown, Nav } from 'react-bootstrap'
 
 import { User } from '@interfaces/User'
-import SignIn from '@components/SignIn'
-import SignUp from '@components/SignUp'
-import UICLogo from '@assets/UICLogo.png'
+import SignIn from '../components/SignIn'
+import SignUp from '../components/SignUp'
+import UICLogo from '../assets/UICLogo.png'
 import { signOut } from '@utils/functions/authentication'
 
 const NavBar = () => {
