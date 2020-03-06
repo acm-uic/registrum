@@ -2,7 +2,7 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSignOutAlt, faUser } from '@fortawesome/free-solid-svg-icons'
+import { faSignOutAlt, faUser, faUserCircle } from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom'
 
 import { Navbar, NavDropdown, Nav } from 'react-bootstrap'
@@ -50,7 +50,17 @@ const NavBar = () => {
                         Contact
                     </Nav.Link>
                     {user != null && (
-                        <NavDropdown title={user.firstname} id="basic-nav-dropdown" alignRight>
+                        <NavDropdown
+                            title={
+                                <>
+                                    <FontAwesomeIcon icon={faUserCircle} />
+                                    {'  '}
+                                    {user.firstname}
+                                </>
+                            }
+                            id="basic-nav-dropdown"
+                            alignRight
+                        >
                             <NavDropdown.Item as={Link} to="/account">
                                 <FontAwesomeIcon icon={faUser} />
                                 {'  '}Account

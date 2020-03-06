@@ -10,8 +10,19 @@ const SignIn = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
+    const doSignIn = async (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault()
+
+        toggleShow(false)
+        setEmail('')
+        setPassword('')
+
+        await signIn(email, password)
+    }
+
     return (
         <>
+            {/* For toggling the modal */}
             <span onClick={() => toggleShow(!show)}>Log In</span>
 
             <Modal show={show} onHide={() => toggleShow(!show)} centered>
@@ -49,18 +60,7 @@ const SignIn = () => {
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button
-                        variant="primary"
-                        onClick={async (e: React.MouseEvent<HTMLButtonElement>) => {
-                            e.preventDefault()
-
-                            toggleShow(false)
-                            setEmail('')
-                            setPassword('')
-
-                            await signIn(email, password)
-                        }}
-                    >
+                    <Button variant="primary" onClick={doSignIn}>
                         Login
                     </Button>
                 </Modal.Footer>
