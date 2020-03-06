@@ -4,29 +4,7 @@ import { Button, Modal, Form } from 'react-bootstrap'
 
 import { signUp } from '@utils/functions/authentication'
 
-interface ModalButton {
-    variant:
-        | 'primary'
-        | 'secondary'
-        | 'success'
-        | 'danger'
-        | 'warning'
-        | 'info'
-        | 'dark'
-        | 'light'
-        | 'link'
-        | 'outline-primary'
-        | 'outline-secondary'
-        | 'outline-success'
-        | 'outline-danger'
-        | 'outline-warning'
-        | 'outline-info'
-        | 'outline-dark'
-        | 'outline-light'
-    size: 'sm' | 'lg'
-}
-
-const SignUp = ({ size, variant }: ModalButton) => {
+const SignUp = () => {
     const [show, toggleShow] = useState(false)
 
     const [fName, setFName] = useState('')
@@ -36,13 +14,11 @@ const SignUp = ({ size, variant }: ModalButton) => {
 
     return (
         <>
-            <Button variant="primary" onClick={() => toggleShow(!show)}>
-                Register
-            </Button>
+            <span onClick={() => toggleShow(!show)}>Register</span>
 
             <Modal show={show} onHide={() => toggleShow(!show)} centered>
                 <Modal.Header closeButton>
-                    <Modal.Title>Sign Un</Modal.Title>
+                    <Modal.Title>Sign Up</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form>
