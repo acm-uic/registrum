@@ -4,29 +4,7 @@ import { Button, Modal, Form } from 'react-bootstrap'
 
 import { signIn } from '@utils/functions/authentication'
 
-interface ModalButton {
-    variant:
-        | 'primary'
-        | 'secondary'
-        | 'success'
-        | 'danger'
-        | 'warning'
-        | 'info'
-        | 'dark'
-        | 'light'
-        | 'link'
-        | 'outline-primary'
-        | 'outline-secondary'
-        | 'outline-success'
-        | 'outline-danger'
-        | 'outline-warning'
-        | 'outline-info'
-        | 'outline-dark'
-        | 'outline-light'
-    size: 'sm' | 'lg'
-}
-
-const SignIn = ({ size, variant }: ModalButton) => {
+const SignIn = () => {
     const [show, toggleShow] = useState(false)
 
     const [email, setEmail] = useState('')
@@ -34,9 +12,7 @@ const SignIn = ({ size, variant }: ModalButton) => {
 
     return (
         <>
-            <Button variant={variant} size={size} onClick={() => toggleShow(!show)}>
-                Log In
-            </Button>
+            <span onClick={() => toggleShow(!show)}>Log In</span>
 
             <Modal show={show} onHide={() => toggleShow(!show)} centered>
                 <Modal.Header closeButton>
