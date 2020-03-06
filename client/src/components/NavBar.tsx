@@ -5,21 +5,19 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSignOutAlt, faUser } from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom'
 
-import Navbar from 'react-bootstrap/Navbar'
-import NavDropdown from 'react-bootstrap/NavDropdown'
-import Nav from 'react-bootstrap/Nav'
+import { Navbar, NavDropdown, Nav } from 'react-bootstrap'
 
 import { User } from '@interfaces/User'
 import SignIn from '@components/SignIn'
 import SignUp from '@components/SignUp'
 import UICLogo from '@assets/UICLogo.png'
-import { signIn, signOut } from '@utils/functions/authentication'
+import { signOut } from '@utils/functions/authentication'
 
 const NavBar = () => {
     const user: User | null = useSelector((state: any) => state.Auth.user)
 
     return (
-        <Navbar expand="lg" className="align-middle">
+        <Navbar expand="md" className="align-middle">
             <Navbar.Brand as={Link} to="/">
                 <img alt="UIC Logo" src={UICLogo} width={30} className="d-inline-block align-top" />{' '}
                 <b>Registrum</b>
@@ -35,12 +33,23 @@ const NavBar = () => {
                 </Nav>
 
                 <Nav>
-                    {user == null ? (
+                    {user == null && (
                         <>
-                            <SignUp />
-                            <SignIn />
+                            <Nav.Link>
+                                <SignIn />
+                            </Nav.Link>
+                            <Nav.Link>
+                                <SignUp />
+                            </Nav.Link>
                         </>
-                    ) : (
+                    )}
+                    <Nav.Link as={Link} to="/classes">
+                        About Us
+                    </Nav.Link>
+                    <Nav.Link as={Link} to="/classes">
+                        Contact
+                    </Nav.Link>
+                    {user != null && (
                         <NavDropdown title={user.firstname} id="basic-nav-dropdown" alignRight>
                             <NavDropdown.Item as={Link} to="/account">
                                 <FontAwesomeIcon icon={faUser} />

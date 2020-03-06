@@ -18,15 +18,13 @@ import Account from '@pages/Account'
 
 import NavBar from '@components/NavBar'
 
-export const App: FC = () => {
-    return (
-        <>
-            <Router>
-                <NavBar />
-                <Route exact path="/classes" component={Classes} />
-                <Route exact path="/account" component={Account} />
-                <Route exact path="/" component={Home} />
-            </Router>
-        </>
-    )
-}
+export const App: FC = () => (
+    <>
+        <Router>
+            <NavBar />
+            <Route exact path="/classes" component={Classes} />
+            <Route exact path="/account" component={Account} />
+            <Route exact path="/" component={Home} />
+        </Router>
+    </>
+)
