@@ -2,8 +2,6 @@ version: "3"
 
 services:
   api:
-    depends_on:
-      - mongo
     container_name: api
     build: "api"
     restart: always
@@ -15,7 +13,7 @@ services:
     links:
       - mongo
       - redis
-    depends_on: 
+    depends_on:
       - mongo
       - redis
   redis:

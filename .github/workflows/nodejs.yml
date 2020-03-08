@@ -24,6 +24,8 @@ jobs:
             ${{ runner.os }}-node-
       - name: Start Docker for Mongodb
         run: docker run -d -p 27017:27017 mongo
+      - name: Start Docker for redis
+        run: docker run -d  -p 6379:6379 redis
       - name: npm install, build, and test
         run: |
           pushd api

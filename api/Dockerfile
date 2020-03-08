@@ -6,7 +6,6 @@ FROM base as build
 RUN npm ci
 COPY . .
 RUN  npm run build --if-present
-RUN  npm run test --if-present
 
 FROM base as release
 RUN npm install --production
