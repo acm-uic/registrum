@@ -14,7 +14,6 @@ const app = express()
 // * Retrieve environment variables
 require('dotenv').config()
 app.set('port', process.env.PORT || 4000)
-console.log(process.env.PORT)
 const redisUrl = process.env.REDIS_URL || 'redis://localhost'
 const mongoUrl = process.env.MONGODB_URI || 'mongodb://localhost/cs494Final'
 const baseUrl = process.env.BASE_URL || '/'
@@ -35,8 +34,7 @@ mongoose
     .connect(mongoUrl, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true })
     .then(() => {
         /** ready to use. The `mongoose.connect()` promise resolves to undefined. */
-        console.log('connected to mongoDB')
-
+        //console.log("connected to mongoDB")
         // // * Drop classes collection
         // mongoose.connection.db.dropCollection('users', function(err, result) {
         //     // * Populate list of classes
@@ -83,3 +81,4 @@ app.use(baseUrl, router)
 // app.use('/', expressRoutes)
 
 export default app
+export { mongoose }
