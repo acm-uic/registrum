@@ -13,9 +13,7 @@ passport.deserializeUser(async (id, done) => {
     try {
         const user = await User.findOne({ _id: id })
         done(null, user)
-    } catch (err) {
-        done(err)
-    }
+    } catch (err) {}
 })
 
 // * Setup Passport Strategies
@@ -37,9 +35,7 @@ passport.use(
             console.log('SUCCESS')
             // * Return user
             return done(null, user)
-        } catch (err) {
-            return done(err)
-        }
+        } catch (err) {}
     })
 )
 
