@@ -5,4 +5,3 @@ COPY package*.json ./
 RUN npm ci
 COPY . .
 RUN npm run build --if-present
-RUN npm run test --if-present
