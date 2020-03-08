@@ -1,8 +1,7 @@
 import dotenv from 'dotenv'
 import axios from 'axios'
-import User, { UserObject } from '../routes/models/User'
+import User from '../routes/models/User'
 import general from '../app'
-import { STATES } from 'mongoose'
 
 dotenv.config()
 const app = general
@@ -20,7 +19,15 @@ describe('Authentication Tests', () => {
             return true
         }
     })
+
     describe('Sanity Tests', () => {
+        afterAll(async () => {
+            //Remove user from DB
+            await User.deleteMany({}).then(() => {
+                console.log('Clear up done')
+            })
+        })
+
         it('Register an account', async () => {
             await client
                 .post('signup', {
@@ -36,12 +43,23 @@ describe('Authentication Tests', () => {
                     }
                 })
         })
-        afterAll(async () => {
-            //Remove user from DB
-            await User.remove({}).then(() => {
-                console.log('Clear up done')
-            })
+        it('Register duplicate account', async () => {
+            await client
+                .post('signup', {
+                    firstname: 'Clark',
+                    lastname: 'Chen',
+                    email: 'schen237@uic.edu',
+                    password: 'theRealClark'
+                })
+                .then(response => {
+                    expect(response.status).toBe(400)
+                    expect(response.data).toBe('Email already exists!')
+                    if (response.status != 400) {
+                        console.log(response.data)
+                    }
+                })
         })
+
         // ! xit indicates test case is pending and not written yet, remember to change to it
         // ! Google login strategy cannot be tested because it requires authentication from google side
         it('Logs user in correctly using email, password', async () => {
@@ -55,6 +73,19 @@ describe('Authentication Tests', () => {
                     expect(response.status).toBe(200)
                 })
         })
+
+        it('Access restricted resource only available to logged in user', async () => {
+            await client
+                .get('', {
+                    headers: {
+                        Cookie: cookie
+                    }
+                })
+                .then(response => {
+                    expect(response.status).toBe(200)
+                })
+        })
+
         it('Logs user out correctly', async () => {
             await client
                 .get('logout', {
@@ -69,6 +100,7 @@ describe('Authentication Tests', () => {
                     }
                 })
         })
+
         it('Cannot login with incorrect email', async () => {
             await client
                 .post('login', {
@@ -79,6 +111,7 @@ describe('Authentication Tests', () => {
                     expect(response.status).toBe(401)
                 })
         })
+
         it('Cannot login with incorrect password', async () => {
             await client
                 .post('login', {
@@ -88,6 +121,15 @@ describe('Authentication Tests', () => {
                 .then(response => {
                     expect(response.status).toBe(401)
                 })
+        })
+
+        it('Logs user in using Google', async () => {
+            await client.post('loginGoogle', {}).then(response => {
+                if (response.status == 200) {
+                    cookie = String(response.headers['set-cookie'])
+                }
+                expect(response.status).toBe(501) // TODO
+            })
         })
     })
 
@@ -99,6 +141,7 @@ describe('Authentication Tests', () => {
                 return true
             }
         })
+
         it('Error with status code 401 when attempting to logout when not logged in', async () => {
             await client.get('logout').then(response => {
                 expect(response.status).toBe(401)

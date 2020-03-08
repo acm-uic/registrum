@@ -1,19 +1,13 @@
 import express, { Router, Request, Response } from 'express'
 import User, { UserObject } from '../models/User'
-import Classes from '../models/Class'
-import passport from 'passport'
 import { isAuthenticated } from '../auth/passport'
 import { v4 as uuidv4 } from 'uuid'
 
 // * All routes under /classes/*
 const router = express.Router()
 router.get('/userlist', isAuthenticated, async (req: Request, res: Response) => {
-    if (req.user) {
-        const user = req.user as UserObject
-        res.status(200).send(user.classes)
-    } else {
-        res.status(401).send({ error: 'Not Authenticated' })
-    }
+    const user = req.user as UserObject
+    res.status(200).send(user.classes)
 })
 
 //* POST request params --> email and classes
@@ -22,34 +16,40 @@ router.post('/add', isAuthenticated, async (req: Request, res: Response) => {
     const { subject, number } = req.body
     const id = uuidv4()
 
-    const user = req.user as UserObject
-    try {
-        console.log(user)
-        await User.updateOne({ _id: user._id }, { $push: { classes: { subject, number, id } } })
-        res.status(200).send('OK')
-    } catch (err) {
-        console.log(err.message)
-        res.status(500).send('Error Updating User')
+    // POST data check
+    if (typeof subject == 'undefined') {
+        res.status(500).send('Missing course subject')
+        return
+    } else if (typeof number == 'undefined') {
+        res.status(500).send('Missing course number')
+        return
     }
+
+    const user = req.user as UserObject
+    console.log(user)
+    await User.updateOne({ _id: user._id }, { $push: { classes: { subject, number, id } } })
+    res.status(200).send('OK')
 })
 
 //* POST request params --> email and class
 router.post('/remove', isAuthenticated, async (req: Request, res: Response) => {
-    try {
-        const { _id } = req.body
-        const user = req.user as UserObject
-        await User.updateOne(
-            {
-                _id: user._id
-            },
-            {
-                $pull: { classes: { _id } }
-            }
-        )
-    } catch (err) {
-        res.status(400).send('Error')
-    }
-    res.status(200).send('OK')
+    const { _id } = req.body
+    const user = req.user as UserObject
+    await User.updateOne(
+        {
+            _id: user._id
+        },
+        {
+            $pull: { classes: { _id } }
+        }
+    )
+        .then(response => {
+            res.status(200).send('OK')
+        })
+        .catch(err => {
+            console.log(err)
+            res.status(400).send('Error')
+        })
 })
 
 // router.get('/subjects', async (req: Request, res: Response) => {

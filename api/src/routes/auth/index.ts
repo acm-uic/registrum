@@ -53,12 +53,7 @@ router.post('/signup', async (req: Request, res: Response) => {
     }
 
     // * Hash password
-    let hashedPassword
-    try {
-        hashedPassword = await bcrypt.hash(password, 2)
-    } catch (err) {
-        console.error(err)
-    }
+    let hashedPassword = await bcrypt.hash(password, 2)
 
     // * Setup User
     const user = new User({
@@ -69,23 +64,13 @@ router.post('/signup', async (req: Request, res: Response) => {
     })
 
     // * Save user
-    try {
-        console.log(user)
-        await user.save()
-    } catch (err) {
-        console.error(err.message)
-        res.status(401).send('Error during registration')
-        return
-    }
+    console.log(user)
+    await user.save()
 
     // * Login User
-    req.login(user, err => {
-        if (err) {
-            res.status(401).send('Error logging in')
-        } else {
-            /* Return user data is successfully signup */
-            res.status(200).json(stripData(user))
-        }
+    req.login(user, () => {
+        /* Return user data is successfully signup */
+        res.status(200).json(stripData(user))
     })
 })
 
