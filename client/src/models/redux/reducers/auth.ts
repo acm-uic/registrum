@@ -22,6 +22,14 @@ export const Auth: Reducer<AuthState> = (state = initialState, action) => {
             return { ...state, user: action.payload.user as User, error: action.payload.error }
         case 'SIGN_OUT':
             return { ...state, user: null, error: action.payload }
+        case 'ADD_CLASS':
+            if (state.user !== null && action.payload.cls !== null)
+                return {
+                    ...state,
+                    user: { ...state.user, classes: [...state.user.classes, action.payload.cls] },
+                    error: action.payload.error
+                }
+            else return { ...state, error: action.payload.error }
         default:
             return state
     }

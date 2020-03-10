@@ -1,7 +1,19 @@
 import React, { FC } from 'react'
+import { useSelector } from 'react-redux'
+
+import AddClass from '@components/AddClass'
+import { User } from '@interfaces/User'
 
 const Classes: FC = () => {
-    return <div>Classes</div>
+    const user: User | null = useSelector((state: any) => state.Auth.user)
+
+    return (
+        <div>
+            <AddClass />
+
+            {user !== null && JSON.stringify(user.classes)}
+        </div>
+    )
 }
 
 export default Classes
