@@ -28,6 +28,7 @@ const NavBar = () => {
                     {user != null && (
                         <Nav.Link as={Link} to="/classes">
                             Classes
+                            {JSON.stringify(user.classes)}
                         </Nav.Link>
                     )}
                 </Nav>
