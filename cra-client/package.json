@@ -60,5 +60,6 @@
     "devDependencies": {
         "@types/node-sass": "^4.11.0",
         "node-sass": "^4.13.1"
-    }
+    },
+    "proxy": "http://localhost:4000/"
 }
