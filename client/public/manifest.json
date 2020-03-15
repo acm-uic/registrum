@@ -1,8 +1,0 @@
-{
-    "name": "Registrum",
-    "short_name": "Registrum",
-    "start_url": ".",
-    "display": "standalone",
-    "background_color": "#fff",
-    "description": "Registrum allows you to track classes and get notified on status changes. Registrum also provides data analytics on class trends and registration."
-}
