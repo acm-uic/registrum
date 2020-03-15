@@ -1,25 +1,26 @@
-import dotenv from 'dotenv'
-import axios from 'axios'
-import User from '../routes/models/User'
-import general from '../app'
+import dotenv from "dotenv"
+import axios from "axios"
+import User from "../routes/models/User"
+import general from "../app"
 
 dotenv.config()
 const app = general
 const PORT = process.env.PORT || 8081
-const URL = `http://localhost:${PORT}/classes/`
+const BASE_PATH = process.env.BASE_PATH || "/api"
+const URL = `http://localhost:${PORT}${BASE_PATH}/classes/`
 
 const server = app.listen(PORT)
 
-describe('Class Tests', () => {
+describe("Class Tests", () => {
     afterAll(async () => {
         //Remove user from DB
         await User.deleteMany({}).then(() => {
-            console.log('Clear up done')
+            console.log("Clear up done")
         })
     })
 
-    let cookie = ''
-    let classID = ''
+    let cookie = ""
+    let classID = ""
     const client = axios.create({
         baseURL: URL,
         validateStatus: () => {
@@ -28,17 +29,17 @@ describe('Class Tests', () => {
         }
     })
 
-    describe('Precondition Tests', () => {
-        it('Register an account', async () => {
+    describe("Precondition Tests", () => {
+        it("Register an account", async () => {
             await axios
-                .post(`http://localhost:${PORT}/auth/signup`, {
-                    firstname: 'Clark',
-                    lastname: 'Chen',
-                    email: 'schen237@uic.edu',
-                    password: 'theRealClark'
+                .post(`http://localhost:${PORT}${BASE_PATH}/auth/signup`, {
+                    firstname: "Clark",
+                    lastname: "Chen",
+                    email: "schen237a@uic.edu",
+                    password: "theRealClark"
                 })
                 .then(response => {
-                    cookie = String(response.headers['set-cookie'])
+                    cookie = String(response.headers["set-cookie"])
                     expect(response.status).toBe(200)
                     if (response.status != 200) {
                         console.log(response.data)
@@ -47,13 +48,13 @@ describe('Class Tests', () => {
         })
     })
 
-    describe('Sanity Tests', () => {
-        it('Correctly add class to user watch list', async () => {
+    describe("Sanity Tests", () => {
+        it("Correctly add class to user watch list", async () => {
             await client
                 .post(
-                    'add',
+                    "add",
                     {
-                        subject: 'CS',
+                        subject: "CS",
                         number: 494
                     },
                     {
@@ -63,7 +64,7 @@ describe('Class Tests', () => {
                     }
                 )
                 .then(response => {
-                    classID = response.data['_id']
+                    classID = response.data["_id"]
                     expect(response.status).toBe(200)
                     if (response.status != 200) {
                         console.log(response.data)
@@ -71,10 +72,10 @@ describe('Class Tests', () => {
                 })
         })
 
-        it('Missing subject field when add class to user watch list', async () => {
+        it("Missing subject field when add class to user watch list", async () => {
             await client
                 .post(
-                    'add',
+                    "add",
                     {
                         number: 494
                     },
@@ -86,16 +87,16 @@ describe('Class Tests', () => {
                 )
                 .then(response => {
                     expect(response.status).toBe(500)
-                    expect(response.data).toBe('Missing course subject')
+                    expect(response.data).toBe("Missing course subject")
                 })
         })
 
-        it('Missing subject field when add class to user watch list', async () => {
+        it("Missing subject field when add class to user watch list", async () => {
             await client
                 .post(
-                    'add',
+                    "add",
                     {
-                        subject: 'CS'
+                        subject: "CS"
                     },
                     {
                         headers: {
@@ -105,13 +106,13 @@ describe('Class Tests', () => {
                 )
                 .then(response => {
                     expect(response.status).toBe(500)
-                    expect(response.data).toBe('Missing course number')
+                    expect(response.data).toBe("Missing course number")
                 })
         })
 
-        it('Correctly retrieves classes for given subject', async () => {
+        it("Correctly retrieves classes for given subject", async () => {
             await client
-                .get('userlist', {
+                .get("userlist", {
                     headers: {
                         Cookie: cookie
                     }
@@ -121,25 +122,25 @@ describe('Class Tests', () => {
                         console.log(response.data)
                     }
                     expect(response.status).toBe(200)
-                    expect(response.data[0]['subject']).toBe('CS')
-                    expect(response.data[0]['number']).toBe(494)
+                    expect(response.data[0]["subject"]).toBe("CS")
+                    expect(response.data[0]["number"]).toBe(494)
                 })
         })
 
-        it('Unauthorized retrieves classes for given subject', async () => {
-            await client.get('userlist').then(response => {
+        it("Unauthorized retrieves classes for given subject", async () => {
+            await client.get("userlist").then(response => {
                 expect(response.status).toBe(401)
-                expect(response.data).toBe('Error, Not logged in')
+                expect(response.data).toBe("Error, Not logged in")
                 if (response.status != 401) {
                     console.log(response.data)
                 }
             })
         })
 
-        it('Correctly remove class from user watch list', async () => {
+        it("Correctly remove class from user watch list", async () => {
             await client
                 .post(
-                    'remove',
+                    "remove",
                     {
                         _id: classID
                     },
@@ -157,12 +158,12 @@ describe('Class Tests', () => {
                 })
         })
 
-        it('Remove class with invalid classID from user watch list', async () => {
+        it("Remove class with invalid classID from user watch list", async () => {
             await client
                 .post(
-                    'remove',
+                    "remove",
                     {
-                        _id: '0'
+                        _id: "0"
                     },
                     {
                         headers: {
@@ -178,7 +179,7 @@ describe('Class Tests', () => {
                 })
         })
 
-        it('Correctly retrieves list of class subjects from Banner DB', () => {
+        it("Correctly retrieves list of class subjects from Banner DB", () => {
             test.todo
         })
     })

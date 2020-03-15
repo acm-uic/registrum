@@ -9,7 +9,7 @@ services:
       - MONGODB_URI=mongodb://mongo:27017/appdb
       - REDIS_URL=redis://redis
       - NODE_ENV=production
-      - BASE_URL=/api
+      - BASE_PATH=/api
     links:
       - mongo
       - redis
