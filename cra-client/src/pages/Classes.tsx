@@ -3,6 +3,9 @@ import { useSelector } from 'react-redux'
 
 import AddClass from '../components/AddClass'
 import { User } from '../models/interfaces/User'
+import ClassView from '../components/ClassView'
+
+import { Container, Row, Col } from 'react-bootstrap'
 
 const Classes: FC = () => {
     const user: User | null = useSelector((state: any) => state.Auth.user)
@@ -11,7 +14,11 @@ const Classes: FC = () => {
         <div>
             <AddClass />
 
-            {user !== null && JSON.stringify(user.classes)}
+            <Container fluid>
+                <Row>
+                    <Col>{user !== null && user.classes.map(cls => <ClassView cls={cls} />)}</Col>
+                </Row>
+            </Container>
         </div>
     )
 }
