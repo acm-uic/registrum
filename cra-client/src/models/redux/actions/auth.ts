@@ -21,3 +21,8 @@ export const userAddClass = (cls: Class | null, error: string): Action => ({
     payload: { cls, error },
     type: 'ADD_CLASS'
 })
+
+export const userRemoveClass = (_id: string | null, error: string): Action => ({
+    payload: { _id, error },
+    type: 'REMOVE_CLASS'
+})

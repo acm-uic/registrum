@@ -30,6 +30,17 @@ export const Auth: Reducer<AuthState> = (state = initialState, action) => {
                     error: action.payload.error
                 }
             else return { ...state, error: action.payload.error }
+        case 'REMOVE_CLASS':
+            if (state.user !== null && action.payload._id !== null)
+                return {
+                    ...state,
+                    user: {
+                        ...state.user,
+                        classes: state.user.classes.filter(cls => cls._id !== action.payload._id)
+                    },
+                    error: action.payload.error
+                }
+            else return { ...state, error: action.payload.error }
         default:
             return state
     }

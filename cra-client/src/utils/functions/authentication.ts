@@ -1,6 +1,8 @@
 import axios from 'axios'
 import { store } from '../../models/redux/store'
 import { userSignIn, userSignOut, userSignUp, userAddClass } from '../../models/redux/actions/auth'
+import { userRemoveClass } from '../../models/redux/actions/auth'
+import { Class } from '../../models/interfaces/Class'
 
 export const signUp = async (fn: string, ln: string, em: string, pw: string) => {
     try {
@@ -52,10 +54,25 @@ export const addClass = async (subject: string, number: string) => {
             { withCredentials: true }
         )
 
-        if (response.status === 200) store.dispatch(userAddClass({ number, subject }, ''))
+        console.log(response)
+
+        if (response.status === 200) store.dispatch(userAddClass(response.data as Class, ''))
         else if (response.status === 401) store.dispatch(userSignOut('You are not signed in'))
         else store.dispatch(userSignOut('Error Occured'))
     } catch (err) {
         store.dispatch(userAddClass(null, ''))
+    }
+}
+
+export const removeClass = async (_id: string) => {
+    try {
+        const response = await axios.post('/api/classes/remove', { _id }, { withCredentials: true })
+
+        if (response.status === 200) store.dispatch(userRemoveClass(_id, ''))
+        else if (response.status === 401)
+            store.dispatch(userRemoveClass(null, 'You are not signed in'))
+        else store.dispatch(userSignOut('Error Occured'))
+    } catch (err) {
+        store.dispatch(userRemoveClass(null, err.message))
     }
 }
