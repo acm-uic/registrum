@@ -6,7 +6,8 @@ import User from '../routes/models/User'
 import app from '../app'
 dotenv.config()
 const PORT = process.env.PORT || 8081
-const URL = `http://localhost:${PORT}/`
+const BASE_PATH = process.env.BASE_PATH || '/api'
+const URL = `http://localhost:${PORT}${BASE_PATH}/`
 
 const server = app.listen(PORT)
 
