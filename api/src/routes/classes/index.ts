@@ -58,6 +58,7 @@ router.post('/remove', isAuthenticated, async (req: Request, res: Response) => {
     //         console.log(err)
     //         res.status(400).send('Error')
     // })
+
 })
 
 // router.get('/subjects', async (req: Request, res: Response) => {
