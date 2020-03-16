@@ -22,12 +22,12 @@ describe('Authentication Tests', () => {
     })
 
     describe('Sanity Tests', () => {
-        afterAll(async () => {
-            //Remove user from DB
-            await User.deleteMany({}).then(() => {
-                console.log('Clear up done')
-            })
-        })
+        // afterAll(async () => {
+        //     //Remove user from DB
+        //     await User.deleteMany({}).then(() => {
+        //         console.log('Clear up done')
+        //     })
+        // })
 
         it('Register an account', async () => {
             await client
