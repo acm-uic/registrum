@@ -40,7 +40,7 @@ router.post('/remove', isAuthenticated, async (req: Request, res: Response) => {
             _id: user._id
         },
         {
-            $pull: { classes: { _id } }
+            $pull: { classes: { id: _id } }
         }
     )
         .then(response => {
