@@ -6,6 +6,7 @@ import flash from 'express-flash'
 import mongoose from 'mongoose'
 import passport from 'passport'
 import morgan from 'morgan'
+import cors from 'cors'
 import router from './routes'
 
 // *  Create Express server
@@ -16,10 +17,8 @@ require('dotenv').config()
 app.set('port', process.env.PORT || 4000)
 const redisUrl = process.env.REDIS_URL || 'redis://localhost'
 const mongoUrl = process.env.MONGODB_URI || 'mongodb://localhost/cs494Final'
-const baseUrl = process.env.BASE_URL || '/'
+const baseUrl = process.env.BASE_PATH || '/api'
 
-const cors = require('cors')({ origin: true })
-app.use(cors)
 app.options('*', cors)
 
 // * Express configuration

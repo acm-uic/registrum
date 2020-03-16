@@ -1,18 +1,28 @@
 import { Action } from './action'
-import { User } from '@interfaces/User'
+import { User } from '../../interfaces/User'
+import { Class } from '../../interfaces/Class'
 
-export const template = (): Action => {
-    return {
-        payload: null,
-        type: ''
-    }
-}
-export const userSignIn = (user: User | null, error?: string): Action => {
-    console.debug('userSignIn - User', user)
-    console.debug('userSignIn - Error', error)
+export const userSignUp = (user: User | null, error?: string): Action => ({
+    payload: { user, error },
+    type: 'SIGN_UP'
+})
 
-    return {
-        payload: { user, error },
-        type: 'SIGN_IN'
-    }
-}
+export const userSignIn = (user: User | null, error?: string): Action => ({
+    payload: { user, error },
+    type: 'SIGN_IN'
+})
+
+export const userSignOut = (error: string): Action => ({
+    payload: error,
+    type: 'SIGN_OUT'
+})
+
+export const userAddClass = (cls: Class | null, error: string): Action => ({
+    payload: { cls, error },
+    type: 'ADD_CLASS'
+})
+
+export const userRemoveClass = (_id: string | null, error: string): Action => ({
+    payload: { _id, error },
+    type: 'REMOVE_CLASS'
+})

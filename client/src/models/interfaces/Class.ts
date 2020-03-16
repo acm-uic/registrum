@@ -1,4 +1,5 @@
 export interface Class {
-    number: number
-    title: number
+    _id: string
+    number: string
+    subject: string
 }

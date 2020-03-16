@@ -2,35 +2,48 @@ import React, { useState } from 'react'
 
 import { Button, Modal, Form } from 'react-bootstrap'
 
-import { signIn } from '../utils/functions/authentication'
+import { signUp } from '../utils/functions/authentication'
 
-const SignIn = () => {
+const SignUp = () => {
     const [show, toggleShow] = useState(false)
 
+    const [fName, setFName] = useState('')
+    const [lName, setLName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
-    const doSignIn = async (e: React.MouseEvent<HTMLButtonElement>) => {
-        e.preventDefault()
-
-        toggleShow(false)
-        setEmail('')
-        setPassword('')
-
-        await signIn(email, password)
-    }
-
     return (
         <>
-            {/* For toggling the modal */}
-            <span onClick={() => toggleShow(!show)}>Log In</span>
+            <span onClick={() => toggleShow(!show)}>Register</span>
 
             <Modal show={show} onHide={() => toggleShow(!show)} centered>
                 <Modal.Header closeButton>
-                    <Modal.Title>Sign In</Modal.Title>
+                    <Modal.Title>Sign Up</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form>
+                        <Form.Group>
+                            <Form.Label>First Name</Form.Label>
+                            <Form.Control
+                                placeholder="Jon"
+                                value={fName}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                    setFName(e.target.value)
+                                }}
+                            />
+                        </Form.Group>
+
+                        <Form.Group>
+                            <Form.Label>Last Name</Form.Label>
+                            <Form.Control
+                                placeholder="Doe"
+                                value={lName}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                    setLName(e.target.value)
+                                }}
+                            />
+                        </Form.Group>
+
                         <Form.Group>
                             <Form.Label>Email address</Form.Label>
                             <Form.Control
@@ -60,8 +73,21 @@ const SignIn = () => {
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="primary" onClick={doSignIn}>
-                        Login
+                    <Button
+                        variant="primary"
+                        onClick={async (e: React.MouseEvent<HTMLButtonElement>) => {
+                            e.preventDefault()
+
+                            toggleShow(false)
+                            setFName('')
+                            setLName('')
+                            setEmail('')
+                            setPassword('')
+
+                            await signUp(fName, lName, email, password)
+                        }}
+                    >
+                        Sign Up
                     </Button>
                 </Modal.Footer>
             </Modal>
@@ -69,4 +95,4 @@ const SignIn = () => {
     )
 }
 
-export default SignIn
+export default SignUp

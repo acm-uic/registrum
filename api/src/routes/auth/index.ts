@@ -10,7 +10,7 @@ const router = Router()
 
 /* Remove data shouldn't be sent to client E.g. password */
 const stripData = userData => {
-    let result = JSON.parse(JSON.stringify(userData))
+    const result = JSON.parse(JSON.stringify(userData))
     delete result['password']
     return result
 }
@@ -53,7 +53,7 @@ router.post('/signup', async (req: Request, res: Response) => {
     }
 
     // * Hash password
-    let hashedPassword = await bcrypt.hash(password, 2)
+    const hashedPassword = await bcrypt.hash(password, 2)
 
     // * Setup User
     const user = new User({

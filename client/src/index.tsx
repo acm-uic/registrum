@@ -1,14 +1,3 @@
-/*
- * File: /src/index.tsx
- * File Created: Wednesday, 11th December 2019 11:26:29 pm
- * Author: Alex Chomiak
- *
- * Last Modified: Thursday, 12th December 2019 8:30:37 pm
- * Modified By: Alex Chomiak
- *
- * Author Github: https://github.com/alexchomiak
- */
-
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { App } from './App'
@@ -16,7 +5,7 @@ import { Provider } from 'react-redux'
 
 import 'react-app-polyfill/ie11'
 import 'bootstrap/dist/css/bootstrap.css'
-
+import * as serviceWorker from './serviceWorker'
 // ! Configure Redux Store
 import { store } from './models/redux/store'
 
@@ -29,3 +18,8 @@ ReactDOM.render(
     </Provider>,
     document.getElementById('root')
 )
+
+// If you want your app to work offline and load faster, you can change
+// unregister() to register() below. Note this comes with some pitfalls.
+// Learn more about service workers: https://bit.ly/CRA-PWA
+serviceWorker.unregister()
