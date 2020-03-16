@@ -19,6 +19,7 @@
         "@types/bcrypt": "^3.0.0",
         "async": "^3.2.0",
         "axios": "^0.19.2",
+        "axios-cookiejar-support": "^0.5.1",
         "bcrypt": "^4.0.1",
         "bcrypt-nodejs": "^0.0.3",
         "body-parser": "^1.19.0",
@@ -42,6 +43,7 @@
         "redis": "^3.0.2",
         "request": "^2.88.2",
         "request-promise": "^4.2.5",
+        "tough-cookie": "^3.0.1",
         "uuid": "^7.0.1",
         "winston": "^3.2.1"
     },
