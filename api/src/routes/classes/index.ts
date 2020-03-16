@@ -13,6 +13,7 @@ router.get('/userlist', isAuthenticated, async (req: Request, res: Response) => 
 //* POST request params --> email and classes
 router.post('/add', isAuthenticated, async (req: Request, res: Response) => {
     // * get user's email before making post request
+
     const { subject, number } = req.body
     const id = uuidv4()
 
@@ -28,34 +29,35 @@ router.post('/add', isAuthenticated, async (req: Request, res: Response) => {
     const user = req.user as UserObject
     console.log(user)
     await User.updateOne({ _id: user._id }, { $push: { classes: { subject, number, id } } })
-
-    console.log(subject)
-    console.log(number)
-    console.log(id)
-
-    res.status(200).json({ subject, number, _id: id })
+    res.status(200).send('OK')
 })
 
 //* POST request params --> email and class
 router.post('/remove', isAuthenticated, async (req: Request, res: Response) => {
-    const { _id } = req.body
+    const { id } = req.body
     const user = req.user as UserObject
-    await User.updateOne(
-        {
-            _id: user._id
-        },
-        {
-            $pull: { classes: { id: _id } }
-        }
-    )
-        .then(response => {
-            console.log(response)
-            res.status(200).send('OK')
-        })
-        .catch(err => {
-            console.log(err)
-            res.status(400).send('Error')
-        })
+
+    try {
+        await User.updateOne(
+            {
+                _id: user._id
+            },
+            {
+                $pull: { classes: { id } }
+            }
+        )
+
+        res.status(200).send('OK')
+    } catch (error) {
+        res.status(400).send('Error')
+    }
+
+    // .then(response => {
+    //         res.status(200).send('OK')
+    // }).catch(err => {
+    //         console.log(err)
+    //         res.status(400).send('Error')
+    // })
 })
 
 // router.get('/subjects', async (req: Request, res: Response) => {
