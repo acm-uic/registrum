@@ -4,7 +4,6 @@ import { userSignIn, userSignOut, userSignUp, userAddClass } from '../../models/
 import { userRemoveClass } from '../../models/redux/actions/auth'
 import { Class } from '../../models/interfaces/Class'
 
-const PORT = process.env.PORT || 4000
 const BASE_PATH = process.env.BASE_PATH || '/api'
 const URL = `${BASE_PATH}/`
 
