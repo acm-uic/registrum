@@ -33,7 +33,7 @@ describe('Class Tests', () => {
         })
     })
 
-    let test_class = {
+    let testClass = {
         _id: '',
         subject: 'CS',
         number: 494
@@ -62,7 +62,7 @@ describe('Class Tests', () => {
     })
 
     it('Correctly add class to user watch list', async () => {
-        const response = await client.post('classes/add', test_class)
+        const response = await client.post('classes/add', testClass)
 
         expect(response.status).toBe(200)
         expect(response.data.length).toBe(1)
@@ -71,7 +71,7 @@ describe('Class Tests', () => {
         expect(response.data[0].number).toBe(494)
         expect(response.data[0]._id).not.toBe('')
 
-        test_class = response.data[0]
+        testClass = response.data[0]
 
         if (response.status != 200) {
             console.debug(response.data)
@@ -106,7 +106,7 @@ describe('Class Tests', () => {
         expect(response.data.length).toBe(1)
 
         const idx = response.data.findIndex(
-            cls => JSON.stringify(cls) === JSON.stringify(test_class)
+            cls => JSON.stringify(cls) === JSON.stringify(testClass)
         )
         expect(idx).toBeGreaterThan(-1)
     })
@@ -124,7 +124,7 @@ describe('Class Tests', () => {
 
     it('Correctly remove class from user watch list', async () => {
         const response = await client.post('classes/remove', {
-            _id: test_class._id
+            _id: testClass._id
         })
 
         expect(response.status).toBe(200)
