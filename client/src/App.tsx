@@ -11,6 +11,8 @@
 
 import React, { FC } from 'react'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 import Home from './pages/Home'
 import Classes from './pages/Classes'
@@ -20,6 +22,16 @@ import NavBar from './components/NavBar'
 
 export const App: FC = () => (
     <>
+        <ToastContainer
+            position="bottom-left"
+            autoClose={4000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            draggable
+            pauseOnHover
+        />
         <Router>
             <NavBar />
             <Route exact path="/classes" component={Classes} />

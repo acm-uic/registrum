@@ -22,10 +22,33 @@ export const signUp = async (fn: string, ln: string, em: string, pw: string) => 
             password: pw
         })
 
-        if (response.status === 200) store.dispatch(userSignUp(response.data, ''))
-        else store.dispatch(userSignUp(null, 'ERROR: Contact Administrator'))
+        if (response.status === 200)
+            store.dispatch(
+                userSignUp(response.data, {
+                    msg: 'Signed Up succesfully',
+                    options: {
+                        type: 'success'
+                    }
+                })
+            )
+        else
+            store.dispatch(
+                userSignUp(null, {
+                    msg: 'ERROR: Contact Administrator',
+                    options: {
+                        type: 'error'
+                    }
+                })
+            )
     } catch (err) {
-        store.dispatch(userSignUp(null, err.message))
+        store.dispatch(
+            userSignUp(null, {
+                msg: err.message as String,
+                options: {
+                    type: 'error'
+                }
+            })
+        )
     }
 }
 
@@ -33,12 +56,42 @@ export const signIn = async (email: string, password: string) => {
     try {
         const response = await client.post('auth/login', { email, password })
 
-        if (response.status === 200) store.dispatch(userSignIn(response.data, ''))
+        if (response.status === 200)
+            store.dispatch(
+                userSignIn(response.data, {
+                    msg: 'Signed In succesfully',
+                    options: {
+                        type: 'success'
+                    }
+                })
+            )
         else if (response.status === 401)
-            store.dispatch(userSignIn(null, 'Invalid Username or password.'))
-        else store.dispatch(userSignIn(null, 'ERROR: Contact Administrator'))
+            store.dispatch(
+                userSignIn(null, {
+                    msg: 'Invalid Username or password',
+                    options: {
+                        type: 'warning'
+                    }
+                })
+            )
+        else
+            store.dispatch(
+                userSignIn(null, {
+                    msg: 'ERROR: Contact Administrator',
+                    options: {
+                        type: 'error'
+                    }
+                })
+            )
     } catch (err) {
-        store.dispatch(userSignIn(null, err.message))
+        store.dispatch(
+            userSignIn(null, {
+                msg: err.message as String,
+                options: {
+                    type: 'error'
+                }
+            })
+        )
     }
 }
 
@@ -47,10 +100,27 @@ export const signOut = async () => {
         const response = await client.get('auth/logout')
 
         if (response.status === 200 || response.status === 401)
-            store.dispatch(userSignOut('Signed Out'))
-        else store.dispatch(userSignOut('ERROR: Contact Administrator'))
+            store.dispatch(
+                userSignOut({ msg: 'Signed out succesfully', options: { type: 'success' } })
+            )
+        else
+            store.dispatch(
+                userSignOut({
+                    msg: 'ERROR: Contact Administrator',
+                    options: {
+                        type: 'error'
+                    }
+                })
+            )
     } catch (err) {
-        store.dispatch(userSignOut(err.message))
+        store.dispatch(
+            userSignOut({
+                msg: err.message as String,
+                options: {
+                    type: 'error'
+                }
+            })
+        )
     }
 }
 
@@ -60,12 +130,42 @@ export const addClass = async (subject: string, number: string) => {
 
         console.log(response)
 
-        if (response.status === 200) store.dispatch(userAddClass(response.data as Class[], ''))
+        if (response.status === 200)
+            store.dispatch(
+                userAddClass(response.data as Class[], {
+                    msg: 'Class added succesfully',
+                    options: {
+                        type: 'success'
+                    }
+                })
+            )
         else if (response.status === 401)
-            store.dispatch(userAddClass(null, 'Please login to access classes'))
-        else store.dispatch(userAddClass(null, 'ERROR: Contact Administrator'))
+            store.dispatch(
+                userAddClass(null, {
+                    msg: 'Please login to access classes',
+                    options: {
+                        type: 'warning'
+                    }
+                })
+            )
+        else
+            store.dispatch(
+                userAddClass(null, {
+                    msg: 'ERROR: Contact Administrator',
+                    options: {
+                        type: 'error'
+                    }
+                })
+            )
     } catch (err) {
-        store.dispatch(userAddClass(null, ''))
+        store.dispatch(
+            userAddClass(null, {
+                msg: err.message as String,
+                options: {
+                    type: 'error'
+                }
+            })
+        )
     }
 }
 
@@ -73,11 +173,41 @@ export const removeClass = async (_id: string) => {
     try {
         const response = await client.post('classes/remove', { _id })
 
-        if (response.status === 200) store.dispatch(userRemoveClass(response.data as Class[], ''))
+        if (response.status === 200)
+            store.dispatch(
+                userRemoveClass(response.data as Class[], {
+                    msg: 'Class removed succesfully',
+                    options: {
+                        type: 'success'
+                    }
+                })
+            )
         else if (response.status === 401)
-            store.dispatch(userRemoveClass(null, 'Please login to access classes'))
-        else store.dispatch(userRemoveClass(null, 'ERROR: Contact Administrator'))
+            store.dispatch(
+                userRemoveClass(null, {
+                    msg: 'Please login to access classes',
+                    options: {
+                        type: 'warning'
+                    }
+                })
+            )
+        else
+            store.dispatch(
+                userRemoveClass(null, {
+                    msg: 'ERROR: Contact Administrator',
+                    options: {
+                        type: 'error'
+                    }
+                })
+            )
     } catch (err) {
-        store.dispatch(userRemoveClass(null, err.message))
+        store.dispatch(
+            userRemoveClass(null, {
+                msg: err.message as String,
+                options: {
+                    type: 'error'
+                }
+            })
+        )
     }
 }
