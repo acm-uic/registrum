@@ -15,7 +15,6 @@ router.post('/add', isAuthenticated, async (req: Request, res: Response) => {
     // * get user's email before making post request
 
     const { subject, number } = req.body
-    const id = uuidv4()
 
     // POST data check
     if (typeof subject == 'undefined') {
@@ -27,37 +26,32 @@ router.post('/add', isAuthenticated, async (req: Request, res: Response) => {
     }
 
     const user = req.user as UserObject
-    console.log(user)
-    await User.updateOne({ _id: user._id }, { $push: { classes: { subject, number, id } } })
-    res.status(200).send('OK')
+    // await User.updateOne({ _id: user._id }, { $push: { classes: { subject, number, id } } })
+    // res.status(200).send('OK')
+
+    const response = await User.findOneAndUpdate(
+        { _id: user._id },
+        { $push: { classes: { subject, number } } },
+        { rawResult: true, new: true }
+    )
+
+    if (response.ok === 1) res.status(200).send(response.value.classes)
+    else res.status(500).send('Error')
 })
 
 //* POST request params --> email and class
 router.post('/remove', isAuthenticated, async (req: Request, res: Response) => {
-    const { id } = req.body
+    const { _id } = req.body
     const user = req.user as UserObject
 
-    try {
-        await User.updateOne(
-            {
-                _id: user._id
-            },
-            {
-                $pull: { classes: { id } }
-            }
-        )
+    const response = await User.findByIdAndUpdate(
+        { _id: user._id },
+        { $pull: { classes: { _id } } },
+        { rawResult: true, new: true }
+    )
 
-        res.status(200).send('OK')
-    } catch (error) {
-        res.status(400).send('Error')
-    }
-
-    // .then(response => {
-    //         res.status(200).send('OK')
-    // }).catch(err => {
-    //         console.log(err)
-    //         res.status(400).send('Error')
-    // })
+    if (response.ok === 1) res.status(200).send(response.value.classes)
+    else res.status(500).send('Error')
 })
 
 // router.get('/subjects', async (req: Request, res: Response) => {
