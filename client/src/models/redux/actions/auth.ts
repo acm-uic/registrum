@@ -13,16 +13,16 @@ export const userSignIn = (user: User | null, error?: string): Action => ({
 })
 
 export const userSignOut = (error: string): Action => ({
-    payload: error,
+    payload: { error },
     type: 'SIGN_OUT'
 })
 
-export const userAddClass = (cls: Class | null, error: string): Action => ({
+export const userAddClass = (cls: Class[] | null, error: string): Action => ({
     payload: { cls, error },
     type: 'ADD_CLASS'
 })
 
-export const userRemoveClass = (_id: string | null, error: string): Action => ({
-    payload: { _id, error },
+export const userRemoveClass = (cls: Class[] | null, error: string): Action => ({
+    payload: { cls, error },
     type: 'REMOVE_CLASS'
 })
