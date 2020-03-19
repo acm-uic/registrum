@@ -44,7 +44,7 @@ describe('Class Tests', () => {
             console.log('Clear up done')
         })
 
-        const response = await client.post(`auth/signup`, {
+        const response = await client.post(`/auth/signup`, {
             firstname: 'Clark',
             lastname: 'Chen',
             email: 'schen2370@uic.edu',
@@ -55,14 +55,14 @@ describe('Class Tests', () => {
     })
 
     beforeEach(async () => {
-        const response = await client.post('auth/login', {
+        const response = await client.post('/auth/login', {
             email: 'schen2370@uic.edu',
             password: 'theRealClark'
         })
     })
 
     it('Correctly add class to user watch list', async () => {
-        const response = await client.post('classes/add', testClass)
+        const response = await client.post('/classes/add', testClass)
 
         expect(response.status).toBe(200)
         expect(response.data.length).toBe(1)
@@ -79,7 +79,7 @@ describe('Class Tests', () => {
     })
 
     it('Missing number field when add class to user watch list', async () => {
-        const response = await client.post('classes/add', {
+        const response = await client.post('/classes/add', {
             number: 494
         })
 
@@ -88,7 +88,7 @@ describe('Class Tests', () => {
     })
 
     it('Missing subject field when add class to user watch list', async () => {
-        const response = await client.post('classes/add', {
+        const response = await client.post('/classes/add', {
             subject: 'CS'
         })
 
@@ -97,7 +97,7 @@ describe('Class Tests', () => {
     })
 
     it('Correctly retrieves classes for given subject', async () => {
-        const response = await client.get('classes/userlist')
+        const response = await client.get('/classes/userlist')
 
         if (response.status != 200) {
             console.debug(response.data)
@@ -113,7 +113,7 @@ describe('Class Tests', () => {
 
     it('Unauthorized retrieves classes for given subject', async () => {
         await client.get('/auth/logout')
-        const response = await client.get('classes/userlist')
+        const response = await client.get('/classes/userlist')
 
         expect(response.status).toBe(401)
         expect(response.data).toBe('Error, Not logged in')
@@ -123,7 +123,7 @@ describe('Class Tests', () => {
     })
 
     it('Correctly remove class from user watch list', async () => {
-        const response = await client.post('classes/remove', {
+        const response = await client.post('/classes/remove', {
             _id: testClass._id
         })
 
@@ -137,17 +137,17 @@ describe('Class Tests', () => {
 
     it('Remove class with invalid classID from user watch list', async () => {
         // * get the original classes so that it could be compared
-        await client.post('classes/add', { subject: 'CS', number: 500 })
-        await client.post('classes/add', { subject: 'CS', number: 200 })
+        await client.post('/classes/add', { subject: 'CS', number: 500 })
+        await client.post('/classes/add', { subject: 'CS', number: 200 })
 
-        const { status: status1, data: originalClasses } = await client.get('classes/userlist')
+        const { status: status1, data: originalClasses } = await client.get('/classes/userlist')
         expect(status1).toBe(200)
         // * Try to remove bogus class
-        await client.post('classes/remove', {
+        await client.post('/classes/remove', {
             id: '0'
         })
 
-        const { status: status2, data: newClasses } = await client.get('classes/userlist')
+        const { status: status2, data: newClasses } = await client.get('/classes/userlist')
         expect(status2).toBe(200)
         // * Check that the newClasses remain unchanged from bogus remove call
         originalClasses.forEach((cls, idx) => {

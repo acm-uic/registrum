@@ -5,7 +5,8 @@ import { userRemoveClass } from '../../models/redux/actions/auth'
 import { Class } from '../../models/interfaces/Class'
 
 const BASE_PATH = process.env.BASE_PATH || '/api'
-const URL = `${BASE_PATH}/`
+const API_URL = process.env.API_URL || 'http://localhost:4000'
+const URL = `${API_URL}${BASE_PATH}`
 
 const client = axios.create({
     baseURL: URL,
@@ -15,7 +16,7 @@ const client = axios.create({
 
 export const signUp = async (fn: string, ln: string, em: string, pw: string) => {
     try {
-        const response = await client.post('auth/signup', {
+        const response = await client.post('/auth/signup', {
             firstname: fn,
             lastname: ln,
             email: em,
@@ -63,7 +64,7 @@ export const signUp = async (fn: string, ln: string, em: string, pw: string) => 
 
 export const signIn = async (email: string, password: string) => {
     try {
-        const response = await client.post('auth/login', { email, password })
+        const response = await client.post('/auth/login', { email, password })
 
         if (response.status === 200)
             store.dispatch(
@@ -106,7 +107,7 @@ export const signIn = async (email: string, password: string) => {
 
 export const signOut = async () => {
     try {
-        const response = await client.get('auth/logout')
+        const response = await client.get('/auth/logout')
 
         if (response.status === 200 || response.status === 401)
             store.dispatch(
@@ -135,7 +136,7 @@ export const signOut = async () => {
 
 export const addClass = async (subject: string, number: string) => {
     try {
-        const response = await client.post('classes/add', { subject, number })
+        const response = await client.post('/classes/add', { subject, number })
 
         console.log(response)
 
@@ -180,7 +181,7 @@ export const addClass = async (subject: string, number: string) => {
 
 export const removeClass = async (_id: string) => {
     try {
-        const response = await client.post('classes/remove', { _id })
+        const response = await client.post('/classes/remove', { _id })
 
         if (response.status === 200)
             store.dispatch(

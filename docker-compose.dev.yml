@@ -1,4 +1,4 @@
-version: "3"
+version: "3.7"
 services:
   mongo:
     image: mongo
@@ -7,6 +7,8 @@ services:
       - 27017:27017
     networks:
       - kanich-net
+    volumes:
+      - mongo-data:/data/db
   redis:
     image: redis
     restart: always
@@ -14,6 +16,9 @@ services:
       - 6379:6379
     networks:
       - kanich-net
+    volumes:
+      - redis-data:/data
+    command: --appendonly yes
   mongo-express:
     image: mongo-express
     restart: always
@@ -36,6 +41,47 @@ services:
       - redis
     networks:
       - kanich-net
+  api:
+    build:
+      context: api
+      target: dev
+    restart: always
+    working_dir: /usr/src/app
+    environment:
+      - MONGODB_URI=mongodb://mongo:27017/registrum
+      - REDIS_URL=redis://redis
+      - BASE_PATH=/api
+    ports:
+      - 4000:4000
+    volumes:
+      - ./api:/usr/src/app
+      - node_modules_api:/usr/src/app/node_modules
+    depends_on: 
+      - mongo
+      - redis
+    networks: 
+      - kanich-net
+  client:
+    build:
+      context: client
+      target: dev
+    restart: always
+    working_dir: /usr/src/app
+    environment: 
+      - API_URL=http://api:4000
+      - BASE_PATH=/api
+    ports:
+      - 3000:3000
+    volumes: 
+      - ./client:/usr/src/app
+      - node_modules_client:/usr/src/app/node_modules
+    networks: 
+      - kanich-net
 
 networks:
   kanich-net:
+volumes: 
+  node_modules_api:
+  node_modules_client:
+  mongo-data:
+  redis-data:
