@@ -30,7 +30,12 @@ app.use(bodyParser.urlencoded({ extended: true }))
 mongoose.Promise = globalThis.Promise
 
 mongoose
-    .connect(mongoUrl, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true })
+    .connect(mongoUrl, {
+        useNewUrlParser: true,
+        useCreateIndex: true,
+        useUnifiedTopology: true,
+        useFindAndModify: false
+    })
     .then(() => {
         /** ready to use. The `mongoose.connect()` promise resolves to undefined. */
         //console.log("connected to mongoDB")

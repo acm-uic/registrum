@@ -32,7 +32,7 @@ passport.use(
             if (!(await bcrypt.compare(password, user.password))) {
                 return done(null, false, { message: 'Invalid email or password!' })
             }
-            console.log('SUCCESS')
+
             // * Return user
             return done(null, user)
         } catch (err) {}
@@ -43,7 +43,6 @@ export const isAuthenticated = (req: Request, res: Response, next: NextFunction)
     if (req.isAuthenticated()) {
         next()
     } else {
-        console.log('USER NOT LOGGED IN')
         res.status(401).send('Error, Not logged in')
     }
 }
