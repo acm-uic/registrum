@@ -1,5 +1,4 @@
 import express from "express"
-import bodyParser from "body-parser"
 import compression from "compression"
 import apicache from "apicache"
 import cors from "cors"
@@ -20,8 +19,9 @@ const cache = apicache.middleware
 
 app.set("port", PORT)
 app.use(morgan("tiny"))
-app.use(bodyParser)
-app.use(compression)
+app.use(express.urlencoded({ extended: true }))
+app.use(express.json())
+app.use(compression())
 app.options("*", cors)
 
 app.use(cache(CACHE_TIME))

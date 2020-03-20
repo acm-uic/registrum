@@ -8,32 +8,9 @@ type BannerInstance = {
     instance: Banner
 }
 
-const BannerInstances: BannerInstance[] = []
-
-BannerController.post('/subscription', (req: Request, res: Response) => {
-    const { term, subject, courseNumber, hook } = req.body;
-
-    res.sendStatus(501)
-})
-
-BannerController.delete('/subscription', (req: Request, res: Response) => {
-    res.sendStatus(501)
-})
-
-BannerController.get('/subscription', (req: Request, res: Response) => {
-    res.sendStatus(501)
-})
-
-BannerController.get('/subscription/:id', (req: Request, res: Response) => {
-    res.sendStatus(501)
-})
-
-BannerController.get('/class', (req: Request, res: Response) => {
-    res.sendStatus(501)
-})
-
-BannerController.get('/class/:id', (req: Request, res: Response) => {
-    res.sendStatus(501)
+BannerController.get('/class/:term/:subject/:courseNumber', async (req: Request, res: Response) => {
+    const { term, subject, courseNumber } = req.params
+    res.send(await new Banner(term, subject).search({ courseNumber }))
 })
 
 export default BannerController

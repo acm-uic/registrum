@@ -6,7 +6,6 @@ const bannerHost = process.env.BANNER_PROXY || 'https://banner.apps.uillinois.ed
 
 type SearchProps = {
     courseNumber: string
-    subject: string
     startDate?: string
     endDate?: string
     pageOffset?: string
@@ -51,7 +50,6 @@ export class Banner {
 
     public search = async ({
         courseNumber = '',
-        subject = '',
         startDate = '',
         endDate = '',
         pageOffset = '0',
@@ -113,19 +111,3 @@ export class Banner {
         ).data
     }
 }
-
-const aaa = async () => {
-    const b = new Banner('220201', 'CS')
-    const s = await b.search({ courseNumber: '442', subject: 'CS' })
-    const x = await b.search({ courseNumber: '361', subject: 'CS' })
-    const y = await b.search({ courseNumber: '261', subject: 'CS' })
-    const z = await b.search({ courseNumber: '342', subject: 'CS' })
-    const c = new Banner('220201', 'IE')
-    const v = await c.search({ courseNumber: '342', subject: 'IE' })
-    console.log(s.data[0].subject, s.data[0].courseNumber)
-    console.log(x.data[0].subject, x.data[0].courseNumber)
-    console.log(y.data[0].subject, y.data[0].courseNumber)
-    console.log(z.data[0].subject, z.data[0].courseNumber)
-    console.log(v.data[0].subject, v.data[0].courseNumber)
-}
-aaa()
