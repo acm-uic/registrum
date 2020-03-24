@@ -23,7 +23,7 @@ const SignIn = () => {
     return (
         <>
             {/* For toggling the modal */}
-            <span onClick={() => toggleShow(!show)}>Log In</span>
+            <span onClick={() => toggleShow(!show)}>Login</span>
 
             <Modal show={show} onHide={() => toggleShow(!show)} centered>
                 <Modal.Header closeButton>
