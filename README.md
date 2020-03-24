@@ -11,13 +11,13 @@ The application will allow users to subscribe and receive notifications from cla
 
 ## Authors, Specialization
 
-| Member           | Web dev level                   | Specialization  |
-| ---------------- | ------------------------------- | --------------- |
-| Arshad Narmawala | Done a couple projects in React | Mobile, Devops  |
-| Alex Chomiak     | Fullstack engineer at a startup | Devops, Cloud   |
-| Jigar Patel      | Done full stack projects w/ node & vue                 | Frontend, Cloud |
-| Clark Chen       | Novice now, expert next week    | Mobile,Security |
-| Bharat Middha    | Done a couple projects in React | Devops, Cloud   |
+| Member           | Web dev level                          | Specialization  |
+| ---------------- | -------------------------------------- | --------------- |
+| Arshad Narmawala | Done a couple projects in React        | Mobile, Devops  |
+| Alex Chomiak     | Fullstack engineer at a startup        | Devops, Cloud   |
+| Jigar Patel      | Done full stack projects w/ node & vue | Frontend, Cloud |
+| Clark Chen       | Novice now, expert next week           | Mobile,Security |
+| Bharat Middha    | Done a couple projects in React        | Devops, Cloud   |
 
 ## Questions for checkpoint 1
 
@@ -39,15 +39,15 @@ Test Cases are as follows for now:
 
 Security Evaluation
 
-- What things would an attacker potentially want to do using our app that we wouldn’t want them to do?
+- What things would an attacker potentially want to do using our app that we wouldn't want them to do?
   - Making too many API requests
     - Possibly implement API rate limiting
     - API Response Caching
   - XSS Attacks through username & password fields
-  - Session hijacking
-  - Unauthorized page access
-  - CSRF - Cross-Site Request Forgery
-  - Attacks to query class microservice (Manipulating API to instruct microservices to spam requests to Banner)
+    - Session hijacking
+    - Unauthorized page access
+    - CSRF - Cross-Site Request Forgery
+    - Attacks to query class microservice (Manipulating API to instruct microservices to spam requests to Banner)
 - What best practices will we follow security wise for this assignment?
   - How will we accomplish them?
     - Implement security rules on db side to prevent unauthorized http calls
@@ -72,6 +72,23 @@ The full application will be completed with an API, Microservice and React/Types
 - Install Docker Compose <https://docs.docker.com/compose/install/>.
 - Run `docker-compose up`.
 
+## Developing with Docker
+
+- Install Docker <https://docs.docker.com/install/>.
+- Install Docker Compose <https://docs.docker.com/compose/install/>.
+- Run `docker-compose -f docker-compose.dev.yml build --pull --parallel --no-cache`.
+- Run `docker-compose -f docker-compose.dev.yml up -d`.
+
+The docker dev containers expose the following services:
+
+| Service Name     | Ports | Description                      |
+| ---------------- | ----- | -------------------------------- |
+| Registrum Client | 3000  | React App in '/client'           |
+| Registrum API    | 4000  | Node.js API in '/api             |
+| MongoDB Server   | 27017 | MongoDB server needed by the API |
+| Redis Server     | 6379  | Redis server needed by the API   |
+| Mongo Express    | 8081  | MongoDB Web Client               |
+| Redis Commander  | 8082  | Redis Web Client                 |
 
 ## Sources
 
