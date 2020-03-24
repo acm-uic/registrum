@@ -32,6 +32,7 @@ module.exports = {
         compress: true,
         historyApiFallback: true,
         overlay: true,
+        host: '0.0.0.0',
         proxy: {
             '/api': {
                 target: settings.apiProxyUrl,

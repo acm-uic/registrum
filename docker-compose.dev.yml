@@ -1,0 +1,88 @@
+version: "3.7"
+services:
+  mongo:
+    image: mongo
+    restart: always
+    ports:
+      - 27017:27017
+    networks:
+      - kanich-net
+    volumes:
+      - mongo-data:/data/db
+  redis:
+    image: redis
+    restart: always
+    ports:
+      - 6379:6379
+    networks:
+      - kanich-net
+    volumes:
+      - redis-data:/data
+    command: --appendonly yes
+  mongo-express:
+    image: mongo-express
+    restart: always
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=mongo
+    ports:
+      - 8081:8081
+    depends_on:
+      - mongo
+    networks:
+      - kanich-net
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    restart: always
+    environment:
+      - REDIS_HOSTS=local:redis:6379
+    ports:
+      - 8082:8081
+    depends_on:
+      - redis
+    networks:
+      - kanich-net
+  api:
+    build:
+      context: api
+      target: dev
+    restart: always
+    working_dir: /usr/src/app
+    environment:
+      - MONGODB_URI=mongodb://mongo:27017/registrum
+      - REDIS_URL=redis://redis
+      - BASE_PATH=/api
+    ports:
+      - 4000:4000
+    volumes:
+      - ./api:/usr/src/app
+      - node_modules_api:/usr/src/app/node_modules
+    depends_on: 
+      - mongo
+      - redis
+    networks: 
+      - kanich-net
+  client:
+    build:
+      context: client
+      target: dev
+    restart: always
+    working_dir: /usr/src/app
+    environment: 
+      - API_PROXY_URL=http://api:4000
+      - BASE_PATH=/api
+      - CLIENT_PORT=3000
+    ports:
+      - 3000:3000
+    volumes: 
+      - ./client:/usr/src/app
+      - node_modules_client:/usr/src/app/node_modules
+    networks: 
+      - kanich-net
+
+networks:
+  kanich-net:
+volumes: 
+  node_modules_api:
+  node_modules_client:
+  mongo-data:
+  redis-data:
