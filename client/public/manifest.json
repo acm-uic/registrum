@@ -1,7 +1,7 @@
 {
     "short_name": "Registrum",
     "name": "Registrum: Class Tracker",
-    "description": "Class Registration Information for UIC",
+    "description": "A big problem for students at UIC is that its difficult to take classes you prefer because all seats are taken. This purpose of this app is to solve that problem by notifying students when seats become available for specific classes. ",
     "lang": "en-US",
     "categories": [],
     "icons": [
