@@ -3,16 +3,20 @@ ENV PATH=$PATH:/usr/src/app/node_modules/.bin
 WORKDIR /usr/src/app
 COPY package*.json ./
 
-FROM base as dev
-ENV NODE_ENV=development \
-    CHOKIDAR_USEPOLLING=true \
-    BROWSER=none \
-    API_URL=http://api:4000
+FROM base as deps
+RUN apt-get update && \ 
+    apt-get -y install \
+    libglu1 \
+    libxi6 \
+    libgconf-2-4
+
+FROM deps as dev
+ENV NODE_ENV=development
 RUN npm install
 EXPOSE 3000
 CMD npm run start
 
-FROM base as build
+FROM deps as build
 ENV CI=true
 RUN npm ci
 COPY . .
@@ -21,4 +25,4 @@ RUN npm run build --if-present
 
 FROM nginx:alpine as prod
 COPY ./nginx.conf /etc/nginx/conf.d/default.conf
-COPY --from=build /use/src/app/build /usr/share/nginx/html
+COPY --from=build /usr/src/app/build /usr/share/nginx/html
