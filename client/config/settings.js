@@ -20,7 +20,7 @@ module.exports = {
     includeReactInBundle: false,
     includeReduxInBundle: false,
     // * Dev server settings
-    port: 3001,
+    port: process.env.CLIENT_PORT || 3000,
     apiProxyUrl: process.env.API_PROXY_URL || 'http://localhost:4000',
     aliases: {
         // ! Run npm run refresh to update the tsconfig when changing these!!

@@ -10,7 +10,7 @@ jobs:
   publish-client:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
+    - uses: actions/checkout@v2
     - name: client - build and publish image
       run: |
         pushd ./client
@@ -20,7 +20,7 @@ jobs:
   publish-api:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
+    - uses: actions/checkout@v2
     - name: api - build and publish image
       run: |
         pushd ./api
