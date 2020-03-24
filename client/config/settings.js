@@ -21,5 +21,5 @@ module.exports = {
     includeReduxInBundle: false,
     // * Dev server settings
     port: 3001,
-    apiProxyUrl: process.env.API_PROXY_URL || 'https://localhost:4000'
+    apiProxyUrl: process.env.API_PROXY_URL || 'http://localhost:4000'
 }
