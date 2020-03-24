@@ -1,15 +1,22 @@
 import React from 'react'
-import { shallow } from 'enzyme'
 import NavBar from '../components/NavBar'
 import { Provider } from 'react-redux'
 import { store } from '../models/redux/store'
-it('renders', () => {
-    const renderedComponent = shallow(
+import { render, screen } from '@testing-library/react'
+import { BrowserRouter as Router } from 'react-router-dom'
+it('Renders NavBar Correctly', () => {
+    render(
         <Provider store={store}>
-            <NavBar />
+            <Router>
+                <NavBar />
+            </Router>
         </Provider>
-    ).dive()
-    console.log(renderedComponent.debug())
+    )
 
-    expect(renderedComponent.contains('Classes')).toBeTruthy()
+    // * Test for Links in App
+    expect(screen.getByText('Registrum')).toBeDefined()
+    expect(screen.getByText('About Us')).toBeDefined()
+    expect(screen.getByText('Contact')).toBeDefined()
+    expect(screen.getByText('Login')).toBeDefined()
+    expect(screen.getByText('Register')).toBeDefined()
 })
