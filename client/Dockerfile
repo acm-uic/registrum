@@ -13,10 +13,10 @@ EXPOSE 3000
 CMD npm run start
 
 FROM base as build
-ENV NODE_ENV=production
 ENV CI=true
 RUN npm ci
 COPY . .
+ENV NODE_ENV=production
 RUN npm run build --if-present
 
 FROM nginx:alpine as prod
