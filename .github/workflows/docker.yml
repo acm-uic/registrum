@@ -7,8 +7,26 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
       - name: Build the Docker image
         run: |
-          docker-compose build
-      
+          docker-compose build --pull --parallel
+      - if: github.ref == 'refs/heads/master'
+        name: Push the Docker image
+        run: |
+          echo ${{ secrets.GITHUB_TOKEN }} | docker login docker.pkg.github.com --username ${{ github.actor }} --password-stdin
+          docker-compose -f docker-compose.yml push
+
+  build-dev-docker:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build the development Docker image
+        run: |
+          docker-compose -f docker-compose.dev.yml build --pull --parallel
+      - if: github.ref == 'refs/heads/master'
+        name: Push the development Docker image
+        run: |
+          echo ${{ secrets.GITHUB_TOKEN }} | docker login docker.pkg.github.com --username ${{ github.actor }} --password-stdin
+          docker-compose -f docker-compose.dev.yml push

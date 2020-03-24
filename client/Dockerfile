@@ -1,5 +1,5 @@
 FROM node:12-buster AS base
-ENV PATH=$PATH:/home/node/app/node_modules/.bin
+ENV PATH=$PATH:/usr/src/app/node_modules/.bin
 WORKDIR /usr/src/app
 COPY package*.json ./
 

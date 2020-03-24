@@ -45,6 +45,7 @@ services:
     build:
       context: api
       target: dev
+    image: docker.pkg.github.com/ckanich-classrooms/final-project-dream-team-1/api:dev
     restart: always
     working_dir: /usr/src/app
     environment:
@@ -65,6 +66,7 @@ services:
     build:
       context: client
       target: dev
+    image: docker.pkg.github.com/ckanich-classrooms/final-project-dream-team-1/client:dev
     restart: always
     working_dir: /usr/src/app
     environment: 

@@ -1,21 +1,22 @@
-version: "3"
+version: "3.7"
 
 services:
   api:
-    container_name: api
-    build: "api"
+    build:
+      context: api
+      target: prod
+    image: docker.pkg.github.com/ckanich-classrooms/final-project-dream-team-1/api:master
     restart: always
     environment:
       - MONGODB_URI=mongodb://mongo:27017/registrum
       - REDIS_URL=redis://redis
       - NODE_ENV=production
       - BASE_PATH=/api
-    links:
-      - mongo
-      - redis
     depends_on:
       - mongo
       - redis
+    networks:
+      - kanich-net
   redis:
     image: redis:alpine
     restart: always
@@ -23,15 +24,22 @@ services:
     volumes:
       - redis-data:/data
     command: --appendonly yes
+    networks: 
+      - kanich-net
   mongo:
     container_name: mongodb
     restart: always
     image: mongo:latest
     volumes:
       - mongo-data:/data/db
+    networks: 
+      - kanich-net
   client:
     container_name: client
-    build: "client"
+    build:
+      context: client
+      target: prod
+    image: docker.pkg.github.com/ckanich-classrooms/final-project-dream-team-1/client:master
     restart: always
     environment:
       - NODE_ENV=production
@@ -39,7 +47,11 @@ services:
       - api
     ports:
       - 8080:80
+    networks: 
+      - kanich-net
 
+networks:
+  kanich-net:
 volumes:
   mongo-data:
   redis-data:
