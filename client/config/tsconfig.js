@@ -31,7 +31,7 @@ const config = {
         },
         target: 'esnext',
         outDir: './public/',
-        strictNullChecks: true,
+        strictNullChecks: false,
         moduleResolution: 'node',
         allowJs: true,
         noEmit: true,
