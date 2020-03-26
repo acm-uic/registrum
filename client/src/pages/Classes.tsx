@@ -16,7 +16,10 @@ const Classes: FC = () => {
 
             <Container fluid>
                 <Row>
-                    <Col>{user !== null && user.classes.map(cls => <ClassView cls={cls} />)}</Col>
+                    <Col>
+                        {user !== null &&
+                            user.classes.map(cls => <ClassView key={cls._id} cls={cls} />)}
+                    </Col>
                 </Row>
             </Container>
         </div>
