@@ -2,15 +2,38 @@ import React, { useState } from 'react'
 
 import { Button, Modal, Form } from 'react-bootstrap'
 
-import { signUp } from '../utils/functions/authentication'
+// import { signUp } from '../utils/functions/authentication'
 
 const SignUp = () => {
     const [show, toggleShow] = useState(false)
+    const [validated, setValidated] = useState(false)
 
     const [fName, setFName] = useState('')
     const [lName, setLName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        const form = e.currentTarget
+        console.log('Form: ' + form.checkValidity())
+
+        if (form.checkValidity() === false) {
+            e.preventDefault()
+            e.stopPropagation()
+        }
+
+        setValidated(true)
+
+        e.preventDefault()
+
+        // toggleShow(false)
+        // setFName('')
+        // setLName('')
+        // setEmail('')
+        // setPassword('')
+
+        // await signUp(fName, lName, email, password)
+    }
 
     return (
         <>
@@ -21,7 +44,7 @@ const SignUp = () => {
                     <Modal.Title>Sign Up</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <Form>
+                    <Form validated={validated} onSubmit={handleSubmit}>
                         <Form.Group>
                             <Form.Label>First Name</Form.Label>
                             <Form.Control
@@ -44,7 +67,7 @@ const SignUp = () => {
                             />
                         </Form.Group>
 
-                        <Form.Group>
+                        <Form.Group controlId="validationEmail">
                             <Form.Label>Email address</Form.Label>
                             <Form.Control
                                 type="email"
@@ -54,9 +77,20 @@ const SignUp = () => {
                                     setEmail(e.target.value)
                                 }}
                             />
+                            <Form.Control.Feedback type="invalid">
+                                Invalid Input!
+                            </Form.Control.Feedback>
                             <Form.Text className="text-muted">
                                 We'll never share your email with anyone else.
                             </Form.Text>
+                        </Form.Group>
+
+                        <Form.Group controlId="validationCustom04">
+                            <Form.Label>State</Form.Label>
+                            <Form.Control type="text" placeholder="State" required />
+                            <Form.Control.Feedback type="invalid">
+                                Please provide a valid state.
+                            </Form.Control.Feedback>
                         </Form.Group>
 
                         <Form.Group>
@@ -70,26 +104,12 @@ const SignUp = () => {
                                 }}
                             />
                         </Form.Group>
+
+                        <Form.Group>
+                            <Button type="submit">Sign Up</Button>
+                        </Form.Group>
                     </Form>
                 </Modal.Body>
-                <Modal.Footer>
-                    <Button
-                        variant="primary"
-                        onClick={async (e: React.MouseEvent<HTMLButtonElement>) => {
-                            e.preventDefault()
-
-                            toggleShow(false)
-                            setFName('')
-                            setLName('')
-                            setEmail('')
-                            setPassword('')
-
-                            await signUp(fName, lName, email, password)
-                        }}
-                    >
-                        Sign Up
-                    </Button>
-                </Modal.Footer>
             </Modal>
         </>
     )
