@@ -20,7 +20,11 @@
   - [Docker](#docker)
     - [Production Deployment](#production-deployment)
     - [Developing with Docker](#developing-with-docker)
+    - [Prerequisites](#prerequisites)
+    - [Getting the development container images](#getting-the-development-container-images)
+    - [Running the development containers](#running-the-development-containers)
     - [Using commands in the containers](#using-commands-in-the-containers)
+    - [Other common commands](#other-common-commands)
   - [Sources](#sources)
 
 ## Description
@@ -129,8 +133,12 @@ The docker containers expose the following services:
 
 ### Developing with Docker
 
+### Prerequisites
+
 - Install Docker <https://docs.docker.com/install/>.
 - Install Docker Compose <https://docs.docker.com/compose/install/>.
+
+### Getting the development container images
 
 ```powershell
 # Login in to GitHub Package Registry (required for pulling containers)
@@ -141,8 +149,19 @@ docker-compose pull
 
 # Build the development containers (not required if using pull)
 docker-compose build --pull --no-cache
-# Builds can be sped up by using --parallel (can be slower less resources are allocated to Docker)
+# Builds can be sped up by using --parallel (can be slower if less resources are allocated to Docker)
 docker-compose build --pull --no-cache --parallel
+```
+
+### Running the development containers
+
+```powershell
+# Create the services defined in docker-compose.yml
+docker-compose up -d
+# Check running service status
+docker-compose ps
+# Stop services
+docker-compose down
 ```
 
 ### Using commands in the containers
@@ -155,6 +174,13 @@ docker-compose exec client npm install redux-persist
 # Run a shell inside a container. Dev Containers are built with Debian base image which include bash among other utilities. They are not available in production containers as they are built with alpine.
 docker-compose exec api bash
 docker-compose exec client bash
+```
+
+### Other common commands
+
+```powershell
+# Restart service
+docker-compose restart api
 ```
 
 The docker dev containers expose the following services:
