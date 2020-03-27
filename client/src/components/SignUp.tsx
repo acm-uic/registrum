@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 
 import { Button, Modal, Form } from 'react-bootstrap'
 
-// import { signUp } from '../utils/functions/authentication'
+import { signUp } from '../utils/functions/authentication'
 
 const SignUp = () => {
     const [show, toggleShow] = useState(false)
@@ -13,26 +13,34 @@ const SignUp = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        const form = e.currentTarget
-        console.log('Form: ' + form.checkValidity())
-
-        if (form.checkValidity() === false) {
-            e.preventDefault()
-            e.stopPropagation()
-        }
-
+    const handleClick = async () => {
         setValidated(true)
 
-        e.preventDefault()
+        const nameRegex = /[a-zA-Z]+[a-zA-Z0-9\s]+[a-zA-Z]/
+        if (!nameRegex.test(fName) || !nameRegex.test(lName)) {
+            return
+        }
 
-        // toggleShow(false)
-        // setFName('')
-        // setLName('')
-        // setEmail('')
-        // setPassword('')
+        // * Verify that the email matches according to W3C standard
+        if (!/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email)) {
+            return
+        }
 
-        // await signUp(fName, lName, email, password)
+        // * Verify the the password is adhering to out standard
+        // * Length is atleast than 8
+        // * Has one lower case and upper case English letter
+        // * Has one digit and one special character
+        if (!/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/.test(password)) {
+            return
+        }
+
+        toggleShow(false)
+        setFName('')
+        setLName('')
+        setEmail('')
+        setPassword('')
+
+        await signUp(fName, lName, email, password)
     }
 
     return (
@@ -44,27 +52,51 @@ const SignUp = () => {
                     <Modal.Title>Sign Up</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <Form validated={validated} onSubmit={handleSubmit}>
-                        <Form.Group>
+                    <Form validated={validated}>
+                        <Form.Group controlId="validationFirstName">
                             <Form.Label>First Name</Form.Label>
                             <Form.Control
                                 placeholder="Jon"
                                 value={fName}
+                                type="text"
+                                pattern="[a-zA-Z]+[a-zA-Z0-9\s]+[a-zA-Z]"
+                                onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+                                    if (e.key === ' ') {
+                                        e.preventDefault()
+                                        setFName(fName + ' ')
+                                    }
+                                }}
                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                    console.log(e.target.value)
                                     setFName(e.target.value)
                                 }}
                             />
+                            <Form.Control.Feedback type="invalid">
+                                Your firstname must start with a alphanumeric character and should
+                                not contain any special characters.
+                            </Form.Control.Feedback>
                         </Form.Group>
 
-                        <Form.Group>
+                        <Form.Group controlId="validationLastName">
                             <Form.Label>Last Name</Form.Label>
                             <Form.Control
                                 placeholder="Doe"
                                 value={lName}
+                                pattern="[a-zA-Z]+[a-zA-Z0-9\s]+[a-zA-Z]"
+                                onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+                                    if (e.key === ' ') {
+                                        e.preventDefault()
+                                        setLName(lName + ' ')
+                                    }
+                                }}
                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                     setLName(e.target.value)
                                 }}
                             />
+                            <Form.Control.Feedback type="invalid">
+                                Your lastname must start with a alphanumeric character and should
+                                not contain any special characters.
+                            </Form.Control.Feedback>
                         </Form.Group>
 
                         <Form.Group controlId="validationEmail">
@@ -78,35 +110,34 @@ const SignUp = () => {
                                 }}
                             />
                             <Form.Control.Feedback type="invalid">
-                                Invalid Input!
+                                Please provide a valid email
                             </Form.Control.Feedback>
                             <Form.Text className="text-muted">
                                 We'll never share your email with anyone else.
                             </Form.Text>
                         </Form.Group>
 
-                        <Form.Group controlId="validationCustom04">
-                            <Form.Label>State</Form.Label>
-                            <Form.Control type="text" placeholder="State" required />
-                            <Form.Control.Feedback type="invalid">
-                                Please provide a valid state.
-                            </Form.Control.Feedback>
-                        </Form.Group>
-
-                        <Form.Group>
+                        <Form.Group controlId="validationPassword">
                             <Form.Label>Password</Form.Label>
                             <Form.Control
                                 type="password"
                                 placeholder="Password"
+                                pattern="(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}"
                                 value={password}
                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                     setPassword(e.target.value)
                                 }}
                             />
+                            <Form.Control.Feedback type="invalid">
+                                Your password must be atleast 8 characters long and have a digit, a
+                                special character, and an uppercase and lowercase English letter
+                            </Form.Control.Feedback>
                         </Form.Group>
 
                         <Form.Group>
-                            <Button type="submit">Sign Up</Button>
+                            <Button variant="primary" onClick={handleClick}>
+                                Sign Up
+                            </Button>
                         </Form.Group>
                     </Form>
                 </Modal.Body>
