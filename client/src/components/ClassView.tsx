@@ -6,6 +6,7 @@ import { Card } from 'react-bootstrap'
 import { removeClass } from '../utils/functions/authentication'
 
 interface ClassViewProps {
+    key: String
     cls: Class
 }
 
