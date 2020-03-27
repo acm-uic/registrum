@@ -3,7 +3,7 @@ import axios from 'axios'
 import axiosCookieJarSupport from 'axios-cookiejar-support'
 import { CookieJar } from 'tough-cookie'
 import User from '../routes/models/User'
-import app from '../app'
+import app, { mongoose, redisClient } from '../app'
 import { response } from 'express'
 dotenv.config()
 const PORT = process.env.PORT || 8081
@@ -27,10 +27,33 @@ axiosCookieJarSupport(client)
 
 describe('Class Tests', () => {
     afterAll(async () => {
-        //Remove user from DB
-        await User.deleteMany({}).then(() => {
-            console.log('Clear up done')
+        // * Remove all users from DB
+        await new Promise((resolve, reject) => {
+            mongoose.connection.db.dropCollection('users', function(err, result) {
+                resolve()
+            })
         })
+
+        // * Close DB Connection
+        await new Promise((resolve, reject) => {
+            mongoose.connection.close(() => {
+                resolve()
+            })
+        })
+
+        // * Quit Redis Client
+        await new Promise(resolve => {
+            redisClient.quit(() => {
+                resolve()
+            })
+        })
+        // ? SOURCE: https://stackoverflow.com/questions/52939575/node-js-jest-redis-quit-but-open-handle-warning-persists
+        // * redis.quit() creates a thread to close the connection.
+        // * We wait until all threads have been run once to ensure the connection closes.
+        await new Promise(resolve => setImmediate(resolve))
+
+        // * Close Server
+        await server.close()
     })
 
     let testClass = {
@@ -40,10 +63,6 @@ describe('Class Tests', () => {
     }
 
     beforeAll(async () => {
-        await User.deleteMany({}).then(() => {
-            console.log('Clear up done')
-        })
-
         const response = await client.post(`auth/signup`, {
             firstname: 'Clark',
             lastname: 'Chen',
@@ -72,10 +91,6 @@ describe('Class Tests', () => {
         expect(response.data[0]._id).not.toBe('')
 
         testClass = response.data[0]
-
-        if (response.status != 200) {
-            console.debug(response.data)
-        }
     })
 
     it('Missing number field when add class to user watch list', async () => {
@@ -99,9 +114,6 @@ describe('Class Tests', () => {
     it('Correctly retrieves classes for given subject', async () => {
         const response = await client.get('classes/userlist')
 
-        if (response.status != 200) {
-            console.debug(response.data)
-        }
         expect(response.status).toBe(200)
         expect(response.data.length).toBe(1)
 
@@ -117,9 +129,6 @@ describe('Class Tests', () => {
 
         expect(response.status).toBe(401)
         expect(response.data).toBe('Error, Not logged in')
-        if (response.status != 401) {
-            console.debug(response.data)
-        }
     })
 
     it('Correctly remove class from user watch list', async () => {
@@ -129,10 +138,6 @@ describe('Class Tests', () => {
 
         expect(response.status).toBe(200)
         expect(response.data.length).toBe(0)
-
-        if (response.status != 200) {
-            console.error(response.data)
-        }
     })
 
     it('Remove class with invalid classID from user watch list', async () => {
