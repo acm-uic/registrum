@@ -47,8 +47,8 @@ describe('Class Tests', () => {
         const response = await client.post(`auth/signup`, {
             firstname: 'Clark',
             lastname: 'Chen',
-            email: 'schen237@uic.edu',
-            password: 'theRealClark1$'
+            email: 'schen2370@uic.edu',
+            password: 'theRealClark'
         })
 
         expect(response.status).toBe(200)
@@ -56,8 +56,8 @@ describe('Class Tests', () => {
 
     beforeEach(async () => {
         const response = await client.post('auth/login', {
-            email: 'schen237@uic.edu',
-            password: 'theRealClark1$'
+            email: 'schen2370@uic.edu',
+            password: 'theRealClark'
         })
     })
 
