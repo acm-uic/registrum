@@ -13,7 +13,8 @@ const SignUp = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
-    const handleClick = async () => {
+    const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault()
         setValidated(true)
 
         const nameRegex = /[a-zA-Z]+[a-zA-Z0-9\s]+[a-zA-Z]/
@@ -34,6 +35,7 @@ const SignUp = () => {
             return
         }
 
+        setValidated(false)
         toggleShow(false)
         setFName('')
         setLName('')
