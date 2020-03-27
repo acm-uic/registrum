@@ -59,6 +59,7 @@ const SignUp = () => {
                                 placeholder="Jon"
                                 value={fName}
                                 type="text"
+                                required
                                 pattern="[a-zA-Z]+[a-zA-Z0-9\s]+[a-zA-Z]"
                                 onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
                                     if (e.key === ' ') {
@@ -82,6 +83,7 @@ const SignUp = () => {
                             <Form.Control
                                 placeholder="Doe"
                                 value={lName}
+                                required
                                 pattern="[a-zA-Z]+[a-zA-Z0-9\s]+[a-zA-Z]"
                                 onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
                                     if (e.key === ' ') {
@@ -104,6 +106,7 @@ const SignUp = () => {
                             <Form.Control
                                 type="email"
                                 placeholder="Enter email"
+                                required
                                 value={email}
                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                     setEmail(e.target.value)
@@ -122,6 +125,7 @@ const SignUp = () => {
                             <Form.Control
                                 type="password"
                                 placeholder="Password"
+                                required
                                 pattern="(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}"
                                 value={password}
                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
