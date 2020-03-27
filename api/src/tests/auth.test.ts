@@ -40,7 +40,7 @@ describe('Authentication Tests', () => {
                 firstname: 'Clark',
                 lastname: 'Chen',
                 email: 'schen237@uic.edu',
-                password: 'theRealClark1$'
+                password: 'theRealClark'
             })
 
             expect(response.status).toBe(200)
@@ -53,7 +53,7 @@ describe('Authentication Tests', () => {
                 firstname: 'Clark',
                 lastname: 'Chen',
                 email: 'schen237@uic.edu',
-                password: 'theRealClark1$'
+                password: 'theRealClark'
             })
 
             expect(response.status).toBe(400)
@@ -68,7 +68,7 @@ describe('Authentication Tests', () => {
         it('Logs user in correctly using email, password', async () => {
             const response = await client.post('login', {
                 email: 'schen237@uic.edu',
-                password: 'theRealClark1$'
+                password: 'theRealClark'
             })
 
             expect(response.status).toBe(200)
@@ -92,7 +92,7 @@ describe('Authentication Tests', () => {
         it('Cannot login with incorrect email', async () => {
             const response = await client.post('login', {
                 email: 'schen237@acm.cs.uic.edu',
-                password: 'theRealClark1$'
+                password: 'theRealClark'
             })
 
             expect(response.status).toBe(401)
@@ -101,7 +101,7 @@ describe('Authentication Tests', () => {
         it('Cannot login with incorrect password', async () => {
             const response = await client.post('login', {
                 email: 'schen237@uic.edu',
-                password: 'theFakeClark1$'
+                password: 'theFakeClark'
             })
 
             expect(response.status).toBe(401)

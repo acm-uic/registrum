@@ -34,7 +34,7 @@ export const signUp = async (fn: string, ln: string, em: string, pw: string) => 
         else if (response.status === 400)
             store.dispatch(
                 userSignUp(null, {
-                    msg: response.data,
+                    msg: 'Email already exist! Please login',
                     options: {
                         type: 'info'
                     }
