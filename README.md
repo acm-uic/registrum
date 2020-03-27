@@ -20,6 +20,7 @@
   - [Docker](#docker)
     - [Production Deployment](#production-deployment)
     - [Developing with Docker](#developing-with-docker)
+    - [Using commands in the containers](#using-commands-in-the-containers)
   - [Sources](#sources)
 
 ## Description
@@ -118,14 +119,43 @@ Build containers, tag them with the release version, and publish them to GitHub 
 
 - Install Docker <https://docs.docker.com/install/>.
 - Install Docker Compose <https://docs.docker.com/compose/install/>.
-- Run `docker-compose up`.
+- Run `docker-compose -f docker-compose.prod.yml up`.
+
+The docker containers expose the following services:
+
+| Service Name | Ports | Description                                     |
+| ------------ | ----- | ----------------------------------------------- |
+| Nginx        | 8080  | Servers static files and proxies other services |
 
 ### Developing with Docker
 
 - Install Docker <https://docs.docker.com/install/>.
 - Install Docker Compose <https://docs.docker.com/compose/install/>.
-- Run `docker-compose -f docker-compose.dev.yml build --pull --parallel --no-cache` to build the development containers or run `docker-compose -f docker-compose.dev.yml pull` to download them from GitHub Package Registry (running the pull requires the user to be logged in with `docker login docker.pkg.github.com --username <github_username>`, then typing their password / personal access token).
-- Run `docker-compose -f docker-compose.dev.yml up -d`.
+
+```powershell
+# Login in to GitHub Package Registry (required for pulling containers)
+docker login docker.pkg.github.com --username <github_username>
+
+# Pull prebuilt development containers from GitHub Package Registry (not required if using build)
+docker-compose pull
+
+# Build the development containers (not required if using pull)
+docker-compose build --pull --no-cache
+# Builds can be sped up by using --parallel (can be slower less resources are allocated to Docker)
+docker-compose build --pull --no-cache --parallel
+```
+
+### Using commands in the containers
+
+```powershell
+# Running commands inside the container
+docker-compose exec api npm install express
+docker-compose exec client npm install redux-persist
+
+# Run a shell inside a container. Dev Containers are built with Debian base image which include bash among other utilities. They are not available in production containers as they are built with alpine.
+docker-compose exec api bash
+docker-compose exec client bash
+```
 
 The docker dev containers expose the following services:
 
