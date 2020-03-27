@@ -17,7 +17,6 @@
         "watch-debug": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"yellow.bold,green.bold\" \"npm run watch-ts\" \"npm run serve-debug\""
     },
     "dependencies": {
-        "@types/bcrypt": "^3.0.0",
         "async": "^3.2.0",
         "axios": "^0.19.2",
         "axios-cookiejar-support": "^0.5.1",
@@ -50,6 +49,7 @@
     },
     "devDependencies": {
         "@types/async": "^3.0.8",
+        "@types/bcrypt": "^3.0.0",
         "@types/bcrypt-nodejs": "^0.0.31",
         "@types/body-parser": "^1.19.0",
         "@types/chai": "^4.2.11",
