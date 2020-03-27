@@ -7,6 +7,7 @@ on:
     types: [published]
 
 jobs:
+
   publish-client:
     runs-on: ubuntu-latest
     steps:
@@ -17,6 +18,7 @@ jobs:
         docker build -t docker.pkg.github.com/${{ github.repository }}/client:$(echo ${{ github.ref }} | sed 's/refs\/tags\///g') .
         echo ${{ secrets.GITHUB_TOKEN }} | docker login docker.pkg.github.com --username ${{ github.actor }} --password-stdin
         docker push docker.pkg.github.com/${{ github.repository }}/client:$(echo ${{ github.ref }} | sed 's/refs\/tags\///g')
+
   publish-api:
     runs-on: ubuntu-latest
     steps:
@@ -27,3 +29,14 @@ jobs:
         docker build -t docker.pkg.github.com/${{ github.repository }}/api:$(echo ${{ github.ref }} | sed 's/refs\/tags\///g') .
         echo ${{ secrets.GITHUB_TOKEN }} | docker login docker.pkg.github.com --username ${{ github.actor }} --password-stdin
         docker push docker.pkg.github.com/${{ github.repository }}/api:$(echo ${{ github.ref }} | sed 's/refs\/tags\///g')
+
+  publish-banner:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: banner - build and publish image
+      run: |
+        pushd ./banner
+        docker build -t docker.pkg.github.com/${{ github.repository }}/banner:$(echo ${{ github.ref }} | sed 's/refs\/tags\///g') .
+        echo ${{ secrets.GITHUB_TOKEN }} | docker login docker.pkg.github.com --username ${{ github.actor }} --password-stdin
+        docker push docker.pkg.github.com/${{ github.repository }}/banner:$(echo ${{ github.ref }} | sed 's/refs\/tags\///g')
