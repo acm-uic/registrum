@@ -1,7 +1,10 @@
 FROM node:12-buster AS base
-ENV PATH=$PATH:/usr/src/app/node_modules/.bin
+ENV PATH=$PATH:/usr/src/app/node_modules/.bin \
+    NODE_ENV=development \
+    CI=true
 WORKDIR /usr/src/app
 COPY package*.json ./
+RUN npm install
 
 FROM base as deps
 RUN apt-get update && \ 
@@ -11,16 +14,11 @@ RUN apt-get update && \
     libgconf-2-4
 
 FROM deps as dev
-ENV NODE_ENV=development
-RUN npm install
 EXPOSE 3000
 CMD npm run start
 
 FROM deps as build
-ENV CI=true
-RUN npm ci
 COPY . .
-ENV NODE_ENV=production
 RUN npm run build --if-present
 
 FROM nginx:alpine as prod
