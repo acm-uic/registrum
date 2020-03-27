@@ -3,10 +3,9 @@ import axios from 'axios'
 import User from '../routes/models/User'
 import axiosCookieJarSupport from 'axios-cookiejar-support'
 import { CookieJar } from 'tough-cookie'
-import general from '../app'
+import app, { mongoose, redisClient } from '../app'
 
 dotenv.config()
-const app = general
 const PORT = process.env.PORT || 8080
 const BASE_PATH = process.env.BASE_PATH || '/api'
 const URL = `http://localhost:${PORT}${BASE_PATH}/auth/`
@@ -27,14 +26,37 @@ const client = axios.create({
 axiosCookieJarSupport(client)
 
 describe('Authentication Tests', () => {
-    describe('Sanity Tests', () => {
-        afterAll(async () => {
-            //Remove all users from DB
-            await User.deleteMany({}).then(() => {
-                console.log('Clear up done')
+    afterAll(async () => {
+        // * Remove all users from DB
+        await new Promise((resolve, reject) => {
+            mongoose.connection.db.dropCollection('users', function(err, result) {
+                resolve()
             })
         })
 
+        // * Close DB Connection
+        await new Promise((resolve, reject) => {
+            mongoose.connection.close(() => {
+                resolve()
+            })
+        })
+
+        // * Quit Redis Client
+        await new Promise(resolve => {
+            redisClient.quit(() => {
+                resolve()
+            })
+        })
+        // ? SOURCE: https://stackoverflow.com/questions/52939575/node-js-jest-redis-quit-but-open-handle-warning-persists
+        // * redis.quit() creates a thread to close the connection.
+        // * We wait until all threads have been run once to ensure the connection closes.
+        await new Promise(resolve => setImmediate(resolve))
+
+        // * Close Server
+        await server.close()
+    })
+
+    describe('Sanity Tests', () => {
         it('Register an account', async () => {
             const response = await client.post('signup', {
                 firstname: 'Clark',
@@ -44,10 +66,8 @@ describe('Authentication Tests', () => {
             })
 
             expect(response.status).toBe(200)
-            if (response.status != 200) {
-                console.log(response.data)
-            }
         })
+
         it('Register duplicate account', async () => {
             const response = await client.post('signup', {
                 firstname: 'Clark',
@@ -58,9 +78,6 @@ describe('Authentication Tests', () => {
 
             expect(response.status).toBe(400)
             expect(response.data).toBe('Email already exists!')
-            if (response.status != 400) {
-                console.log(response.data)
-            }
         })
 
         // ! xit indicates test case is pending and not written yet, remember to change to it
@@ -125,9 +142,6 @@ describe('Authentication Tests', () => {
             })
 
             expect(response.status).toBe(401)
-            if (response.status != 401) {
-                console.log(response.data)
-            }
         })
     })
 })
