@@ -60,7 +60,10 @@ app.use(bodyParser.urlencoded({ extended: true }))
 // * Initialize Redis Client and Redis Session Store
 const redis = require('redis')
 const redisClient = redis.createClient(redisUrl)
+
 const RedisStore = require('connect-redis')(session)
+const SessionStore = new RedisStore({ client: redisClient, resave: false })
+SessionStore.client.unref()
 
 // * Setup Express Session
 app.use(
@@ -68,7 +71,8 @@ app.use(
         resave: true,
         saveUninitialized: true,
         secret: process.env.SESSION_SECRET || 'This is not a secure secret!',
-        store: new RedisStore({ client: redisClient, secret: 'CHANGE THIS', resave: false })
+        store: SessionStore,
+        cookie: { secure: process.env.NODE_ENV === 'production' }
     })
 )
 
@@ -85,4 +89,4 @@ app.use(baseUrl, router)
 // app.use('/', expressRoutes)
 
 export default app
-export { mongoose }
+export { mongoose, redisClient }
