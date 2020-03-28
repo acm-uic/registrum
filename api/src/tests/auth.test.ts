@@ -129,6 +129,55 @@ describe('Authentication Tests', () => {
 
             expect(response.status).toBe(501) // TODO
         })
+
+        // Test Input Validation
+        it('Register with invalid firstname', async () => {
+            const response = await client.post('signup', {
+                firstname: 'Clark1',
+                lastname: 'Chen',
+                email: 'schen237@uic.edu',
+                password: 'theRealClark1$'
+            })
+
+            expect(response.status).toBe(400)
+            expect(response.data).toBe("Name is invalid")
+        })
+        
+        it('Register with invalid lastname', async () => {
+            const response = await client.post('signup', {
+                firstname: 'Clark',
+                lastname: 'Chen1',
+                email: 'schen237@uic.edu',
+                password: 'theRealClark1$'
+            })
+
+            expect(response.status).toBe(400)
+            expect(response.data).toBe("Name is invalid")
+        })
+        
+        it('Register with invalid email', async () => {
+            const response = await client.post('signup', {
+                firstname: 'Clark',
+                lastname: 'Chen',
+                email: 'schen237uic.edu',
+                password: 'theRealClark1$'
+            })
+
+            expect(response.status).toBe(400)
+            expect(response.data).toBe("Email is invalid")
+        })
+        
+        it('Register with invalid password', async () => {
+            const response = await client.post('signup', {
+                firstname: 'Clark',
+                lastname: 'Chen',
+                email: 'schen237@uic.edu',
+                password: 'theRealClark'
+            })
+
+            expect(response.status).toBe(400)
+            expect(response.data).toBe("Password is not strong enough")
+        })
     })
 
     describe('Edge Case tests', () => {

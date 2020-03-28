@@ -46,7 +46,7 @@ router.post('/signup', async (req: Request, res: Response) => {
     const { firstname, lastname, email, password } = req.body
 
     // * Verify that the first and last name is valid
-    const nameRegex = /[^0-9\.\,\"\?\!\;\:\#\$\%\&\(\)\*\+\-\/\<\>\=\@\[\]\\\^\_\{\}\|\~]/
+    const nameRegex = /^[^0-9\.\,\"\?\!\;\:\#\$\%\&\(\)\*\+\-\/\<\>\=\@\[\]\\\^\_\{\}\|\~]+$/
     if (!nameRegex.test(firstname) || !nameRegex.test(lastname)) {
         res.status(400).send('Name is invalid')
         return
