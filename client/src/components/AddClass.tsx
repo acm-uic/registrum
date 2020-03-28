@@ -35,25 +35,13 @@ const AddClass = () => {
     useEffect(() => {
         if (terms.length === 0) {
             // * Fetch subjects from API
-            console.log('FETCHING SUBJECTS')
             axios.get('/api/classes/terms').then((res: AxiosResponse) => {
                 // * Destructure response from API
                 const { data: terms } = res
 
                 // * Set terms
                 setTerms(terms)
-
-                console.log(terms)
             })
-
-            axios
-                .get('/api/banner/statuses', {
-                    withCredentials: true
-                })
-                .then((res: AxiosResponse) => {
-                    console.log('Statuses')
-                    console.log(res.data)
-                })
         }
     }, [subjects])
 
@@ -112,8 +100,8 @@ const AddClass = () => {
             dispatch(updateUser())
         }
     }
-
     return (
+        // * Terms > Subjects > Classes
         <>
             {/* For toggling the modal */}
 

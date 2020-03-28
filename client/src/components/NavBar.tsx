@@ -54,7 +54,6 @@ const NavBar = () => {
                             title={
                                 <>
                                     <FontAwesomeIcon icon={faUserCircle} />
-                                    {'  '}
                                     {user.firstname}
                                 </>
                             }
@@ -73,7 +72,7 @@ const NavBar = () => {
                                 }}
                             >
                                 <FontAwesomeIcon icon={faSignOutAlt} />
-                                {'  '}Sign Out
+                                Sign Out
                             </NavDropdown.Item>
                         </NavDropdown>
                     )}

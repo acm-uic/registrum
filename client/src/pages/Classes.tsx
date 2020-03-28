@@ -20,7 +20,7 @@ const Classes: FC = () => {
             // * Update statuses
             setStatuses(res.data as Status[])
         })
-    }, [auth])
+    }, [auth.user])
 
     return (
         <div>

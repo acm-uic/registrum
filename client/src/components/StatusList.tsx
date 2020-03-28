@@ -12,8 +12,8 @@ const StatusList: FC<StatusListProps> = ({ statuses }) => {
         <Container fluid>
             <Row>
                 <Col>
-                    {statuses.map(status => (
-                        <StatusView status={status} />
+                    {statuses.map((status, index) => (
+                        <StatusView key={index} status={status} />
                     ))}
                 </Col>
             </Row>

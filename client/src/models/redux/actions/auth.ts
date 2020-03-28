@@ -15,9 +15,12 @@ export const updateUser = (): ThunkActionCreator => {
         // * Retrieve updated user object
         try {
             const response = await axios.get('/api/auth/')
+            const user = response.data
 
-            if (response.status === 200) {
-                const user = response.data
+            if (
+                response.status === 200 &&
+                (user.subscriptions.length !== Auth.user.subscriptions.length || Auth.user === null)
+            ) {
                 // * Set user
                 dispatch(setUser(user))
             }
