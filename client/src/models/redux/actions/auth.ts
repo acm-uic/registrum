@@ -2,7 +2,6 @@ import { Action, ThunkActionCreator } from './action'
 import { User } from '../../interfaces/User'
 import axios from 'axios'
 import { State } from '../store'
-import { toast } from 'react-toastify'
 export const setUser = (user: User | null): Action => ({
     payload: user,
     type: 'SET_USER'
