@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express'
 import passport from 'passport'
-import User from '../models/User'
+import User, { UserObject } from '../models/User'
 import bcrypt from 'bcrypt'
 // * Bind Passport stategies
 import './passport'
@@ -16,8 +16,8 @@ const stripData = data => {
 }
 
 // * All routes under /auth/*
-router.get('/', isAuthenticated, (req: Request, res: Response) => {
-    res.status(200).send('OK')
+router.get('/', isAuthenticated, async (req: Request, res: Response) => {
+    res.status(200).json(stripData(await User.findOne({ _id: (req.user as UserObject)._id })))
 })
 
 /* Login by passport.authenticate */
@@ -53,7 +53,11 @@ router.post('/signup', async (req: Request, res: Response) => {
     }
 
     // * Verify that the email matches according to W3C standard
-    if (!/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email)) {
+    if (
+        !RegExp(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/, 'i').test(
+            email
+        )
+    ) {
         res.status(400).send('Email is invalid')
         return
     }
@@ -62,7 +66,11 @@ router.post('/signup', async (req: Request, res: Response) => {
     // * Length is atleast than 8
     // * Has one lower case and upper case English letter
     // * Has one digit and one special character
-    if (!/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/.test(password)) {
+    if (
+        !RegExp(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/, 'i').test(
+            password
+        )
+    ) {
         res.status(400).send('Password is not strong enough')
         return
     }

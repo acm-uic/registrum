@@ -38,6 +38,9 @@ module.exports = {
                 target: settings.apiProxyUrl,
                 secure: false
             }
+        },
+        watchOptions: {
+            poll: true
         }
     },
     plugins: [...production.plugins]

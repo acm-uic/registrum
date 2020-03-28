@@ -1,29 +1,21 @@
-import { Action } from './action'
+import { Action, ThunkActionCreator } from './action'
 import { User } from '../../interfaces/User'
-import { Class } from '../../interfaces/Class'
-import { Message } from '../../interfaces/Message'
-
-export const userSignUp = (user: User | null, msg?: Message): Action => ({
-    payload: { user, msg },
-    type: 'SIGN_UP'
+import axios from 'axios'
+import { toast } from 'react-toastify'
+export const setUser = (user: User | null): Action => ({
+    payload: user,
+    type: 'SET_USER'
 })
 
-export const userSignIn = (user: User | null, msg?: Message): Action => ({
-    payload: { user, msg },
-    type: 'SIGN_IN'
-})
-
-export const userSignOut = (msg?: Message): Action => ({
-    payload: { msg },
-    type: 'SIGN_OUT'
-})
-
-export const userAddClass = (cls: Class[] | null, msg?: Message): Action => ({
-    payload: { cls, msg },
-    type: 'ADD_CLASS'
-})
-
-export const userRemoveClass = (cls: Class[] | null, msg?: Message): Action => ({
-    payload: { cls, msg },
-    type: 'REMOVE_CLASS'
-})
+export const updateUser = (): ThunkActionCreator => {
+    return async dispatch => {
+        try {
+            // * Retrieve updated user object
+            const { data: user } = await axios.get('/api/auth/')
+            // * Set user
+            dispatch(setUser(user))
+        } catch (err) {
+            toast('Error Syncing User!', { type: 'error' })
+        }
+    }
+}

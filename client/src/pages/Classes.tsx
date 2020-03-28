@@ -1,27 +1,35 @@
-import React, { FC } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 
 import AddClass from '../components/AddClass'
-import { User } from '../models/interfaces/User'
-import ClassView from '../components/ClassView'
+import StatusList from '../components/StatusList'
+import { Status } from '../models/interfaces/Status'
+import axios from 'axios'
 
-import { Container, Row, Col } from 'react-bootstrap'
+import { State } from '../models/redux/store'
 
 const Classes: FC = () => {
-    const user: User | null = useSelector((state: any) => state.Auth.user)
+    const auth = useSelector((state: State) => state.Auth)
+    const { user } = auth
+
+    const [statuses, setStatuses] = useState<Status[]>([])
+
+    // * Refresh Class Data on Auth State Change
+    useEffect(() => {
+        axios.get('/api/banner/statuses').then(res => {
+            // * Update statuses
+            setStatuses(res.data as Status[])
+        })
+    }, [auth])
 
     return (
         <div>
-            <AddClass />
-
-            <Container fluid>
-                <Row>
-                    <Col>
-                        {user !== null &&
-                            user.classes.map(cls => <ClassView key={cls._id} cls={cls} />)}
-                    </Col>
-                </Row>
-            </Container>
+            {user !== null && (
+                <>
+                    <AddClass />
+                    <StatusList statuses={statuses} />
+                </>
+            )}
         </div>
     )
 }

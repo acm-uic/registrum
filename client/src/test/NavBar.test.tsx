@@ -14,9 +14,9 @@ it('Renders NavBar Correctly', () => {
     )
 
     // * Test for Links in App
-    expect(screen.getByText('Registrum')).toBeDefined()
-    expect(screen.getByText('About Us')).toBeDefined()
-    expect(screen.getByText('Contact')).toBeDefined()
-    expect(screen.getByText('Login')).toBeDefined()
-    expect(screen.getByText('Register')).toBeDefined()
+    expect(screen.findByText('Registrum')).toBeDefined()
+    expect(screen.findByText('About Us')).toBeDefined()
+    expect(screen.findByText('Contact')).toBeDefined()
+    expect(screen.findByText('Login')).toBeDefined()
+    expect(screen.findByText('Register')).toBeDefined()
 })
