@@ -16,5 +16,5 @@ export interface Action {
 }
 
 export interface ThunkActionCreator {
-    (dispatch: (action: Action) => any, getState?: () => any): any
+    (dispatch: (action: Action) => any, getState: () => any): any
 }

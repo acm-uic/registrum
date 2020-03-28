@@ -31,7 +31,7 @@ export const App: FC = () => {
 
     useEffect(() => {
         // * Update user on app load / auth state change
-        dispatch(updateUser)
+        dispatch(updateUser())
     }, [auth])
 
     return (

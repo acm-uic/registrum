@@ -1,6 +1,7 @@
 import { Action, ThunkActionCreator } from './action'
 import { User } from '../../interfaces/User'
 import axios from 'axios'
+import { State } from '../store'
 import { toast } from 'react-toastify'
 export const setUser = (user: User | null): Action => ({
     payload: user,
@@ -8,14 +9,24 @@ export const setUser = (user: User | null): Action => ({
 })
 
 export const updateUser = (): ThunkActionCreator => {
-    return async dispatch => {
+    return async (dispatch, getState) => {
+        const state: State = getState()
+        const { Auth } = state
+
+        // * Retrieve updated user object
         try {
-            // * Retrieve updated user object
-            const { data: user } = await axios.get('/api/auth/')
-            // * Set user
-            dispatch(setUser(user))
+            const response = await axios.get('/api/auth/')
+
+            if (response.status === 200) {
+                const user = response.data
+                // * Set user
+                dispatch(setUser(user))
+            }
         } catch (err) {
-            toast('Error Syncing User!', { type: 'error' })
+            const { response } = err
+            if (response.status === 401 && Auth.user !== null) {
+                dispatch(setUser(null))
+            }
         }
     }
 }
