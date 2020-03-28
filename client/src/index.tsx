@@ -12,6 +12,8 @@ import { store } from './models/redux/store'
 // * Import styles
 import './styles/index.scss'
 
+// * Attempt to fetch current user, and set user
+
 ReactDOM.render(
     <Provider store={store}>
         <App />

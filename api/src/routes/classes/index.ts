@@ -1,67 +1,79 @@
-import express, { Router, Request, Response } from 'express'
-import User, { UserObject } from '../models/User'
-import { isAuthenticated } from '../auth/passport'
-import { v4 as uuidv4 } from 'uuid'
-
+import { Router, Request, Response } from 'express'
 // * All routes under /classes/*
-const router = express.Router()
-router.get('/userlist', isAuthenticated, async (req: Request, res: Response) => {
-    const user = req.user as UserObject
-    res.status(200).send(user.classes)
-})
+const router = Router()
 
-//* POST request params --> email and classes
-router.post('/add', isAuthenticated, async (req: Request, res: Response) => {
-    // * get user's email before making post request
+// * Seed Classes Data
+const Classes = {
+    CS: [
+        {
+            number: '141',
+            crn: '12345'
+        },
+        {
+            number: '151',
+            crn: '12343'
+        },
+        {
+            number: '261',
+            crn: '12341'
+        }
+    ],
+    BIO: [
+        {
+            number: '100',
+            crn: '32345'
+        },
+        {
+            number: '101',
+            crn: '32343'
+        },
+        {
+            number: '202',
+            crn: '32347'
+        }
+    ],
+    MATH: [
+        {
+            number: '180',
+            crn: '72345'
+        },
+        {
+            number: '181',
+            crn: '72342'
+        }
+    ]
+}
+router.get('/list/:subject', async (req: Request, res: Response) => {
+    // TODO: Write route that grabs class list for given subject from Bharat's API
+    const { subject } = req.params
+    // * FOR NOW, CHECK AGAINST HASH MAP
 
-    const { subject, number } = req.body
-
-    // POST data check
-    if (typeof subject == 'undefined') {
-        res.status(500).send('Missing course subject')
-        return
-    } else if (typeof number == 'undefined') {
-        res.status(500).send('Missing course number')
-        return
+    // * Send Class Response
+    if (!subject || !Classes[subject]) {
+        res.send([])
+    } else {
+        res.send(Classes[subject])
     }
-
-    const user = req.user as UserObject
-    // await User.updateOne({ _id: user._id }, { $push: { classes: { subject, number, id } } })
-    // res.status(200).send('OK')
-
-    const response = await User.findOneAndUpdate(
-        { _id: user._id },
-        { $push: { classes: { subject, number } } },
-        { rawResult: true, new: true }
-    )
-
-    if (response.ok === 1) res.status(200).send(response.value.classes)
-    else res.status(500).send('Error')
 })
 
-//* POST request params --> email and class
-router.post('/remove', isAuthenticated, async (req: Request, res: Response) => {
-    const { _id } = req.body
-    const user = req.user as UserObject
+const Terms = {
+    '11111': ['CS', 'BIO', 'MATH'],
+    '11112': ['CS', 'BIO']
+}
+router.get('/subjects/:term', async (req: Request, res: Response) => {
+    // TODO: Write route that grabs class subjects list for term from Bharat's API and returns them
+    const { term } = req.params
 
-    const response = await User.findByIdAndUpdate(
-        { _id: user._id },
-        { $pull: { classes: { _id } } },
-        { rawResult: true, new: true }
-    )
-
-    if (response.ok === 1) res.status(200).send(response.value.classes)
-    else res.status(500).send('Error')
+    if (!term || !Terms[term]) {
+        res.send([])
+    } else {
+        res.send(Terms[term])
+    }
 })
 
-// router.get('/subjects', async (req: Request, res: Response) => {
-//     // TODO: Write route that grabs class subjects list from Banner DB and returns them
-//     // * FOR NOW, return seeded list
-//     res.send(['CS', 'BIO'])
-// })
+router.get('/terms', async (req: Request, res: Response) => {
+    // TODO: Write route that grabs terms from Bharat's API, use seeded list for now
+    res.send(['11111', '11112'])
+})
 
-// //* example get request --> http://localhost:8080/classes/list/CS
-// router.get('/list/:subjectCodeName', async (req: Request, res: Response) => {
-//     // TODO: Write route that grabs class list for provided subject from Banner DB and returns them
-// })
 export default router

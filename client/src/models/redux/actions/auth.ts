@@ -1,29 +1,34 @@
-import { Action } from './action'
+import { Action, ThunkActionCreator } from './action'
 import { User } from '../../interfaces/User'
-import { Class } from '../../interfaces/Class'
-import { Message } from '../../interfaces/Message'
-
-export const userSignUp = (user: User | null, msg?: Message): Action => ({
-    payload: { user, msg },
-    type: 'SIGN_UP'
+import axios from 'axios'
+import { State } from '../store'
+export const setUser = (user: User | null): Action => ({
+    payload: user,
+    type: 'SET_USER'
 })
 
-export const userSignIn = (user: User | null, msg?: Message): Action => ({
-    payload: { user, msg },
-    type: 'SIGN_IN'
-})
+export const updateUser = (): ThunkActionCreator => {
+    return async (dispatch, getState) => {
+        const state: State = getState()
+        const { Auth } = state
 
-export const userSignOut = (msg?: Message): Action => ({
-    payload: { msg },
-    type: 'SIGN_OUT'
-})
+        // * Retrieve updated user object
+        try {
+            const response = await axios.get('/api/auth/')
+            const user = response.data
 
-export const userAddClass = (cls: Class[] | null, msg?: Message): Action => ({
-    payload: { cls, msg },
-    type: 'ADD_CLASS'
-})
-
-export const userRemoveClass = (cls: Class[] | null, msg?: Message): Action => ({
-    payload: { cls, msg },
-    type: 'REMOVE_CLASS'
-})
+            if (
+                response.status === 200 &&
+                (user.subscriptions.length !== Auth.user.subscriptions.length || Auth.user === null)
+            ) {
+                // * Set user
+                dispatch(setUser(user))
+            }
+        } catch (err) {
+            const { response } = err
+            if (response.status === 401 && Auth.user !== null) {
+                dispatch(setUser(null))
+            }
+        }
+    }
+}

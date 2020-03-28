@@ -1,7 +1,9 @@
 import { Document, Schema, model } from 'mongoose'
-import Class from './Class'
 
-const ObjectID = require('mongoose')
+// * Class Subscription Interface
+export interface ClassSubscription {
+    crn: string
+}
 
 // * typescript interface for user info
 export interface UserObject extends Document {
@@ -9,7 +11,7 @@ export interface UserObject extends Document {
     lastname: string
     email: string
     password: string
-    classes: typeof Class
+    subscriptions: string[]
 }
 
 // * Schema for user's info
@@ -18,12 +20,7 @@ const UserSchema: Schema = new Schema({
     lastname: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    classes: [
-        {
-            subject: String,
-            number: Number
-        }
-    ]
+    subscriptions: [String]
 })
 
 // Export the model

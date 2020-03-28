@@ -56,12 +56,6 @@ describe('Class Tests', () => {
         await server.close()
     })
 
-    let testClass = {
-        _id: '',
-        subject: 'CS',
-        number: 494
-    }
-
     beforeAll(async () => {
         const response = await client.post(`auth/signup`, {
             firstname: 'Clark',
@@ -73,95 +67,59 @@ describe('Class Tests', () => {
         expect(response.status).toBe(200)
     })
 
-    beforeEach(async () => {
-        const response = await client.post('auth/login', {
-            email: 'schen237@uic.edu',
-            password: 'theRealClark1$'
+    describe('Sanity tests', () => {
+        it('Returns a valid list of terms', async () => {
+            // * Grab terms
+            const { data: terms } = await client.get('classes/terms')
+
+            // * Assure each term is valid by checking it is a number
+            terms.forEach(term => {
+                expect(() => parseInt(term)).not.toThrow()
+            })
+        })
+
+        it('Returns a valid list of subjects for a retrieved term', async () => {
+            // * Grab terms
+            const { data: terms } = await client.get('classes/terms')
+
+            // * Grab subjects for given term
+            const { data: subjects } = await client.get(`classes/subjects/${terms[0]}`)
+
+            // * Make sure each subject is a valid string
+            subjects.forEach(subject => {
+                expect(typeof subject === typeof String)
+            })
+        })
+
+        it('Returns a valid list of courses for a given subject', async () => {
+            // * Grab terms
+            const { data: terms } = await client.get('classes/terms')
+
+            // * Grab subjects for given term
+            const { data: subjects } = await client.get(`classes/subjects/${terms[0]}`)
+
+            // * Grab classes for given subject
+            const { data: classes } = await client.get(`classes/list/${subjects[0]}`)
+
+            // * Make sure each class is a valid class object
+            classes.forEach(cls => {
+                expect(cls).toHaveProperty('crn')
+                expect(cls).toHaveProperty('number')
+            })
         })
     })
 
-    it('Correctly add class to user watch list', async () => {
-        const response = await client.post('classes/add', testClass)
-
-        expect(response.status).toBe(200)
-        expect(response.data.length).toBe(1)
-
-        expect(response.data[0].subject).toBe('CS')
-        expect(response.data[0].number).toBe(494)
-        expect(response.data[0]._id).not.toBe('')
-
-        testClass = response.data[0]
-    })
-
-    it('Missing number field when add class to user watch list', async () => {
-        const response = await client.post('classes/add', {
-            number: 494
+    describe('Edge case tests', () => {
+        it('Returns an empty array of subjects for an invalid term', async () => {
+            // * Try to retrieve subjects
+            const { data: subjects } = await client.get('/classes/subjects/invalid')
+            expect(subjects).toHaveLength(0)
         })
 
-        expect(response.status).toBe(500)
-        expect(response.data).toBe('Missing course subject')
-    })
-
-    it('Missing subject field when add class to user watch list', async () => {
-        const response = await client.post('classes/add', {
-            subject: 'CS'
+        it('Returns an empty array of classes for an invalid subject', async () => {
+            // * Try to retrieve classes
+            const { data: classes } = await client.get('/classes/list/invalid')
+            expect(classes).toHaveLength(0)
         })
-
-        expect(response.status).toBe(500)
-        expect(response.data).toBe('Missing course number')
-    })
-
-    it('Correctly retrieves classes for given subject', async () => {
-        const response = await client.get('classes/userlist')
-
-        expect(response.status).toBe(200)
-        expect(response.data.length).toBe(1)
-
-        const idx = response.data.findIndex(
-            cls => JSON.stringify(cls) === JSON.stringify(testClass)
-        )
-        expect(idx).toBeGreaterThan(-1)
-    })
-
-    it('Unauthorized retrieves classes for given subject', async () => {
-        await client.get('/auth/logout')
-        const response = await client.get('classes/userlist')
-
-        expect(response.status).toBe(401)
-        expect(response.data).toBe('Error, Not logged in')
-    })
-
-    it('Correctly remove class from user watch list', async () => {
-        const response = await client.post('classes/remove', {
-            _id: testClass._id
-        })
-
-        expect(response.status).toBe(200)
-        expect(response.data.length).toBe(0)
-    })
-
-    it('Remove class with invalid classID from user watch list', async () => {
-        // * get the original classes so that it could be compared
-        await client.post('classes/add', { subject: 'CS', number: 500 })
-        await client.post('classes/add', { subject: 'CS', number: 200 })
-
-        const { status: status1, data: originalClasses } = await client.get('classes/userlist')
-        expect(status1).toBe(200)
-        // * Try to remove bogus class
-        await client.post('classes/remove', {
-            id: '0'
-        })
-
-        const { status: status2, data: newClasses } = await client.get('classes/userlist')
-        expect(status2).toBe(200)
-        // * Check that the newClasses remain unchanged from bogus remove call
-        originalClasses.forEach((cls, idx) => {
-            expect(cls.subject).toBe(newClasses[idx].subject)
-            expect(cls.number).toBe(newClasses[idx].number)
-        })
-    })
-
-    it('Correctly retrieves list of class subjects from Banner DB', () => {
-        test.todo
     })
 })
