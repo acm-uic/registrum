@@ -8,9 +8,9 @@ import { isAuthenticated } from './passport'
 
 const router = Router()
 
-/* Remove data shouldn't be sent to client E.g. password */
-const stripData = userData => {
-    const result = JSON.parse(JSON.stringify(userData))
+// * Remove data shouldn't be sent to client
+const stripData = data => {
+    const result = JSON.parse(JSON.stringify(data))
     delete result['password']
     return result
 }
@@ -45,6 +45,28 @@ router.post('/signup', async (req: Request, res: Response) => {
     // * Grab needed elements from request body
     const { firstname, lastname, email, password } = req.body
 
+    // * Verify that the first and last name is valid
+    const nameRegex = /^[^0-9\.\,\"\?\!\;\:\#\$\%\&\(\)\*\+\-\/\<\>\=\@\[\]\\\^\_\{\}\|\~]+$/
+    if (!nameRegex.test(firstname) || !nameRegex.test(lastname)) {
+        res.status(400).send('Name is invalid')
+        return
+    }
+
+    // * Verify that the email matches according to W3C standard
+    if (!/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email)) {
+        res.status(400).send('Email is invalid')
+        return
+    }
+
+    // * Verify the the password is adhering to out standard
+    // * Length is atleast than 8
+    // * Has one lower case and upper case English letter
+    // * Has one digit and one special character
+    if (!/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/.test(password)) {
+        res.status(400).send('Password is not strong enough')
+        return
+    }
+
     // * Check if user already exists
     const test = await User.findOne({ email })
     if (test) {
@@ -52,19 +74,16 @@ router.post('/signup', async (req: Request, res: Response) => {
         return
     }
 
-    // * Hash password
-    const hashedPassword = await bcrypt.hash(password, 2)
-
     // * Setup User
     const user = new User({
         firstname,
         lastname,
         email,
-        password: hashedPassword
+        // * Hashed Password
+        password: await bcrypt.hash(password, 2)
     })
 
     // * Save user
-    console.log(user)
     await user.save()
 
     // * Login User
