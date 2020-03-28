@@ -5,6 +5,7 @@ import User, { UserObject } from '../models/User'
 // * All routes under /classes/*
 const router = Router()
 
+// * | >>>>> Bharat's API ()
 router.post('/subscribe', isAuthenticated, async (req: Request, res: Response) => {
     // * Grab user id from session
     const _id = (req.user as UserObject)._id
