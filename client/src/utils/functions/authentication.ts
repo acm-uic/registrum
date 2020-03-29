@@ -36,13 +36,14 @@ export const changePasswordAPI = async (password: string) => {
 
 }
 
-export const updateUsernameAPI = async (username: string) => {
+export const updateUsernameAPI = async (fName: string, lName: string) => {
     
     try {
   
         // * making api call to update username
         const response = await client.post('auth/updateUsername', {
-            username: username
+            fName: fName,
+            lName: lName
         })
 
         // * notifying user for success or failure
