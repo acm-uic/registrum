@@ -13,53 +13,6 @@ const client = axios.create({
     withCredentials: true
 })
 
-export const changePasswordAPI = async (password: string) => {
-    
-    try {
-  
-        // * making api call to update password
-        const response = await client.post('auth/updatePassword', {
-            password: password
-        })
-
-        // * notifying user for success or failure
-        if( response.status == 200 ){
-            alert("Password updated successfully")
-        }
-        else{
-            alert("Error updating password")
-        }
-
-    } catch (error) {
-        console.log(error);
-    }
-
-}
-
-export const updateAccountInfoAPI = async (fName: string, lName: string) => {
-    
-    try {
-  
-        // * making api call to update username
-        const response = await client.post('auth/updateAccountInfo', {
-            fName: fName,
-            lName: lName
-        })
-
-        // * notifying user for success or failure
-        if( response.status == 200 ){
-            alert("Username updated successfully")
-        }
-        else{
-            alert("Error updating username")
-        }
-
-    } catch (error) {
-        console.log(error);
-    }
-
-}
-
 export const signUp = async (fn: string, ln: string, em: string, pw: string) => {
     try {
         const response = await client.post('auth/signup', {

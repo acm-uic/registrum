@@ -101,8 +101,31 @@ router.post('/signup', async (req: Request, res: Response) => {
     })
 })
 
+//* this route will be used when updating user's password
+router.post('/checkPassword', isAuthenticated, async (req: Request, res: Response) => {
+    // * Grab needed elements from request body
+    const { oldPassword } = req.body
+    
+    //* get the user object
+    const user = (req.user as UserObject);
+
+    //* get user's database entry
+    const userDatabaseEntry = await User.findOne({ _id: user._id })
+
+    // * Check if password is correct
+    if (!(await bcrypt.compare(oldPassword, userDatabaseEntry.password))) {
+        res.status(401).send('Error') //* Sending status 401 since old password was incorrect 
+        return
+    }
+
+    // * Sending status 200 because old password was correct
+    res.status(200).send("Old Password is correct")
+
+})
+
+
 // * this route will update user's password
-router.post('/updatePassword', async (req: Request, res: Response) => {
+router.post('/updatePassword', isAuthenticated, async (req: Request, res: Response) => {
     // * Grab needed elements from request body
     const { password } = req.body
     
@@ -123,7 +146,7 @@ router.post('/updatePassword', async (req: Request, res: Response) => {
 })
 
 // * this route will update user's account info
-router.post('/updateAccountInfo', async (req: Request, res: Response) => {
+router.post('/updateAccountInfo', isAuthenticated, async (req: Request, res: Response) => {
     // * Grab needed elements from request body
     const { fName, lName } = req.body
     

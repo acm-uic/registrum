@@ -1,10 +1,12 @@
 import React, { FC, useState } from 'react'
 import { Button, Form } from 'react-bootstrap'
-import { changePasswordAPI, updateAccountInfoAPI } from '../utils/functions/authentication'
+import { toast } from 'react-toastify'
+import axios from 'axios'
 
 const Account: FC = () => {
 
     //* Using hooks to keep track of state
+    const [oldPassword, setOldPassword] = useState('');
     const [password, setPassword] = useState('');
     const [retypePassword, setRetypePassword] = useState('');
 
@@ -17,6 +19,25 @@ const Account: FC = () => {
 
         setPassword('')
         setRetypePassword('')
+        setOldPassword('')
+
+        //* Check if old password is valid
+        try {
+  
+            // * making api call to update password
+            await axios.post('/api/auth/checkPassword', {
+                oldPassword: oldPassword
+            })
+        
+        } catch (error) {
+            
+            //* checking for status 401 here because didn't work when checking response.status
+            if( error.message.includes("401") ){
+                toast("Invalid old password", { type: 'error' })
+                return;
+            }
+        }
+
 
         // * [[Check regex for password]]
         // * Verify the the password is adhering to out standard
@@ -24,17 +45,36 @@ const Account: FC = () => {
         // * Has one lower case and upper case English letter
         // * Has one digit and one special character
         if (!/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/.test(password)) {
-            return
+            toast("Password requirements not met: 8 characters, 1 uppercase & lowercase, 1 digit & 1 special character", { type: 'error' })
+            return;
         }        
 
         //* check if both passwords are the same
         if( password != retypePassword ){
-            alert("The two password fields don't match");
-            return
+            toast("The two password fields don't match", { type: 'error' })
+            return;
         }
 
         //* make api call to update the password
-        await changePasswordAPI(password);
+        try {
+  
+            // * making api call to update password
+            const response = await axios.post('/api/auth/updatePassword', {
+                password: password
+            })
+    
+            // * notifying user for success or failure
+            if( response.status == 200 ){
+                toast("Password updated successfully", { type: 'success' })
+            }
+            else{
+                toast("Error updating password", { type: 'error' })
+            }
+    
+        } catch (error) {
+            console.log(error);
+        }
+        
     }
 
     //* event handler to update password that will be trigger when user clicks submit
@@ -47,10 +87,30 @@ const Account: FC = () => {
         //* Check regex for username
         const nameRegex = /[a-zA-Z]+[a-zA-Z0-9\s]+[a-zA-Z]/
         if (!nameRegex.test(fName) || !nameRegex.test(lName)) {
+            toast("Firstname and/or Lastname not valid", { type: 'error' })
             return
         }
 
-        await updateAccountInfoAPI(fName, lName);
+        try {
+  
+            // * making api call to update username
+            const response = await axios.post('api/auth/updateAccountInfo', {
+                fName: fName,
+                lName: lName
+            })
+    
+            // * notifying user for success or failure
+            if( response.status == 200 ){
+                toast("Username updated successfully", { type: 'success' })
+            }
+            else{
+                toast("Error updating username", { type: 'error' })
+            }
+    
+        } catch (error) {
+            console.log(error);
+        }
+
     }
     
 
@@ -62,6 +122,11 @@ const Account: FC = () => {
             <h5>Update Password</h5>
 
             <Form>
+                <Form.Group controlId="formBasicPassword">
+                    <Form.Label>Old Password</Form.Label>
+                    <Form.Control type="password" placeholder="Enter Password" value={oldPassword} onChange={ (e: React.ChangeEvent<HTMLInputElement>) => { setOldPassword(e.target.value)} } />
+                </Form.Group>
+
                 <Form.Group controlId="formBasicPassword">
                     <Form.Label>Password</Form.Label>
                     <Form.Control type="password" placeholder="Enter Password" value={password} onChange={ (e: React.ChangeEvent<HTMLInputElement>) => { setPassword(e.target.value)} } />
