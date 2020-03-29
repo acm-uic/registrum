@@ -101,4 +101,23 @@ router.post('/signup', async (req: Request, res: Response) => {
     })
 })
 
+// * this route will update user's password
+router.post('/updatePassword', async (req: Request, res: Response) => {
+    // * Grab needed elements from request body
+    const { password } = req.body
+    
+    //* get the user object
+    const user = (req.user as UserObject);
+
+    const response = await User.findOneAndUpdate(
+        { _id: user._id },
+        { $set: { password: password } },
+        { rawResult: true, new: true }
+    )
+
+    if (response.ok === 1) res.status(200).send("Password has been updated")
+    else res.status(500).send('Error')
+
+})
+
 export default router
