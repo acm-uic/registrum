@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react'
 import { Button, Form } from 'react-bootstrap'
-import { changePasswordAPI, updateUsernameAPI } from '../utils/functions/authentication'
+import { changePasswordAPI, updateAccountInfoAPI } from '../utils/functions/authentication'
 
 const Account: FC = () => {
 
@@ -50,7 +50,7 @@ const Account: FC = () => {
             return
         }
 
-        await updateUsernameAPI(fName, lName);
+        await updateAccountInfoAPI(fName, lName);
     }
     
 

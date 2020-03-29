@@ -36,12 +36,12 @@ export const changePasswordAPI = async (password: string) => {
 
 }
 
-export const updateUsernameAPI = async (fName: string, lName: string) => {
+export const updateAccountInfoAPI = async (fName: string, lName: string) => {
     
     try {
   
         // * making api call to update username
-        const response = await client.post('auth/updateUsername', {
+        const response = await client.post('auth/updateAccountInfo', {
             fName: fName,
             lName: lName
         })

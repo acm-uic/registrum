@@ -109,13 +109,36 @@ router.post('/updatePassword', async (req: Request, res: Response) => {
     //* get the user object
     const user = (req.user as UserObject);
 
+    // * hashing password and updating entry database
     const response = await User.findOneAndUpdate(
         { _id: user._id },
-        { $set: { password: password } },
+        { $set: { password: await bcrypt.hash(password, 2) } },
         { rawResult: true, new: true }
     )
 
+    // * Sending status of database update
     if (response.ok === 1) res.status(200).send("Password has been updated")
+    else res.status(500).send('Error')
+
+})
+
+// * this route will update user's account info
+router.post('/updateAccountInfo', async (req: Request, res: Response) => {
+    // * Grab needed elements from request body
+    const { fName, lName } = req.body
+    
+    //* get the user object
+    const user = (req.user as UserObject);
+
+    // * Updating firstname and lastname entry in database
+    const response = await User.findOneAndUpdate(
+        { _id: user._id },
+        { $set: { firstname: fName, lastname: lName } },
+        { rawResult: true, new: true }
+    )
+
+    // * Sending status of database update
+    if (response.ok === 1) res.status(200).send("Account Info has been updated")
     else res.status(500).send('Error')
 
 })
