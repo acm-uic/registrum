@@ -26,7 +26,8 @@ export const StatusPanel: FC<StatusPanelProps> = ({ statuses }) => {
             <Card>
                 <Card.Body>
                     <Card.Title>
-                        There are {openCount} {openCount === 1 ? 'class' : 'classes'} open!
+                        There {openCount === 1 ? 'is' : 'are'} {openCount}{' '}
+                        {openCount === 1 ? 'class' : 'classes'} open!
                     </Card.Title>
                 </Card.Body>
             </Card>
