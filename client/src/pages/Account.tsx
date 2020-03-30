@@ -104,7 +104,7 @@ const Account: FC = () => {
                     <Form>
                         <Form.Group controlId="formBasicPassword">
                             <Card.Title>
-                                Please enter your current Pasword to make any changes...
+                                Please enter your current password to make any changes...
                             </Card.Title>
                             <Form.Control
                                 type="password"
