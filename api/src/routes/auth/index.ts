@@ -161,6 +161,18 @@ router.post('/update', isAuthenticated, async (req: Request, res: Response) => {
                 return
             }
         }
+        if (updates.email) {
+            // * Verify that the email matches according to W3C standard
+            if (
+                !RegExp(
+                    /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
+                    'i'
+                ).test(updates.email)
+            ) {
+                res.status(400).send('Email is invalid')
+                return
+            }
+        }
 
         // * Update in mongoose
         await User.updateOne({ _id: user._id }, updates)
