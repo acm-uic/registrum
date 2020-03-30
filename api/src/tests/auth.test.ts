@@ -57,12 +57,15 @@ describe('Authentication Tests', () => {
     })
 
     describe('Sanity Tests', () => {
+        // To allow changing password during test case
+        let userPassword = 'theRealClark1$'
+
         it('Register an account', async () => {
             const response = await client.post('signup', {
                 firstname: 'Clark',
                 lastname: 'Chen',
                 email: 'schen237@uic.edu',
-                password: 'theRealClark1$'
+                password: userPassword
             })
 
             expect(response.status).toBe(200)
@@ -95,6 +98,29 @@ describe('Authentication Tests', () => {
             const response = await client.get('')
 
             expect(response.status).toBe(200)
+        })
+
+        // Update user Info
+        it('Update user info with valid new password', async () => {
+            const newUserPassword = 'theRealClark2$'
+            const response = await client.post('update', {
+                password: newUserPassword,
+                userPassword: userPassword
+            })
+            userPassword = newUserPassword
+            expect(response.status).toBe(200)
+            expect(response.data).toBe("OK")
+        })
+        
+        // Input Validation for update user info
+        it('Update user info with invalid new password', async () => {
+            const response = await client.post('update', {
+                password: 'theRealClark',
+                userPassword: userPassword
+            })
+
+            expect(response.status).toBe(400)
+            expect(response.data).toBe("Password is not strong enough")
         })
 
         it('Logs user out correctly', async () => {
@@ -130,7 +156,7 @@ describe('Authentication Tests', () => {
             expect(response.status).toBe(501) // TODO
         })
 
-        // Test Input Validation
+        // Input Validation for Register
         it('Register with invalid firstname', async () => {
             const response = await client.post('signup', {
                 firstname: 'Clark1',
