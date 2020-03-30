@@ -35,7 +35,7 @@ export class Banner {
         await this._api.get(
             `${bannerHost}/StudentRegistrationSSB/ssb/term/search?
             mode=search&term=${this._term}&studyPath=&studyPathText=&
-            startDatepicker=&endDatepicker=&mepCode=2UIC`
+            startDatepicker=&endDatepicker=&mepCode=2UIC`,
         )
         await this._api.get(`${bannerHost}/StudentRegistrationSSB/ssb/registration/registration`)
     }
@@ -55,14 +55,16 @@ export class Banner {
         pageOffset = '0',
         pageMaxSize = '10',
         sortColumn = 'subjectDescription',
-        sortDirection = 'asc'
+        sortDirection = 'asc',
     }: SearchProps) => {
         if (this._cookieJar.getCookiesSync(`${bannerHost}`)) {
             this._clearCookie()
             await this._getNewCookie()
         }
         return (
-            await this._api.get(`${bannerHost}/StudentRegistrationSSB/ssb/searchResults/searchResults?txt_subject=${this._subject}&txt_courseNumber=${courseNumber}&txt_term=${this._term}&startDatepicker=${startDate}&endDatepicker=${endDate}&pageOffset=${pageOffset}&pageMaxSize=${pageMaxSize}&sortColumn=${sortColumn}&sortDirection=${sortDirection}`)
+            await this._api.get(
+                `${bannerHost}/StudentRegistrationSSB/ssb/searchResults/searchResults?txt_subject=${this._subject}&txt_courseNumber=${courseNumber}&txt_term=${this._term}&startDatepicker=${startDate}&endDatepicker=${endDate}&pageOffset=${pageOffset}&pageMaxSize=${pageMaxSize}&sortColumn=${sortColumn}&sortDirection=${sortDirection}`,
+            )
         ).data
     }
 
@@ -70,7 +72,7 @@ export class Banner {
         return (
             await axios.get(
                 `${bannerHost}/StudentRegistrationSSB/ssb/classSearch/getTerms?
-                searchTerm=&offset=1&max=1000&mepCode=2UIC`
+                searchTerm=&offset=1&max=1000&mepCode=2UIC`,
             )
         ).data
     }
@@ -79,7 +81,7 @@ export class Banner {
         return (
             await axios.get(
                 `${bannerHost}/StudentRegistrationSSB-FED/ssb/classSearch/get_subject?
-                searchTerm=${searchTerm}&term=${term}&offset=1&max=1000&mepCode=2UIC`
+                searchTerm=${searchTerm}&term=${term}&offset=1&max=1000&mepCode=2UIC`,
             )
         ).data
     }
@@ -88,7 +90,7 @@ export class Banner {
         return (
             await axios.get(
                 `${bannerHost}/StudentRegistrationSSB/ssb/classSearch/get_session?
-                searchTerm=${searchTerm}&term=${term}&offset=1&max=1000&mepCode=2UIC`
+                searchTerm=${searchTerm}&term=${term}&offset=1&max=1000&mepCode=2UIC`,
             )
         ).data
     }
@@ -97,7 +99,7 @@ export class Banner {
         return (
             await axios.get(
                 `${bannerHost}/StudentRegistrationSSB/ssb/classSearch/get_partOfTerm?
-                searchTerm=${searchTerm}&term=${term}&offset=1&max=1000&mepCode=2UIC`
+                searchTerm=${searchTerm}&term=${term}&offset=1&max=1000&mepCode=2UIC`,
             )
         ).data
     }
@@ -106,7 +108,7 @@ export class Banner {
         return (
             await axios.get(
                 `${bannerHost}/StudentRegistrationSSB/ssb/classSearch/get_attribute?
-                searchTerm=${searchTerm}&term=${term}&offset=1&max=1000&mepCode=2UIC`
+                searchTerm=${searchTerm}&term=${term}&offset=1&max=1000&mepCode=2UIC`,
             )
         ).data
     }
