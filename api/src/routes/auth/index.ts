@@ -127,6 +127,12 @@ router.post('/update', isAuthenticated, async (req: Request, res: Response) => {
     let updates = req.body
 
     try {
+        // requestBody check (Prevent changing prohibited column)
+        if (updates._id || updates.subscriptions) {
+            res.status(400).send('Info update input violation')
+            return
+        }
+
         // * If password is provided, hash said password
         if (updates.password) {
             // * Verify the the password is adhering to out standard

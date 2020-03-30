@@ -26,7 +26,7 @@ const StatusView: FC<StatusViewProps> = ({ status }) => {
     }
 
     return (
-        <Col lg={4}>
+        <Col className="statusView" lg={4}>
             <Card>
                 <Card.Header>
                     <Card.Title>
