@@ -196,7 +196,7 @@ router.post("/update", isAuthenticated, async (req: Request, res: Response) => {
     try {
         // * If password is provided, hash said password
         if(updates.password) {
-            updates.password = bcrypt.hash(updates.password, 2)
+            updates.password = await bcrypt.hash(updates.password, 2)
         }
     
         // * Update in mongoose
