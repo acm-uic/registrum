@@ -57,14 +57,15 @@ describe('Authentication Tests', () => {
     })
 
     describe('Sanity Tests', () => {
-        // To allow changing password during test case
+        // To allow changing info during test case
+        let userEmail = 'schen237@uic.edu'
         let userPassword = 'theRealClark1$'
 
         it('Register an account', async () => {
             const response = await client.post('signup', {
                 firstname: 'Clark',
                 lastname: 'Chen',
-                email: 'schen237@uic.edu',
+                email: userEmail,
                 password: userPassword
             })
 
@@ -75,8 +76,8 @@ describe('Authentication Tests', () => {
             const response = await client.post('signup', {
                 firstname: 'Clark',
                 lastname: 'Chen',
-                email: 'schen237@uic.edu',
-                password: 'theRealClark1$'
+                email: userEmail,
+                password: userPassword
             })
 
             expect(response.status).toBe(400)
@@ -87,8 +88,8 @@ describe('Authentication Tests', () => {
         // ! Google login strategy cannot be tested because it requires authentication from google side
         it('Logs user in correctly using email, password', async () => {
             const response = await client.post('login', {
-                email: 'schen237@uic.edu',
-                password: 'theRealClark1$'
+                email: userEmail,
+                password: userPassword
             })
 
             expect(response.status).toBe(200)
@@ -133,11 +134,12 @@ describe('Authentication Tests', () => {
         })
 
         it('Update user info with valid new email', async () => {
+            const newUserEmail = 'clark@clark-chen.com'
             const response = await client.post('update', {
-                email: 'clark@clark-chen.com',
+                email: newUserEmail,
                 userPassword: userPassword
             })
-
+            userEmail = newUserEmail
             expect(response.status).toBe(200)
             expect(response.data).toBe('OK')
         })
@@ -211,7 +213,7 @@ describe('Authentication Tests', () => {
 
         it('Cannot login with incorrect email', async () => {
             const response = await client.post('login', {
-                email: 'schen237@acm.cs.uic.edu',
+                email: userEmail + '.fake',
                 password: 'theRealClark1$'
             })
 
@@ -220,7 +222,7 @@ describe('Authentication Tests', () => {
 
         it('Cannot login with incorrect password', async () => {
             const response = await client.post('login', {
-                email: 'schen237@uic.edu',
+                email: userEmail,
                 password: 'theFakeClark1$'
             })
 
