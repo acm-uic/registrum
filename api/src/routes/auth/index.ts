@@ -101,4 +101,47 @@ router.post('/signup', async (req: Request, res: Response) => {
     })
 })
 
+router.post("/update", isAuthenticated, async (req: Request, res: Response) => { 
+    // * Get the user object
+    const user = (req.user as UserObject);
+    
+    // * Grab password out of body
+    const { userPassword } = req.body
+
+    // * If password is not provided, send error status
+    if(!userPassword) {
+        res.status(401).send("Password not provided")
+        return
+    }
+
+    // * Grab up to date user from database
+    const userDatabaseEntry = await User.findOne({_id: user._id})
+
+    // * Make sure provided password is correct
+    if( ! (await bcrypt.compare(userPassword, userDatabaseEntry.password))) {
+        res.status(401).send("Password not valid")
+        return
+    }
+
+    // * Grab updates from body
+    let updates = req.body
+
+    try {
+        // * If password is provided, hash said password
+        if(updates.password) {
+            updates.password = await bcrypt.hash(updates.password, 2)
+        }
+    
+        // * Update in mongoose
+        await User.updateOne({_id: user._id}, updates)
+        res.status(200).send("OK")
+    }
+    catch(err) {
+        res.status(500).send('Error')
+    }
+    
+    
+})
+
+
 export default router
