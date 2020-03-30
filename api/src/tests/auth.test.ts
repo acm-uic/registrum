@@ -132,6 +132,16 @@ describe('Authentication Tests', () => {
             expect(response.data).toBe('OK')
         })
 
+        it('Update user info with valid new email', async () => {
+            const response = await client.post('update', {
+                email: 'clark@clark-chen.com',
+                userPassword: userPassword
+            })
+
+            expect(response.status).toBe(200)
+            expect(response.data).toBe('OK')
+        })
+
         // Input Validation for update user info
         it('Update user info with invalid old password', async () => {
             const response = await client.post('update', {
@@ -171,6 +181,16 @@ describe('Authentication Tests', () => {
 
             expect(response.status).toBe(400)
             expect(response.data).toBe('First name is invalid')
+        })
+
+        it('Update user info with invalid new email', async () => {
+            const response = await client.post('update', {
+                email: 'clarkclark-chen.com',
+                userPassword: userPassword
+            })
+
+            expect(response.status).toBe(400)
+            expect(response.data).toBe('Email is invalid')
         })
 
         it('Logs user out correctly', async () => {
