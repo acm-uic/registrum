@@ -4,7 +4,6 @@ import User from '../routes/models/User'
 import axiosCookieJarSupport from 'axios-cookiejar-support'
 import { CookieJar } from 'tough-cookie'
 import app, { mongoose, redisClient } from '../app'
-import { response } from 'express'
 
 dotenv.config()
 const PORT = process.env.PORT || 8080
@@ -62,11 +61,11 @@ describe('Authentication Tests', () => {
     })
 
     describe('Sanity Tests', () => {
-        // To allow changing info during test case
+        // * To allow changing info during test case
         let userEmail = 'schen237@uic.edu'
         let userPassword = 'theRealClark1$'
 
-        // Signup
+        // *Signup
         it('Register an account', async () => {
             const response = await client.post('signup', {
                 firstname: 'Clark',
@@ -119,7 +118,6 @@ describe('Authentication Tests', () => {
             })
             userPassword = newUserPassword
             expect(response.status).toBe(200)
-            expect(response.data).toBe('OK')
         })
 
         // Valid input for changing lastname
@@ -130,7 +128,6 @@ describe('Authentication Tests', () => {
             })
 
             expect(response.status).toBe(200)
-            expect(response.data).toBe('OK')
         })
 
         // Valid input for changing firstname
@@ -141,7 +138,6 @@ describe('Authentication Tests', () => {
             })
 
             expect(response.status).toBe(200)
-            expect(response.data).toBe('OK')
         })
 
         // Valid input for changing email
@@ -153,7 +149,6 @@ describe('Authentication Tests', () => {
             })
             userEmail = newUserEmail
             expect(response.status).toBe(200)
-            expect(response.data).toBe('OK')
         })
 
         // Attempting to change password with wrong current password

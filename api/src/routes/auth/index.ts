@@ -144,10 +144,13 @@ router.post('/update', isAuthenticated, async (req: Request, res: Response) => {
             updates.password = await bcrypt.hash(updates.password, 2)
         }
 
-        const nameRegex = /^[^0-9\.\,\"\?\!\;\:\#\$\%\&\(\)\*\+\-\/\<\>\=\@\[\]\\\^\_\{\}\|\~]+$/
+        const nameRegex = new RegExp(
+            /^[^0-9\.\,\"\?\!\;\:\#\$\%\&\(\)\*\+\-\/\<\>\=\@\[\]\\\^\_\{\}\|\~]+$/,
+            'i'
+        )
+
         if (updates.lastname) {
             // * Verify that the first and last name is valid
-
             if (!nameRegex.test(updates.lastname)) {
                 res.status(400).send('Last name is invalid')
                 return
@@ -155,7 +158,6 @@ router.post('/update', isAuthenticated, async (req: Request, res: Response) => {
         }
         if (updates.firstname) {
             // * Verify that the first and last name is valid
-
             if (!nameRegex.test(updates.firstname)) {
                 res.status(400).send('First name is invalid')
                 return
@@ -175,8 +177,8 @@ router.post('/update', isAuthenticated, async (req: Request, res: Response) => {
         }
 
         // * Update in mongoose
-        await User.updateOne({ _id: user._id }, updates)
-        res.status(200).send('OK')
+        const updatedUser = await User.findOneAndUpdate({ _id: user._id }, updates)
+        res.status(200).send(updatedUser)
     } catch (err) {
         res.status(500).send('Error')
     }
