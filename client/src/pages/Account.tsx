@@ -14,40 +14,11 @@ const Account: FC = () => {
     const [lName, setLName] = useState('')
 
     //* event handler to update password that will be trigger when user clicks submit
-    const updatePassword = async (e: React.MouseEvent<HTMLButtonElement>) => {
-        e.preventDefault()
-
+    const updatePassword = async () => {
+        // e.preventDefault()
         setPassword('')
         setRetypePassword('')
         setOldPassword('')
-
-        //* Check if old password is valid
-        try {
-  
-            // * making api call to update password
-            await axios.post('/api/auth/checkPassword', {
-                oldPassword: oldPassword
-            })
-        
-        } catch (error) {
-            
-            //* checking for status 401 here because didn't work when checking response.status
-            if( error.message.includes("401") ){
-                toast("Invalid old password", { type: 'error' })
-                return;
-            }
-        }
-
-
-        // * [[Check regex for password]]
-        // * Verify the the password is adhering to out standard
-        // * Length is at least than 8
-        // * Has one lower case and upper case English letter
-        // * Has one digit and one special character
-        if (!/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/.test(password)) {
-            toast("Password requirements not met: 8 characters, 1 uppercase & lowercase, 1 digit & 1 special character", { type: 'error' })
-            return;
-        }        
 
         //* check if both passwords are the same
         if( password != retypePassword ){
@@ -55,14 +26,25 @@ const Account: FC = () => {
             return;
         }
 
+        // * [[Check regex for password]]
+        // * Verify the the password is adhering to out standard
+        // * Length is at least than 8
+        // * Has one lower case and upper case English letter
+        // * Has one digit and one special character
+        if (!(new RegExp(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,'i')).test(password)) {
+            toast("Password requirements not met: 8 characters, 1 uppercase & lowercase, 1 digit & 1 special character", { type: 'error' })
+            return;
+        }        
+
         //* make api call to update the password
         try {
-  
             // * making api call to update password
-            const response = await axios.post('/api/auth/updatePassword', {
-                password: password
+            const response = await axios.post('/api/auth/update', {
+                firstname: "Alex",
+                userPassword: oldPassword, 
+                password
             })
-    
+            
             // * notifying user for success or failure
             if( response.status == 200 ){
                 toast("Password updated successfully", { type: 'success' })
@@ -72,7 +54,8 @@ const Account: FC = () => {
             }
     
         } catch (error) {
-            console.log(error);
+            // * Display error message from server
+            toast(error.response.data, { type: 'error' })
         }
         
     }
