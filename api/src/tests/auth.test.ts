@@ -184,7 +184,7 @@ describe('Authentication Tests', () => {
             expect(response.data).toBe('Password is not strong enough')
         })
 
-        describe('Can update user correctly', async () => {
+        it('Can update user correctly', async () => {
             // * Signup
             await client.post('signup', {
                 firstname: 'Bharat',
