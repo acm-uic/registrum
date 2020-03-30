@@ -109,28 +109,38 @@ describe('Authentication Tests', () => {
             })
             userPassword = newUserPassword
             expect(response.status).toBe(200)
-            expect(response.data).toBe("OK")
+            expect(response.data).toBe('OK')
         })
 
         it('Update user info with valid new lastname', async () => {
             const response = await client.post('update', {
-                lastname: "Kent",
+                lastname: 'Kent',
                 userPassword: userPassword
             })
-            
+
             expect(response.status).toBe(200)
-            expect(response.data).toBe("OK")
+            expect(response.data).toBe('OK')
         })
-        
+
+        it('Update user info with valid new firstname', async () => {
+            const response = await client.post('update', {
+                firstname: 'Clarke',
+                userPassword: userPassword
+            })
+
+            expect(response.status).toBe(200)
+            expect(response.data).toBe('OK')
+        })
+
         // Input Validation for update user info
         it('Update user info with invalid old password', async () => {
             const response = await client.post('update', {
                 password: 'theRealClark',
-                userPassword: userPassword+"fake"
+                userPassword: userPassword + 'fake'
             })
 
             expect(response.status).toBe(401)
-            expect(response.data).toBe("Password not valid")
+            expect(response.data).toBe('Password not valid')
         })
 
         it('Update user info with invalid new password', async () => {
@@ -140,17 +150,27 @@ describe('Authentication Tests', () => {
             })
 
             expect(response.status).toBe(400)
-            expect(response.data).toBe("Password is not strong enough")
+            expect(response.data).toBe('Password is not strong enough')
         })
 
         it('Update user info with invalid new lastname', async () => {
             const response = await client.post('update', {
-                lastname: "Kent?",
+                lastname: 'Kent?',
                 userPassword: userPassword
             })
-            
+
             expect(response.status).toBe(400)
-            expect(response.data).toBe("Name is invalid")
+            expect(response.data).toBe('Last name is invalid')
+        })
+
+        it('Update user info with invalid new firstname', async () => {
+            const response = await client.post('update', {
+                firstname: 'Clark?',
+                userPassword: userPassword
+            })
+
+            expect(response.status).toBe(400)
+            expect(response.data).toBe('First name is invalid')
         })
 
         it('Logs user out correctly', async () => {
@@ -196,9 +216,9 @@ describe('Authentication Tests', () => {
             })
 
             expect(response.status).toBe(400)
-            expect(response.data).toBe("Name is invalid")
+            expect(response.data).toBe('Name is invalid')
         })
-        
+
         it('Register with invalid lastname', async () => {
             const response = await client.post('signup', {
                 firstname: 'Clark',
@@ -208,9 +228,9 @@ describe('Authentication Tests', () => {
             })
 
             expect(response.status).toBe(400)
-            expect(response.data).toBe("Name is invalid")
+            expect(response.data).toBe('Name is invalid')
         })
-        
+
         it('Register with invalid email', async () => {
             const response = await client.post('signup', {
                 firstname: 'Clark',
@@ -220,9 +240,9 @@ describe('Authentication Tests', () => {
             })
 
             expect(response.status).toBe(400)
-            expect(response.data).toBe("Email is invalid")
+            expect(response.data).toBe('Email is invalid')
         })
-        
+
         it('Register with invalid password', async () => {
             const response = await client.post('signup', {
                 firstname: 'Clark',
@@ -232,7 +252,7 @@ describe('Authentication Tests', () => {
             })
 
             expect(response.status).toBe(400)
-            expect(response.data).toBe("Password is not strong enough")
+            expect(response.data).toBe('Password is not strong enough')
         })
     })
 
