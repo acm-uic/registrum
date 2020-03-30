@@ -101,25 +101,25 @@ router.post('/signup', async (req: Request, res: Response) => {
     })
 })
 
-router.post("/update", isAuthenticated, async (req: Request, res: Response) => { 
+router.post('/update', isAuthenticated, async (req: Request, res: Response) => {
     // * Get the user object
-    const user = (req.user as UserObject);
-    
+    const user = req.user as UserObject
+
     // * Grab password out of body
     const { userPassword } = req.body
 
     // * If password is not provided, send error status
-    if(!userPassword) {
-        res.status(401).send("Password not provided")
+    if (!userPassword) {
+        res.status(401).send('Password not provided')
         return
     }
 
     // * Grab up to date user from database
-    const userDatabaseEntry = await User.findOne({_id: user._id})
+    const userDatabaseEntry = await User.findOne({ _id: user._id })
 
     // * Make sure provided password is correct
-    if( ! (await bcrypt.compare(userPassword, userDatabaseEntry.password))) {
-        res.status(401).send("Password not valid")
+    if (!(await bcrypt.compare(userPassword, userDatabaseEntry.password))) {
+        res.status(401).send('Password not valid')
         return
     }
 
@@ -128,7 +128,7 @@ router.post("/update", isAuthenticated, async (req: Request, res: Response) => {
 
     try {
         // * If password is provided, hash said password
-        if(updates.password) {
+        if (updates.password) {
             // * Verify the the password is adhering to out standard
             // * Length is atleast than 8
             // * Has one lower case and upper case English letter
@@ -143,17 +143,31 @@ router.post("/update", isAuthenticated, async (req: Request, res: Response) => {
             }
             updates.password = await bcrypt.hash(updates.password, 2)
         }
-    
+
+        const nameRegex = /^[^0-9\.\,\"\?\!\;\:\#\$\%\&\(\)\*\+\-\/\<\>\=\@\[\]\\\^\_\{\}\|\~]+$/
+        if (updates.lastname) {
+            // * Verify that the first and last name is valid
+
+            if (!nameRegex.test(updates.lastname)) {
+                res.status(400).send('Last name is invalid')
+                return
+            }
+        }
+        if (updates.firstname) {
+            // * Verify that the first and last name is valid
+
+            if (!nameRegex.test(updates.firstname)) {
+                res.status(400).send('First name is invalid')
+                return
+            }
+        }
+
         // * Update in mongoose
-        await User.updateOne({_id: user._id}, updates)
-        res.status(200).send("OK")
-    }
-    catch(err) {
+        await User.updateOne({ _id: user._id }, updates)
+        res.status(200).send('OK')
+    } catch (err) {
         res.status(500).send('Error')
     }
-    
-    
 })
-
 
 export default router
