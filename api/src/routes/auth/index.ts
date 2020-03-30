@@ -183,7 +183,7 @@ router.post('/update', isAuthenticated, async (req: Request, res: Response) => {
         }
 
         // * Update in mongoose
-        const updatedUser = await User.findOneAndUpdate({ _id: user._id }, updates)
+        const updatedUser = await User.findOneAndUpdate({ _id: user._id }, updates, { new: true })
         res.status(200).send(updatedUser)
     } catch (err) {
         res.status(500).send('Error')
