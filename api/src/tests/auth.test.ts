@@ -66,6 +66,7 @@ describe('Authentication Tests', () => {
         let userEmail = 'schen237@uic.edu'
         let userPassword = 'theRealClark1$'
 
+        // Signup
         it('Register an account', async () => {
             const response = await client.post('signup', {
                 firstname: 'Clark',
@@ -77,6 +78,7 @@ describe('Authentication Tests', () => {
             expect(response.status).toBe(200)
         })
 
+        // Attempting to register a duplicate account
         it('Register duplicate account', async () => {
             const response = await client.post('signup', {
                 firstname: 'Clark',
@@ -100,13 +102,15 @@ describe('Authentication Tests', () => {
             expect(response.status).toBe(200)
         })
 
+        // Test Login status by accessing restricted page
         it('Access restricted resource only available to logged in user', async () => {
             const response = await client.get('')
 
             expect(response.status).toBe(200)
         })
 
-        // Update user Info
+        //// Update user Info
+        // Valid input for changing password
         it('Update user info with valid new password', async () => {
             const newUserPassword = 'theRealClark2$'
             const response = await client.post('update', {
@@ -118,6 +122,7 @@ describe('Authentication Tests', () => {
             expect(response.data).toBe('OK')
         })
 
+        // Valid input for changing lastname
         it('Update user info with valid new lastname', async () => {
             const response = await client.post('update', {
                 lastname: 'Kent',
@@ -128,6 +133,7 @@ describe('Authentication Tests', () => {
             expect(response.data).toBe('OK')
         })
 
+        // Valid input for changing firstname
         it('Update user info with valid new firstname', async () => {
             const response = await client.post('update', {
                 firstname: 'Clarke',
@@ -138,6 +144,7 @@ describe('Authentication Tests', () => {
             expect(response.data).toBe('OK')
         })
 
+        // Valid input for changing email
         it('Update user info with valid new email', async () => {
             const newUserEmail = 'clark@clark-chen.com'
             const response = await client.post('update', {
@@ -149,7 +156,7 @@ describe('Authentication Tests', () => {
             expect(response.data).toBe('OK')
         })
 
-        // Input Validation for update user info
+        // Attempting to change password with wrong current password
         it('Update user info with invalid old password', async () => {
             const response = await client.post('update', {
                 password: 'theRealClark',
@@ -160,6 +167,7 @@ describe('Authentication Tests', () => {
             expect(response.data).toBe('Password not valid')
         })
 
+        // Attempting to change password with invalid new password
         it('Update user info with invalid new password', async () => {
             const response = await client.post('update', {
                 password: 'theRealClark',
@@ -170,6 +178,7 @@ describe('Authentication Tests', () => {
             expect(response.data).toBe('Password is not strong enough')
         })
 
+        // Attempting to change lastname with invalid new lastname
         it('Update user info with invalid new lastname', async () => {
             const response = await client.post('update', {
                 lastname: 'Kent?',
@@ -180,6 +189,7 @@ describe('Authentication Tests', () => {
             expect(response.data).toBe('Last name is invalid')
         })
 
+        // Attempting to change firstname with invalid new firstname
         it('Update user info with invalid new firstname', async () => {
             const response = await client.post('update', {
                 firstname: 'Clark?',
@@ -190,6 +200,7 @@ describe('Authentication Tests', () => {
             expect(response.data).toBe('First name is invalid')
         })
 
+        // Attempting to change email with invalid new email
         it('Update user info with invalid new email', async () => {
             const response = await client.post('update', {
                 email: 'clarkclark-chen.com',
@@ -200,6 +211,7 @@ describe('Authentication Tests', () => {
             expect(response.data).toBe('Email is invalid')
         })
 
+        // Attempting to change info without old password(userPassword) provided
         it('Update user info with missing userPassword', async () => {
             const response = await client.post('update', {})
 
@@ -207,6 +219,7 @@ describe('Authentication Tests', () => {
             expect(response.data).toBe('Password not provided')
         })
 
+        // Check if logout is working
         it('Logs user out correctly', async () => {
             const response = await client.get('logout')
 
@@ -216,15 +229,17 @@ describe('Authentication Tests', () => {
             }
         })
 
+        // Attempting to login with incorrect email
         it('Cannot login with incorrect email', async () => {
             const response = await client.post('login', {
                 email: userEmail + '.fake',
-                password: 'theRealClark1$'
+                password: userPassword
             })
 
             expect(response.status).toBe(401)
         })
 
+        // Attempting to login with incorrect password
         it('Cannot login with incorrect password', async () => {
             const response = await client.post('login', {
                 email: userEmail,
@@ -234,13 +249,14 @@ describe('Authentication Tests', () => {
             expect(response.status).toBe(401)
         })
 
+        // Test login with Google (TODO)
         it('Logs user in using Google', async () => {
             const response = await client.post('loginGoogle', {})
 
             expect(response.status).toBe(501) // TODO
         })
 
-        // Input Validation for Register
+        // Attempting to register with invalid firstname
         it('Register with invalid firstname', async () => {
             const response = await client.post('signup', {
                 firstname: 'Clark1',
@@ -253,6 +269,7 @@ describe('Authentication Tests', () => {
             expect(response.data).toBe('Name is invalid')
         })
 
+        // Attempting to register with invalid lastname
         it('Register with invalid lastname', async () => {
             const response = await client.post('signup', {
                 firstname: 'Clark',
@@ -265,6 +282,7 @@ describe('Authentication Tests', () => {
             expect(response.data).toBe('Name is invalid')
         })
 
+        // Attempting to register with invalid email
         it('Register with invalid email', async () => {
             const response = await client.post('signup', {
                 firstname: 'Clark',
@@ -277,6 +295,7 @@ describe('Authentication Tests', () => {
             expect(response.data).toBe('Email is invalid')
         })
 
+        // Attempting to register with invalid password
         it('Register with invalid password', async () => {
             const response = await client.post('signup', {
                 firstname: 'Clark',
@@ -289,6 +308,7 @@ describe('Authentication Tests', () => {
             expect(response.data).toBe('Password is not strong enough')
         })
 
+        // Run through a sequence of Change user info process
         it('Can update user correctly', async () => {
             // * Signup
             await client.post('signup', {
@@ -328,6 +348,7 @@ describe('Authentication Tests', () => {
     })
 
     describe('Edge Case tests', () => {
+        // Attempting to logout while not login
         it('Error with status code 401 when attempting to logout when not logged in', async () => {
             const response = await axios({
                 method: 'GET',
