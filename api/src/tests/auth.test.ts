@@ -193,6 +193,13 @@ describe('Authentication Tests', () => {
             expect(response.data).toBe('Email is invalid')
         })
 
+        it('Update user info with missing userPassword', async () => {
+            const response = await client.post('update', {})
+
+            expect(response.status).toBe(401)
+            expect(response.data).toBe('Password not provided')
+        })
+
         it('Logs user out correctly', async () => {
             const response = await client.get('logout')
 
