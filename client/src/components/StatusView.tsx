@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import { updateUser } from '../models/redux/actions/auth'
 import { useDispatch } from 'react-redux'
-import { Card } from 'react-bootstrap'
+import { Card, Button, Col } from 'react-bootstrap'
 import { Status } from '../models/interfaces/Status'
 import axios from 'axios'
 import { toast } from 'react-toastify'
@@ -15,6 +15,7 @@ const StatusView: FC<StatusViewProps> = ({ status }) => {
     const dispatch = useDispatch()
     const doRemoveClass = async () => {
         try {
+            // * Delete class by CRN
             await axios.post('/api/banner/unsubscribe', { crn: status.crn })
 
             // * update user
@@ -25,16 +26,21 @@ const StatusView: FC<StatusViewProps> = ({ status }) => {
     }
 
     return (
-        <>
-            <Card bg="info" text="dark" style={{ width: '18rem' }}>
-                <Card.Body>
+        <Col lg={4}>
+            <Card>
+                <Card.Header>
                     <Card.Title>
                         {status.crn} - {status.status}
                     </Card.Title>
-                    <Card.Link onClick={doRemoveClass}>Remove Class</Card.Link>
-                </Card.Body>
+                </Card.Header>
+                <Card.Body>More Class Information Here (TODO)</Card.Body>
+                <Card.Footer>
+                    <Button variant="outline-danger" onClick={doRemoveClass}>
+                        Remove Class
+                    </Button>
+                </Card.Footer>
             </Card>
-        </>
+        </Col>
     )
 }
 
