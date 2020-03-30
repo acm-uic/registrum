@@ -17,7 +17,7 @@ const NavBar = () => {
     const user: User | null = useSelector((state: any) => state.Auth.user)
 
     return (
-        <Navbar expand="md" className="align-middle">
+        <Navbar expand="md" bg="light" className="align-middle">
             <Navbar.Brand as={Link} to="/">
                 <img alt="UIC Logo" src={UICLogo} width={30} className="d-inline-block align-top" />{' '}
                 <b>Registrum</b>
@@ -43,12 +43,12 @@ const NavBar = () => {
                             </Nav.Link>
                         </>
                     )}
-                    <Nav.Link as={Link} to="/classes">
+                    {/* <Nav.Link as={Link} to="/classes">
                         About Us
                     </Nav.Link>
                     <Nav.Link as={Link} to="/classes">
                         Contact
-                    </Nav.Link>
+                    </Nav.Link> */}
                     {user != null && (
                         <NavDropdown
                             title={
