@@ -113,6 +113,16 @@ describe('Authentication Tests', () => {
         })
         
         // Input Validation for update user info
+        it('Update user info with invalid old password', async () => {
+            const response = await client.post('update', {
+                password: 'theRealClark',
+                userPassword: userPassword+"fake"
+            })
+
+            expect(response.status).toBe(401)
+            expect(response.data).toBe("Password not valid")
+        })
+
         it('Update user info with invalid new password', async () => {
             const response = await client.post('update', {
                 password: 'theRealClark',
