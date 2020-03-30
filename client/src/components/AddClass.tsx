@@ -104,8 +104,15 @@ const AddClass = () => {
         // * Terms > Subjects > Classes
         <>
             {/* For toggling the modal */}
-
-            <span onClick={() => toggleShow(!show)}>Add Class</span>
+            <Button
+                variant="outline-primary"
+                disabled={show}
+                onClick={() => toggleShow(!show)}
+                size="lg"
+                block
+            >
+                Add Class
+            </Button>
 
             <Modal show={show} onHide={() => toggleShow(!show)} centered>
                 <Modal.Header closeButton>

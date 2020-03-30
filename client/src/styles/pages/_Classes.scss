@@ -1,0 +1,19 @@
+.classInformationTitle {
+    width: 100%;
+    h4 {
+        margin-left: 1rem;
+    }
+    margin-bottom: 0;
+}
+
+.statuses {
+    background: $bootstrapLight;
+    padding: 1rem;
+    border-radius: 1rem;
+
+    position: relative;
+}
+
+.statusView {
+    margin: 1rem;
+}
