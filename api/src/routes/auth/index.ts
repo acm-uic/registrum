@@ -127,6 +127,12 @@ router.post('/update', isAuthenticated, async (req: Request, res: Response) => {
     let updates = req.body
 
     try {
+        // requestBody check (Prevent changing prohibited column)
+        if (updates._id || updates.subscriptions) {
+            res.status(400).send('Info update input violation')
+            return
+        }
+
         // * If password is provided, hash said password
         if (updates.password) {
             // * Verify the the password is adhering to out standard
@@ -176,7 +182,7 @@ router.post('/update', isAuthenticated, async (req: Request, res: Response) => {
 
         // * Update in mongoose
         await User.updateOne({ _id: user._id }, updates)
-        res.status(200).send('OK')
+        res.status(200).send(stripData(await User.findOne({ _id: user._id })))
     } catch (err) {
         res.status(500).send('Error')
     }

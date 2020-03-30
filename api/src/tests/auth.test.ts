@@ -76,6 +76,9 @@ describe('Authentication Tests', () => {
             })
 
             expect(response.status).toBe(200)
+            expect(response.data.firstname).toBe('Clark')
+            expect(response.data.lastname).toBe('Chen')
+            expect(response.data.email).toBe(userEmail)
         })
 
         // Attempting to register a duplicate account
@@ -100,6 +103,7 @@ describe('Authentication Tests', () => {
             })
 
             expect(response.status).toBe(200)
+            expect(response.data.email).toBe(userEmail)
         })
 
         // Test Login status by accessing restricted page
@@ -119,7 +123,15 @@ describe('Authentication Tests', () => {
             })
             userPassword = newUserPassword
             expect(response.status).toBe(200)
-            expect(response.data).toBe('OK')
+            expect(response.data.email).toBe(userEmail)
+
+            // Login with new password
+            const retryLoginResponse = await client.post('login', {
+                email: userEmail,
+                password: userPassword
+            })
+            expect(retryLoginResponse.status).toBe(200)
+            expect(retryLoginResponse.data.email).toBe(userEmail)
         })
 
         // Valid input for changing lastname
@@ -130,7 +142,7 @@ describe('Authentication Tests', () => {
             })
 
             expect(response.status).toBe(200)
-            expect(response.data).toBe('OK')
+            expect(response.data.lastname).toBe('Kent')
         })
 
         // Valid input for changing firstname
@@ -141,7 +153,7 @@ describe('Authentication Tests', () => {
             })
 
             expect(response.status).toBe(200)
-            expect(response.data).toBe('OK')
+            expect(response.data.firstname).toBe('Clarke')
         })
 
         // Valid input for changing email
@@ -153,7 +165,7 @@ describe('Authentication Tests', () => {
             })
             userEmail = newUserEmail
             expect(response.status).toBe(200)
-            expect(response.data).toBe('OK')
+            expect(response.data.email).toBe('clark@clark-chen.com')
         })
 
         // Attempting to change password with wrong current password
@@ -219,14 +231,34 @@ describe('Authentication Tests', () => {
             expect(response.data).toBe('Password not provided')
         })
 
+        // Attempting to change user ID
+        it("Update user info's id (Security Violation)", async () => {
+            const response = await client.post('update', {
+                _id: '000000000000000000000000',
+                userPassword: userPassword
+            })
+
+            expect(response.status).toBe(400)
+            expect(response.data).toBe('Info update input violation')
+        })
+
+        // Attempting to change subscriptions
+        it('Update subscriptions using userinfo API', async () => {
+            const response = await client.post('update', {
+                subscriptions: '{}',
+                userPassword: userPassword
+            })
+
+            expect(response.status).toBe(400)
+            expect(response.data).toBe('Info update input violation')
+        })
+
         // Check if logout is working
         it('Logs user out correctly', async () => {
             const response = await client.get('logout')
 
             expect(response.status).toBe(200)
-            if (response.status != 200) {
-                console.error(response.data)
-            }
+            expect(response.data).toBe('OK')
         })
 
         // Attempting to login with incorrect email
@@ -237,6 +269,7 @@ describe('Authentication Tests', () => {
             })
 
             expect(response.status).toBe(401)
+            expect(response.data).toBe('Unauthorized')
         })
 
         // Attempting to login with incorrect password
@@ -247,6 +280,7 @@ describe('Authentication Tests', () => {
             })
 
             expect(response.status).toBe(401)
+            expect(response.data).toBe('Unauthorized')
         })
 
         // Test login with Google (TODO)
@@ -254,6 +288,7 @@ describe('Authentication Tests', () => {
             const response = await client.post('loginGoogle', {})
 
             expect(response.status).toBe(501) // TODO
+            expect(response.data).toBe('TODO')
         })
 
         // Attempting to register with invalid firstname
