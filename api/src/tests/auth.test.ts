@@ -23,7 +23,8 @@ const client = axios.create({
 axiosCookieJarSupport(client)
 
 describe('Authentication Tests', () => {
-    let server = beforeAll(async () => {
+    let server
+    beforeAll(async () => {
         await new Promise((resolve, reject) => {
             server = app.listen(PORT, resolve)
         })
