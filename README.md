@@ -87,11 +87,12 @@ We will have basic CRUD functionality ready by allowing for user login/registrat
 
 ### Deliverables for checkpoint 4
 
-Basic microservice functionality, client completion, completed API.
+Basic microservice functionality, client completion (tenative), completed API(tenative).
 
 ### Deliverables for final project
 
-The full application will be completed with an API, Microservice and React/Typescript client
+The full application will be completed with an API, Microservice Infrastructure and React/Typescript client and a defined
+production workflow.
 
 ## CI/CD
 
