@@ -1,10 +1,8 @@
 import dotenv from 'dotenv'
 import axios from 'axios'
-import User from '../routes/models/User'
 import axiosCookieJarSupport from 'axios-cookiejar-support'
 import { CookieJar } from 'tough-cookie'
 import app, { mongoose, redisClient } from '../app'
-import { response } from 'express'
 
 dotenv.config()
 const PORT = process.env.PORT || 8080
