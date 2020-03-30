@@ -4,13 +4,12 @@ import User from '../routes/models/User'
 import axiosCookieJarSupport from 'axios-cookiejar-support'
 import { CookieJar } from 'tough-cookie'
 import app, { mongoose, redisClient } from '../app'
+import { response } from 'express'
 
 dotenv.config()
 const PORT = process.env.PORT || 8080
 const BASE_PATH = process.env.BASE_PATH || '/api'
 const URL = `http://localhost:${PORT}${BASE_PATH}/auth/`
-
-const server = app.listen(PORT)
 
 // * Add Axios Cookie Jar
 const jar = new CookieJar()
@@ -26,6 +25,12 @@ const client = axios.create({
 axiosCookieJarSupport(client)
 
 describe('Authentication Tests', () => {
+    let server = beforeAll(async () => {
+        await new Promise((resolve, reject) => {
+            server = app.listen(PORT, resolve)
+        })
+    })
+
     afterAll(async () => {
         // * Remove all users from DB
         await new Promise((resolve, reject) => {
@@ -140,9 +145,9 @@ describe('Authentication Tests', () => {
             })
 
             expect(response.status).toBe(400)
-            expect(response.data).toBe("Name is invalid")
+            expect(response.data).toBe('Name is invalid')
         })
-        
+
         it('Register with invalid lastname', async () => {
             const response = await client.post('signup', {
                 firstname: 'Clark',
@@ -152,9 +157,9 @@ describe('Authentication Tests', () => {
             })
 
             expect(response.status).toBe(400)
-            expect(response.data).toBe("Name is invalid")
+            expect(response.data).toBe('Name is invalid')
         })
-        
+
         it('Register with invalid email', async () => {
             const response = await client.post('signup', {
                 firstname: 'Clark',
@@ -164,9 +169,9 @@ describe('Authentication Tests', () => {
             })
 
             expect(response.status).toBe(400)
-            expect(response.data).toBe("Email is invalid")
+            expect(response.data).toBe('Email is invalid')
         })
-        
+
         it('Register with invalid password', async () => {
             const response = await client.post('signup', {
                 firstname: 'Clark',
@@ -176,7 +181,44 @@ describe('Authentication Tests', () => {
             })
 
             expect(response.status).toBe(400)
-            expect(response.data).toBe("Password is not strong enough")
+            expect(response.data).toBe('Password is not strong enough')
+        })
+
+        describe('Can update user correctly', async () => {
+            // * Signup
+            await client.post('signup', {
+                firstname: 'Bharat',
+                lastname: 'Middha',
+                email: 'achomi2@uic.edu',
+                password: 'oldPassword1$'
+            })
+
+            // * Try to post updates
+            await client.post('update', {
+                firstname: 'Alex',
+                lastname: 'Chomiak',
+                password: 'theRealAlex1$',
+                userPassword: 'oldPassword1$'
+            })
+
+            // * Logout
+            await client.post('logout')
+
+            // * Log back in with new password
+            const response = await client.post('/login', {
+                email: 'achomi2@uic.edu',
+                password: 'theRealAlex1$'
+            })
+
+            // * Assure status is 200
+            expect(response.status).toBe(200)
+
+            // * Check user is updated
+            const { data: user } = await client.get('/')
+
+            // * Check against new first and last names
+            expect(user.firstname).toBe('Alex')
+            expect(user.lastname).toBe('Chomiak')
         })
     })
 
