@@ -129,6 +129,18 @@ router.post("/update", isAuthenticated, async (req: Request, res: Response) => {
     try {
         // * If password is provided, hash said password
         if(updates.password) {
+            // * Verify the the password is adhering to out standard
+            // * Length is atleast than 8
+            // * Has one lower case and upper case English letter
+            // * Has one digit and one special character
+            if (
+                !RegExp(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/, 'i').test(
+                    updates.password
+                )
+            ) {
+                res.status(400).send('Password is not strong enough')
+                return
+            }
             updates.password = await bcrypt.hash(updates.password, 2)
         }
     
