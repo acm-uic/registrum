@@ -23,7 +23,10 @@ const SignUp = () => {
         }
 
         // * Verify that the email matches according to W3C standard
-        if (!/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email)) {
+        const emailRegex = RegExp(
+            /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
+        )
+        if (!emailRegex.test(email)) {
             return
         }
 
@@ -31,7 +34,10 @@ const SignUp = () => {
         // * Length is at least than 8
         // * Has one lower case and upper case English letter
         // * Has one digit and one special character
-        if (!/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/.test(password)) {
+        const passwordRegex = RegExp(
+            /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/
+        )
+        if (!passwordRegex.test(password)) {
             return
         }
 
