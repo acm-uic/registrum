@@ -8,6 +8,20 @@ import { isAuthenticated } from './passport'
 
 const router = Router()
 
+// * Defining RegExp statement
+
+// * RegExp verifies that the name don't have outlandish characters
+const nameRegex = RegExp(/[a-zA-Z]+[a-zA-Z-\s]+[a-zA-Z]*$/)
+
+// * RegExp verifies that the email matches according to W3C standard
+const emailRegex = RegExp(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)
+
+// * RegExp verifies that the password is adhering to our standard
+// * Length is at least 8
+// * Has one lower case and upper case English letter
+// * Has one digit and one special character
+const passwordRegex = RegExp(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/)
+
 // * Remove data shouldn't be sent to client
 const stripData = data => {
     const result = JSON.parse(JSON.stringify(data))
@@ -46,18 +60,13 @@ router.post('/signup', async (req: Request, res: Response) => {
     const { firstname, lastname, email, password } = req.body
 
     // * Verify that the first and last name is valid
-    const nameRegex = /^[^0-9\.\,\"\?\!\;\:\#\$\%\&\(\)\*\+\-\/\<\>\=\@\[\]\\\^\_\{\}\|\~]+$/
     if (!nameRegex.test(firstname) || !nameRegex.test(lastname)) {
         res.status(400).send('Name is invalid')
         return
     }
 
     // * Verify that the email matches according to W3C standard
-    if (
-        !RegExp(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/, 'i').test(
-            email
-        )
-    ) {
+    if (!emailRegex.test(email)) {
         res.status(400).send('Email is invalid')
         return
     }
@@ -66,11 +75,7 @@ router.post('/signup', async (req: Request, res: Response) => {
     // * Length is at least than 8
     // * Has one lower case and upper case English letter
     // * Has one digit and one special character
-    if (
-        !RegExp(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/, 'i').test(
-            password
-        )
-    ) {
+    if (!passwordRegex.test(password)) {
         res.status(400).send('Password is not strong enough')
         return
     }
@@ -139,21 +144,12 @@ router.post('/update', isAuthenticated, async (req: Request, res: Response) => {
             // * Length is at least than 8
             // * Has one lower case and upper case English letter
             // * Has one digit and one special character
-            if (
-                !RegExp(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/, 'i').test(
-                    updates.password
-                )
-            ) {
+            if (!passwordRegex.test(updates.password)) {
                 res.status(400).send('Password is not strong enough')
                 return
             }
             updates.password = await bcrypt.hash(updates.password, 2)
         }
-
-        const nameRegex = new RegExp(
-            /^[^0-9\.\,\"\?\!\;\:\#\$\%\&\(\)\*\+\-\/\<\>\=\@\[\]\\\^\_\{\}\|\~]+$/,
-            'i'
-        )
 
         if (updates.lastname) {
             // * Verify that the first and last name is valid
@@ -171,12 +167,7 @@ router.post('/update', isAuthenticated, async (req: Request, res: Response) => {
         }
         if (updates.email) {
             // * Verify that the email matches according to W3C standard
-            if (
-                !RegExp(
-                    /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
-                    'i'
-                ).test(updates.email)
-            ) {
+            if (!emailRegex.test(updates.email)) {
                 res.status(400).send('Email is invalid')
                 return
             }
