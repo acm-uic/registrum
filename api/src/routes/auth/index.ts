@@ -174,14 +174,16 @@ router.post('/update', isAuthenticated, async (req: Request, res: Response) => {
         }
 
         // * Update in mongoose
-        const updatedUser = await User.findOneAndUpdate({ _id: user._id }, updates, { new: true })
+        let updatedUser = await User.findOneAndUpdate({ _id: user._id }, updates, { new: true })
+
+        // * Delete unnecessary keys
+        updatedUser = JSON.parse(JSON.stringify(updatedUser))
+        delete updatedUser['_id']
+        delete updatedUser['password']
+        delete updatedUser['__v']
 
         // * Makes sure unnecessary keys/values are not sent
-        res.status(200).send({
-            firstname: updatedUser.firstname,
-            lastname: updatedUser.lastname,
-            email: updatedUser.email
-        })
+        res.status(200).send(updatedUser)
     } catch (err) {
         res.status(500).send('Error')
     }
