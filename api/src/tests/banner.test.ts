@@ -43,10 +43,10 @@ describe('Class Tests', () => {
         server = app.listen(PORT)
 
         const response = await client.post(`auth/signup`, {
-            firstname: 'Clark',
-            lastname: 'Chen',
-            email: 'schen237@uic.edu',
-            password: 'theRealClark1$'
+            firstname: 'John',
+            lastname: 'Doe',
+            email: 'example@registrum.app',
+            password: 'theRealApp1$'
         })
 
         expect(response.status).toBe(200)
@@ -102,8 +102,8 @@ describe('Class Tests', () => {
 
     beforeEach(async () => {
         await client.post('auth/login', {
-            email: 'schen237@uic.edu',
-            password: 'theRealClark1$'
+            email: 'example@registrum.app',
+            password: 'theRealApp1$'
         })
 
         // * Unsubscribe from class
@@ -210,7 +210,7 @@ describe('Class Tests', () => {
             crn: secondClass.crn
         })
 
-        // * Make sure user subscribptions contain both CRNs
+        // * Make sure user subscriptions contain both CRNs
         const { subscriptions } = (await client.get('/auth')).data
 
         // * Make sure both subscriptions registered in system

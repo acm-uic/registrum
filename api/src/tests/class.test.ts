@@ -32,10 +32,10 @@ describe('Class Tests', () => {
         server = app.listen(PORT)
 
         const response = await client.post(`auth/signup`, {
-            firstname: 'Clark',
-            lastname: 'Chen',
-            email: 'schen237@uic.edu',
-            password: 'theRealClark1$'
+            firstname: 'John',
+            lastname: 'Doe',
+            email: 'example@registrum.app',
+            password: 'theRealApp1$'
         })
 
         expect(response.status).toBe(200)

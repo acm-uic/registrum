@@ -46,13 +46,13 @@ describe('Authentication Tests', () => {
         await new Promise(resolve => setImmediate(resolve))
 
         // * Close Server
-        await server.close()
+        server.close()
     })
 
     describe('Sanity Tests', () => {
         // * To allow changing info during test case
-        let userEmail = 'schen237@uic.edu'
-        let userPassword = 'theRealClark1$'
+        let userEmail = 'example@registrum.app'
+        let userPassword = 'theRealApp1$'
 
         // * Add Axios Cookie Jar
         const jar = new CookieJar()
@@ -70,23 +70,23 @@ describe('Authentication Tests', () => {
         // *Signup
         it('Register an account', async () => {
             const response = await client.post('signup', {
-                firstname: 'Clark',
-                lastname: 'Chen',
+                firstname: 'John',
+                lastname: 'Smith',
                 email: userEmail,
                 password: userPassword
             })
 
             expect(response.status).toBe(200)
-            expect(response.data.firstname).toBe('Clark')
-            expect(response.data.lastname).toBe('Chen')
+            expect(response.data.firstname).toBe('John')
+            expect(response.data.lastname).toBe('Smith')
             expect(response.data.email).toBe(userEmail)
         })
 
         // Attempting to register a duplicate account
         it('Register duplicate account', async () => {
             const response = await client.post('signup', {
-                firstname: 'Clark',
-                lastname: 'Chen',
+                firstname: 'John',
+                lastname: 'Smith',
                 email: userEmail,
                 password: userPassword
             })
@@ -117,7 +117,7 @@ describe('Authentication Tests', () => {
         //// Update user Info
         // Valid input for changing password
         it('Update user info with valid new password', async () => {
-            const newUserPassword = 'theRealClark2$'
+            const newUserPassword = 'theRealApp2$'
             const response = await client.post('update', {
                 password: newUserPassword,
                 userPassword: userPassword
@@ -139,44 +139,43 @@ describe('Authentication Tests', () => {
         // Valid input for changing lastname
         it('Update user info with valid new lastname', async () => {
             const response = await client.post('update', {
-                lastname: 'Kent',
+                lastname: 'Doe',
                 userPassword: userPassword
             })
 
             expect(response.status).toBe(200)
 
-            expect(response.data.lastname).toBe('Kent')
+            expect(response.data.lastname).toBe('Doe')
         })
 
         // Valid input for changing firstname
         it('Update user info with valid new firstname', async () => {
             const response = await client.post('update', {
-                firstname: 'Clarke',
+                firstname: 'Dough',
                 userPassword: userPassword
             })
 
             expect(response.status).toBe(200)
-
-            expect(response.data.firstname).toBe('Clarke')
+            expect(response.data.firstname).toBe('Dough')
         })
 
         // Valid input for changing email
         it('Update user info with valid new email', async () => {
-            const newUserEmail = 'clark@clark-chen.com'
+            const newUserEmail = 'registrum@example.com'
             const response = await client.post('update', {
                 email: newUserEmail,
                 userPassword: userPassword
             })
+
             userEmail = newUserEmail
             expect(response.status).toBe(200)
-
-            expect(response.data.email).toBe('clark@clark-chen.com')
+            expect(response.data.email).toBe('registrum@example.com')
         })
 
         // Attempting to change password with wrong current password
         it('Update user info with invalid old password', async () => {
             const response = await client.post('update', {
-                password: 'theRealClark',
+                password: 'password_is_fake',
                 userPassword: userPassword + 'fake'
             })
 
@@ -187,7 +186,7 @@ describe('Authentication Tests', () => {
         // Attempting to change password with invalid new password
         it('Update user info with invalid new password', async () => {
             const response = await client.post('update', {
-                password: 'theRealClark',
+                password: 'theRealApp',
                 userPassword: userPassword
             })
 
@@ -198,7 +197,7 @@ describe('Authentication Tests', () => {
         // Attempting to change lastname with invalid new lastname
         it('Update user info with invalid new lastname', async () => {
             const response = await client.post('update', {
-                lastname: 'Kent?',
+                lastname: 'Doe?',
                 userPassword: userPassword
             })
 
@@ -209,7 +208,7 @@ describe('Authentication Tests', () => {
         // Attempting to change firstname with invalid new firstname
         it('Update user info with invalid new firstname', async () => {
             const response = await client.post('update', {
-                firstname: 'Clark?',
+                firstname: 'John?',
                 userPassword: userPassword
             })
 
@@ -220,7 +219,7 @@ describe('Authentication Tests', () => {
         // Attempting to change email with invalid new email
         it('Update user info with invalid new email', async () => {
             const response = await client.post('update', {
-                email: 'clarkclark-chen.com',
+                email: 'registrum-example.com',
                 userPassword: userPassword
             })
 
@@ -281,7 +280,7 @@ describe('Authentication Tests', () => {
         it('Cannot login with incorrect password', async () => {
             const response = await client.post('login', {
                 email: userEmail,
-                password: 'theFakeClark1$'
+                password: 'theFakeApp1$'
             })
 
             expect(response.status).toBe(401)
@@ -299,10 +298,10 @@ describe('Authentication Tests', () => {
         // Attempting to register with invalid firstname
         it('Register with invalid firstname', async () => {
             const response = await client.post('signup', {
-                firstname: 'Clark1',
-                lastname: 'Chen',
-                email: 'schen237@uic.edu',
-                password: 'theRealClark1$'
+                firstname: 'John1',
+                lastname: 'Doe',
+                email: 'registrum@example.com',
+                password: 'theRealApp1$'
             })
 
             expect(response.status).toBe(400)
@@ -312,10 +311,10 @@ describe('Authentication Tests', () => {
         // Attempting to register with invalid lastname
         it('Register with invalid lastname', async () => {
             const response = await client.post('signup', {
-                firstname: 'Clark',
-                lastname: 'Chen1',
-                email: 'schen237@uic.edu',
-                password: 'theRealClark1$'
+                firstname: 'John',
+                lastname: 'Doe1',
+                email: 'registrum@example.com',
+                password: 'theRealApp1$'
             })
 
             expect(response.status).toBe(400)
@@ -325,10 +324,10 @@ describe('Authentication Tests', () => {
         // Attempting to register with invalid email
         it('Register with invalid email', async () => {
             const response = await client.post('signup', {
-                firstname: 'Clark',
-                lastname: 'Chen',
-                email: 'schen237uic.edu',
-                password: 'theRealClark1$'
+                firstname: 'John',
+                lastname: 'Doe',
+                email: 'registrum-example.com',
+                password: 'theRealApp1$'
             })
 
             expect(response.status).toBe(400)
@@ -338,10 +337,10 @@ describe('Authentication Tests', () => {
         // Attempting to register with invalid password
         it('Register with invalid password', async () => {
             const response = await client.post('signup', {
-                firstname: 'Clark',
-                lastname: 'Chen',
-                email: 'schen237@uic.edu',
-                password: 'theRealClark'
+                firstname: 'John',
+                lastname: 'Doe',
+                email: 'registrum@example.com',
+                password: 'theRealApp'
             })
 
             expect(response.status).toBe(400)
@@ -352,18 +351,18 @@ describe('Authentication Tests', () => {
         it('Can update user correctly', async () => {
             // * Signup
             await client.post('signup', {
-                firstname: 'Bharat',
-                lastname: 'Middha',
-                email: 'achomi2@uic.edu',
-                password: 'oldPassword1$'
+                firstname: 'Jimmy',
+                lastname: 'Falcon',
+                email: 'jimmy@registrum.app',
+                password: 'jimmyPass#1'
             })
 
             // * Try to post updates
             await client.post('update', {
-                firstname: 'Alex',
-                lastname: 'Chomiak',
-                password: 'theRealAlex1$',
-                userPassword: 'oldPassword1$'
+                firstname: 'Tom',
+                lastname: 'Bald',
+                password: 'jimmyPass#2',
+                userPassword: 'jimmyPass#1'
             })
 
             // * Logout
@@ -371,8 +370,8 @@ describe('Authentication Tests', () => {
 
             // * Log back in with new password
             const response = await client.post('/login', {
-                email: 'achomi2@uic.edu',
-                password: 'theRealAlex1$'
+                email: 'jimmy@registrum.app',
+                password: 'jimmyPass#2'
             })
 
             // * Assure status is 200
@@ -382,8 +381,8 @@ describe('Authentication Tests', () => {
             const { data: user } = await client.get('/')
 
             // * Check against new first and last names
-            expect(user.firstname).toBe('Alex')
-            expect(user.lastname).toBe('Chomiak')
+            expect(user.firstname).toBe('Tom')
+            expect(user.lastname).toBe('Bald')
         })
     })
 
