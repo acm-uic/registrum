@@ -4,7 +4,7 @@ import User, { UserObject } from '../models/User'
 import bcrypt from 'bcrypt'
 import { NextFunction, Request, Response } from 'express'
 
-// * Setup serialization and Deserialization functions
+// * Setup serialization and De-serialization functions
 passport.serializeUser((user: UserObject, done) => {
     done(null, user._id)
 })
@@ -20,7 +20,6 @@ passport.deserializeUser(async (id, done) => {
 passport.use(
     new Local.Strategy({ usernameField: 'email' }, async (email, password, done) => {
         try {
-            console.log('AUTH' + email + password)
             const user = await User.findOne({ email })
 
             // * Check if user exists
