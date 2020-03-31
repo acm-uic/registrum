@@ -31,6 +31,14 @@ describe('Class Tests', () => {
     })
     axiosCookieJarSupport(client)
 
+    // * Chosen term
+    let term = ''
+    // * Subjects
+    let subjects = []
+
+    // * Chosen Class for subscription
+    let chosenClass: Class = null
+
     beforeAll(async () => {
         server = app.listen(PORT)
 
@@ -55,7 +63,7 @@ describe('Class Tests', () => {
         // * Pick random subject
         const subject = subjects[Math.floor(Math.random() * subjects.length)]
 
-        // * Retieve classes for random class
+        // * Retrieve classes for random class
         const classes = (await client.get(`/classes/list/${subject}`)).data as Class[]
 
         // * Pick random class
@@ -91,14 +99,6 @@ describe('Class Tests', () => {
         // * Close Server
         server.close()
     })
-
-    // * Chosen term
-    let term = ''
-    // * Subjects
-    let subjects = []
-
-    // * Chosen Class for subscription
-    let chosenClass: Class = null
 
     beforeEach(async () => {
         await client.post('auth/login', {
