@@ -8,67 +8,32 @@ import { response } from 'express'
 
 import { Class } from '../routes/models/interfaces/Class'
 import { Status } from '../routes/models/interfaces/Status'
+import { Server } from 'http'
 
 dotenv.config()
-const PORT = process.env.PORT || 8081
+const PORT = process.env.PORT || 8085
 const BASE_PATH = process.env.BASE_PATH || '/api'
 const URL = `http://localhost:${PORT}${BASE_PATH}/`
 
-const server = app.listen(PORT)
-
-// * Add Axios Cookie Jar
-const jar = new CookieJar()
-const client = axios.create({
-    baseURL: URL,
-    withCredentials: true,
-    jar: jar,
-    validateStatus: () => {
-        /* always resolve on any HTTP status */
-        return true
-    }
-})
-axiosCookieJarSupport(client)
-
 describe('Class Tests', () => {
-    afterAll(async () => {
-        // * Remove all users from DB
-        await new Promise((resolve, reject) => {
-            mongoose.connection.db.dropCollection('users', function(err, result) {
-                resolve()
-            })
-        })
+    let server: Server
 
-        // * Close DB Connection
-        await new Promise((resolve, reject) => {
-            mongoose.connection.close(() => {
-                resolve()
-            })
-        })
-
-        // * Quit Redis Client
-        await new Promise(resolve => {
-            redisClient.quit(() => {
-                resolve()
-            })
-        })
-        // ? SOURCE: https://stackoverflow.com/questions/52939575/node-js-jest-redis-quit-but-open-handle-warning-persists
-        // * redis.quit() creates a thread to close the connection.
-        // * We wait until all threads have been run once to ensure the connection closes.
-        await new Promise(resolve => setImmediate(resolve))
-
-        // * Close Server
-        await server.close()
+    // * Add Axios Cookie Jar
+    const jar = new CookieJar()
+    const client = axios.create({
+        baseURL: URL,
+        withCredentials: true,
+        jar: jar,
+        validateStatus: () => {
+            /* always resolve on any HTTP status */
+            return true
+        }
     })
-
-    // * Chosen term
-    let term = ''
-    // * Subjects
-    let subjects = []
-
-    // * Chosen Class for subscription
-    let chosenClass: Class = null
+    axiosCookieJarSupport(client)
 
     beforeAll(async () => {
+        server = app.listen(PORT)
+
         const response = await client.post(`auth/signup`, {
             firstname: 'Clark',
             lastname: 'Chen',
@@ -96,6 +61,44 @@ describe('Class Tests', () => {
         // * Pick random class
         chosenClass = classes[Math.floor(Math.random() * classes.length)]
     })
+
+    afterAll(async () => {
+        // * Remove all users from DB
+        await new Promise((resolve, reject) => {
+            mongoose.connection.db.dropCollection('users', function(err, result) {
+                resolve()
+            })
+        })
+
+        // * Close DB Connection
+        await new Promise((resolve, reject) => {
+            mongoose.connection.close(() => {
+                resolve()
+            })
+        })
+
+        // * Quit Redis Client
+        await new Promise(resolve => {
+            redisClient.quit(() => {
+                resolve()
+            })
+        })
+        // ? SOURCE: https://stackoverflow.com/questions/52939575/node-js-jest-redis-quit-but-open-handle-warning-persists
+        // * redis.quit() creates a thread to close the connection.
+        // * We wait until all threads have been run once to ensure the connection closes.
+        await new Promise(resolve => setImmediate(resolve))
+
+        // * Close Server
+        server.close()
+    })
+
+    // * Chosen term
+    let term = ''
+    // * Subjects
+    let subjects = []
+
+    // * Chosen Class for subscription
+    let chosenClass: Class = null
 
     beforeEach(async () => {
         await client.post('auth/login', {

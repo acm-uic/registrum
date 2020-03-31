@@ -3,27 +3,16 @@ import axios from 'axios'
 import axiosCookieJarSupport from 'axios-cookiejar-support'
 import { CookieJar } from 'tough-cookie'
 import app, { mongoose, redisClient } from '../app'
+import { Server } from 'http'
 
 dotenv.config()
-const PORT = process.env.PORT || 8080
+const PORT = process.env.PORT || 8085
 const BASE_PATH = process.env.BASE_PATH || '/api'
 const URL = `http://localhost:${PORT}${BASE_PATH}/auth/`
 
-// * Add Axios Cookie Jar
-const jar = new CookieJar()
-const client = axios.create({
-    baseURL: URL,
-    withCredentials: true,
-    jar: jar,
-    validateStatus: () => {
-        /* always resolve on any HTTP status */
-        return true
-    }
-})
-axiosCookieJarSupport(client)
-
 describe('Authentication Tests', () => {
-    let server
+    let server: Server
+
     beforeAll(async () => {
         await new Promise((resolve, reject) => {
             server = app.listen(PORT, resolve)
@@ -64,6 +53,19 @@ describe('Authentication Tests', () => {
         // * To allow changing info during test case
         let userEmail = 'schen237@uic.edu'
         let userPassword = 'theRealClark1$'
+
+        // * Add Axios Cookie Jar
+        const jar = new CookieJar()
+        const client = axios.create({
+            baseURL: URL,
+            withCredentials: true,
+            jar: jar,
+            validateStatus: () => {
+                /* always resolve on any HTTP status */
+                return true
+            }
+        })
+        axiosCookieJarSupport(client)
 
         // *Signup
         it('Register an account', async () => {
