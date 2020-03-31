@@ -2,7 +2,7 @@ import { Router, Request, Response } from 'express'
 import passport from 'passport'
 import User, { UserObject } from '../models/User'
 import bcrypt from 'bcrypt'
-// * Bind Passport stategies
+// * Bind Passport strategies
 import './passport'
 import { isAuthenticated } from './passport'
 
@@ -28,7 +28,7 @@ router.post(
         res.status(200).json(stripData(await User.findOne({ email: req.body.email })))
 )
 
-/* Login by Google - WIP to allow Student to signin with their school account*/
+/* Login by Google - WIP to allow Student to sign in with their school account*/
 router.post('/loginGoogle', (req: Request, res: Response) => {
     // TODO: Login with passport Google strategy ?
     res.status(501).send('TODO')
@@ -63,7 +63,7 @@ router.post('/signup', async (req: Request, res: Response) => {
     }
 
     // * Verify the the password is adhering to out standard
-    // * Length is atleast than 8
+    // * Length is at least than 8
     // * Has one lower case and upper case English letter
     // * Has one digit and one special character
     if (
@@ -136,7 +136,7 @@ router.post('/update', isAuthenticated, async (req: Request, res: Response) => {
         // * If password is provided, hash said password
         if (updates.password) {
             // * Verify the the password is adhering to out standard
-            // * Length is atleast than 8
+            // * Length is at least than 8
             // * Has one lower case and upper case English letter
             // * Has one digit and one special character
             if (
@@ -184,7 +184,13 @@ router.post('/update', isAuthenticated, async (req: Request, res: Response) => {
 
         // * Update in mongoose
         const updatedUser = await User.findOneAndUpdate({ _id: user._id }, updates, { new: true })
-        res.status(200).send(updatedUser)
+
+        // * Makes sure unnecessary keys/values are not sent
+        res.status(200).send({
+            firstname: updatedUser.firstname,
+            lastname: updatedUser.lastname,
+            email: updatedUser.email
+        })
     } catch (err) {
         res.status(500).send('Error')
     }

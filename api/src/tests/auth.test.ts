@@ -248,7 +248,7 @@ describe('Authentication Tests', () => {
         })
 
         // Attempting to change subscriptions
-        it('Update subscriptions using userinfo API', async () => {
+        it('Update subscriptions using user info API', async () => {
             const response = await client.post('update', {
                 subscriptions: '{}',
                 userPassword: userPassword
