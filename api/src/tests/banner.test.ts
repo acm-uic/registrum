@@ -45,7 +45,7 @@ describe('Class Tests', () => {
         const response = await client.post(`auth/signup`, {
             firstname: 'John',
             lastname: 'Doe',
-            email: 'example@registrum.app',
+            email: 'registrum@example.com',
             password: 'theRealApp1$'
         })
 
@@ -102,7 +102,7 @@ describe('Class Tests', () => {
 
     beforeEach(async () => {
         await client.post('auth/login', {
-            email: 'example@registrum.app',
+            email: 'registrum@example.com',
             password: 'theRealApp1$'
         })
 

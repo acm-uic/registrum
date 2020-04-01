@@ -51,7 +51,7 @@ describe('Authentication Tests', () => {
 
     describe('Sanity Tests', () => {
         // * To allow changing info during test case
-        let userEmail = 'example@registrum.app'
+        let userEmail = 'registrum@example.com'
         let userPassword = 'theRealApp1$'
 
         // * Add Axios Cookie Jar
@@ -161,7 +161,7 @@ describe('Authentication Tests', () => {
 
         // Valid input for changing email
         it('Update user info with valid new email', async () => {
-            const newUserEmail = 'registrum@example.com'
+            const newUserEmail = 'registrum2@example.com'
             const response = await client.post('update', {
                 email: newUserEmail,
                 userPassword: userPassword
@@ -169,7 +169,7 @@ describe('Authentication Tests', () => {
 
             userEmail = newUserEmail
             expect(response.status).toBe(200)
-            expect(response.data.email).toBe('registrum@example.com')
+            expect(response.data.email).toBe('registrum2@example.com')
         })
 
         // Attempting to change password with wrong current password
@@ -353,7 +353,7 @@ describe('Authentication Tests', () => {
             await client.post('signup', {
                 firstname: 'Jimmy',
                 lastname: 'Falcon',
-                email: 'jimmy@registrum.app',
+                email: 'jimmy@example.com',
                 password: 'jimmyPass#1'
             })
 
@@ -370,7 +370,7 @@ describe('Authentication Tests', () => {
 
             // * Log back in with new password
             const response = await client.post('/login', {
-                email: 'jimmy@registrum.app',
+                email: 'jimmy@example.com',
                 password: 'jimmyPass#2'
             })
 
