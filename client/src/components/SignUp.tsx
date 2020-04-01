@@ -17,21 +17,27 @@ const SignUp = () => {
         e.preventDefault()
         setValidated(true)
 
-        const nameRegex = /[a-zA-Z]+[a-zA-Z0-9\s]+[a-zA-Z]/
+        const nameRegex = /[a-zA-Z]+[a-zA-Z-\s]+[a-zA-Z]/
         if (!nameRegex.test(fName) || !nameRegex.test(lName)) {
             return
         }
 
         // * Verify that the email matches according to W3C standard
-        if (!/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email)) {
+        const emailRegex = RegExp(
+            /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
+        )
+        if (!emailRegex.test(email)) {
             return
         }
 
         // * Verify the the password is adhering to out standard
-        // * Length is atleast than 8
+        // * Length is at least than 8
         // * Has one lower case and upper case English letter
         // * Has one digit and one special character
-        if (!/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/.test(password)) {
+        const passwordRegex = RegExp(
+            /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/
+        )
+        if (!passwordRegex.test(password)) {
             return
         }
 
@@ -135,7 +141,7 @@ const SignUp = () => {
                                 }}
                             />
                             <Form.Control.Feedback type="invalid">
-                                Your password must be atleast 8 characters long and have a digit, a
+                                Your password must be at least 8 characters long and have a digit, a
                                 special character, and an uppercase and lowercase English letter
                             </Form.Control.Feedback>
                         </Form.Group>

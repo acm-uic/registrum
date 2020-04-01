@@ -2,11 +2,25 @@ import { Router, Request, Response } from 'express'
 import passport from 'passport'
 import User, { UserObject } from '../models/User'
 import bcrypt from 'bcrypt'
-// * Bind Passport stategies
+// * Bind Passport strategies
 import './passport'
 import { isAuthenticated } from './passport'
 
 const router = Router()
+
+// * Defining RegExp statement
+
+// * RegExp verifies that the name don't have outlandish characters
+const nameRegex = RegExp(/[a-zA-Z]+[a-zA-Z-\s]+[a-zA-Z]*$/)
+
+// * RegExp verifies that the email matches according to W3C standard
+const emailRegex = RegExp(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)
+
+// * RegExp verifies that the password is adhering to our standard
+// * Length is at least 8
+// * Has one lower case and upper case English letter
+// * Has one digit and one special character
+const passwordRegex = RegExp(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/)
 
 // * Remove data shouldn't be sent to client
 const stripData = data => {
@@ -28,7 +42,7 @@ router.post(
         res.status(200).json(stripData(await User.findOne({ email: req.body.email })))
 )
 
-/* Login by Google - WIP to allow Student to signin with their school account*/
+/* Login by Google - WIP to allow Student to sign in with their school account*/
 router.post('/loginGoogle', (req: Request, res: Response) => {
     // TODO: Login with passport Google strategy ?
     res.status(501).send('TODO')
@@ -46,31 +60,22 @@ router.post('/signup', async (req: Request, res: Response) => {
     const { firstname, lastname, email, password } = req.body
 
     // * Verify that the first and last name is valid
-    const nameRegex = /^[^0-9\.\,\"\?\!\;\:\#\$\%\&\(\)\*\+\-\/\<\>\=\@\[\]\\\^\_\{\}\|\~]+$/
     if (!nameRegex.test(firstname) || !nameRegex.test(lastname)) {
         res.status(400).send('Name is invalid')
         return
     }
 
     // * Verify that the email matches according to W3C standard
-    if (
-        !RegExp(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/, 'i').test(
-            email
-        )
-    ) {
+    if (!emailRegex.test(email)) {
         res.status(400).send('Email is invalid')
         return
     }
 
     // * Verify the the password is adhering to out standard
-    // * Length is atleast than 8
+    // * Length is at least than 8
     // * Has one lower case and upper case English letter
     // * Has one digit and one special character
-    if (
-        !RegExp(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/, 'i').test(
-            password
-        )
-    ) {
+    if (!passwordRegex.test(password)) {
         res.status(400).send('Password is not strong enough')
         return
     }
@@ -136,24 +141,15 @@ router.post('/update', isAuthenticated, async (req: Request, res: Response) => {
         // * If password is provided, hash said password
         if (updates.password) {
             // * Verify the the password is adhering to out standard
-            // * Length is atleast than 8
+            // * Length is at least than 8
             // * Has one lower case and upper case English letter
             // * Has one digit and one special character
-            if (
-                !RegExp(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/, 'i').test(
-                    updates.password
-                )
-            ) {
+            if (!passwordRegex.test(updates.password)) {
                 res.status(400).send('Password is not strong enough')
                 return
             }
             updates.password = await bcrypt.hash(updates.password, 2)
         }
-
-        const nameRegex = new RegExp(
-            /^[^0-9\.\,\"\?\!\;\:\#\$\%\&\(\)\*\+\-\/\<\>\=\@\[\]\\\^\_\{\}\|\~]+$/,
-            'i'
-        )
 
         if (updates.lastname) {
             // * Verify that the first and last name is valid
@@ -171,19 +167,22 @@ router.post('/update', isAuthenticated, async (req: Request, res: Response) => {
         }
         if (updates.email) {
             // * Verify that the email matches according to W3C standard
-            if (
-                !RegExp(
-                    /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
-                    'i'
-                ).test(updates.email)
-            ) {
+            if (!emailRegex.test(updates.email)) {
                 res.status(400).send('Email is invalid')
                 return
             }
         }
 
         // * Update in mongoose
-        const updatedUser = await User.findOneAndUpdate({ _id: user._id }, updates, { new: true })
+        let updatedUser = await User.findOneAndUpdate({ _id: user._id }, updates, { new: true })
+
+        // * Delete unnecessary keys
+        updatedUser = JSON.parse(JSON.stringify(updatedUser))
+        delete updatedUser['_id']
+        delete updatedUser['password']
+        delete updatedUser['__v']
+
+        // * Makes sure unnecessary keys/values are not sent
         res.status(200).send(updatedUser)
     } catch (err) {
         res.status(500).send('Error')

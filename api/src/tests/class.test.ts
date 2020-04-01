@@ -5,27 +5,42 @@ import { CookieJar } from 'tough-cookie'
 import User from '../routes/models/User'
 import app, { mongoose, redisClient } from '../app'
 import { response } from 'express'
+import { Server } from 'http'
+
 dotenv.config()
-const PORT = process.env.PORT || 8081
+const PORT = process.env.PORT || 8085
 const BASE_PATH = process.env.BASE_PATH || '/api'
 const URL = `http://localhost:${PORT}${BASE_PATH}/`
 
-const server = app.listen(PORT)
-
-// * Add Axios Cookie Jar
-const jar = new CookieJar()
-const client = axios.create({
-    baseURL: URL,
-    withCredentials: true,
-    jar: jar,
-    validateStatus: () => {
-        /* always resolve on any HTTP status */
-        return true
-    }
-})
-axiosCookieJarSupport(client)
-
 describe('Class Tests', () => {
+    let server: Server
+
+    // * Add Axios Cookie Jar
+    const jar = new CookieJar()
+    const client = axios.create({
+        baseURL: URL,
+        withCredentials: true,
+        jar: jar,
+        validateStatus: () => {
+            /* always resolve on any HTTP status */
+            return true
+        }
+    })
+    axiosCookieJarSupport(client)
+
+    beforeAll(async () => {
+        server = app.listen(PORT)
+
+        const response = await client.post(`auth/signup`, {
+            firstname: 'John',
+            lastname: 'Doe',
+            email: 'registrum@example.com',
+            password: 'theRealApp1$'
+        })
+
+        expect(response.status).toBe(200)
+    })
+
     afterAll(async () => {
         // * Remove all users from DB
         await new Promise((resolve, reject) => {
@@ -53,18 +68,7 @@ describe('Class Tests', () => {
         await new Promise(resolve => setImmediate(resolve))
 
         // * Close Server
-        await server.close()
-    })
-
-    beforeAll(async () => {
-        const response = await client.post(`auth/signup`, {
-            firstname: 'Clark',
-            lastname: 'Chen',
-            email: 'schen237@uic.edu',
-            password: 'theRealClark1$'
-        })
-
-        expect(response.status).toBe(200)
+        server.close()
     })
 
     describe('Sanity tests', () => {

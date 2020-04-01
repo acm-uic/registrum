@@ -14,8 +14,7 @@ router.post('/subscribe', isAuthenticated, async (req: Request, res: Response) =
     const { crn } = req.body
 
     if (crn) {
-        console.log(_id)
-        // * Add subscription to class model (addToSet ensures unique CRNS, no duplicates)
+        // * Add subscription to class model (addToSet ensures unique CRN's, no duplicates)
         await User.updateOne({ _id }, { $addToSet: { subscriptions: crn } })
 
         // TODO: Subscribe to CRN with banner API

@@ -148,7 +148,7 @@ const AddClass = () => {
                         {/* // * Select Subject */}
                         {currentTerm.length > 0 && (
                             <Form.Group>
-                                <Form.Label>Select Semester Term</Form.Label>
+                                <Form.Label>Select Course Subject</Form.Label>
                                 {/* // * Render Drop down when term list fetched */}
                                 {subjects.length > 0 && (
                                     <Dropdown
@@ -179,7 +179,7 @@ const AddClass = () => {
                         {/* //* Select Class */}
                         {currentSubject.length > 0 && (
                             <Form.Group>
-                                <Form.Label>Select Semester Term</Form.Label>
+                                <Form.Label>Select Course Number</Form.Label>
                                 {/* // * Render Drop down when term list fetched */}
                                 {classes.length > 0 && (
                                     <Dropdown
