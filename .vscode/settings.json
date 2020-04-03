@@ -15,6 +15,10 @@
     },
     "typescript.referencesCodeLens.enabled": true,
     "eslint.alwaysShowStatus": true,
+    "eslint.workingDirectories": [
+        "api",
+        "client"
+    ],
     "editor.codeActionsOnSave": {
         "source.fixAll.eslint": true
     },
