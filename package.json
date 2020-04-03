@@ -1,0 +1,19 @@
+{
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "api/*": [
+      "cd api && npm run lint"
+    ],
+    "client/*": [
+      "cd client && npm run lint"
+    ]
+  },
+  "devDependencies": {
+    "husky": "^4.2.3",
+    "lint-staged": "^10.1.1"
+  }
+}
