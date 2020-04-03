@@ -2,20 +2,36 @@
     "editor.rulers": [
         100
     ],
+    "eslint.validate": [
+        "javascript",
+        "typescript",
+        "typescriptreact"
+    ],
+    "search.exclude": {
+        "**/node_modules": true,
+        "**/bower_components": true,
+        "**/dist": true,
+        "**/coverage": true
+    },
+    "typescript.referencesCodeLens.enabled": true,
+    "eslint.alwaysShowStatus": true,
     "editor.codeActionsOnSave": {
         "source.fixAll.eslint": true
     },
     "[markdown]": {
-        "editor.defaultFormatter": "yzhang.markdown-all-in-one"
+        "editor.defaultFormatter": "yzhang.markdown-all-in-one",
+        "editor.formatOnSave": false
     },
     "[yaml]": {
         "editor.defaultFormatter": "redhat.vscode-yaml"
     },
     "[typescriptreact]": {
-        "editor.defaultFormatter": "vscode.typescript-language-features"
+        "editor.defaultFormatter": "vscode.typescript-language-features",
+        "editor.formatOnSave": false
     },
     "[typescript]": {
-        "editor.defaultFormatter": "vscode.typescript-language-features"
+        "editor.defaultFormatter": "vscode.typescript-language-features",
+        "editor.formatOnSave": false
     },
     "[json]": {
         "editor.defaultFormatter": "vscode.json-language-features"
@@ -24,6 +40,7 @@
         "editor.defaultFormatter": "vscode.json-language-features"
     },
     "[javascript]": {
-        "editor.defaultFormatter": "vscode.typescript-language-features"
+        "editor.defaultFormatter": "vscode.typescript-language-features",
+        "editor.formatOnSave": false
     },
 }

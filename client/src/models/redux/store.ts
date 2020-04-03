@@ -10,7 +10,8 @@
  */
 // ? This file configures the redux store within an application
 import { createStore, applyMiddleware, combineReducers } from 'redux'
-import thunk from 'redux-thunk' // * Redux-Thunk middleware, used for asynchronous events that effect state (api calls)
+import thunk from 'redux-thunk'
+// * Redux-Thunk middleware, used for asynchronous events that effect state (api calls)
 import { composeWithDevTools } from 'redux-devtools-extension'
 
 import { persistStore, persistReducer } from 'redux-persist'

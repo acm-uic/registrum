@@ -29,13 +29,14 @@ export const updateUser = (): ThunkActionCreator => async (dispatch, getState) =
       if (!Array.isArray(value) && Object(value) !== value) {
         // * Set update to true
         if (value !== Auth.user[key]) shouldUpdate = true
-      } else if (Array.isArray(value) && value.length !== Auth.user[key].length) shouldUpdate = true 
+      } else if (Array.isArray(value) && value.length !== Auth.user[key].length)
+        shouldUpdate = true
     })
-            
+
 
     if (
       response.status === 200
-                && shouldUpdate
+      && shouldUpdate
     ) {
       // * Set user
       dispatch(setUser(user))
