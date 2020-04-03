@@ -1,26 +1,26 @@
-import * as request from 'request-promise-native'
-import * as crypto from 'crypto'
-import { Redis } from 'ioredis'
-import { EventEmitter } from 'events'
+import * as request from "request-promise-native"
+import * as crypto from "crypto"
+import { Redis } from "ioredis"
+import { EventEmitter } from "events"
 
 type Options = {
-    redisClient?: Redis
+    redisClient?: Redis;
 }
 
 interface DB {
-    [key: string]: string[]
+    [key: string]: string[];
 }
 
 interface HashTable<T> {
-    [key: string]: T
+    [key: string]: T;
 }
 
 type RequestFunction = (name: string, jsonData: {}, headersData?: {}) => Promise<void>
 
 export class WebHooks {
-    redisClient: Redis
-    emitter: EventEmitter
-    requestFunctions: HashTable<RequestFunction>
+    #redisClient: Redis
+    #emitter: EventEmitter
+    #requestFunctions: HashTable<RequestFunction>
     constructor({ redisClient }: Options) {
         this.#redisClient = redisClient
         this.#emitter = new EventEmitter()
@@ -28,28 +28,28 @@ export class WebHooks {
         this.#setListeners()
     }
 
-    setListeners = async () => {
-        const keys = await this.#redisClient.keys('*')
+    #setListeners = async () => {
+        const keys = await this.#redisClient.keys("*")
         keys.map(async (key: string) => {
             const urls: string[] = JSON.parse(await this.#redisClient.get(key))
             urls.forEach(url => {
-                const encUrl = crypto.createHash('md5').update(url).digest('hex')
+                const encUrl = crypto.createHash("md5").update(url).digest("hex")
                 this.#requestFunctions[encUrl] = this.#getRequestFunction(url)
                 this.#emitter.on(key, this.#requestFunctions[encUrl])
             })
         })
     }
 
-    getRequestFunction = (url: string): RequestFunction => {
+    #getRequestFunction = (url: string): RequestFunction => {
         return async (name: string, jsonData: {}, headersData?: {}): Promise<void> => {
             /* istanbul ignore next */
             const { statusCode, body } = await request({
-                method: 'POST',
+                method: "POST",
                 uri: url,
                 strictSSL: false,
                 headers: {
                     ...headersData,
-                    'Content-Type': 'application/json',
+                    "Content-Type": "application/json",
                 },
                 body: JSON.stringify(jsonData),
                 resolveWithFullResponse: true,
@@ -59,7 +59,7 @@ export class WebHooks {
         }
     }
 
-    removeUrlFromName = async (name: string, url: string): Promise<void> => {
+    #removeUrlFromName = async (name: string, url: string): Promise<void> => {
         const urls: string[] = JSON.parse(await this.#redisClient.get(name))
         if (urls.indexOf(url) !== -1) {
             urls.splice(urls.indexOf(url), 1)
@@ -69,7 +69,7 @@ export class WebHooks {
         }
     }
 
-    removeName = async (name: string): Promise<void> => {
+    #removeName = async (name: string): Promise<void> => {
         await this.#redisClient.unlink(name)
     }
 
@@ -94,7 +94,7 @@ export class WebHooks {
             : []
         if (urls.indexOf(url) === -1) {
             urls.push(url)
-            const encUrl = crypto.createHash('md5').update(url).digest('hex')
+            const encUrl = crypto.createHash("md5").update(url).digest("hex")
             this.#requestFunctions[encUrl] = this.#getRequestFunction(url)
             this.#emitter.on(name, this.#requestFunctions[encUrl])
             await this.#redisClient.set(name, JSON.stringify(urls))
@@ -114,14 +114,14 @@ export class WebHooks {
             throw new Error(`Name(${name}) not found while removing.`)
         if (url) {
             await this.#removeUrlFromName(name, url)
-            const urlKey = crypto.createHash('md5').update(url).digest('hex')
+            const urlKey = crypto.createHash("md5").update(url).digest("hex")
             this.#emitter.removeListener(name, this.#requestFunctions[urlKey])
             delete this.#requestFunctions[urlKey]
         } else {
             this.#emitter.removeAllListeners(name)
             const urls: string[] = JSON.parse(await this.#redisClient.get(name))
             urls.forEach(url => {
-                const urlKey = crypto.createHash('md5').update(url).digest('hex')
+                const urlKey = crypto.createHash("md5").update(url).digest("hex")
                 delete this.#requestFunctions[urlKey]
             })
             await this.#removeName(name)
@@ -134,7 +134,7 @@ export class WebHooks {
      * @returns Promise
      */
     getDB = async (): Promise<DB> => {
-        const keys = await this.#redisClient.keys('*')
+        const keys = await this.#redisClient.keys("*")
         const pairs = await Promise.all(
             keys.map(async (key: string) => {
                 const urls = JSON.parse(await this.#redisClient.get(key))
