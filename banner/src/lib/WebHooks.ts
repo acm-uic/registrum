@@ -139,7 +139,7 @@ export class WebHooks {
             keys.map(async (key: string) => {
                 const urls = JSON.parse(await this.#redisClient.get(key))
                 return [key, urls]
-            }),
+            })
         )
         return Object.fromEntries(pairs)
     }

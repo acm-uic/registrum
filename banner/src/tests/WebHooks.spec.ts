@@ -74,7 +74,7 @@ describe('WebHooks Test', () => {
         } catch (e) {
             assert.equal(
                 e.message,
-                `URL(${removedUrl}) not found wile removing from Name(${name}).`,
+                `URL(${removedUrl}) not found wile removing from Name(${name}).`
             )
         }
         await webHooks.remove(name)
@@ -195,9 +195,9 @@ describe('WebHooks Test', () => {
                         method: 'POST',
                         url,
                         body,
-                    }),
+                    })
                 )
-            },
+            }
         )
         webHooks.trigger(name, data, headerData)
     })
