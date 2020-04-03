@@ -81,6 +81,8 @@
         "chai": "^4.2.0",
         "concurrently": "^5.1.0",
         "eslint": "^6.8.0",
+        "husky": "^4.2.3",
+        "lint-staged": "^10.1.1",
         "nodemon": "^2.0.2",
         "supertest": "^4.0.2",
         "ts-jest": "^25.2.1",
@@ -89,5 +91,14 @@
     },
     "resolutions": {
         "minimist": "^1.2.5"
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "lint-staged"
+        }
+    },
+    "lint-staged": {
+        "*.js,*.ts": "eslint --cache --fix",
+        "*.{js,ts,css,md}": "prettier --write"
     }
 }
