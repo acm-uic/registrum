@@ -29,7 +29,7 @@ const config = {
         paths: {
             ...paths
         },
-        target: 'esnext',
+        target: 'es6',
         outDir: './public/',
         strictNullChecks: true,
         moduleResolution: 'node',
@@ -39,7 +39,15 @@ const config = {
         esModuleInterop: true,
         jsx: 'react',
         baseUrl: 'src',
-        lib: ['es2015', 'dom.iterable', 'es2016.array.include', 'es2017.object', 'dom'],
+        lib: [
+            'es2015',
+            'dom.iterable',
+            'es2016.array.include',
+            'es2017.object',
+            'dom',
+            'es2020',
+            'es2019'
+        ],
         module: 'es6',
         removeComments: true,
         alwaysStrict: true,

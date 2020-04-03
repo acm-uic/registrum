@@ -10,11 +10,11 @@
  */
 
 export interface Action {
-    type: string
-    error?: string
-    payload: any
+    type: string;
+    error?: string;
+    payload: any;
 }
 
 export interface ThunkActionCreator {
-    (dispatch: (action: Action) => any, getState: () => any): any
+    (dispatch: (action: Action) => any, getState: () => any): any;
 }

@@ -1,4 +1,4 @@
-import { Document, Schema, model } from "mongoose";
+import { Document, Schema, model } from 'mongoose'
 
 // * Class Subscription Interface
 export interface ClassSubscription {
@@ -21,7 +21,7 @@ const UserSchema: Schema = new Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   subscriptions: [String],
-});
+})
 
 // Export the model
-export default model<UserObject>("User", UserSchema);
+export default model<UserObject>('User', UserSchema)

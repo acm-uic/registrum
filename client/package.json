@@ -6,7 +6,7 @@
         "build": "webpack --config ./config/webpack.production.config.js",
         "build-lib": "webpack --config ./config/webpack.library.config.js",
         "lint": "eslint \"src/**/*.{js,ts}\" --quiet",
-        "lint:fix": "npm run lint --fix",
+        "lint:fix": "npm run lint -- --fix",
         "refresh": "node ./scripts/refresh.js",
         "start": "webpack-dev-server src --inline --config ./config/webpack.development.config.js --open",
         "test": "jest"

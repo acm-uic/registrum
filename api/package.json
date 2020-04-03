@@ -6,7 +6,7 @@
         "build-ts": "node_modules/.bin/tsc",
         "debug": "npm run build && npm run watch-debug",
         "lint": "eslint \"src/**/*.{js,ts}\" --quiet",
-        "lint:fix": "npm run lint --fix",
+        "lint:fix": "npm run lint -- --fix",
         "serve": "node dist/server.js",
         "serve-debug": "nodemon --inspect dist/server.js",
         "start": "npm run serve",
