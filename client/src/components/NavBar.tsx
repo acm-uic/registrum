@@ -10,7 +10,7 @@ import { Navbar, NavDropdown, Nav } from 'react-bootstrap'
 import { User } from '../models/interfaces/User'
 import SignIn from './SignIn'
 import SignUp from './SignUp'
-import UICLogo from '../assets/UICLogo.png'
+import UICLogo from './UICLogo'
 import { signOut } from '../utils/functions/authentication'
 
 const NavBar = () => {
@@ -19,7 +19,7 @@ const NavBar = () => {
   return (
     <Navbar expand="md" bg="light" className="align-middle">
       <Navbar.Brand as={Link} to="/">
-        <img alt="UIC Logo" src={UICLogo} width={30} className="d-inline-block align-top" />
+        <UICLogo size={30}/>
         {' '}
         <b>Registrum</b>
       </Navbar.Brand>
@@ -44,12 +44,7 @@ const NavBar = () => {
               </Nav.Link>
             </>
           )}
-          {/* <Nav.Link as={Link} to="/classes">
-                        About Us
-                    </Nav.Link>
-                    <Nav.Link as={Link} to="/classes">
-                        Contact
-                    </Nav.Link> */}
+
           {user != null && (
             <NavDropdown
               title={(
