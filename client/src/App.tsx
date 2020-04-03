@@ -13,51 +13,53 @@ import React, { FC, useEffect } from 'react'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import { useSelector, useDispatch } from 'react-redux'
 import Home from './pages/Home'
 import SplashPage from './pages/SplashPage'
 import Classes from './pages/Classes'
 import Account from './pages/Account'
 import NavBar from './components/NavBar'
-import { useSelector } from 'react-redux'
 import { State } from './models/redux/store'
 
-import { useDispatch } from 'react-redux'
+
 import { updateUser } from './models/redux/actions/auth'
+
 export const App: FC = () => {
-    // * Grab current user
-    const auth = useSelector((state: State) => state.Auth)
-    const { user } = auth
-    const dispatch = useDispatch()
+  // * Grab current user
+  const auth = useSelector((state: State) => state.Auth)
+  const { user } = auth
+  const dispatch = useDispatch()
 
-    useEffect(() => {
-        // * Update user on app load / auth state change
-        dispatch(updateUser())
-    }, [auth])
+  useEffect(() => {
+    // * Update user on app load / auth state change
+    dispatch(updateUser())
+  }, [auth])
 
-    return (
-        <>
-            <ToastContainer
-                position="bottom-left"
-                autoClose={4000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                draggable
-                pauseOnHover
-            />
-            <Router>
-                <NavBar />
-                {user !== null ? (
-                    <>
-                        <Route exact path="/classes" component={Classes} />
-                        <Route exact path="/account" component={Account} />
-                        <Route exact path="/" component={Home} />{' '}
-                    </>
-                ) : (
-                    <SplashPage />
-                )}
-            </Router>
-        </>
-    )
+  return (
+    <>
+      <ToastContainer
+        position="bottom-left"
+        autoClose={4000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        draggable
+        pauseOnHover
+      />
+      <Router>
+        <NavBar />
+        {user !== null ? (
+          <>
+            <Route exact path="/classes" component={Classes} />
+            <Route exact path="/account" component={Account} />
+            <Route exact path="/" component={Home} />
+            {' '}
+          </>
+        ) : (
+          <SplashPage />
+        )}
+      </Router>
+    </>
+  )
 }

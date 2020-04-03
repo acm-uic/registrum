@@ -30,24 +30,26 @@ app.use(bodyParser.urlencoded({ extended: true }))
 mongoose.Promise = globalThis.Promise
 
 mongoose
-    .connect(mongoUrl, {
-        useNewUrlParser: true,
-        useCreateIndex: true,
-        useUnifiedTopology: true,
-        useFindAndModify: false
-    })
-    .then(() => {
-        /** ready to use. The `mongoose.connect()` promise resolves to undefined. */
-        //console.log("connected to mongoDB")
-        // // * Drop classes collection
-        // mongoose.connection.db.dropCollection('users', function(err, result) {
-        //     // * Populate list of classes
-        // })
-    })
-    .catch(err => {
-        console.log('MongoDB connection error. Please make sure MongoDB is running. ' + err)
-        process.exit()
-    })
+  .connect(mongoUrl, {
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false,
+  })
+  .then(() => {
+    /** ready to use. The `mongoose.connect()` promise resolves to undefined. */
+    //console.log("connected to mongoDB")
+    // // * Drop classes collection
+    // mongoose.connection.db.dropCollection('users', function(err, result) {
+    //     // * Populate list of classes
+    // })
+  })
+  .catch((err) => {
+    console.log(
+      'MongoDB connection error. Please make sure MongoDB is running. ' + err
+    )
+    process.exit()
+  })
 
 // * Logger
 app.use(morgan('tiny'))
@@ -67,13 +69,13 @@ SessionStore.client.unref()
 
 // * Setup Express Session
 app.use(
-    session({
-        resave: true,
-        saveUninitialized: true,
-        secret: process.env.SESSION_SECRET || 'This is not a secure secret!',
-        store: SessionStore,
-        cookie: { secure: process.env.NODE_ENV === 'production' }
-    })
+  session({
+    resave: true,
+    saveUninitialized: true,
+    secret: process.env.SESSION_SECRET || 'This is not a secure secret!',
+    store: SessionStore,
+    cookie: { secure: process.env.NODE_ENV === 'production' },
+  })
 )
 
 // * Setup passport

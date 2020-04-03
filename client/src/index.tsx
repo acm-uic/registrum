@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { App } from './App'
 import { Provider } from 'react-redux'
+import { App } from './App'
 
 import 'react-app-polyfill/ie11'
 import 'bootstrap/dist/css/bootstrap.css'
@@ -15,10 +15,10 @@ import './styles/index.scss'
 // * Attempt to fetch current user, and set user
 
 ReactDOM.render(
-    <Provider store={store}>
-        <App />
-    </Provider>,
-    document.getElementById('root')
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById('root'),
 )
 
 // If you want your app to work offline and load faster, you can change

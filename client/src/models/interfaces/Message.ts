@@ -1,4 +1,4 @@
 export interface Message {
-    msg: String
-    options: any
+    msg: string;
+    options: any;
 }

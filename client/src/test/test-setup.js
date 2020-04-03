@@ -1,5 +1,5 @@
-global.requestAnimationFrame = function(callback) {
-    setTimeout(callback, 0)
+global.requestAnimationFrame = function (callback) {
+  setTimeout(callback, 0)
 }
 
 const enzyme = require('enzyme')

@@ -1,0 +1,23 @@
+{
+  "scripts": {
+    "lint:api": "cd api && npm run lint",
+    "lint:client": "cd client && npm run lint"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "api/**/*.{js,ts}": [
+      "npm run lint:api"
+    ],
+    "client/**/*.{js,ts,tsx}": [
+      "npm run lint:client"
+    ]
+  },
+  "devDependencies": {
+    "husky": "^4.2.3",
+    "lint-staged": "^10.1.1"
+  }
+}

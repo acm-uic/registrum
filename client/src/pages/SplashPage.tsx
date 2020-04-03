@@ -11,8 +11,6 @@
 
 import React, { FC } from 'react'
 
-const SplashPage: FC = () => {
-    return <div>SplashPage</div>
-}
+const SplashPage: FC = () => <div>SplashPage</div>
 
 export default SplashPage
