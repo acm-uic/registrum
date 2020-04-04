@@ -1,9 +1,9 @@
-import axios, { AxiosInstance } from "axios"
-import axiosCookieJarSupport from "axios-cookiejar-support"
-import { CookieJar } from "tough-cookie"
-import { URLSearchParams } from "url"
+import axios, { AxiosInstance } from 'axios'
+import axiosCookieJarSupport from 'axios-cookiejar-support'
+import { CookieJar } from 'tough-cookie'
+import { URLSearchParams } from 'url'
 
-const bannerHost = process.env.BANNER_PROXY || "https://banner.apps.uillinois.edu"
+const bannerHost = process.env.BANNER_PROXY || 'https://banner.apps.uillinois.edu'
 
 type SearchProps = {
     courseNumber: string;
@@ -51,13 +51,13 @@ export class Banner {
 
     #getNewCookie = async () => {
         const params = new URLSearchParams({
-            mode: "search",
+            mode: 'search',
             term: this.#term,
-            studyPath: "",
-            studyPathText: "",
-            startDatepicker: "",
-            endDatepicker: "",
-            mepCode: "2UIC",
+            studyPath: '',
+            studyPathText: '',
+            startDatepicker: '',
+            endDatepicker: '',
+            mepCode: '2UIC',
         })
         await this.#api.get(
             `${bannerHost}/StudentRegistrationSSB/ssb/term/search?${params.toString()}`
@@ -74,13 +74,13 @@ export class Banner {
     }
 
     search = async ({
-        courseNumber = "",
-        startDate = "",
-        endDate = "",
-        pageOffset = "0",
-        pageMaxSize = "10",
-        sortColumn = "subjectDescription",
-        sortDirection = "asc",
+        courseNumber = '',
+        startDate = '',
+        endDate = '',
+        pageOffset = '0',
+        pageMaxSize = '10',
+        sortColumn = 'subjectDescription',
+        sortDirection = 'asc',
     }: SearchProps) => {
         if (this.#cookieJar.getCookiesSync(`${bannerHost}`)) {
             this.#clearCookie()
@@ -124,7 +124,7 @@ export class Banner {
         const _params = new URLSearchParams({
             ...params,
             term: this.#term,
-            first: "first",
+            first: 'first',
         })
         return (
             await this.#api.get(
@@ -134,31 +134,31 @@ export class Banner {
     }
 
     getClassDetails = async (params: GetClassDetailsProps) => {
-        return await this.#courseOperation("getClassDetails", params)
+        return await this.#courseOperation('getClassDetails', params)
     }
     getCourseDescription = async (params: GetCourseDescriptionProps) => {
-        return await this.#courseOperation("getCourseDescription", params)
+        return await this.#courseOperation('getCourseDescription', params)
     }
     getSectionAttributes = async (params: GetSectionAttributesProps) => {
-        return await this.#courseOperation("getSectionAttributes", params)
+        return await this.#courseOperation('getSectionAttributes', params)
     }
     getRestrictions = async (params: GetRestrictionsProps) => {
-        return await this.#courseOperation("getRestrictions", params)
+        return await this.#courseOperation('getRestrictions', params)
     }
     getFacultyMeetingTimes = async (params: GetFacultyMeetingTimesProps) => {
-        return await this.#courseOperation("getFacultyMeetingTimes", params)
+        return await this.#courseOperation('getFacultyMeetingTimes', params)
     }
     getXlstSections = async (params: GetXlstSectionsProps) => {
-        return await this.#courseOperation("getXlstSections", params)
+        return await this.#courseOperation('getXlstSections', params)
     }
     getLinkedSections = async (params: GetLinkedSectionsProps) => {
-        return await this.#courseOperation("getLinkedSections", params)
+        return await this.#courseOperation('getLinkedSections', params)
     }
     getFees = async (params: GetFeesProps) => {
-        return await this.#courseOperation("getFees", params)
+        return await this.#courseOperation('getFees', params)
     }
     getSectionBookstoreDetails = async (params: GetSectionBookstoreDetailsProps) => {
-        return await this.#courseOperation("getSectionBookstoreDetails", params)
+        return await this.#courseOperation('getSectionBookstoreDetails', params)
     }
 
     private static staticOperations = async (
@@ -172,10 +172,10 @@ export class Banner {
     ) => {
         const _params = new URLSearchParams({
             ...params,
-            searchTerm: "",
-            offset: "1",
-            max: "1000",
-            mepCode: "2UIC",
+            searchTerm: '',
+            offset: '1',
+            max: '1000',
+            mepCode: '2UIC',
         })
         return (
             await axios.get(
@@ -184,23 +184,25 @@ export class Banner {
         ).data
     }
 
-    public static getTerm = async (params: GetTermProps) => {
-        return await Banner.staticOperations("getTerms", params)
+    public static getTerm = async (params?: GetTermProps) => {
+        return await Banner.staticOperations('getTerms', params)
     }
 
     public static getSubject = async (params: GetSubjectProps) => {
-        return await Banner.staticOperations("get_subject", params)
+        return await Banner.staticOperations('get_subject', params)
     }
 
     public static getSession = async (params: GetSessionProps) => {
-        return await Banner.staticOperations("get_session", params)
+        return await Banner.staticOperations('get_session', params)
     }
 
     public static getPartOfTerm = async (params: GetPartOfTermProps) => {
-        return await Banner.staticOperations("get_partOfTerm", params)
+        return await Banner.staticOperations('get_partOfTerm', params)
     }
 
     public static getAttribute = async (params: GetAttributeProps) => {
-        return await Banner.staticOperations("get_attribute", params)
+        return await Banner.staticOperations('get_attribute', params)
     }
 }
+
+export default Banner

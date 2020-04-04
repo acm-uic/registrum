@@ -17,7 +17,8 @@
     "eslint.alwaysShowStatus": true,
     "eslint.workingDirectories": [
         "api",
-        "client"
+        "client",
+        "banner"
     ],
     "editor.codeActionsOnSave": {
         "source.fixAll.eslint": true

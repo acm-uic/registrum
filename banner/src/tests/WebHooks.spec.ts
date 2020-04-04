@@ -1,15 +1,23 @@
-import { WebHooks } from "../lib/WebHooks"
-import * as chai from "chai"
-import "mocha"
-import * as Redis from "ioredis"
-import * as http from "http"
+import { WebHooks } from '../lib/WebHooks'
+import * as chai from 'chai'
+import 'mocha'
+import * as Redis from 'ioredis'
+import * as http from 'http'
 
 const { assert } = chai
 
-describe("WebHooks Test", () => {
-    const redisClient = new Redis("redis://localhost")
+
+describe('WebHooks Test', () => {
+    const redisClient = new Redis('redis://localhost')
+
+    redisClient.on('error', async () => {
+        console.error('Redis Error')
+        await redisClient.quit()
+        process.exit(1)
+    })
+
     const unlinkAllKeys = async () => {
-        const keys = await redisClient.keys("*")
+        const keys = await redisClient.keys('*')
         await Promise.all(keys.map(key => redisClient.unlink(key)))
     }
 
@@ -17,29 +25,38 @@ describe("WebHooks Test", () => {
         const { headers, method, url } = request
         const buffer: Uint8Array[] = []
         request
-            .on("error", err => {
+            .on('error', err => {
                 console.error(err)
             })
-            .on("data", chunk => {
+            .on('data', chunk => {
                 buffer.push(chunk)
             })
-            .on("end", () => {
+            .on('end', () => {
                 const body = Buffer.concat(buffer).toString()
-                response.on("error", err => {
+                response.on('error', err => {
                     console.error(err)
                 })
-                response.writeHead(200, { "Content-Type": "application/json" })
+                response.writeHead(200, { 'Content-Type': 'application/json' })
                 response.end(JSON.stringify({ headers, method, url, body }))
             })
     }
 
     const server = http.createServer(requestHandler)
-    const port = 8888
-    const protocol = "http"
-    const host = `localhost:${port}`
-    const baseUrl = `${protocol}://${host}`
+    let port: number
+    const protocol = 'http'
+    let host: string
+    let baseUrl: string
     before(async () => {
-        server.listen(port)
+        server.listen(0)
+        port = await new Promise(resolve => {
+            server.on('listening', () => {
+                const addressInfo = server.address().valueOf() as
+                    { address: string; family: string; port: number }
+                resolve(addressInfo.port)
+            })
+        })
+        host = `localhost:${port}`
+        baseUrl = `${protocol}://${host}`
         await unlinkAllKeys()
     })
     afterEach(async () => {
@@ -50,15 +67,15 @@ describe("WebHooks Test", () => {
         server.close()
     })
 
-    it("test remove", async () => {
-        const name = "testRemove"
+    it('test remove', async () => {
+        const name = 'testRemove'
         const urls = [
-            "/testRemove/123",
-            "/testRemove/1235",
-            "/testRemove/1236",
-            "/testRemove/12367",
-            "/testRemove/12368",
-            "/testRemove/12369",
+            '/testRemove/123',
+            '/testRemove/1235',
+            '/testRemove/1236',
+            '/testRemove/12367',
+            '/testRemove/12368',
+            '/testRemove/12369',
         ]
         const truth = urls.map(url => `${baseUrl}${url}`)
         redisClient.set(name, JSON.stringify(truth))
@@ -86,7 +103,7 @@ describe("WebHooks Test", () => {
         } catch (e) {
             assert.equal(e.message, `Name(${name}) not found while removing.`)
         }
-        const badName = "testRemove-bad"
+        const badName = 'testRemove-bad'
         try {
             await webHooks.remove(badName, removedUrl)
             assert.fail()
@@ -101,10 +118,10 @@ describe("WebHooks Test", () => {
         }
     })
 
-    it("test add", async () => {
+    it('test add', async () => {
         const webHooks = new WebHooks({ redisClient })
-        const name = "testAdd"
-        const urls = ["/testAdd/123", "/testAdd/1235", "/testAdd/1236"]
+        const name = 'testAdd'
+        const urls = ['/testAdd/123', '/testAdd/1235', '/testAdd/1236']
         const truth = urls.map(url => `${baseUrl}${url}`)
         for (const i in truth) {
             await webHooks.add(name, truth[i])
@@ -119,15 +136,15 @@ describe("WebHooks Test", () => {
         }
     })
 
-    it("test getWebHook", async () => {
-        const name = "testGetWebHook"
-        const urls = ["/testGetWebHook/123", "/testGetWebHook/1235", "/testGetWebHook/1236"]
+    it('test getWebHook', async () => {
+        const name = 'testGetWebHook'
+        const urls = ['/testGetWebHook/123', '/testGetWebHook/1235', '/testGetWebHook/1236']
         const truth = urls.map(url => `${baseUrl}${url}`)
         redisClient.set(name, JSON.stringify(truth))
         const webHooks = new WebHooks({ redisClient })
         const getWebHookResponse = JSON.parse(await webHooks.getWebHook(name))
         assert.deepEqual(getWebHookResponse, truth)
-        const badName = "testGetWebHook-bad"
+        const badName = 'testGetWebHook-bad'
         try {
             await webHooks.getWebHook(badName)
             assert.fail()
@@ -136,13 +153,13 @@ describe("WebHooks Test", () => {
         }
     })
 
-    it("test get requestFunctions", () => {
+    it('test get requestFunctions', () => {
         const webHooks = new WebHooks({ redisClient })
         const { requestFunctions } = webHooks
-        assert.typeOf(requestFunctions, "object")
+        assert.typeOf(requestFunctions, 'object')
     })
 
-    it("test getDB", async () => {
+    it('test getDB', async () => {
         const db = {
             getDB2: [
                 `${baseUrl}testGetDB2/123`,
@@ -165,40 +182,43 @@ describe("WebHooks Test", () => {
         assert.deepEqual(val, db)
     })
 
-    it("test trigger", async function () {
-        this.timeout(100)
+    it('test trigger', async function () {
         const data = { data: 123123123 }
         const body = JSON.stringify(data)
         const status = 200
         const headerData = {
-            custom: "data",
+            custom: 'data',
         }
-        const name = "testTrigger"
-        const url = "/testTrigger/123"
+        const name = 'testTrigger'
+        const url = '/testTrigger/123'
         await redisClient.set(name, JSON.stringify([`${baseUrl}${url}`]))
+
         const webHooks = new WebHooks({ redisClient })
-        webHooks.emitter.addListener(
-            `${name}.status`,
-            (nameReceived: string, statusReceived: number, bodyReceived: string) => {
-                assert.equal(statusReceived, status)
-                assert.equal(nameReceived, name)
-                assert.equal(
-                    bodyReceived,
-                    JSON.stringify({
-                        headers: {
-                            ...headerData,
-                            "content-type": "application/json",
-                            host,
-                            "content-length": body.length.toString(),
-                            connection: "close",
-                        },
-                        method: "POST",
-                        url,
-                        body,
-                    })
-                )
-            }
-        )
-        webHooks.trigger(name, data, headerData)
+        await new Promise(resolve => setTimeout(resolve, 100))
+        await new Promise(resolve => {
+            webHooks.emitter.on(`${name}.status`,
+                (nameReceived: string, statusReceived: number, bodyReceived: string) => {
+                    assert.equal(statusReceived, status)
+                    assert.equal(nameReceived, name)
+                    assert.equal(
+                        bodyReceived,
+                        JSON.stringify({
+                            headers: {
+                                ...headerData,
+                                'content-type': 'application/json',
+                                host,
+                                'content-length': body.length.toString(),
+                                connection: 'close',
+                            },
+                            method: 'POST',
+                            url,
+                            body,
+                        })
+                    )
+                    resolve()
+                }
+            )
+            webHooks.trigger(name, data, headerData)
+        })
     })
 })

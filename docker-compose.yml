@@ -81,7 +81,7 @@ services:
       - REDIS_URL=redis://redis
       - BASE_PATH=/banner
     ports:
-      - 4000:4000
+      - 4001:4001
     volumes:
       - ./banner:/usr/src/app
       - node_modules_banner:/usr/src/app/node_modules
