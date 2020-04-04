@@ -1,6 +1,12 @@
 {
   "scripts": {
+    "install-all": "npm install && npm-run-all install:*",
+    "install:api": "cd api && npm install",
+    "install:banner": "cd banner && npm install",
+    "install:client": "cd client && npm install",
+    "lint-all": "npm-run-all lint:*",
     "lint:api": "cd api && npm run lint",
+    "lint:banner": "cd client && npm run lint",
     "lint:client": "cd client && npm run lint"
   },
   "husky": {
@@ -12,12 +18,16 @@
     "api/**/*.{js,ts}": [
       "npm run lint:api"
     ],
+    "banner/**/*.{js,ts}": [
+      "npm run lint:banner"
+    ],
     "client/**/*.{js,ts,tsx}": [
       "npm run lint:client"
     ]
   },
   "devDependencies": {
     "husky": "^4.2.3",
-    "lint-staged": "^10.1.1"
+    "lint-staged": "^10.1.1",
+    "npm-run-all": "^4.1.5"
   }
 }
