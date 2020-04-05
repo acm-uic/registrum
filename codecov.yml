@@ -7,6 +7,9 @@ coverage:
       api:
         flags: 
           - api
+      banner:
+        flags: 
+          - banner
 
 flags:
   api:
@@ -15,3 +18,6 @@ flags:
   client:
     paths:
       - client/
+  banner:
+    paths:
+      - banner/

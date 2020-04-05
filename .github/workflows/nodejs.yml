@@ -72,6 +72,11 @@ jobs:
           popd
         env:
           CI: true
+      - uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./banner/coverage/lcov.info
+          flags: banner
 
   build-client:
     runs-on: ubuntu-latest
