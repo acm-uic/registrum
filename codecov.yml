@@ -1,0 +1,17 @@
+coverage:
+  status:
+    project:
+      client:
+        flags: 
+          - client
+      api:
+        flags: 
+          - api
+
+flags:
+  api:
+    paths:
+      - api/
+  client:
+    paths:
+      - client/
