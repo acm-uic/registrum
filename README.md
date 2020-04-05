@@ -184,10 +184,12 @@ docker-compose down
 # Running commands inside the container
 docker-compose exec api npm install express
 docker-compose exec client npm install redux-persist
+docker-compose exec banner npm install -D @types/node
 
 # Run a shell inside a container. Dev Containers are built with Debian base image which include bash among other utilities. They are not available in production containers as they are built with alpine.
 docker-compose exec api bash
 docker-compose exec client bash
+docker-compose exec banner bash
 ```
 
 ### Other common commands
@@ -199,14 +201,15 @@ docker-compose restart api
 
 The docker dev containers expose the following services:
 
-| Service Name     | Ports | Description                      |
-| ---------------- | ----- | -------------------------------- |
-| Registrum Client | 3000  | React App in /client             |
-| Registrum API    | 4000  | Node.js API in /api              |
-| MongoDB Server   | 27017 | MongoDB server needed by the API |
-| Redis Server     | 6379  | Redis server needed by the API   |
-| Mongo Express    | 8081  | MongoDB Web Client               |
-| Redis Commander  | 8082  | Redis Web Client                 |
+| Service Name             | Ports | Description                      |
+| ------------------------ | ----- | -------------------------------- |
+| Registrum Client         | 3000  | React App in /client             |
+| Registrum API            | 4000  | Node.js API in /api              |
+| Registrum Banner Service | 4001  | Node.js API in /banner           |
+| MongoDB Server           | 27017 | MongoDB server needed by the API |
+| Redis Server             | 6379  | Redis server needed by the API   |
+| Mongo Express            | 8081  | MongoDB Web Client               |
+| Redis Commander          | 8082  | Redis Web Client                 |
 
 ## Sources
 

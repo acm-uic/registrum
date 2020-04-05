@@ -26,10 +26,27 @@ services:
     image: docker.pkg.github.com/ckanich-classrooms/final-project-dream-team-1/api:master
     restart: always
     environment:
-      - MONGODB_URI=mongodb://mongo:27017/registrum
+      - MONGODB_URI=mongodb://mongo:27017/registrum-api
       - REDIS_URL=redis://redis
       - NODE_ENV=production
       - BASE_PATH=/api
+    depends_on:
+      - mongo
+      - redis
+    networks:
+      - registrum-net
+
+  banner:
+    build:
+      context: banner
+      target: prod
+    image: docker.pkg.github.com/ckanich-classrooms/final-project-dream-team-1/banner:master
+    restart: always
+    environment:
+      - MONGODB_URI=mongodb://mongo:27017/registrum-banner
+      - REDIS_URL=redis://redis
+      - NODE_ENV=production
+      - BASE_PATH=/banner
     depends_on:
       - mongo
       - redis

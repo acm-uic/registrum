@@ -1,0 +1,1 @@
+import Banner from '../lib/Banner'
