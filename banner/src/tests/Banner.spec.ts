@@ -21,20 +21,14 @@ describe('Banner Lib Test', () => {
         const banner = new Banner(term, 'CS')
         const courseReferenceNumber = (await banner.search({ courseNumber: '111' }))
             .data[0].courseReferenceNumber
-        await Promise.all([
-            banner.getClassDetails({ courseReferenceNumber }),
-            banner.getCourseDescription({ courseReferenceNumber }),
-            banner.getSectionAttributes({ courseReferenceNumber }),
-        ])
-        await Promise.all([
-            banner.getRestrictions({ courseReferenceNumber }),
-            banner.getFacultyMeetingTimes({ courseReferenceNumber }),
-            banner.getXlstSections({ courseReferenceNumber }),
-        ])
-        await Promise.all([
-            banner.getLinkedSections({ courseReferenceNumber }),
-            banner.getFees({ courseReferenceNumber }),
-            banner.getSectionBookstoreDetails({ courseReferenceNumber }),
-        ])
+        await banner.getClassDetails({ courseReferenceNumber })
+        await banner.getCourseDescription({ courseReferenceNumber })
+        await banner.getSectionAttributes({ courseReferenceNumber })
+        await banner.getRestrictions({ courseReferenceNumber })
+        await banner.getFacultyMeetingTimes({ courseReferenceNumber })
+        await banner.getXlstSections({ courseReferenceNumber })
+        await banner.getLinkedSections({ courseReferenceNumber })
+        await banner.getFees({ courseReferenceNumber })
+        await banner.getSectionBookstoreDetails({ courseReferenceNumber })
     })
 })
