@@ -1,17 +1,16 @@
 coverage:
   status:
     project:
-      threshold: 5%
-      informational: true
-    client:
-      flags: 
-        - client
-    api:
-      flags: 
-        - api
-    banner:
-      flags: 
-        - banner
+      default: off
+      client:
+        flags: 
+          - client
+      api:
+        flags: 
+          - api
+      banner:
+        flags: 
+          - banner
 
 flags:
   api:
