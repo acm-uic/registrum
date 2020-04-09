@@ -1,7 +1,6 @@
 import express from 'express'
 import compression from 'compression' // compresses requests
 import session from 'express-session'
-import bodyParser from 'body-parser'
 import flash from 'express-flash'
 import mongoose from 'mongoose'
 import passport from 'passport'
@@ -19,12 +18,12 @@ const redisUrl = process.env.REDIS_URL || 'redis://localhost'
 const mongoUrl = process.env.MONGODB_URI || 'mongodb://localhost/cs494Final'
 const baseUrl = process.env.BASE_PATH || '/api'
 
-app.options('*', cors)
-
 // * Express configuration
+app.options('*', cors)
 app.use(compression())
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true }))
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
+app.use(morgan('tiny'))
 
 // Connect to MongoDB
 mongoose.Promise = globalThis.Promise
@@ -44,20 +43,12 @@ mongoose
     //     // * Populate list of classes
     // })
   })
-  .catch((err) => {
+  .catch(err => {
     console.log(
       'MongoDB connection error. Please make sure MongoDB is running. ' + err
     )
     process.exit()
   })
-
-// * Logger
-app.use(morgan('tiny'))
-
-// * Express configuration
-app.use(compression())
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true }))
 
 // * Initialize Redis Client and Redis Session Store
 const redis = require('redis')
@@ -87,8 +78,6 @@ app.use(flash())
 
 // * Bind Routes to app
 app.use(baseUrl, router)
-
-// app.use('/', expressRoutes)
 
 export default app
 export { mongoose, redisClient }
