@@ -1,27 +1,42 @@
 {
     "name": "banner",
-    "version": "1.0.0",
-    "description": "",
-    "main": "dist/index.js",
+    "private": true,
     "scripts": {
-        "start": "npm run serve",
         "build": "npm run build-ts && npm run lint",
-        "serve": "node dist/index.js",
-        "watch-node": "nodemon dist/index.js",
-        "watch": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"cyan.bold,green.bold\" \"npm run watch-ts\" \"npm run watch-node\"",
-        "test": "nyc --reporter=lcov --reporter=text mocha -r ts-node/register src/tests/**/*.spec.ts",
         "build-ts": "tsc",
-        "watch-ts": "tsc -w",
-        "watch-test": "npm run test -- --watchAll",
-        "lint": "tsc --noEmit && eslint \"**/*.{js,ts}\" --quiet",
-        "lint:fix": "npm run lint -- --fix",
         "debug": "npm run build && npm run watch-debug",
+        "lint": "eslint \"**/*.{js,ts}\" --quiet",
+        "lint:fix": "npm run lint -- --fix",
+        "serve": "node dist/index.js",
         "serve-debug": "nodemon --inspect dist/index.js",
-        "watch-debug": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"yellow.bold,green.bold\" \"npm run watch-ts\" \"npm run serve-debug\""
+        "start": "npm run serve",
+        "test": "nyc --reporter=lcov --reporter=text mocha -r ts-node/register src/tests/**/*.spec.ts",
+        "watch": "npm run build && concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"cyan.bold,green.bold\" \"npm run watch-ts\" \"npm run watch-node\"",
+        "watch-debug": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"yellow.bold,green.bold\" \"npm run watch-ts\" \"npm run serve-debug\"",
+        "watch-node": "nodemon dist/index.js",
+        "watch-test": "npm run test -- --watch-files src --watch",
+        "watch-ts": "tsc -w --preserveWatchOutput"
     },
-    "keywords": [],
-    "author": "",
-    "license": "ISC",
+    "nyc": {
+        "exclude": "**/*.spec.ts",
+        "include": "src"
+    },
+    "dependencies": {
+        "apicache": "^1.5.3",
+        "axios": "^0.19.2",
+        "axios-cookiejar-support": "^0.5.1",
+        "chai": "^4.2.0",
+        "compression": "^1.7.4",
+        "cors": "^2.8.5",
+        "dotenv": "^8.2.0",
+        "express": "^4.17.1",
+        "ioredis": "^4.16.1",
+        "mongodb": "^3.5.5",
+        "morgan": "^1.10.0",
+        "request": "^2.88.2",
+        "request-promise-native": "^1.0.8",
+        "tough-cookie": "^4.0.0"
+    },
     "devDependencies": {
         "@types/apicache": "^1.2.2",
         "@types/axios": "^0.14.0",
@@ -40,30 +55,12 @@
         "@types/tough-cookie": "^2.3.6",
         "@typescript-eslint/eslint-plugin": "^2.26.0",
         "@typescript-eslint/parser": "^2.26.0",
+        "concurrently": "^5.1.0",
         "eslint": "^6.8.0",
         "mocha": "^7.1.1",
+        "nodemon": "^2.0.3",
         "nyc": "^15.0.0",
-        "ts-node": "^8.8.1",
+        "ts-node": "^8.8.2",
         "typescript": "^3.8.3"
-    },
-    "dependencies": {
-        "apicache": "^1.5.3",
-        "axios": "^0.19.2",
-        "axios-cookiejar-support": "^0.5.1",
-        "chai": "^4.2.0",
-        "compression": "^1.7.4",
-        "cors": "^2.8.5",
-        "dotenv": "^8.2.0",
-        "express": "^4.17.1",
-        "ioredis": "^4.16.1",
-        "mongodb": "^3.5.5",
-        "morgan": "^1.10.0",
-        "request": "^2.88.2",
-        "request-promise-native": "^1.0.8",
-        "tough-cookie": "^4.0.0"
-    },
-    "nyc": {
-        "include": "src",
-        "exclude": "**/*.spec.ts"
     }
 }

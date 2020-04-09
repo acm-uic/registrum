@@ -12,6 +12,8 @@
         "test": "jest"
     },
     "jest": {
+        "collectCoverage": true,
+        "coverageDirectory": "./coverage/",
         "moduleFileExtensions": [
             "ts",
             "tsx",
@@ -32,9 +34,7 @@
         "transform": {
             "^.+\\.(ts|tsx)$": "ts-jest",
             "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/src/fileTransformer.js"
-        },
-        "coverageDirectory": "./coverage/",
-        "collectCoverage": true
+        }
     },
     "dependencies": {
         "@date-io/date-fns": "^2.5.0",

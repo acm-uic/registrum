@@ -5,9 +5,13 @@
     "install:banner": "cd banner && npm install",
     "install:client": "cd client && npm install",
     "lint-all": "npm-run-all lint:*",
+    "lint-all:fix": "npm-run-all lint:fix:*",
     "lint:api": "cd api && npm run lint",
     "lint:banner": "cd client && npm run lint",
-    "lint:client": "cd client && npm run lint"
+    "lint:client": "cd client && npm run lint",
+    "lint:fix:api": "cd api && npm run lint:fix",
+    "lint:fix:banner": "cd client && npm run lint:fix",
+    "lint:fix:client": "cd client && npm run lint:fix"
   },
   "husky": {
     "hooks": {
