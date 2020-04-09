@@ -8,7 +8,7 @@ services:
     volumes:
       - redis-data:/data
     command: --appendonly yes
-    networks: 
+    networks:
       - registrum-net
 
   mongo:
@@ -16,9 +16,9 @@ services:
     image: mongo:latest
     volumes:
       - mongo-data:/data/db
-    networks: 
+    networks:
       - registrum-net
-      
+
   api:
     build:
       context: api
@@ -53,6 +53,20 @@ services:
     networks:
       - registrum-net
 
+  banner-data:
+    build:
+      context: banner-data
+      target: prod
+    image: docker.pkg.github.com/ckanich-classrooms/final-project-dream-team-1/banner-data:prod
+    restart: always
+    environment:
+      - MONGODB_URI=mongodb://mongo:27017/registrum-banner-data
+      - NODE_ENV=production
+    depends_on:
+      - mongo
+    networks:
+      - registrum-net
+
   client:
     build:
       context: client
@@ -63,7 +77,7 @@ services:
       - api
     ports:
       - 8080:80
-    networks: 
+    networks:
       - registrum-net
 
 networks:

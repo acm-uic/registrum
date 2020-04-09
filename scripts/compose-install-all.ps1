@@ -1,4 +1,4 @@
-$services = "api","banner","client"
+$services = "api","banner","banner-data","client"
 docker-compose up -d
 
 ForEach($service in $services) {

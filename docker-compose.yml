@@ -91,6 +91,23 @@ services:
     networks:
       - registrum-net
 
+  banner-data:
+    build:
+      context: banner-data
+      target: dev
+    image: docker.pkg.github.com/ckanich-classrooms/final-project-dream-team-1/banner-data:dev
+    restart: always
+    working_dir: /usr/src/app
+    environment:
+      - MONGODB_URI=mongodb://mongo:27017/registrum-banner-data
+    volumes:
+      - ./banner-data:/usr/src/app
+      - node_modules_banner-data:/usr/src/app/node_modules
+    depends_on:
+      - mongo
+    networks:
+      - registrum-net
+
   client:
     build:
       context: client
@@ -116,6 +133,7 @@ networks:
 volumes:
   node_modules_api:
   node_modules_banner:
+  node_modules_banner-data:
   node_modules_client:
   mongo-data:
   redis-data:

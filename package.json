@@ -3,14 +3,17 @@
     "install-all": "npm install && npm-run-all install:*",
     "install:api": "cd api && npm install",
     "install:banner": "cd banner && npm install",
+    "install:banner-data": "cd banner-data && npm install",
     "install:client": "cd client && npm install",
     "lint-all": "npm-run-all lint:*",
     "lint-all:fix": "npm-run-all lint:fix:*",
     "lint:api": "cd api && npm run lint",
     "lint:banner": "cd banner && npm run lint",
+    "lint:banner-data": "cd banner-data && npm run lint",
     "lint:client": "cd client && npm run lint",
     "lint:fix:api": "cd api && npm run lint:fix",
     "lint:fix:banner": "cd banner && npm run lint:fix",
+    "lint:fix:banner-data": "cd banner-data && npm run lint:fix",
     "lint:fix:client": "cd client && npm run lint:fix"
   },
   "husky": {
@@ -21,6 +24,9 @@
   "lint-staged": {
     "api/**/*.{js,ts}": [
       "npm run lint:api"
+    ],
+    "banner-data/**/*.{js,ts}": [
+      "npm run lint:banner-data"
     ],
     "banner/**/*.{js,ts}": [
       "npm run lint:banner"
