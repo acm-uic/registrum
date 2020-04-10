@@ -200,7 +200,7 @@ export class BannerData {
             const page = await this.#getPage(banner, maxPageSize, received)
             const { success, totalCount, pageOffset, pageMaxSize, sectionsFetchedCount } = page
             console.log(`${progress[(count++) % progress.length]} ${success}, ${totalCount}, \
-            ${pageOffset}, ${pageMaxSize}, ${sectionsFetchedCount}\r`)
+${pageOffset}, ${pageMaxSize}, ${sectionsFetchedCount}`)
             res.data = [...res.data, ...page.data]
             received += page.data.length
             await new Promise(resolve => setTimeout(resolve, waitBetweenPages))

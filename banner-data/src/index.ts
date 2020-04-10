@@ -113,8 +113,14 @@ const boot = async () => {
         console.log('❌ MongoDB connection unsuccessful.')
     }
     const bannerData = new BannerData(db, config.bannerData)
-    console.log(`⏲ Scheduling Update Task to run ${config.cron}`)
-    cron.schedule(config.cron, bannerData.updateDb)
+    if (config.now) {
+        console.log('🔥 Performing one-off sync now')
+        await bannerData.updateDb()
+    }
+    else {
+        console.log(`⏲ Scheduling Update Task to run ${config.cron}`)
+        cron.schedule(config.cron, bannerData.updateDb)
+    }
     db.connection.close()
 }
 

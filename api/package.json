@@ -3,7 +3,7 @@
     "private": true,
     "scripts": {
         "build": "npm run build-ts && npm run lint",
-        "build-ts": "tec",
+        "build-ts": "tsc",
         "lint": "eslint \"src/**/*.{js,ts}\" --quiet",
         "lint:fix": "npm run lint -- --fix",
         "start": "node dist/server.js",
