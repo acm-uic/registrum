@@ -17,19 +17,23 @@
         "include": "src"
     },
     "dependencies": {
+        "argparse": "^1.0.10",
         "axios": "^0.19.2",
         "axios-cookiejar-support": "^0.5.1",
         "dotenv": "^8.2.0",
         "mongoose": "^5.9.7",
+        "node-cron": "^2.0.3",
         "tough-cookie": "^4.0.0"
     },
     "devDependencies": {
+        "@types/argparse": "^1.0.38",
         "@types/axios": "^0.14.0",
         "@types/chai": "^4.2.11",
         "@types/dotenv": "^8.2.0",
         "@types/mocha": "^7.0.2",
         "@types/mongoose": "^5.7.10",
         "@types/node": "^13.11.1",
+        "@types/node-cron": "^2.0.3",
         "@types/tough-cookie": "^2.3.7",
         "@typescript-eslint/eslint-plugin": "^2.27.0",
         "@typescript-eslint/parser": "^2.27.0",
