@@ -211,7 +211,12 @@ ${pageOffset}, ${pageMaxSize}, ${sectionsFetchedCount}`)
     #getPage = async (banner: Banner, size: number, offset: number) => {
         const { pageRetryTime, pageRetryCount } = this.#config
         for (let retryCount = 0; retryCount < pageRetryCount; retryCount++) {
-            const res = await banner.search({ pageMaxSize: `${size}`, pageOffset: `${offset}` })
+            const res = await banner.search({
+                pageMaxSize: `${size}`,
+                pageOffset: `${offset}`,
+                // TODO: Remove subject filter when sync service is completed
+                subject: 'CS'
+            })
             if (res.success)
                 return res
             console.log('Retrying Page')
