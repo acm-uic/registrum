@@ -1,84 +1,5 @@
 import { Document, model, Schema, Mongoose } from 'mongoose'
-import Banner from './lib/Banner'
-
-interface Faculty extends Document {
-    bannerId: number;
-    category: string | null;
-    class: string;
-    courseReferenceNumber: number;
-    displayName: string;
-    emailAddress: string;
-    primaryIndicator: boolean;
-    term: number;
-}
-
-interface MeetingsFaculty extends Document {
-    category: string;
-    class: string;
-    courseReferenceNumber: string;
-    faculty: [];
-    meetingTime: {
-        beginTime: string;
-        building: string;
-        buildingDescription: string;
-        campus: string;
-        campusDescription: string;
-        category: string;
-        class: string;
-        courseReferenceNumber: string;
-        creditHourSession: number;
-        endDate: string;
-        endTime: string;
-        friday: boolean;
-        hoursWeek: number;
-        meetingScheduleType: string;
-        monday: boolean;
-        room: string;
-        saturday: boolean;
-        startDate: string;
-        sunday: boolean;
-        term: string;
-        thursday: boolean;
-        tuesday: boolean;
-        wednesday: boolean;
-    };
-    term: number;
-}
-
-interface Course extends Document {
-    id: number;
-    term: string;
-    termDesc: string;
-    courseReferenceNumber: string;
-    partOfTerm: string;
-    courseNumber: string;
-    subject: string;
-    subjectDescription: string;
-    sequenceNumber: string;
-    campusDescription: string;
-    scheduleTypeDescription: string;
-    courseTitle: string;
-    creditHours: string | null;
-    maximumEnrollment: number;
-    enrollment: number;
-    seatsAvailable: number;
-    waitCapacity: number;
-    waitCount: number;
-    waitAvailable: number;
-    crossList: string | null;
-    crossListCapacity: string | null;
-    crossListCount: string | null;
-    crossListAvailable: string | null;
-    creditHourHigh: string | null;
-    creditHourLow: number;
-    creditHourIndicator: string | null;
-    openSection: boolean;
-    linkIdentifier: string | null;
-    isSectionLinked: boolean;
-    subjectCourse: string;
-    faculty: Faculty[];
-    meetingsFaculty: MeetingsFaculty[];
-}
+import { Banner, SearchResponse, Course } from './lib/Banner'
 
 const FacultySchema = new Schema({
     bannerId: Number,
@@ -159,22 +80,6 @@ const CourseSchema = new Schema({
     meetingsFaculty: [MeetingsFacultySchema],
 })
 
-type SearchResponse = {
-    success: boolean;
-    totalCount: number;
-    data: Course[];
-    pageOffset: number;
-    pageMaxSize: number;
-    sectionsFetchedCount: number;
-    pathMode: string;
-    searchResultsConfigs: {
-        config: string;
-        display: string;
-        title: string;
-        width: string;
-    }[];
-}
-
 export type BannerDataConfig = {
     maxPageSize: number;
     waitBetweenPages: number;
@@ -193,9 +98,12 @@ export class BannerData {
     #getAllPages = async (banner: Banner) => {
         const progress = '✨ 🚀 🌮 🧪 🎸 😎 🔫 💩 👽 👾 🤖 💥 🔥 🌈 👻'.split(' ')
         const { maxPageSize, waitBetweenPages } = this.#config
-        const res = await this.#getPage(banner, maxPageSize, 0)
-        let received = res.data.length
         let count = 0
+        const res = await this.#getPage(banner, maxPageSize, 0)
+        const { success, totalCount, pageOffset, pageMaxSize, sectionsFetchedCount } = res
+        console.log(`${progress[(count++) % progress.length]} ${success}, ${totalCount}, \
+${pageOffset}, ${pageMaxSize}, ${sectionsFetchedCount}`)
+        let received = res.data.length
         while (received < res.totalCount) {
             const page = await this.#getPage(banner, maxPageSize, received)
             const { success, totalCount, pageOffset, pageMaxSize, sectionsFetchedCount } = page
@@ -229,7 +137,7 @@ ${pageOffset}, ${pageMaxSize}, ${sectionsFetchedCount}`)
         console.log(`🚨 Term: ${latestTerm.code}: ${latestTerm.description}`)
         const banner = new Banner(latestTerm.code)
         const res: SearchResponse = await this.#getAllPages(banner)
-        const CourseModel = model<Course>('Course', CourseSchema)
+        const CourseModel = model<Course & Document>('Course', CourseSchema)
         console.log('🗑 Deleting Documents')
         await CourseModel.collection.deleteMany({})
         console.log('✨ Creating Documents')
