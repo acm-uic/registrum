@@ -2,27 +2,46 @@ import * as express from 'express'
 import * as compression from 'compression'
 import * as apicache from 'apicache'
 import * as cors from 'cors'
-import * as dotenv from 'dotenv'
 import * as morgan from 'morgan'
+import { Controller } from './interfaces/Controller'
+export type AppConfig = {
+    port: number;
+    basePath: string;
+    cacheTime: string;
+    mongoUri: string;
+}
 
-import BannerController from './controllers/BannerController'
+export class App {
+    #app: express.Application;
+    #config: AppConfig
 
-dotenv.config()
+    constructor(controllers: Controller[], config: AppConfig) {
+        this.#app = express()
+        this.#config = config
 
-const CACHE_TIME = process.env.CACHE_TIME || '10 minutes'
-const BASE_PATH = process.env.BASE_PATH || '/banner'
-const PORT = parseInt(process.env.PORT) || 4001
+        this.#initializeMiddlewares()
+        this.#initializeControllers(controllers)
+    }
 
-export const app = express()
+    #initializeMiddlewares = () => {
+        this.#app.set('port', this.#config.port)
+        this.#app.use(morgan('tiny'))
+        this.#app.use(express.urlencoded({ extended: true }))
+        this.#app.use(express.json())
+        this.#app.use(compression())
+        this.#app.options('*', cors)
+        this.#app.use(apicache.middleware(this.#config.cacheTime))
+    }
 
-const cache = apicache.middleware
+    #initializeControllers = (controllers: Controller[]) => {
+        controllers.forEach(controller => {
+            this.#app.use(this.#config.basePath, controller.router)
+        })
+    }
 
-app.set('port', PORT)
-app.use(morgan('tiny'))
-app.use(express.urlencoded({ extended: true }))
-app.use(express.json())
-app.use(compression())
-app.options('*', cors)
-
-app.use(cache(CACHE_TIME))
-app.use(BASE_PATH, BannerController)
+    listen() {
+        this.#app.listen(this.#config.port, () => {
+            console.log(`🚀 Banner service running on port ${this.#config.port}. 🤘`)
+        })
+    }
+}

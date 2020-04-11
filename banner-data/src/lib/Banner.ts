@@ -2,6 +2,7 @@ import axios, { AxiosInstance } from 'axios'
 import axiosCookieJarSupport from 'axios-cookiejar-support'
 import { CookieJar } from 'tough-cookie'
 import { URLSearchParams } from 'url'
+import { parse } from 'path'
 
 const bannerHost = process.env.BANNER_PROXY || 'https://banner.apps.uillinois.edu'
 
@@ -42,7 +43,6 @@ type GetSessionProps = GetSubjectProps
 type GetAttributeProps = GetSubjectProps
 type GetPartOfTermProps = GetSubjectProps
 
-
 export type SearchResponse = {
     success: boolean;
     totalCount: number;
@@ -60,7 +60,7 @@ export type SearchResponse = {
 }
 
 
-export interface Faculty {
+export type Faculty = {
     bannerId: number;
     category: string | null;
     class: string;
@@ -71,7 +71,7 @@ export interface Faculty {
     term: number;
 }
 
-export interface MeetingsFaculty {
+export type MeetingsFaculty = {
     category: string;
     class: string;
     courseReferenceNumber: string;
@@ -104,7 +104,7 @@ export interface MeetingsFaculty {
     term: number;
 }
 
-export interface Course {
+export type Course = {
     id: number;
     term: string;
     termDesc: string;
@@ -138,6 +138,16 @@ export interface Course {
     faculty: Faculty[];
     meetingsFaculty: MeetingsFaculty[];
 }
+
+export type Term = {
+    code: string;
+    description: string;
+}
+
+export type Subject = Term
+
+export type GetTermResponse = Term[];
+export type GetSubjectResponse = Subject[];
 
 export class Banner {
     #api: AxiosInstance
@@ -235,33 +245,24 @@ export class Banner {
         ).data
     }
 
-    getClassDetails = async (params: GetClassDetailsProps) => {
-        return await this.#courseOperation('getClassDetails', params)
-    }
-    getCourseDescription = async (params: GetCourseDescriptionProps) => {
-        return await this.#courseOperation('getCourseDescription', params)
-    }
-    getSectionAttributes = async (params: GetSectionAttributesProps) => {
-        return await this.#courseOperation('getSectionAttributes', params)
-    }
-    getRestrictions = async (params: GetRestrictionsProps) => {
-        return await this.#courseOperation('getRestrictions', params)
-    }
-    getFacultyMeetingTimes = async (params: GetFacultyMeetingTimesProps) => {
-        return await this.#courseOperation('getFacultyMeetingTimes', params)
-    }
-    getXlstSections = async (params: GetXlstSectionsProps) => {
-        return await this.#courseOperation('getXlstSections', params)
-    }
-    getLinkedSections = async (params: GetLinkedSectionsProps) => {
-        return await this.#courseOperation('getLinkedSections', params)
-    }
-    getFees = async (params: GetFeesProps) => {
-        return await this.#courseOperation('getFees', params)
-    }
-    getSectionBookstoreDetails = async (params: GetSectionBookstoreDetailsProps) => {
-        return await this.#courseOperation('getSectionBookstoreDetails', params)
-    }
+    getClassDetails = async (params: GetClassDetailsProps) =>
+        await this.#courseOperation('getClassDetails', params)
+    getCourseDescription = async (params: GetCourseDescriptionProps) =>
+        await this.#courseOperation('getCourseDescription', params)
+    getSectionAttributes = async (params: GetSectionAttributesProps) =>
+        await this.#courseOperation('getSectionAttributes', params)
+    getRestrictions = async (params: GetRestrictionsProps) =>
+        await this.#courseOperation('getRestrictions', params)
+    getFacultyMeetingTimes = async (params: GetFacultyMeetingTimesProps) =>
+        await this.#courseOperation('getFacultyMeetingTimes', params)
+    getXlstSections = async (params: GetXlstSectionsProps) =>
+        await this.#courseOperation('getXlstSections', params)
+    getLinkedSections = async (params: GetLinkedSectionsProps) =>
+        await this.#courseOperation('getLinkedSections', params)
+    getFees = async (params: GetFeesProps) =>
+        await this.#courseOperation('getFees', params)
+    getSectionBookstoreDetails = async (params: GetSectionBookstoreDetailsProps) =>
+        await this.#courseOperation('getSectionBookstoreDetails', params)
 
     private static staticOperations = async (
         operation: string,
@@ -286,25 +287,19 @@ export class Banner {
         ).data
     }
 
-    public static getTerm = async (params?: GetTermProps) => {
-        return await Banner.staticOperations('getTerms', params)
-    }
-
-    public static getSubject = async (params: GetSubjectProps) => {
-        return await Banner.staticOperations('get_subject', params)
-    }
-
-    public static getSession = async (params: GetSessionProps) => {
-        return await Banner.staticOperations('get_session', params)
-    }
-
-    public static getPartOfTerm = async (params: GetPartOfTermProps) => {
-        return await Banner.staticOperations('get_partOfTerm', params)
-    }
-
-    public static getAttribute = async (params: GetAttributeProps) => {
-        return await Banner.staticOperations('get_attribute', params)
-    }
+    public static getLatestTerm = async (): Promise<Term> =>
+        (await Banner.getTerm()).reduce((prev, term) =>
+            parseInt(term.code) > parseInt(prev.code) ? term : prev)
+    public static getTerm = async (params?: GetTermProps): Promise<GetTermResponse> =>
+        await Banner.staticOperations('getTerms', params)
+    public static getSubject = async (params: GetSubjectProps): Promise<GetSubjectResponse> =>
+        await Banner.staticOperations('get_subject', params)
+    public static getSession = async (params: GetSessionProps) =>
+        await Banner.staticOperations('get_session', params)
+    public static getPartOfTerm = async (params: GetPartOfTermProps) =>
+        await Banner.staticOperations('get_partOfTerm', params)
+    public static getAttribute = async (params: GetAttributeProps) =>
+        await Banner.staticOperations('get_attribute', params)
 }
 
 export default Banner

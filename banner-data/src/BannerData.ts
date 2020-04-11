@@ -1,85 +1,6 @@
-import { Document, model, Schema, Mongoose } from 'mongoose'
-import { Banner, SearchResponse, Course } from './lib/Banner'
-
-const FacultySchema = new Schema({
-    bannerId: Number,
-    category: String,
-    class: String,
-    courseReferenceNumber: Number,
-    displayName: String,
-    emailAddress: String,
-    primaryIndicator: Boolean,
-    term: Number,
-})
-
-const MeetingsFacultySchema = new Schema({
-    category: String,
-    class: String,
-    courseReferenceNumber: String,
-    faculty: [FacultySchema],
-    meetingTime: {
-        beginTime: String,
-        building: String,
-        buildingDescription: String,
-        campus: String,
-        campusDescription: String,
-        category: String,
-        class: String,
-        courseReferenceNumber: String,
-        creditHourSession: Number,
-        endDate: String,
-        endTime: String,
-        friday: Boolean,
-        hoursWeek: Number,
-        meetingScheduleType: String,
-        monday: Boolean,
-        room: String,
-        saturday: Boolean,
-        startDate: String,
-        sunday: Boolean,
-        term: String,
-        thursday: Boolean,
-        tuesday: Boolean,
-        wednesday: Boolean,
-    },
-    term: Number,
-})
-
-const CourseSchema = new Schema({
-    id: Number,
-    term: String,
-    termDesc: String,
-    courseReferenceNumber: String,
-    partOfTerm: String,
-    courseNumber: String,
-    subject: String,
-    subjectDescription: String,
-    sequenceNumber: String,
-    campusDescription: String,
-    scheduleTypeDescription: String,
-    courseTitle: String,
-    creditHours: String,
-    maximumEnrollment: Number,
-    enrollment: Number,
-    seatsAvailable: Number,
-    waitCapacity: Number,
-    waitCount: Number,
-    waitAvailable: Number,
-    crossList: String,
-    crossListCapacity: String,
-    crossListCount: String,
-    crossListAvailable: String,
-    creditHourHigh: String,
-    creditHourLow: Number,
-    creditHourIndicator: String,
-    openSection: Boolean,
-    linkIdentifier: String,
-    isSectionLinked: Boolean,
-    subjectCourse: String,
-    faculty: [FacultySchema],
-    meetingsFaculty: [MeetingsFacultySchema],
-})
-
+import { Mongoose } from 'mongoose'
+import { Banner, SearchResponse } from './lib/Banner'
+import { CourseModel, SubjectModel, TermModel } from './Models'
 export type BannerDataConfig = {
     maxPageSize: number;
     waitBetweenPages: number;
@@ -122,8 +43,7 @@ ${pageOffset}, ${pageMaxSize}, ${sectionsFetchedCount}`)
             const res = await banner.search({
                 pageMaxSize: `${size}`,
                 pageOffset: `${offset}`,
-                // TODO: Remove subject filter when sync service is completed
-                subject: 'CS'
+                // subject: 'CS'
             })
             if (res.success)
                 return res
@@ -132,17 +52,80 @@ ${pageOffset}, ${pageMaxSize}, ${sectionsFetchedCount}`)
         }
     }
 
+    updateTerms = async () => {
+        const terms = await Banner.getTerm()
+        const res = terms.map(term => {
+            return {
+                ...term,
+                _id: term.code
+            }
+        })
+        await TermModel.collection.bulkWrite(
+            res.map(r => {
+                return {
+                    updateOne: {
+                        filter: {
+                            _id: r._id
+                        },
+                        update: r,
+                        upsert: true
+                    }
+                }
+            })
+        )
+    }
+
+    updateSubjects = async () => {
+        const subjects = await Banner.getSubject({ term: (await Banner.getLatestTerm()).code })
+        const res = subjects.map(subject => {
+            return {
+                ...subject,
+                _id: subject.code
+            }
+        })
+        await SubjectModel.collection.bulkWrite(
+            res.map(r => {
+                return {
+                    updateOne: {
+                        filter: {
+                            _id: r._id
+                        },
+                        update: r,
+                        upsert: true
+                    }
+                }
+            })
+        )
+    }
+
+    updateCourses = async () => {
+        const banner = new Banner((await Banner.getLatestTerm()).code)
+        const courses: SearchResponse = await this.#getAllPages(banner)
+        const res = courses.data.map(course => {
+            return {
+                ...course,
+                _id: course.courseReferenceNumber
+            }
+        })
+        await CourseModel.collection.bulkWrite(
+            res.map(r => {
+                return {
+                    updateOne: {
+                        filter: {
+                            _id: r._id
+                        },
+                        update: r,
+                        upsert: true
+                    }
+                }
+            })
+        )
+    }
+
     updateDb = async () => {
-        const latestTerm = (await Banner.getTerm()).shift()
-        console.log(`🚨 Term: ${latestTerm.code}: ${latestTerm.description}`)
-        const banner = new Banner(latestTerm.code)
-        const res: SearchResponse = await this.#getAllPages(banner)
-        const CourseModel = model<Course & Document>('Course', CourseSchema)
-        console.log('🗑 Deleting Documents')
-        await CourseModel.collection.deleteMany({})
-        console.log('✨ Creating Documents')
-        await CourseModel.collection.insertMany(res.data)
-        console.log('🍕 Sync Completed')
+        await this.updateSubjects()
+        await this.updateTerms()
+        await this.updateCourses()
     }
 }
 

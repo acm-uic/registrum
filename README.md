@@ -4,38 +4,40 @@
 [![Docker CI](https://github.com/ckanich-classrooms/final-project-dream-team-1/workflows/Docker%20CI/badge.svg)](https://github.com/ckanich-classrooms/final-project-dream-team-1/actions?query=workflow%3A%22Docker+CI%22)
 [![Docker CD](https://github.com/ckanich-classrooms/final-project-dream-team-1/workflows/Docker%20CD/badge.svg)](https://github.com/ckanich-classrooms/final-project-dream-team-1/actions?query=workflow%3A%22Docker+CD%22)
 [![codecov](https://codecov.io/gh/ckanich-classrooms/final-project-dream-team-1/branch/master/graph/badge.svg?token=5aYe8JnyLU)](https://codecov.io/gh/ckanich-classrooms/final-project-dream-team-1)
+[![lerna](https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg)](https://lerna.js.org/)
 
 ## Table of Contents
 
--   [Dream Team Final Project](#dream-team-final-project)
-    -   [Table of Contents](#table-of-contents)
-    -   [Description](#description)
-    -   [Authors, Specialization](#authors-specialization)
-    -   [Checkpoints](#checkpoints)
-        -   [Questions for checkpoint 1](#questions-for-checkpoint-1)
-        -   [Deliverables for checkpoint 2](#deliverables-for-checkpoint-2)
-        -   [Deliverables for checkpoint 4](#deliverables-for-checkpoint-4)
-        -   [Deliverables for final project](#deliverables-for-final-project)
-    -   [CI/CD](#cicd)
-        -   [Node CI](#node-ci)
-        -   [Docker CI](#docker-ci)
-        -   [Docker CD](#docker-cd)
-    -   [Docker](#docker)
-        -   [Production Deployment](#production-deployment)
-        -   [Developing with Docker](#developing-with-docker)
-        -   [Prerequisites](#prerequisites)
-        -   [Getting the development container images](#getting-the-development-container-images)
-        -   [Running the development containers](#running-the-development-containers)
-        -   [Using commands in the containers](#using-commands-in-the-containers)
-        -   [Other common commands](#other-common-commands)
-    -   [Sources](#sources)
+- [Dream Team Final Project](#dream-team-final-project)
+  - [Table of Contents](#table-of-contents)
+  - [Description](#description)
+  - [Authors, Specialization](#authors-specialization)
+  - [Checkpoints](#checkpoints)
+    - [Questions for checkpoint 1](#questions-for-checkpoint-1)
+    - [Deliverables for checkpoint 2](#deliverables-for-checkpoint-2)
+    - [Tests for checkpoint 4 (checkpoint 3 deliverable)](#tests-for-checkpoint-4-checkpoint-3-deliverable)
+    - [Deliverables for checkpoint 4](#deliverables-for-checkpoint-4)
+    - [Deliverables for final project](#deliverables-for-final-project)
+  - [CI/CD](#cicd)
+    - [Node CI](#node-ci)
+    - [Docker CI](#docker-ci)
+    - [Docker CD](#docker-cd)
+  - [Docker](#docker)
+    - [Production Deployment](#production-deployment)
+    - [Developing with Docker](#developing-with-docker)
+    - [Prerequisites](#prerequisites)
+    - [Getting the development container images](#getting-the-development-container-images)
+    - [Running the development containers](#running-the-development-containers)
+    - [Using commands in the containers](#using-commands-in-the-containers)
+    - [Other common commands](#other-common-commands)
+  - [Sources](#sources)
 
 ## Description
 
 The application will allow users to subscribe and receive notifications from classes at UIC based on when the class opens/closes. It is very similar in function to the Coursicle/Seatcheck applications that students have used in the past to keep an eye on classes they want to get into.
 
--   Push notifications from PWA (Android for now)
--   Application will be written in typescript
+- Push notifications from PWA (Android for now)
+- Application will be written in typescript
 
 ## Authors, Specialization
 
@@ -54,35 +56,35 @@ The application will allow users to subscribe and receive notifications from cla
 Test Cases are written in tests file within api
 Test Cases are as follows for now:
 
--   Authentication Tests
-    -   Logs user incorrectly using email, password
-    -   Logs user out correctly
-    -   Cannot log in with incorrect email
-    -   Cannot login with an incorrect password
-    -   Error with status code 401 when attempting to log out when not logged in
-    -   Can't log in when already logged in, error thrown
--   Class Tests
-    -   Correctly add class to user watch list
-    -   Correctly remove class from user watch list
-    -   Correctly retrieves list of class subjects from Banner DB
-    -   Correctly retrieves classes for given subject
+- Authentication Tests
+  - Logs user incorrectly using email, password
+  - Logs user out correctly
+  - Cannot log in with incorrect email
+  - Cannot login with an incorrect password
+  - Error with status code 401 when attempting to log out when not logged in
+  - Can't log in when already logged in, error thrown
+- Class Tests
+  - Correctly add class to user watch list
+  - Correctly remove class from user watch list
+  - Correctly retrieves list of class subjects from Banner DB
+  - Correctly retrieves classes for given subject
 
 Security Evaluation
 
--   What things would an attacker potentially want to do using our app that we wouldn't want them to do?
-    -   Making too many API requests
-        -   Possibly implement API rate limiting
-        -   API Response Caching
-    -   XSS Attacks through username & password fields
-        -   Session hijacking
-        -   Unauthorized page access
-        -   CSRF - Cross-Site Request Forgery
-        -   Attacks to query class microservice (Manipulating API to instruct microservices to spam requests to Banner)
--   What best practices will we follow security wise for this assignment?
-    -   How will we accomplish them?
-        -   Implement security rules on db side to prevent unauthorized http calls
-        -   Add user authentication
-        -   Use a front end framework that escapes characters for XSS
+- What things would an attacker potentially want to do using our app that we wouldn't want them to do?
+  - Making too many API requests
+    - Possibly implement API rate limiting
+    - API Response Caching
+  - XSS Attacks through username & password fields
+    - Session hijacking
+    - Unauthorized page access
+    - CSRF - Cross-Site Request Forgery
+    - Attacks to query class microservice (Manipulating API to instruct microservices to spam requests to Banner)
+- What best practices will we follow security wise for this assignment?
+  - How will we accomplish them?
+    - Implement security rules on db side to prevent unauthorized http calls
+    - Add user authentication
+    - Use a front end framework that escapes characters for XSS
 
 ### Deliverables for checkpoint 2
 
@@ -92,11 +94,11 @@ We will have basic CRUD functionality ready by allowing for user login/registrat
 
 Tests to be written in Microservice API ( written as todo in test file )
 
--   Cannot subscribe to class with invalid CRN
--   Cannot unsubscribe to class with invalid CRN
--   Banner API returns all proper class information upon query
--   Correct subjects are retrieved for FALL 2020
--   Correct CS 141 Listings are retrieved for CS In FALL 2020
+- Cannot subscribe to class with invalid CRN
+- Cannot unsubscribe to class with invalid CRN
+- Banner API returns all proper class information upon query
+- Correct subjects are retrieved for FALL 2020
+- Correct CS 141 Listings are retrieved for CS In FALL 2020
 
 ### Deliverables for checkpoint 4
 
@@ -115,15 +117,15 @@ This project uses GitHub Actions to automate build and release pipelines.
 
 Triggers: `push`, `pull_request`
 
--   Starts MongoDB and Redis services in Docker.
--   Run `npm install`, `npm run test`, and `npm run build` on the Node.js projects.
+- Starts MongoDB and Redis services in Docker.
+- Run `npm install`, `npm run test`, and `npm run build` on the Node.js projects.
 
 ### Docker CI
 
 Triggers: `push`, `pull_request`
 
--   Build containers defined in `docker-compose.yml` and `docker-compose.dev.yml`.
--   If running on `master`, then publish the containers tagged as `master` and `dev` respectively to GitHub Package Registry.
+- Build containers defined in `docker-compose.yml` and `docker-compose.dev.yml`.
+- If running on `master`, then publish the containers tagged as `master` and `dev` respectively to GitHub Package Registry.
 
 ### Docker CD
 
@@ -135,9 +137,9 @@ Build containers, tag them with the release version, and publish them to GitHub 
 
 ### Production Deployment
 
--   Install Docker <https://docs.docker.com/install/>.
--   Install Docker Compose <https://docs.docker.com/compose/install/>.
--   Run `docker-compose -f docker-compose.prod.yml up`.
+- Install Docker <https://docs.docker.com/install/>.
+- Install Docker Compose <https://docs.docker.com/compose/install/>.
+- Run `docker-compose -f docker-compose.prod.yml up`.
 
 The docker containers expose the following services:
 
@@ -149,8 +151,8 @@ The docker containers expose the following services:
 
 ### Prerequisites
 
--   Install Docker <https://docs.docker.com/install/>.
--   Install Docker Compose <https://docs.docker.com/compose/install/>.
+- Install Docker <https://docs.docker.com/install/>.
+- Install Docker Compose <https://docs.docker.com/compose/install/>.
 
 ### Getting the development container images
 
@@ -172,6 +174,8 @@ docker-compose build --pull --no-cache --parallel
 ```powershell
 # Create the services defined in docker-compose.yml
 docker-compose up -d
+# Follow logs
+docker-compose logs -f
 # Check running service status
 docker-compose ps
 # Stop services
@@ -185,11 +189,15 @@ docker-compose down
 docker-compose exec api npm install express
 docker-compose exec client npm install redux-persist
 docker-compose exec banner npm install -D @types/node
+docker-compose exec banner-data npm install -D @types/node
 
-# Run a shell inside a container. Dev Containers are built with Debian base image which include bash among other utilities. They are not available in production containers as they are built with alpine.
+# Run a shell inside a container.
+# Dev Containers are built with Debian base image which include bash among other utilities.
+# They are not available in production containers as they are built with alpine.
 docker-compose exec api bash
 docker-compose exec client bash
 docker-compose exec banner bash
+docker-compose exec banner-data bash
 ```
 
 ### Other common commands

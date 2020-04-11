@@ -1,16 +1,36 @@
-import { Router, Request, Response } from 'express'
-import { Banner } from '../lib/Banner'
+import { Request, Response } from 'express'
+import { Controller } from '../interfaces/Controller'
+import * as mongoose from 'mongoose'
 
-export const BannerController = Router()
+export class BannerController extends Controller {
 
-type BannerInstance = {
-    term: string;
-    instance: Banner;
+    #db: mongoose.Mongoose;
+
+    constructor(path: string, mongoUri: string) {
+        super(path)
+        this.#initializeRoutes()
+        mongoose
+            .connect(mongoUri, {
+                useNewUrlParser: true,
+                useCreateIndex: true,
+                useUnifiedTopology: true,
+                useFindAndModify: false,
+            }).then(db => {
+                this.#db = db
+            })
+    }
+
+    #initializeRoutes = () => {
+        this.router.get(this.path, this.#getSubject)
+        this.router.get(this.path, this.#getTerm)
+    }
+
+    #getSubject = (request: Request, response: Response) => {
+        //a
+    }
+
+    #getTerm = (request: Request, response: Response) => {
+        //a
+    }
+
 }
-
-BannerController.get('/class/:term/:subject/:courseNumber', async (req: Request, res: Response) => {
-    const { term, subject, courseNumber } = req.params
-    res.send(await new Banner(term, subject).search({ courseNumber }))
-})
-
-export default BannerController
