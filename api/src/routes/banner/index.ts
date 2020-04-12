@@ -21,7 +21,7 @@ router.post('/subscribe', isAuthenticated, async (req: Request, res: Response) =
         // * Subscribe via Banner API
         try {
             // * Waiting for Banner Client to be completely implemented
-            BannerClient.post('/subscribe', {
+            await BannerClient.post('/subscribe', {
                 hook: `/notify/${_id}/${crn}`
             })
         }
@@ -49,7 +49,7 @@ router.post('/unsubscribe', isAuthenticated, async (req: Request, res: Response)
         // * Subscribe via Banner API
         try {
             // ! Waiting for Banner Client to be completely implemented
-            BannerClient.post('/unsubscribe', {
+            await BannerClient.post('/unsubscribe', {
                 hook: `/notify/${_id}/${crn}`
             })
         }
