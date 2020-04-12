@@ -1,8 +1,8 @@
 import { Router, Request, Response } from 'express'
 import { isAuthenticated } from '../auth/passport'
 import User, { UserObject } from '../models/User'
-import {notifyUser} from '../../util/notifier'
-import {BannerClient} from '../../util/banner'
+import { notifyUser } from '../../util/notifier'
+import { BannerClient } from '../../util/banner'
 // * All routes under /classes/*
 const router = Router()
 
@@ -24,8 +24,7 @@ router.post('/subscribe', isAuthenticated, async (req: Request, res: Response) =
             await BannerClient.post('/subscribe', {
                 hook: `/notify/${_id}/${crn}`
             })
-        }
-        catch(err) {
+        } catch (err) {
             // ! DO NOTHING Since banner routes aren't implemented yet
             // res.status(500).send('Error trying to subscribe to class')
         }
@@ -52,8 +51,7 @@ router.post('/unsubscribe', isAuthenticated, async (req: Request, res: Response)
             await BannerClient.post('/unsubscribe', {
                 hook: `/notify/${_id}/${crn}`
             })
-        }
-        catch (err) {
+        } catch (err) {
             // * DO NOTHING Since banner routes aren't implemented yet
             // res.status(500).send('Error trying to subscribe to class')
         }
@@ -83,15 +81,14 @@ router.get('/statuses', isAuthenticated, async (req: Request, res: Response) => 
     )
 })
 
-router.post('/notify/:id/:crn', async(req: Request, res: Response) => {
+router.post('/notify/:id/:crn', async (req: Request, res: Response) => {
     // * Grab needed params off of request
-    const {id: _id } = req.params
-    const {classJSON} = req.body
+    const { id: _id } = req.params
+    const { classJSON } = req.body
 
     try {
         // * Resolve updated user
         const user = await User.findOne({ _id })
-
 
         console.log(user.email)
         // * Send user notification
@@ -99,12 +96,10 @@ router.post('/notify/:id/:crn', async(req: Request, res: Response) => {
 
         // * Notification successful
         res.status(200).send('NOTIFICATION SUCCESSFUL')
-    }
-    catch(err) {
+    } catch (err) {
         // ! Error notifying user
         res.status(400).send(err.message)
     }
-
 })
 
 export default router
