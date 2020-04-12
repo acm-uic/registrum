@@ -7,14 +7,23 @@
     "extends": [
         "plugin:@typescript-eslint/recommended"
     ],
+    "plugins": [
+        "prettier"
+    ],
     "rules": {
+        "prettier/prettier": [
+            "warn",
+            {
+                "bracketSpacing": true,
+                "jsxBracketSameLine": false
+            }
+        ],
         "max-len": [
-            "error",
+            "warn",
             {
                 "code": 100,
                 "tabWidth": 4,
-                "ignoreUrls": true,
-                "ignoreTemplateLiterals": true
+                "ignoreUrls": true
             }
         ],
         "quotes": [
