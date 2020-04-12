@@ -27,7 +27,7 @@ const passwordRegex = RegExp(
 )
 
 // * Remove data shouldn't be sent to client
-const stripData = (data) => {
+const stripData = data => {
   const result = JSON.parse(JSON.stringify(data))
   delete result['password']
   return result

@@ -51,7 +51,6 @@ ${pageOffset}, ${pageMaxSize}, ${sectionsFetchedCount}`)
             await new Promise(resolve => setTimeout(resolve, pageRetryTime))
         }
     }
-
     updateTerms = async () => {
         const terms = await Banner.getTerm()
         const res = terms.map(term => {

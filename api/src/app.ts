@@ -14,10 +14,10 @@ const app = express()
 
 // * Retrieve environment variables
 require('dotenv').config()
-app.set('port', process.env.PORT || 4000)
-const redisUrl = process.env.REDIS_URL || 'redis://localhost'
+app.set('port', process.env.API_PORT || 4000)
+const redisUri = process.env.API_REDIS_URI || 'redis://localhost'
 const mongoUrl = process.env.MONGODB_URI || 'mongodb://localhost/cs494Final'
-const baseUrl = process.env.BASE_PATH || '/api'
+const baseUrl = process.env.API_BASE_PATH || '/api'
 
 // * Express configuration
 app.options('*', cors)
@@ -53,7 +53,7 @@ mongoose
 
 // * Initialize Redis Client and Redis Session Store
 const redis = require('redis')
-const redisClient = redis.createClient(redisUrl)
+const redisClient = redis.createClient(redisUri)
 
 const RedisStore = require('connect-redis')(session)
 const SessionStore = new RedisStore({ client: redisClient, resave: false })

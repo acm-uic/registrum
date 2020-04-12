@@ -8,9 +8,9 @@ import { response } from 'express'
 import { Server } from 'http'
 
 dotenv.config()
-const PORT = process.env.PORT || 8085
-const BASE_PATH = process.env.BASE_PATH || '/api'
-const URL = `http://localhost:${PORT}${BASE_PATH}/`
+const port = process.env.API_PORT || 8085
+const basePath = process.env.API_BASE_PATH || '/api'
+const URL = `http://localhost:${port}${basePath}/`
 
 describe('Class Tests', () => {
   let server: Server
@@ -29,7 +29,7 @@ describe('Class Tests', () => {
   axiosCookieJarSupport(client)
 
   beforeAll(async () => {
-    server = app.listen(PORT)
+    server = app.listen(port)
 
     const response = await client.post('auth/signup', {
       firstname: 'John',
@@ -57,7 +57,7 @@ describe('Class Tests', () => {
     })
 
     // * Quit Redis Client
-    await new Promise((resolve) => {
+    await new Promise(resolve => {
       redisClient.quit(() => {
         resolve()
       })
@@ -65,7 +65,7 @@ describe('Class Tests', () => {
     // ? SOURCE: https://stackoverflow.com/questions/52939575/node-js-jest-redis-quit-but-open-handle-warning-persists
     // * redis.quit() creates a thread to close the connection.
     // * We wait until all threads have been run once to ensure the connection closes.
-    await new Promise((resolve) => setImmediate(resolve))
+    await new Promise(resolve => setImmediate(resolve))
 
     // * Close Server
     server.close()
@@ -77,7 +77,7 @@ describe('Class Tests', () => {
       const { data: terms } = await client.get('classes/terms')
 
       // * Assure each term is valid by checking it is a number
-      terms.forEach((term) => {
+      terms.forEach(term => {
         expect(() => parseInt(term)).not.toThrow()
       })
     })
@@ -92,7 +92,7 @@ describe('Class Tests', () => {
       )
 
       // * Make sure each subject is a valid string
-      subjects.forEach((subject) => {
+      subjects.forEach(subject => {
         expect(typeof subject === typeof String)
       })
     })
@@ -110,7 +110,7 @@ describe('Class Tests', () => {
       const { data: classes } = await client.get(`classes/list/${subjects[0]}`)
 
       // * Make sure each class is a valid class object
-      classes.forEach((cls) => {
+      classes.forEach(cls => {
         expect(cls).toHaveProperty('crn')
         expect(cls).toHaveProperty('number')
       })

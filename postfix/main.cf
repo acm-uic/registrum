@@ -1,0 +1,7 @@
+myhostname = mail.registrum.acmuic.app
+myorigin = registrum.acmuic.app
+relayhost = registrum.acmuic.app
+mynetworks = 0.0.0.0/0
+mydestination =
+compatibility_level=2
+maillog_file=/dev/stdout

@@ -5,16 +5,17 @@ import { CookieJar } from 'tough-cookie'
 import app, { mongoose, redisClient } from '../app'
 import { Server } from 'http'
 
-const PORT = process.env.PORT || 8085
-const BASE_PATH = process.env.BASE_PATH || '/api'
-const URL = `http://localhost:${PORT}${BASE_PATH}/auth/`
+dotenv.config()
+const port = process.env.API_PORT || 8085
+const basePath = process.env.API_BASE_PATH || '/api'
+const URL = `http://localhost:${port}${basePath}/auth/`
 
 describe('Authentication Tests', () => {
   let server: Server
 
   beforeAll(async () => {
     await new Promise((resolve, reject) => {
-      server = app.listen(PORT, resolve)
+      server = app.listen(port, resolve)
     })
   })
 
@@ -391,7 +392,7 @@ describe('Authentication Tests', () => {
     it('Error with status code 401 when attempting to logout when not logged in', async () => {
       const response = await axios({
         method: 'GET',
-        url: `http://localhost:${PORT}${BASE_PATH}/auth/logout`,
+        url: `http://localhost:${port}${basePath}/auth/logout`,
         validateStatus: function (status) {
           return true
         },

@@ -1,7 +1,3 @@
-
-# Created by https://www.gitignore.io/api/node,linux,macos,windows,visualstudiocode
-# Edit at https://www.gitignore.io/?templates=node,linux,macos,windows,visualstudiocode
-
 ### Linux ###
 *~
 
@@ -126,8 +122,8 @@ typings/
 # rollup.js default build output
 dist/
 
-# create-react-app build output
-build
+# webpack build output
+build/
 
 # Uncomment the public line if your project uses Gatsby
 # https://nextjs.org/blog/next-9-1#public-directory-support
@@ -161,6 +157,7 @@ temp/
 !.vscode/launch.json
 !.vscode/extensions.json
 
+### VisualStudioCode Patch ###
 # Ignore all local history of files
 .history
 
@@ -190,4 +187,6 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-# End of https://www.gitignore.io/api/node,linux,macos,windows,visualstudiocode
+# Rush temporary files
+common/temp/
+**/.rush/temp/

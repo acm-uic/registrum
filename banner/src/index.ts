@@ -4,10 +4,10 @@ import { HookController } from './controllers/HookController'
 import { BannerController } from './controllers/BannerController'
 
 const cacheTime = process.env.CACHE_TIME || '10 minutes'
-const basePath = process.env.BASE_PATH || '/banner'
-const port = parseInt(process.env.PORT) || 4001
+const basePath = process.env.BANNER_BASE_PATH || '/banner'
+const port = parseInt(process.env.BANNER_PORT) || 4001
 const mongoUri = process.env.MONGO_URI || 'mongodb://localhost:27017/banner-data'
-const redisUri = process.env.REDIS_URI || 'redis://localhost'
+const redisUri = process.env.BANNER_REDIS_URI || 'redis://localhost'
 
 const app = new App(
     [
