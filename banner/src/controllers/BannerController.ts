@@ -15,6 +15,13 @@ export class BannerController extends Controller {
         this.router.get('/subject', this.#getSubject)
         this.router.get('/term', this.#getTerm)
         this.router.get('/crn', this.#getCourseReferenceNumber)
+        this.router.get('/course', this.#getCourse)
+    }
+
+    #getCourse = async (request: Request, response: Response) => {
+        this.ok(response, await CourseModel.find({
+            '_id': { $in: request.body.courseReferenceNumbers}
+        }))
     }
 
     #getCourseReferenceNumber = async (_: Request, response: Response) => {
