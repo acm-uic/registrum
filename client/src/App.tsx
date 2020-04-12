@@ -21,45 +21,43 @@ import Account from './pages/Account'
 import NavBar from './components/NavBar'
 import { State } from './models/redux/store'
 
-
 import { updateUser } from './models/redux/actions/auth'
 
 export const App: FC = () => {
-  // * Grab current user
-  const auth = useSelector((state: State) => state.Auth)
-  const { user } = auth
-  const dispatch = useDispatch()
+    // * Grab current user
+    const auth = useSelector((state: State) => state.Auth)
+    const { user } = auth
+    const dispatch = useDispatch()
 
-  useEffect(() => {
-    // * Update user on app load / auth state change
-    dispatch(updateUser())
-  }, [auth])
+    useEffect(() => {
+        // * Update user on app load / auth state change
+        dispatch(updateUser())
+    }, [auth])
 
-  return (
-    <>
-      <ToastContainer
-        position="bottom-left"
-        autoClose={4000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        draggable
-        pauseOnHover
-      />
-      <Router>
-        <NavBar />
-        {user !== null ? (
-          <>
-            <Route exact path="/classes" component={Classes} />
-            <Route exact path="/account" component={Account} />
-            <Route exact path="/" component={Home} />
-            {' '}
-          </>
-        ) : (
-          <SplashPage />
-        )}
-      </Router>
-    </>
-  )
+    return (
+        <>
+            <ToastContainer
+                position="bottom-left"
+                autoClose={4000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                draggable
+                pauseOnHover
+            />
+            <Router>
+                <NavBar />
+                {user !== null ? (
+                    <>
+                        <Route exact path="/classes" component={Classes} />
+                        <Route exact path="/account" component={Account} />
+                        <Route exact path="/" component={Home} />{' '}
+                    </>
+                ) : (
+                    <SplashPage />
+                )}
+            </Router>
+        </>
+    )
 }

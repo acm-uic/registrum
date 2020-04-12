@@ -1,4 +1,4 @@
 export interface Status {
-    crn: string
-    status: string
+    crn: string;
+    status: string;
 }

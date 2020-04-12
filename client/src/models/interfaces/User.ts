@@ -1,4 +1,4 @@
-import { Class } from './Class';
+import { Class } from './Class'
 
 export interface User {
     _id: string;

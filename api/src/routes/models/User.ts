@@ -2,17 +2,17 @@ import { Document, Schema, model } from 'mongoose'
 
 // * Class Subscription Interface
 export interface ClassSubscription {
-    crn: string
+    crn: string;
 }
 
 // * typescript interface for user info
 export interface UserObject extends Document {
-    firstname: string
-    lastname: string
-    email: string
-    password: string
-    subscriptions: string[]
-    emailNotificationsEnabled: boolean
+    firstname: string;
+    lastname: string;
+    email: string;
+    password: string;
+    subscriptions: string[];
+    emailNotificationsEnabled: boolean;
 }
 
 // * Schema for user's info

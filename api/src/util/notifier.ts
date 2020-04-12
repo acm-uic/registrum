@@ -7,8 +7,8 @@ dotenv.config()
 sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 
 interface ClassJSON {
-    courseReferenceNumber: string
-    seatsAvailable: number
+    courseReferenceNumber: string;
+    seatsAvailable: number;
 }
 export const notifyUser = async (user: UserObject, classData: any) => {
     // * Cast class data to classJSON interface
