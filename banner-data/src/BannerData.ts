@@ -1,6 +1,10 @@
-import { Mongoose } from 'mongoose'
-import { Banner, SearchResponse } from 'registrum-banner/src/lib/Banner'
-import { CourseModel, SubjectModel, TermModel } from 'registrum-banner/src/interfaces/Models'
+import { Banner, SearchResponse, Course, Subject, Term } from 'registrum-banner/dist/lib/Banner'
+import { CourseSchema, SubjectSchema, TermSchema } from 'registrum-banner/dist/interfaces/Schemas'
+import { Document, model } from 'mongoose'
+export const TermModel = model<Term & Document>('Term', TermSchema)
+export const SubjectModel = model<Subject & Document>('Subject', SubjectSchema)
+export const CourseModel = model<Course & Document>('Course', CourseSchema)
+
 export type BannerDataConfig = {
     maxPageSize: number;
     waitBetweenPages: number;
@@ -9,10 +13,8 @@ export type BannerDataConfig = {
 }
 
 export class BannerData {
-    #db: Mongoose
     #config: BannerDataConfig
-    constructor(db: Mongoose, config: BannerDataConfig) {
-        this.#db = db
+    constructor(config: BannerDataConfig) {
         this.#config = config
     }
 
@@ -43,7 +45,7 @@ ${pageOffset}, ${pageMaxSize}, ${sectionsFetchedCount}`)
             const res = await banner.search({
                 pageMaxSize: `${size}`,
                 pageOffset: `${offset}`,
-                // subject: 'CS'
+                subject: 'CS'
             })
             if (res.success)
                 return res
@@ -122,8 +124,11 @@ ${pageOffset}, ${pageMaxSize}, ${sectionsFetchedCount}`)
     }
 
     updateDb = async () => {
+        console.log('Updating Subjects')
         await this.updateSubjects()
+        console.log('Updating Terms')
         await this.updateTerms()
+        console.log('Updating Subjects')
         await this.updateCourses()
     }
 }

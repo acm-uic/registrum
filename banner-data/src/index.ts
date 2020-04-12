@@ -1,6 +1,6 @@
 import * as dotenv from 'dotenv'
 import * as cron from 'node-cron'
-import { Mongoose, connect } from 'mongoose'
+import * as mongoose from 'mongoose'
 import { BannerData, BannerDataConfig } from './BannerData'
 import { ArgumentParser } from 'argparse'
 
@@ -102,9 +102,8 @@ const config: AppConfig = {
 console.log('🛠 Config:', config)
 
 const boot = async () => {
-    let db: Mongoose
     try {
-        db = await connect(mongoUri, {
+        await mongoose.connect(mongoUri, {
             useNewUrlParser: true,
             useUnifiedTopology: true
         })
@@ -112,7 +111,7 @@ const boot = async () => {
     } catch (error) {
         console.log('❌ MongoDB connection unsuccessful.')
     }
-    const bannerData = new BannerData(db, config.bannerData)
+    const bannerData = new BannerData(config.bannerData)
     if (config.now) {
         console.log('🔥 Performing one-off sync now')
         await bannerData.updateDb()
@@ -121,7 +120,7 @@ const boot = async () => {
         console.log(`⏲ Scheduling Update Task to run ${config.cron}`)
         cron.schedule(config.cron, bannerData.updateDb)
     }
-    db.connection.close()
+    mongoose.connection.close()
 }
 
 boot()

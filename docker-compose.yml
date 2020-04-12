@@ -3,13 +3,20 @@ version: "3.7"
 services:
   mongo:
     image: mongo
+    container_name: mongo
+    hostname: mongo
     restart: always
-    ports:
-      - 27017:27017
     networks:
       - registrum-net
     volumes:
-      - mongo-data:/data/db
+      - mongo-data:/data/db/
+    ports:
+      - 27017:27017
+    healthcheck:
+      test: test $$(echo "rs.initiate().ok || rs.status().ok" | mongo) -eq 1
+      interval: 10s
+      start_period: 10s
+    command: ["--replSet", "rs0", "--bind_ip_all"]
 
   banner-redis:
     image: redis

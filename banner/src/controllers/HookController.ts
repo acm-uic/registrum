@@ -16,27 +16,23 @@ export class HookController extends Controller {
         this.#redisClient = new Redis(redisUri)
         this.#webHooks = new WebHooks({ redisClient: this.#redisClient })
         this.#initializeRoutes()
-        console.log('hook constructor')
         this.#initWatcher()
     }
 
     #initWatcher = () => {
-        console.log('init watcher')
         const CourseModel = mongoose.model<Course & mongoose.Document>('Course', CourseSchema)
-        CourseModel.watch().
-            on('change', async (data: any) => {
-                console.log(data.operationType)
-                if (data && data.fullDocument && data.fullDocument.courseReferenceNumber) {
-                    console.log('triggering')
-                    this.#webHooks.trigger(data.fullDocument.courseReferenceNumber, {
-                        content: '```json\n' + JSON.stringify(data.fullDocument) + '\n```'
-                    })
-                }
-            })
+        CourseModel.watch().on('change', (data: any) => {
+            console.log(data.operationType)
+            if (data && data.fullDocument && data.fullDocument.courseReferenceNumber) {
+                console.log('triggering')
+                this.#webHooks.trigger(data.fullDocument.courseReferenceNumber, {
+                    content: '```json\n' + JSON.stringify(data) + '\n```'
+                })
+            }
+        })
     }
 
     #initializeRoutes = () => {
-        console.log('init routes')
         this.router.put(this.path, this.#addHook)
         this.router.delete(this.path, this.#deleteHook)
     }
@@ -44,7 +40,6 @@ export class HookController extends Controller {
     #addHook = (request: Request, response: Response) => {
         const { crn, url } = request.body
         try {
-            console.log('adding hook', crn, url)
             this.#webHooks.add(crn, url)
             this.created(response)
         }
@@ -58,10 +53,9 @@ export class HookController extends Controller {
 
     #deleteHook = (request: Request, response: Response) => {
         const { crn, url } = request.body
-        console.log('deleting hook', crn, url)
         try {
             this.#webHooks.remove(crn, url)
-            this.accepted(response)
+            this.ok(response)
         }
         catch (error) {
             if (error instanceof URLNotFoundError || error instanceof NameNotFoundError)
@@ -70,13 +64,4 @@ export class HookController extends Controller {
                 this.fail(response, error)
         }
     }
-
-    // sub post with hook
-
-    // unsub delete hook
-
-    // subs for term
-    // courseNumbers for subject
-    // crn to class
-    // subject and course number query
 }
