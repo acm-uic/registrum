@@ -3,7 +3,7 @@ import { Controller } from '../interfaces/Controller'
 import { WebHooks, URLExistsError, URLNotFoundError, NameNotFoundError } from '../lib/WebHooks'
 import Redis from 'ioredis'
 import * as mongoose from 'mongoose'
-import { CourseSchema } from '../Schemas'
+import { CourseSchema } from '../interfaces/Schemas'
 import { Course } from '../lib/Banner'
 
 export class HookController extends Controller {

@@ -1,6 +1,6 @@
 import { Mongoose } from 'mongoose'
-import { Banner, SearchResponse } from './lib/Banner'
-import { CourseModel, SubjectModel, TermModel } from './Models'
+import { Banner, SearchResponse } from 'registrum-banner/src/lib/Banner'
+import { CourseModel, SubjectModel, TermModel } from 'registrum-banner/src/interfaces/Models'
 export type BannerDataConfig = {
     maxPageSize: number;
     waitBetweenPages: number;

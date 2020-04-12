@@ -24,7 +24,8 @@
         "dotenv": "^8.2.0",
         "mongoose": "^5.9.7",
         "node-cron": "^2.0.3",
-        "tough-cookie": "^4.0.0"
+        "tough-cookie": "^4.0.0",
+        "registrum-banner": "^0.1.0"
     },
     "devDependencies": {
         "@types/argparse": "^1.0.38",

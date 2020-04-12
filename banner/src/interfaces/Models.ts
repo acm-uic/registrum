@@ -1,4 +1,4 @@
-import { Course, Subject, Term } from './lib/Banner'
+import { Course, Subject, Term } from '../lib/Banner'
 import { CourseSchema, SubjectSchema, TermSchema } from './Schemas'
 import { Document, model } from 'mongoose'
 export const TermModel = model<Term & Document>('Term', TermSchema)
