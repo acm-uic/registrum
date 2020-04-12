@@ -14,69 +14,67 @@ import UICLogo from './UICLogo'
 import { signOut } from '../utils/functions/authentication'
 
 const NavBar = () => {
-  const user: User | null = useSelector((state: any) => state.Auth.user)
+    const user: User | null = useSelector((state: any) => state.Auth.user)
 
-  return (
-    <Navbar expand="md" bg="light" className="align-middle">
-      <Navbar.Brand as={Link} to="/">
-        <UICLogo size={30}/>
-        {' '}
-        <b>Registrum</b>
-      </Navbar.Brand>
-      <Navbar.Toggle aria-controls="basic-navbar-nav" />
-      <Navbar.Collapse id="basic-navbar-nav">
-        <Nav className="mr-auto">
-          {user != null && (
-            <Nav.Link as={Link} to="/classes">
-              Classes
-            </Nav.Link>
-          )}
-        </Nav>
+    return (
+        <Navbar expand="md" bg="light" className="align-middle">
+            <Navbar.Brand as={Link} to="/">
+                <UICLogo size={30} /> <b>Registrum</b>
+            </Navbar.Brand>
+            <Navbar.Toggle aria-controls="basic-navbar-nav" />
+            <Navbar.Collapse id="basic-navbar-nav">
+                <Nav className="mr-auto">
+                    {user != null && (
+                        <Nav.Link as={Link} to="/classes">
+                            Classes
+                        </Nav.Link>
+                    )}
+                </Nav>
 
-        <Nav>
-          {user == null && (
-            <>
-              <Nav.Link>
-                <SignIn />
-              </Nav.Link>
-              <Nav.Link>
-                <SignUp />
-              </Nav.Link>
-            </>
-          )}
+                <Nav>
+                    {user == null && (
+                        <>
+                            <Nav.Link>
+                                <SignIn />
+                            </Nav.Link>
+                            <Nav.Link>
+                                <SignUp />
+                            </Nav.Link>
+                        </>
+                    )}
 
-          {user != null && (
-            <NavDropdown
-              title={(
-                <>
-                  <FontAwesomeIcon icon={faUserCircle} />
-                  {user.firstname}
-                </>
-                              )}
-              id="basic-nav-dropdown"
-              alignRight
-            >
-              <NavDropdown.Item as={Link} to="/account">
-                <FontAwesomeIcon icon={faUser} />
-                {'  '}
-                Account
-              </NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item
-                onClick={async (e: any) => {
-                  e.preventDefault()
-                  await signOut()
-                }}
-              >
-                <FontAwesomeIcon icon={faSignOutAlt} />
-                Sign Out
-              </NavDropdown.Item>
-            </NavDropdown>
-          )}
-        </Nav>
-      </Navbar.Collapse>
-    </Navbar>
-  )
+                    {user != null && (
+                        <NavDropdown
+                            title={
+                                <>
+                                    <FontAwesomeIcon icon={faUserCircle} />
+                                    {user.firstname}
+                                </>
+                            }
+                            id="basic-nav-dropdown"
+                            alignRight
+                        >
+                            <NavDropdown.Item as={Link} to="/account">
+                                <FontAwesomeIcon icon={faUser} />
+                                {'  '}
+                                Account
+                            </NavDropdown.Item>
+                            <NavDropdown.Divider />
+                            <NavDropdown.Item
+                                onClick={async (e: any) => {
+                                    e.preventDefault()
+                                    await signOut()
+                                }}
+                            >
+                                <FontAwesomeIcon icon={faSignOutAlt} />
+                                Sign Out
+                            </NavDropdown.Item>
+                        </NavDropdown>
+                    )}
+                </Nav>
+            </Navbar.Collapse>
+        </Navbar>
+    )
 }
 
 export default NavBar

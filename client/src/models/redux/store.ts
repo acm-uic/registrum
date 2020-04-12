@@ -21,13 +21,13 @@ import { Reducer } from './reducers/reducer'
 
 // * Bind reducers into single object
 const reducers = combineReducers<Reducer<any>>({
-  // ! Add more reducers in this object
-  Auth,
+    // ! Add more reducers in this object
+    Auth
 })
 
 const persistOptions = {
-  key: 'root',
-  storage,
+    key: 'root',
+    storage
 }
 
 // * Declare state interface (This gets the compiler to shutup when referencing any objects)
@@ -35,9 +35,9 @@ export type State = {} & { [prop: string]: any }
 
 // * Configure store
 export const store = createStore(
-  persistReducer(persistOptions, reducers),
-  {},
-  composeWithDevTools(applyMiddleware(thunk)),
+    persistReducer(persistOptions, reducers),
+    {},
+    composeWithDevTools(applyMiddleware(thunk))
 )
 export const persistor = persistStore(store)
 console.log('Configured Store', store.getState())

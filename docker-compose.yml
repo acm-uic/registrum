@@ -1,7 +1,6 @@
 version: "3.7"
 
 services:
-
   mongo:
     image: mongo
     restart: always
@@ -58,15 +57,16 @@ services:
       - MONGODB_URI=mongodb://mongo:27017/registrum-api
       - REDIS_URL=redis://redis
       - BASE_PATH=/api
+      - BANNER_URL=http://banner:4001/
     ports:
       - 4000:4000
     volumes:
       - ./api:/usr/src/app
       - node_modules_api:/usr/src/app/node_modules
-    depends_on: 
+    depends_on:
       - mongo
       - redis
-    networks: 
+    networks:
       - registrum-net
 
   banner:
@@ -85,10 +85,10 @@ services:
     volumes:
       - ./banner:/usr/src/app
       - node_modules_banner:/usr/src/app/node_modules
-    depends_on: 
+    depends_on:
       - mongo
       - redis
-    networks: 
+    networks:
       - registrum-net
 
   client:
@@ -98,22 +98,22 @@ services:
     image: docker.pkg.github.com/ckanich-classrooms/final-project-dream-team-1/client:dev
     restart: always
     working_dir: /usr/src/app
-    environment: 
+    environment:
       - API_PROXY_URL=http://api:4000
       - BASE_PATH=/api
       - CLIENT_PORT=3000
     ports:
       - 3000:3000
-    volumes: 
+    volumes:
       - ./client:/usr/src/app
       - node_modules_client:/usr/src/app/node_modules
-    networks: 
+    networks:
       - registrum-net
 
 networks:
   registrum-net:
-  
-volumes: 
+
+volumes:
   node_modules_api:
   node_modules_banner:
   node_modules_client:

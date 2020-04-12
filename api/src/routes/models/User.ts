@@ -12,6 +12,7 @@ export interface UserObject extends Document {
   email: string;
   password: string;
   subscriptions: string[];
+  emailNotificationsEnabled: boolean;
 }
 
 // * Schema for user's info
@@ -21,6 +22,10 @@ const UserSchema: Schema = new Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   subscriptions: [String],
+  emailNotificationsEnabled: {
+    type: Boolean,
+    default: true,
+  },
 })
 
 // Export the model

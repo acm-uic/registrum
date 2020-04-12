@@ -14,7 +14,8 @@
     ],
     "plugins": [
         "react",
-        "@typescript-eslint"
+        "@typescript-eslint",
+        "prettier"
     ],
     "env": {
         "browser": true,
@@ -39,8 +40,15 @@
         }
     ],
     "rules": {
+        "prettier/prettier": [
+            "warn",
+            {
+                "bracketSpacing": true,
+                "jsxBracketSameLine": false
+            }
+        ],
         "max-len": [
-            "error",
+            "warn",
             {
                 "code": 100,
                 "tabWidth": 4,
@@ -62,7 +70,7 @@
         ],
         "no-trailing-spaces": "warn",
         "@typescript-eslint/explicit-function-return-type": "off",
-        "@typescript-eslint/no-explicit-any": 0,
+        "@typescript-eslint/no-explicit-any": 1,
         "@typescript-eslint/no-inferrable-types": [
             "warn",
             {

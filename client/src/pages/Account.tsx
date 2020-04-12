@@ -1,22 +1,29 @@
 import React, { FC, useState } from 'react'
-import {
-  Button, Form, Card, Container, 
-} from 'react-bootstrap'
+import { Button, Form, Card, Container } from 'react-bootstrap'
 import { toast } from 'react-toastify'
 import axios from 'axios'
 
-import { useDispatch } from 'react-redux'
+import { useDispatch, useStore } from 'react-redux'
 import { updateUser } from '../models/redux/actions/auth'
-
+import { User } from '../models/interfaces/User'
 interface UserUpdate {
-    // * Update Interface
-    firstname?: string;
-    lastname?: string;
-    password?: string;
+  // * Update Interface
+  firstname?: string;
+  lastname?: string;
+  password?: string;
+  emailNotificationsEnabled?: boolean;
 }
 
 const Account: FC = () => {
+  // * Grab needed state
+  const store = useStore()
+  const { Auth } = store.getState()
+  const user = Auth.user as User
+  console.log(user)
+
+  // * Grab dispatcher for redux
   const dispatch = useDispatch()
+
   //* Using hooks to keep track of state
   const [currentPassword, setCurrentPassword] = useState('')
   const [password, setPassword] = useState('')
@@ -24,6 +31,9 @@ const Account: FC = () => {
 
   const [fName, setFName] = useState('')
   const [lName, setLName] = useState('')
+  const [emailNotificationsEnabled, setEmailNotificationsEnabled] = useState(
+    user.emailNotificationsEnabled
+  )
 
   //* event handler to update password that will be trigger when user clicks submit
   const update = async () => {
@@ -45,13 +55,13 @@ const Account: FC = () => {
       if (
         !new RegExp(
           /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
-          'i',
+          'i'
         ).test(password)
       ) {
         toast(
-          'Password requirements not met: 8 characters, 1 uppercase & lowercase, ' + 
+          'Password requirements not met: 8 characters, 1 uppercase & lowercase, ' +
           '1 digit & 1 special character',
-          { type: 'error' },
+          { type: 'error' }
         )
         return
       }
@@ -70,12 +80,17 @@ const Account: FC = () => {
       updates.lastname = lName
     }
 
+    // * Notification options
+    if (emailNotificationsEnabled != user.emailNotificationsEnabled) {
+      updates.emailNotificationsEnabled = emailNotificationsEnabled
+    }
+
     //* make api call to update the password
     try {
       // * making api call to update password
       const response = await axios.post('/api/auth/update', {
         ...updates,
-        userPassword: currentPassword,
+        userPassword: currentPassword
       })
 
       // * notifying user for success or failure
@@ -108,7 +123,7 @@ const Account: FC = () => {
             <Form.Group controlId="formBasicPassword">
               <Card.Title>
                 Please enter your current password to make any changes...
-              </Card.Title>
+                            </Card.Title>
               <Form.Control
                 type="password"
                 placeholder="Enter Password"
@@ -134,18 +149,18 @@ const Account: FC = () => {
               />
             </Form.Group>
             {password.length > 0 && (
-            <Form.Group>
-              <Form.Label>Re-type New Password</Form.Label>
-              <Form.Control
-                disabled={currentPassword.length == 0}
-                type="password"
-                placeholder="Confirm new password"
-                value={retypePassword}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  setRetypePassword(e.target.value)
-                }}
-              />
-            </Form.Group>
+              <Form.Group>
+                <Form.Label>Re-type New Password</Form.Label>
+                <Form.Control
+                  disabled={currentPassword.length == 0}
+                  type="password"
+                  placeholder="Confirm new password"
+                  value={retypePassword}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    setRetypePassword(e.target.value)
+                  }}
+                />
+              </Form.Group>
             )}
 
             <Form.Group controlId="formBasicEmail">
@@ -174,20 +189,34 @@ const Account: FC = () => {
               />
             </Form.Group>
 
+            <Form.Group controlId="formNotifications">
+              <Card.Title>Notification Options</Card.Title>
+
+              <Form.Check
+                type="checkbox"
+                checked={emailNotificationsEnabled}
+                onChange={() =>
+                  setEmailNotificationsEnabled(!emailNotificationsEnabled)
+                }
+                label="Email Notifications Enabled"
+              />
+            </Form.Group>
+
             <Button
               block
               variant="primary"
               onClick={update}
               disabled={
-                                !(
-                                  (password.length > 0 && retypePassword.length > 0)
-                                    || fName.length > 0
-                                    || lName.length > 0
-                                )
-                            }
+                !(
+                  (password.length > 0 && retypePassword.length > 0) ||
+                  fName.length > 0 ||
+                  lName.length > 0 ||
+                  user.emailNotificationsEnabled != emailNotificationsEnabled
+                )
+              }
             >
               Submit Changes
-            </Button>
+                        </Button>
           </Form>
         </Card.Body>
       </Card>

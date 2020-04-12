@@ -32,11 +32,11 @@
     },
     "[typescriptreact]": {
         "editor.defaultFormatter": "vscode.typescript-language-features",
-        "editor.formatOnSave": false
+        "editor.formatOnSave": true
     },
     "[typescript]": {
         "editor.defaultFormatter": "vscode.typescript-language-features",
-        "editor.formatOnSave": false
+        "editor.formatOnSave": true
     },
     "[json]": {
         "editor.defaultFormatter": "vscode.json-language-features"
@@ -46,6 +46,6 @@
     },
     "[javascript]": {
         "editor.defaultFormatter": "vscode.typescript-language-features",
-        "editor.formatOnSave": false
+        "editor.formatOnSave": true
     },
 }

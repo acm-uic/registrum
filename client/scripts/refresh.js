@@ -4,11 +4,15 @@
  * Author: Alex Chomiak
  *
  * Last Modified: Sunday, 5th January 2020 1:17:33 am
- * Modified By: Alex Chomiak 
+ * Modified By: Alex Chomiak
  *
  * Author Github: https://github.com/alexchomiak
  */
 
-const config = require('../config/tsconfig')
-require('fs').writeFileSync('./tsconfig.json', `// * Automatically Generated tsconfig file\n// * Change settings in settings/tsconfig.js\n ${config}`)
-console.log('tsconfig.json refreshed!')
+const config = require( '../config/tsconfig' )
+require( 'fs' ).writeFileSync(
+    './tsconfig.json',
+    // eslint-disable-next-line
+    `// * Automatically Generated tsconfig file\n// * Change settings in settings/tsconfig.js\n ${config}`
+)
+console.log( 'tsconfig.json refreshed!' )

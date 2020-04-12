@@ -7,7 +7,8 @@ import passport from 'passport'
 import morgan from 'morgan'
 import cors from 'cors'
 import router from './routes'
-
+import dotenv from 'dotenv'
+dotenv.config({ path: '../.env' })
 // *  Create Express server
 const app = express()
 
@@ -43,7 +44,7 @@ mongoose
     //     // * Populate list of classes
     // })
   })
-  .catch(err => {
+  .catch((err) => {
     console.log(
       'MongoDB connection error. Please make sure MongoDB is running. ' + err
     )
