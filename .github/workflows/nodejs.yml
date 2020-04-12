@@ -26,11 +26,17 @@ jobs:
         run: docker run -d -p 27017:27017 mongo
       - name: Start Docker for redis
         run: docker run -d  -p 6379:6379 redis
-      - run: rush install --no-link
-      - run: rush link
-      - run: rush lint
-      - run: rush build --verbose
-      - run: rush test
-      - run: rush coverage
+      - name: rush install
+        run: node common/scripts/install-run-rush.js install --no-link
+      - name: rush link
+        run: node common/scripts/install-run-rush.js link
+      - name: rush lint
+        run: node common/scripts/install-run-rush.js lint
+      - name: rush build
+        run: node common/scripts/install-run-rush.js build --verbose
+      - name: rush test
+        run: node common/scripts/install-run-rush.js test
+      - name: rush coverage
+        run: node common/scripts/install-run-rush.js coverage
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
