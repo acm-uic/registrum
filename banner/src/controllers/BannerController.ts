@@ -1,36 +1,32 @@
 import { Request, Response } from 'express'
 import { Controller } from '../interfaces/Controller'
-import * as mongoose from 'mongoose'
+import { TermModel, SubjectModel, CourseModel } from '../interfaces/Models'
+import * as apicache from 'apicache'
 
 export class BannerController extends Controller {
 
-    #db: mongoose.Mongoose;
-
-    constructor(path: string, mongoUri: string) {
+    constructor(path: string, cacheTime: string) {
         super(path)
+        this.router.use(apicache.middleware(cacheTime))
         this.#initializeRoutes()
-        mongoose
-            .connect(mongoUri, {
-                useNewUrlParser: true,
-                useCreateIndex: true,
-                useUnifiedTopology: true,
-                useFindAndModify: false,
-            }).then(db => {
-                this.#db = db
-            })
     }
 
     #initializeRoutes = () => {
-        this.router.get(this.path, this.#getSubject)
-        this.router.get(this.path, this.#getTerm)
+        this.router.get('/subject', this.#getSubject)
+        this.router.get('/term', this.#getTerm)
+        this.router.get('/crn', this.#getCourseReferenceNumber)
     }
 
-    #getSubject = (request: Request, response: Response) => {
-        //a
+    #getCourseReferenceNumber = async (request: Request, response: Response) => {
+        this.ok(response, (await CourseModel.find({})).map(course => course.courseReferenceNumber))
     }
 
-    #getTerm = (request: Request, response: Response) => {
-        //a
+    #getSubject = async (request: Request, response: Response) => {
+        this.ok(response, await SubjectModel.find({}))
+    }
+
+    #getTerm = async (request: Request, response: Response) => {
+        this.ok(response, await TermModel.find({}))
     }
 
 }

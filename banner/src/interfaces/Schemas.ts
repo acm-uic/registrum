@@ -87,6 +87,6 @@ export const TermSchema = new Schema({
 
 export const SubjectSchema = new Schema({
     _id: String,
-    code: Number,
+    code: String,
     description: String,
 })

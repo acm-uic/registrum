@@ -1,26 +1,41 @@
 import * as express from 'express'
 import * as compression from 'compression'
-import * as apicache from 'apicache'
 import * as cors from 'cors'
 import * as morgan from 'morgan'
+import * as mongoose from 'mongoose'
 import { Controller } from './interfaces/Controller'
 export type AppConfig = {
     port: number;
     basePath: string;
-    cacheTime: string;
     mongoUri: string;
 }
 
 export class App {
-    #app: express.Application;
+    #app: express.Application
     #config: AppConfig
 
     constructor(controllers: Controller[], config: AppConfig) {
         this.#app = express()
         this.#config = config
 
+        this.#initializeDatabase()
         this.#initializeMiddlewares()
         this.#initializeControllers(controllers)
+    }
+
+    #initializeDatabase = async () => {
+        try {
+            await mongoose.connect(this.#config.mongoUri, {
+                useNewUrlParser: true,
+                useCreateIndex: true,
+                useUnifiedTopology: true,
+                useFindAndModify: false
+            })
+            console.log('✅ MongoDB connection successful.')
+        } catch (error) {
+            console.log('❌ MongoDB connection unsuccessful.')
+        }
+
     }
 
     #initializeMiddlewares = () => {
@@ -30,7 +45,6 @@ export class App {
         this.#app.use(express.json())
         this.#app.use(compression())
         this.#app.options('*', cors)
-        this.#app.use(apicache.middleware(this.#config.cacheTime))
     }
 
     #initializeControllers = (controllers: Controller[]) => {

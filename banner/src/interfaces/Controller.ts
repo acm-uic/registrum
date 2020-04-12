@@ -10,6 +10,15 @@ export abstract class Controller {
     public static jsonResponse(response: Response, code: number, message: string) {
         return response.status(code).json({ message })
     }
+
+    public ok<T>(res: Response, dto?: T) {
+        if (!!dto) {
+            res.type('application/json')
+            return res.status(200).json(dto)
+        } else {
+            return res.sendStatus(200)
+        }
+    }
     public created(response: Response) {
         response.sendStatus(201)
     }

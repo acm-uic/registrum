@@ -10,24 +10,14 @@ export class HookController extends Controller {
 
     #webHooks: WebHooks
     #redisClient: Redis.Redis
-    #db: mongoose.Mongoose;
 
-    constructor(path: string, redisUri: string, mongoUri: string) {
+    constructor(path: string, redisUri: string) {
         super(path)
         this.#redisClient = new Redis(redisUri)
         this.#webHooks = new WebHooks({ redisClient: this.#redisClient })
         this.#initializeRoutes()
         console.log('hook constructor')
-        mongoose
-            .connect(mongoUri, {
-                useNewUrlParser: true,
-                useCreateIndex: true,
-                useUnifiedTopology: true,
-                useFindAndModify: false,
-            }).then(db => {
-                this.#db = db
-                this.#initWatcher()
-            })
+        this.#initWatcher()
     }
 
     #initWatcher = () => {

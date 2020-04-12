@@ -4,6 +4,8 @@ services:
   mongo:
     image: mongo
     restart: always
+    ports:
+      - 27017:27017
     networks:
       - registrum-net
     volumes:
@@ -12,6 +14,8 @@ services:
   banner-redis:
     image: redis
     restart: always
+    ports:
+      - 6379:6379
     networks:
       - registrum-net
     volumes:
