@@ -6,4 +6,5 @@ export interface User {
     lastname: string;
     email: string;
     classes: Class[];
+    emailNotificationsEnabled: boolean;
 }

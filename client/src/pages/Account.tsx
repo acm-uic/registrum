@@ -1,22 +1,31 @@
 import React, { FC, useState } from 'react'
 import {
-  Button, Form, Card, Container, 
+  Button, Form, Card, Container,
 } from 'react-bootstrap'
 import { toast } from 'react-toastify'
 import axios from 'axios'
 
-import { useDispatch } from 'react-redux'
+import { useDispatch, useStore } from 'react-redux'
 import { updateUser } from '../models/redux/actions/auth'
-
+import {User} from '../models/interfaces/User'
 interface UserUpdate {
     // * Update Interface
     firstname?: string;
     lastname?: string;
     password?: string;
+    emailNotificationsEnabled?: boolean;
 }
 
 const Account: FC = () => {
+  // * Grab needed state
+  const store = useStore()
+  const {Auth} = store.getState()
+  const user = Auth.user as User
+  console.log(user)
+
+  // * Grab dispatcher for redux
   const dispatch = useDispatch()
+
   //* Using hooks to keep track of state
   const [currentPassword, setCurrentPassword] = useState('')
   const [password, setPassword] = useState('')
@@ -24,6 +33,7 @@ const Account: FC = () => {
 
   const [fName, setFName] = useState('')
   const [lName, setLName] = useState('')
+  const [emailNotificationsEnabled, setEmailNotificationsEnabled] = useState(user.emailNotificationsEnabled)
 
   //* event handler to update password that will be trigger when user clicks submit
   const update = async () => {
@@ -49,7 +59,7 @@ const Account: FC = () => {
         ).test(password)
       ) {
         toast(
-          'Password requirements not met: 8 characters, 1 uppercase & lowercase, ' + 
+          'Password requirements not met: 8 characters, 1 uppercase & lowercase, ' +
           '1 digit & 1 special character',
           { type: 'error' },
         )
@@ -68,6 +78,11 @@ const Account: FC = () => {
     // * Check if last name field set
     if (lName.length > 0) {
       updates.lastname = lName
+    }
+
+    // * Notification options
+    if(emailNotificationsEnabled != user.emailNotificationsEnabled) {
+      updates.emailNotificationsEnabled = emailNotificationsEnabled
     }
 
     //* make api call to update the password
@@ -174,6 +189,14 @@ const Account: FC = () => {
               />
             </Form.Group>
 
+            <Form.Group controlId="formNotifications">
+              <Card.Title>Notification Options</Card.Title>
+
+              <Form.Check type="checkbox" checked={emailNotificationsEnabled} onChange={() => setEmailNotificationsEnabled(!emailNotificationsEnabled)} label="Email Notifications Enabled" />
+
+            </Form.Group>
+
+
             <Button
               block
               variant="primary"
@@ -183,6 +206,7 @@ const Account: FC = () => {
                                   (password.length > 0 && retypePassword.length > 0)
                                     || fName.length > 0
                                     || lName.length > 0
+                                    || user.emailNotificationsEnabled != emailNotificationsEnabled
                                 )
                             }
             >

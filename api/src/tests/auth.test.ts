@@ -5,7 +5,6 @@ import { CookieJar } from 'tough-cookie'
 import app, { mongoose, redisClient } from '../app'
 import { Server } from 'http'
 
-dotenv.config()
 const PORT = process.env.PORT || 8085
 const BASE_PATH = process.env.BASE_PATH || '/api'
 const URL = `http://localhost:${PORT}${BASE_PATH}/auth/`

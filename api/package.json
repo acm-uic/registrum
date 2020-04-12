@@ -30,6 +30,7 @@
         "minimist": "^1.2.5"
     },
     "dependencies": {
+        "@sendgrid/mail": "^7.0.0",
         "async": "^3.2.0",
         "axios": "^0.19.2",
         "axios-cookiejar-support": "^0.5.1",
