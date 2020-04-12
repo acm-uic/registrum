@@ -4,7 +4,7 @@ on: [push, pull_request]
 
 jobs:
 
-  build-api:
+  build-rush:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -18,8 +18,8 @@ jobs:
           echo "::set-output name=dir::$(npm config get cache)"
       - uses: actions/cache@v1
         with:
-          path: ${{ steps.npm-cache.outputs.dir }}
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          path: common/temp/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('common/config/rush/shrinkwrap.yml') }}
           restore-keys: |
             ${{ runner.os }}-node-
       - name: Start Docker for Mongodb
