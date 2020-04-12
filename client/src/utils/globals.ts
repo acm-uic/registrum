@@ -12,6 +12,6 @@
 // * Global variables files! Accessible from any file using:
 // ?                       import {var} from '@utils/globals'
 
-export const GLOBAL_VARIABLE = 'Hello World!'
+export const GLOBAL_VARIABLE = 'Hello World!';
 
-export default GLOBAL_VARIABLE
+export default GLOBAL_VARIABLE;
