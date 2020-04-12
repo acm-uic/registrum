@@ -17,13 +17,14 @@
     - [Tests for checkpoint 4 (checkpoint 3 deliverable)](#tests-for-checkpoint-4-checkpoint-3-deliverable)
     - [Deliverables for checkpoint 4](#deliverables-for-checkpoint-4)
     - [Deliverables for final project](#deliverables-for-final-project)
+  - [Getting Started](#getting-started)
   - [CI/CD](#cicd)
     - [Node CI](#node-ci)
     - [Docker CI](#docker-ci)
     - [Docker CD](#docker-cd)
+  - [Rush](#rush)
   - [Docker](#docker)
     - [Production Deployment](#production-deployment)
-    - [Rush](#rush)
     - [Developing with Docker](#developing-with-docker)
     - [Prerequisites](#prerequisites)
     - [Getting the development container images](#getting-the-development-container-images)
@@ -106,8 +107,21 @@ Basic microservice functionality, client completion (tenative), completed API(te
 
 ### Deliverables for final project
 
-The full application will be completed with an API, Microservice Infrastructure and React/Typescript client and a defined
-production workflow.
+The full application will be completed with **an** API, Microservice Infrastructure and React/Typescript client and a defined production workflow.
+
+## Getting Started
+
+```powershell
+npm i -g @microsoft/rush
+
+git clone git@github.com:ckanich-classrooms/final-project-dream-team-1.git
+
+rush update # install and link dependencies, add git hooks
+rush build # build all projects
+rush watch # build, watch, and run all projects
+```
+
+You can also run `./init.sh` which runs `rush update`, `build`, and `watch`
 
 ## CI/CD
 
@@ -133,20 +147,7 @@ Triggers: `release`
 
 Build containers, tag them with the release version, and publish them to GitHub Package Registry.
 
-## Docker
-
-### Production Deployment
-
-- Install Docker <https://docs.docker.com/install/>.
-- Install Docker Compose <https://docs.docker.com/compose/install/>.
-- Run `docker-compose -f docker-compose.prod.yml up`.
-
-The docker containers expose the following services:
-
-| ------------ | ----- | ----------------------------------------------- |
-| Nginx        | 8080  | Servers static files and proxies other services |
-
-### Rush
+## Rush
 
 This monorepo uses rush <https://github.com/microsoft/rushstack/>.
 
@@ -162,6 +163,19 @@ cd repo
 rush update # Similar to npm install, install and link dependencies
 rush build # Build all projects
 ```
+
+## Docker
+
+### Production Deployment
+
+- Install Docker <https://docs.docker.com/install/>.
+- Install Docker Compose <https://docs.docker.com/compose/install/>.
+- Run `docker-compose -f docker-compose.prod.yml up`.
+
+The docker containers expose the following services:
+
+| ------------ | ----- | ----------------------------------------------- |
+| Nginx        | 8080  | Servers static files and proxies other services |
 
 ### Developing with Docker
 
@@ -217,11 +231,11 @@ docker-compose restart api
 
 The docker dev containers expose the following services:
 
-| Service Name        | Ports            | Description                             |
-| ------------------- | ---------------- | --------------------------------------- |
-| Registrum Node Apps | 3000, 4000, 4001 | Node.js apps (client, api, banner, ...) |
-| Mongo Express       | 8081             | MongoDB Web Client                      |
-| Redis Commander     | 8082             | Redis Web Client                        |
+| Service Name        | Ports            | Description        |
+| ------------------- | ---------------- | ------------------ |
+| Registrum Node Apps | 3000, 4000, 4001 | Node.js apps       |
+| Mongo Express       | 8081             | MongoDB Web Client |
+| Redis Commander     | 8082             | Redis Web Client   |
 
 ## Sources
 
