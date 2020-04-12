@@ -187,6 +187,10 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+# npm and yarn lock files
+package-lock.json
+yarn.lock
+
 # Rush temporary files
 common/temp/
 **/.rush/temp/

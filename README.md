@@ -24,6 +24,7 @@
     - [Docker CD](#docker-cd)
   - [Docker](#docker)
     - [Production Deployment](#production-deployment)
+    - [Rush](#rush)
     - [Developing with Docker](#developing-with-docker)
     - [Prerequisites](#prerequisites)
     - [Getting the development container images](#getting-the-development-container-images)
@@ -143,9 +144,25 @@ Build containers, tag them with the release version, and publish them to GitHub 
 
 The docker containers expose the following services:
 
-| Service Name | Ports | Description                                     |
 | ------------ | ----- | ----------------------------------------------- |
 | Nginx        | 8080  | Servers static files and proxies other services |
+
+### Rush
+
+This monorepo uses rush <https://github.com/microsoft/rushstack/>.
+
+**DO NOT COMMIT `package-lock.json` FILES.**
+
+The shrinkwrap file is global to the monorepo located in `common/config/shrinkwrap.yml`
+
+Common clone workflow:
+
+```powershell
+git clone repo.git
+cd repo
+rush update # Similar to npm install, install and link dependencies
+rush build # Build all projects
+```
 
 ### Developing with Docker
 
@@ -186,18 +203,10 @@ docker-compose down
 
 ```powershell
 # Running commands inside the container
-docker-compose exec api npm install express
-docker-compose exec client npm install redux-persist
-docker-compose exec banner npm install -D @types/node
-docker-compose exec banner-data npm install -D @types/node
-
 # Run a shell inside a container.
 # Dev Containers are built with Debian base image which include bash among other utilities.
 # They are not available in production containers as they are built with alpine.
-docker-compose exec api bash
-docker-compose exec client bash
-docker-compose exec banner bash
-docker-compose exec banner-data bash
+docker-compose exec app-dev bash
 ```
 
 ### Other common commands
@@ -209,15 +218,11 @@ docker-compose restart api
 
 The docker dev containers expose the following services:
 
-| Service Name             | Ports | Description                      |
-| ------------------------ | ----- | -------------------------------- |
-| Registrum Client         | 3000  | React App in /client             |
-| Registrum API            | 4000  | Node.js API in /api              |
-| Registrum Banner Service | 4001  | Node.js API in /banner           |
-| MongoDB Server           | 27017 | MongoDB server needed by the API |
-| Redis Server             | 6379  | Redis server needed by the API   |
-| Mongo Express            | 8081  | MongoDB Web Client               |
-| Redis Commander          | 8082  | Redis Web Client                 |
+| Service Name        | Ports            | Description                             |
+| ------------------- | ---------------- | --------------------------------------- |
+| Registrum Node Apps | 3000, 4000, 4001 | Node.js apps (client, api, banner, ...) |
+| Mongo Express       | 8081             | MongoDB Web Client                      |
+| Redis Commander     | 8082             | Redis Web Client                        |
 
 ## Sources
 
