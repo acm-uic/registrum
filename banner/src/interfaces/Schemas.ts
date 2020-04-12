@@ -7,7 +7,7 @@ export const FacultySchema = new Schema({
     displayName: String,
     emailAddress: String,
     primaryIndicator: Boolean,
-    term: Number,
+    term: Number
 })
 
 export const MeetingsFacultySchema = new Schema({
@@ -38,9 +38,9 @@ export const MeetingsFacultySchema = new Schema({
         term: String,
         thursday: Boolean,
         tuesday: Boolean,
-        wednesday: Boolean,
+        wednesday: Boolean
     },
-    term: Number,
+    term: Number
 })
 
 export const CourseSchema = new Schema({
@@ -76,17 +76,17 @@ export const CourseSchema = new Schema({
     isSectionLinked: Boolean,
     subjectCourse: String,
     faculty: [FacultySchema],
-    meetingsFaculty: [MeetingsFacultySchema],
+    meetingsFaculty: [MeetingsFacultySchema]
 })
 
 export const TermSchema = new Schema({
     _id: String,
     code: Number,
-    description: String,
+    description: String
 })
 
 export const SubjectSchema = new Schema({
     _id: String,
     code: String,
-    description: String,
+    description: String
 })

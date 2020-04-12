@@ -9,15 +9,10 @@ const port = parseInt(process.env.BANNER_PORT) || 4001
 const mongoUri = process.env.MONGO_URI || 'mongodb://localhost:27017/banner-data'
 const redisUri = process.env.BANNER_REDIS_URI || 'redis://localhost'
 
-
-const app = new App(
-    [
-        new HookController('/hook', redisUri),
-        new BannerController('/', cacheTime),
-    ],
-    {
-        port, basePath, mongoUri
-    }
-)
+const app = new App([new HookController('/hook', redisUri), new BannerController('/', cacheTime)], {
+    port,
+    basePath,
+    mongoUri
+})
 
 app.listen()

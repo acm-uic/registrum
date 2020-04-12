@@ -7,7 +7,6 @@ import { CourseSchema } from '../interfaces/Schemas'
 import { Course } from '../lib/Banner'
 
 export class HookController extends Controller {
-
     #webHooks: WebHooks
     #redisClient: Redis.Redis
 
@@ -42,12 +41,9 @@ export class HookController extends Controller {
         try {
             this.#webHooks.add(crn, url)
             this.created(response)
-        }
-        catch (error) {
-            if (error instanceof URLExistsError)
-                this.conflict(response)
-            else
-                this.fail(response, error)
+        } catch (error) {
+            if (error instanceof URLExistsError) this.conflict(response)
+            else this.fail(response, error)
         }
     }
 
@@ -56,12 +52,10 @@ export class HookController extends Controller {
         try {
             this.#webHooks.remove(crn, url)
             this.ok(response)
-        }
-        catch (error) {
+        } catch (error) {
             if (error instanceof URLNotFoundError || error instanceof NameNotFoundError)
                 this.notFound(response)
-            else
-                this.fail(response, error)
+            else this.fail(response, error)
         }
     }
 }

@@ -5,40 +5,11 @@
         "sourceType": "module"
     },
     "extends": [
-        "plugin:@typescript-eslint/recommended"
-    ],
-    "plugins": [
-        "prettier"
+        "plugin:@typescript-eslint/recommended",
+        "prettier/@typescript-eslint",
+        "plugin:prettier/recommended"
     ],
     "rules": {
-        "prettier/prettier": [
-            "warn",
-            {
-                "bracketSpacing": true,
-                "jsxBracketSameLine": false
-            }
-        ],
-        "max-len": [
-            "warn",
-            {
-                "code": 100,
-                "tabWidth": 4,
-                "ignoreUrls": true
-            }
-        ],
-        "quotes": [
-            "error",
-            "single"
-        ],
-        "semi": [
-            "error",
-            "never"
-        ],
-        "no-tabs": "error",
-        "arrow-parens": [
-            "warn",
-            "as-needed"
-        ],
         "no-trailing-spaces": "warn",
         "@typescript-eslint/explicit-function-return-type": "off",
         "@typescript-eslint/no-explicit-any": 1,

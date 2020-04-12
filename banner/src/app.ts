@@ -5,9 +5,9 @@ import * as morgan from 'morgan'
 import * as mongoose from 'mongoose'
 import { Controller } from './interfaces/Controller'
 export type AppConfig = {
-    port: number;
-    basePath: string;
-    mongoUri: string;
+    port: number
+    basePath: string
+    mongoUri: string
 }
 
 export class App {
@@ -35,7 +35,6 @@ export class App {
         } catch (error) {
             console.log('❌ MongoDB connection unsuccessful.')
         }
-
     }
 
     #initializeMiddlewares = () => {

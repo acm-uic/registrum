@@ -4,15 +4,15 @@ import { Redis } from 'ioredis'
 import { EventEmitter } from 'events'
 
 type Options = {
-    redisClient?: Redis;
+    redisClient?: Redis
 }
 
 interface DB {
-    [key: string]: string[];
+    [key: string]: string[]
 }
 
 interface HashTable<T> {
-    [key: string]: T;
+    [key: string]: T
 }
 
 type RequestFunction = (name: string, jsonData: {}, headersData?: {}) => Promise<void>
@@ -71,10 +71,10 @@ export class WebHooks {
                 strictSSL: false,
                 headers: {
                     ...headersData,
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(jsonData),
-                resolveWithFullResponse: true,
+                resolveWithFullResponse: true
             })
             /* istanbul ignore next */
             this.#emitter.emit(`${name}.status`, name, statusCode, body)

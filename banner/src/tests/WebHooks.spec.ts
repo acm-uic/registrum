@@ -6,7 +6,6 @@ import * as http from 'http'
 
 const { assert } = chai
 
-
 describe('WebHooks Test', () => {
     const redisClient = new Redis('redis://localhost')
 
@@ -50,8 +49,11 @@ describe('WebHooks Test', () => {
         server.listen(0)
         port = await new Promise(resolve => {
             server.on('listening', () => {
-                const addressInfo = server.address().valueOf() as
-                    { address: string; family: string; port: number }
+                const addressInfo = server.address().valueOf() as {
+                    address: string
+                    family: string
+                    port: number
+                }
                 resolve(addressInfo.port)
             })
         })
@@ -75,7 +77,7 @@ describe('WebHooks Test', () => {
             '/testRemove/1236',
             '/testRemove/12367',
             '/testRemove/12368',
-            '/testRemove/12369',
+            '/testRemove/12369'
         ]
         const truth = urls.map(url => `${baseUrl}${url}`)
         redisClient.set(name, JSON.stringify(truth))
@@ -164,13 +166,13 @@ describe('WebHooks Test', () => {
             getDB2: [
                 `${baseUrl}testGetDB2/123`,
                 `${baseUrl}testGetDB2/1234`,
-                `${baseUrl}testGetDB2/1235`,
+                `${baseUrl}testGetDB2/1235`
             ],
             getDB1: [
                 `${baseUrl}testGetDB/123`,
                 `${baseUrl}testGetDB/1234`,
-                `${baseUrl}testGetDB/1235`,
-            ],
+                `${baseUrl}testGetDB/1235`
+            ]
         }
         const values = Object.values(db)
         const keys = Object.keys(db)
@@ -187,7 +189,7 @@ describe('WebHooks Test', () => {
         const body = JSON.stringify(data)
         const status = 200
         const headerData = {
-            custom: 'data',
+            custom: 'data'
         }
         const name = 'testTrigger'
         const url = '/testTrigger/123'
@@ -196,7 +198,8 @@ describe('WebHooks Test', () => {
         const webHooks = new WebHooks({ redisClient })
         await new Promise(resolve => setTimeout(resolve, 100))
         await new Promise(resolve => {
-            webHooks.emitter.on(`${name}.status`,
+            webHooks.emitter.on(
+                `${name}.status`,
                 (nameReceived: string, statusReceived: number, bodyReceived: string) => {
                     assert.equal(statusReceived, status)
                     assert.equal(nameReceived, name)
@@ -208,11 +211,11 @@ describe('WebHooks Test', () => {
                                 'content-type': 'application/json',
                                 host,
                                 'content-length': body.length.toString(),
-                                connection: 'close',
+                                connection: 'close'
                             },
                             method: 'POST',
                             url,
-                            body,
+                            body
                         })
                     )
                     resolve()

@@ -1,8 +1,8 @@
 import { Response, Router } from 'express'
 
 export abstract class Controller {
-    public router: Router;
-    public path: string;
+    public router: Router
+    public path: string
     constructor(path: string) {
         this.router = Router()
         this.path = path

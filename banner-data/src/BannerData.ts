@@ -6,10 +6,10 @@ export const SubjectModel = model<Subject & Document>('Subject', SubjectSchema)
 export const CourseModel = model<Course & Document>('Course', CourseSchema)
 
 export type BannerDataConfig = {
-    maxPageSize: number;
-    waitBetweenPages: number;
-    pageRetryCount: number;
-    pageRetryTime: number;
+    maxPageSize: number
+    waitBetweenPages: number
+    pageRetryCount: number
+    pageRetryTime: number
 }
 
 export class BannerData {
@@ -24,13 +24,13 @@ export class BannerData {
         let count = 0
         const res = await this.#getPage(banner, maxPageSize, 0)
         const { success, totalCount, pageOffset, pageMaxSize, sectionsFetchedCount } = res
-        console.log(`${progress[(count++) % progress.length]} ${success}, ${totalCount}, \
+        console.log(`${progress[count++ % progress.length]} ${success}, ${totalCount}, \
 ${pageOffset}, ${pageMaxSize}, ${sectionsFetchedCount}`)
         let received = res.data.length
         while (received < res.totalCount) {
             const page = await this.#getPage(banner, maxPageSize, received)
             const { success, totalCount, pageOffset, pageMaxSize, sectionsFetchedCount } = page
-            console.log(`${progress[(count++) % progress.length]} ${success}, ${totalCount}, \
+            console.log(`${progress[count++ % progress.length]} ${success}, ${totalCount}, \
 ${pageOffset}, ${pageMaxSize}, ${sectionsFetchedCount}`)
             res.data = [...res.data, ...page.data]
             received += page.data.length
@@ -47,8 +47,7 @@ ${pageOffset}, ${pageMaxSize}, ${sectionsFetchedCount}`)
                 pageOffset: `${offset}`,
                 subject: 'CS'
             })
-            if (res.success)
-                return res
+            if (res.success) return res
             console.log('Retrying Page')
             await new Promise(resolve => setTimeout(resolve, pageRetryTime))
         }

@@ -4,7 +4,6 @@ import { TermModel, SubjectModel, CourseModel } from '../interfaces/Models'
 import * as apicache from 'apicache'
 
 export class BannerController extends Controller {
-
     constructor(path: string, cacheTime: string) {
         super(path)
         this.router.use(apicache.middleware(cacheTime))
@@ -19,13 +18,19 @@ export class BannerController extends Controller {
     }
 
     #getCourse = async (request: Request, response: Response) => {
-        this.ok(response, await CourseModel.find({
-            '_id': { $in: request.body.courseReferenceNumbers}
-        }))
+        this.ok(
+            response,
+            await CourseModel.find({
+                _id: { $in: request.body.courseReferenceNumbers }
+            })
+        )
     }
 
     #getCourseReferenceNumber = async (_: Request, response: Response) => {
-        this.ok(response, (await CourseModel.find({})).map(course => course.courseReferenceNumber))
+        this.ok(
+            response,
+            (await CourseModel.find({})).map(course => course.courseReferenceNumber)
+        )
     }
 
     #getSubject = async (_: Request, response: Response) => {
@@ -35,5 +40,4 @@ export class BannerController extends Controller {
     #getTerm = async (_: Request, response: Response) => {
         this.ok(response, await TermModel.find({}))
     }
-
 }

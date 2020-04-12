@@ -4,7 +4,7 @@ import StatusView from './StatusView'
 import { Status } from '../models/interfaces/Status'
 
 interface StatusListProps {
-    statuses: Status[];
+    statuses: Status[]
 }
 
 const StatusList: FC<StatusListProps> = ({ statuses }) => (
