@@ -4,6 +4,7 @@
     "allowSyntheticDefaultImports": true,
     "target": "es2019",
     "noImplicitAny": true,
+    "declaration": true,
     "moduleResolution": "node",
     "sourceMap": true,
     "lib": ["es2020"],

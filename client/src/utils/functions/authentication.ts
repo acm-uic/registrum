@@ -4,8 +4,8 @@ import { User } from '@interfaces/User'
 import { setUser } from '../../models/redux/actions/auth'
 import { store } from '../../models/redux/store'
 
-const BASE_PATH = process.env.BASE_PATH || '/api'
-const URL = `${BASE_PATH}/`
+const basePath = process.env.API_BASE_PATH || '/api'
+const URL = `${basePath}/`
 
 const client = axios.create({
     baseURL: URL,

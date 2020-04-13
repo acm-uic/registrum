@@ -3,8 +3,8 @@ import { Reducer } from './reducer'
 import { User } from '../../interfaces/User'
 
 export interface AuthState {
-    user: User | null;
-    loading: boolean;
+    user: User | null
+    loading: boolean
 }
 
 const initialState: AuthState = {

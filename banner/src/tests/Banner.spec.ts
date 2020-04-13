@@ -19,8 +19,8 @@ describe('Banner Lib Test', () => {
         const terms = await Banner.getTerm()
         const term = terms[0].code
         const banner = new Banner(term, 'CS')
-        const courseReferenceNumber = (await banner.search({ courseNumber: '111' }))
-            .data[0].courseReferenceNumber
+        const courseReferenceNumber = (await banner.search({ courseNumber: '111' })).data[0]
+            .courseReferenceNumber
         await banner.getClassDetails({ courseReferenceNumber })
         await banner.getCourseDescription({ courseReferenceNumber })
         await banner.getSectionAttributes({ courseReferenceNumber })

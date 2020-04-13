@@ -2,23 +2,40 @@ version: "3.7"
 
 services:
 
-  redis:
-    image: redis:alpine
+  banner-redis:
+    image: redis
     restart: always
-    volumes:
-      - redis-data:/data
-    command: --appendonly yes
-    networks: 
+    networks:
       - registrum-net
+    volumes:
+      - banner-redis-data:/data
+    command: --appendonly yes
+
+  api-redis:
+    image: redis
+    restart: always
+    networks:
+      - registrum-net
+    volumes:
+      - api-redis-data:/data
+    command: --appendonly yes
 
   mongo:
     restart: always
     image: mongo:latest
     volumes:
       - mongo-data:/data/db
-    networks: 
+    networks:
       - registrum-net
-      
+
+  postfix:
+    build:
+      context: postfix
+    image: docker.pkg.github.com/ckanich-classrooms/final-project-dream-team-1/postfix:master
+    restart: always
+    networks:
+      - registrum-net
+
   api:
     build:
       context: api
@@ -27,12 +44,12 @@ services:
     restart: always
     environment:
       - MONGODB_URI=mongodb://mongo:27017/registrum-api
-      - REDIS_URL=redis://redis
+      - API_REDIS_URI=redis://api-redis
       - NODE_ENV=production
-      - BASE_PATH=/api
+      - API_BASE_PATH=/api
     depends_on:
-      - mongo
-      - redis
+      - api-redis
+      - banner-redis
     networks:
       - registrum-net
 
@@ -44,12 +61,26 @@ services:
     restart: always
     environment:
       - MONGODB_URI=mongodb://mongo:27017/registrum-banner
-      - REDIS_URL=redis://redis
+      - BANNER_REDIS_URI=redis://banner-redis
       - NODE_ENV=production
-      - BASE_PATH=/banner
+      - BANNER_BASE_PATH=/banner
+    depends_on:
+      - api-redis
+      - banner-redis
+    networks:
+      - registrum-net
+
+  banner-data:
+    build:
+      context: banner-data
+      target: prod
+    image: docker.pkg.github.com/ckanich-classrooms/final-project-dream-team-1/banner-data:prod
+    restart: always
+    environment:
+      - MONGODB_URI=mongodb://mongo:27017/registrum-banner-data
+      - NODE_ENV=production
     depends_on:
       - mongo
-      - redis
     networks:
       - registrum-net
 
@@ -63,7 +94,7 @@ services:
       - api
     ports:
       - 8080:80
-    networks: 
+    networks:
       - registrum-net
 
 networks:
@@ -71,4 +102,5 @@ networks:
 
 volumes:
   mongo-data:
-  redis-data:
+  banner-redis-data:
+  api-redis-data:

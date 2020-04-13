@@ -4,18 +4,39 @@ import { Redis } from 'ioredis'
 import { EventEmitter } from 'events'
 
 type Options = {
-    redisClient?: Redis;
+    redisClient?: Redis
 }
 
 interface DB {
-    [key: string]: string[];
+    [key: string]: string[]
 }
 
 interface HashTable<T> {
-    [key: string]: T;
+    [key: string]: T
 }
 
 type RequestFunction = (name: string, jsonData: {}, headersData?: {}) => Promise<void>
+
+export class URLExistsError extends Error {
+    constructor(message: string) {
+        super(message)
+        this.name = 'URL Exists'
+    }
+}
+
+export class URLNotFoundError extends Error {
+    constructor(message: string) {
+        super(message)
+        this.name = 'URL Not Found'
+    }
+}
+
+export class NameNotFoundError extends Error {
+    constructor(message: string) {
+        super(message)
+        this.name = 'Name Not Found'
+    }
+}
 
 export class WebHooks {
     #redisClient: Redis
@@ -50,10 +71,10 @@ export class WebHooks {
                 strictSSL: false,
                 headers: {
                     ...headersData,
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(jsonData),
-                resolveWithFullResponse: true,
+                resolveWithFullResponse: true
             })
             /* istanbul ignore next */
             this.#emitter.emit(`${name}.status`, name, statusCode, body)
@@ -66,7 +87,7 @@ export class WebHooks {
             urls.splice(urls.indexOf(url), 1)
             await this.#redisClient.set(name, JSON.stringify(urls))
         } else {
-            throw new Error(`URL(${url}) not found wile removing from Name(${name}).`)
+            throw new URLNotFoundError(`URL(${url}) not found wile removing from Name(${name}).`)
         }
     }
 
@@ -100,7 +121,7 @@ export class WebHooks {
             this.#emitter.on(name, this.#requestFunctions[encUrl])
             await this.#redisClient.set(name, JSON.stringify(urls))
         } else {
-            throw new Error(`URL(${url}) already exists for name(${name}).`)
+            throw new URLExistsError(`URL(${url}) already exists for name(${name}).`)
         }
     }
 
@@ -112,7 +133,7 @@ export class WebHooks {
      */
     remove = async (name: string, url?: string): Promise<void> => {
         if (!(await this.#redisClient.exists(name)))
-            throw new Error(`Name(${name}) not found while removing.`)
+            throw new NameNotFoundError(`Name(${name}) not found while removing.`)
         if (url) {
             await this.#removeUrlFromName(name, url)
             const urlKey = crypto.createHash('md5').update(url).digest('hex')
@@ -153,7 +174,7 @@ export class WebHooks {
      */
     getWebHook = async (name: string): Promise<string> => {
         if (!(await this.#redisClient.exists(name)))
-            throw new Error(`Name(${name}) not found while getWebHook.`)
+            throw new NameNotFoundError(`Name(${name}) not found while getWebHook.`)
         return await this.#redisClient.get(name)
     }
 

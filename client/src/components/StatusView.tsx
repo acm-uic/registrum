@@ -8,7 +8,7 @@ import { updateUser } from '../models/redux/actions/auth'
 // import { removeClass } from '../utils/functions/authentication'
 
 interface StatusViewProps {
-    status: Status;
+    status: Status
 }
 
 const StatusView: FC<StatusViewProps> = ({ status }) => {

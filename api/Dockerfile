@@ -1,6 +1,6 @@
 FROM node:12-buster AS base
 ENV PATH=$PATH:/usr/src/app/node_modules/.bin \
-    PORT=4000
+    API_PORT=4000
 EXPOSE 4000
 
 WORKDIR /usr/src/app

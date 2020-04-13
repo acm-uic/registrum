@@ -1,0 +1,45 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/rush/v5/command-line.schema.json",
+
+  "commands": [
+    {
+      "commandKind": "bulk",
+      "name": "lint",
+      "summary": "Runs linter in each project.",
+      "description": "Runs linter in each project.",
+      "enableParallelism": true
+    },
+    {
+      "commandKind": "bulk",
+      "name": "lint:fix",
+      "summary": "Fix linter errors in each project.",
+      "description": "Fix linter errors in each project.",
+      "enableParallelism": true
+    },
+    {
+      "commandKind": "bulk",
+      "name": "test",
+      "summary": "Run test script",
+      "description": "Run test script",
+      "enableParallelism": true,
+      "allowWarningsInSuccessfulBuild": true
+    },
+    {
+      "commandKind": "global",
+      "name": "watch",
+      "summary": "Runs linter in each project.",
+      "description": "Runs linter in each project.",
+      "allowWarningsInSuccessfulBuild": true,
+      "shellCommand": "common/temp/node_modules/.bin/concurrently -n client,api,banner,banner-data \"cd client && npm run watch\" \"cd api && npm run watch\" \"cd banner && npm run watch\" \"cd banner-data && npm run watch\""
+    },
+    {
+      "commandKind": "global",
+      "name": "coverage",
+      "summary": "Record test coverage.",
+      "description": "Record test coverage.",
+      "shellCommand": "codecov"
+    }
+  ],
+
+  "parameters": []
+}

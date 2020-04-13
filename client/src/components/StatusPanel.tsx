@@ -4,7 +4,7 @@ import { Status } from '../models/interfaces/Status'
 import AddClass from './AddClass'
 
 interface StatusPanelProps {
-    statuses: Status[];
+    statuses: Status[]
 }
 export const StatusPanel: FC<StatusPanelProps> = ({ statuses }) => {
     let openCount = 0

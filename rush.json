@@ -1,0 +1,35 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/rush/v5/rush.schema.json",
+  "rushVersion": "5.23.0",
+  "pnpmVersion": "4.13.0",
+  // "npmVersion": "4.5.0",
+  // "yarnVersion": "1.9.4",
+  "pnpmOptions": {},
+  "gitPolicy": {},
+  "repository": {},
+  "eventHooks": {
+    "preRushInstall": [],
+    "postRushInstall": [],
+    "preRushBuild": [],
+    "postRushBuild": []
+  },
+  "variants": [],
+  "projects": [
+    {
+      "packageName": "registrum-banner-data",
+      "projectFolder": "banner-data"
+    },
+    {
+      "packageName": "registrum-banner",
+      "projectFolder": "banner"
+    },
+    {
+      "packageName": "registrum-client",
+      "projectFolder": "client"
+    },
+    {
+      "packageName": "registrum-api",
+      "projectFolder": "api"
+    }
+  ]
+}

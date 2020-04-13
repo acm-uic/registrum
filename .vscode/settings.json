@@ -7,6 +7,7 @@
         "typescript",
         "typescriptreact"
     ],
+    "files.trimTrailingWhitespace": true,
     "search.exclude": {
         "**/node_modules": true,
         "**/bower_components": true,
@@ -18,7 +19,8 @@
     "eslint.workingDirectories": [
         "api",
         "client",
-        "banner"
+        "banner",
+        "banner-data"
     ],
     "editor.codeActionsOnSave": {
         "source.fixAll.eslint": true
@@ -32,11 +34,11 @@
     },
     "[typescriptreact]": {
         "editor.defaultFormatter": "vscode.typescript-language-features",
-        "editor.formatOnSave": true
+        "editor.formatOnSave": false
     },
     "[typescript]": {
         "editor.defaultFormatter": "vscode.typescript-language-features",
-        "editor.formatOnSave": true
+        "editor.formatOnSave": false
     },
     "[json]": {
         "editor.defaultFormatter": "vscode.json-language-features"
@@ -46,6 +48,9 @@
     },
     "[javascript]": {
         "editor.defaultFormatter": "vscode.typescript-language-features",
-        "editor.formatOnSave": true
+        "editor.formatOnSave": false
     },
+    "files.associations": {
+        "*.json": "jsonc"
+    }
 }

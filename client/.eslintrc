@@ -8,14 +8,14 @@
         }
     },
     "extends": [
-        "eslint:recommended",
         "plugin:react/recommended",
-        "plugin:@typescript-eslint/recommended"
+        "plugin:@typescript-eslint/recommended",
+        "prettier/@typescript-eslint",
+        "plugin:prettier/recommended",
+        "prettier/react"
     ],
     "plugins": [
-        "react",
-        "@typescript-eslint",
-        "prettier"
+        "react"
     ],
     "env": {
         "browser": true,
@@ -40,34 +40,6 @@
         }
     ],
     "rules": {
-        "prettier/prettier": [
-            "warn",
-            {
-                "bracketSpacing": true,
-                "jsxBracketSameLine": false
-            }
-        ],
-        "max-len": [
-            "warn",
-            {
-                "code": 100,
-                "tabWidth": 4,
-                "ignoreUrls": true
-            }
-        ],
-        "quotes": [
-            "error",
-            "single"
-        ],
-        "semi": [
-            "error",
-            "never"
-        ],
-        "no-tabs": "error",
-        "arrow-parens": [
-            "warn",
-            "as-needed"
-        ],
         "no-trailing-spaces": "warn",
         "@typescript-eslint/explicit-function-return-type": "off",
         "@typescript-eslint/no-explicit-any": 1,

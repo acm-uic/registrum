@@ -40,3 +40,25 @@ jobs:
         docker build -t docker.pkg.github.com/${{ github.repository }}/banner:$(echo ${{ github.ref }} | sed 's/refs\/tags\///g') .
         echo ${{ secrets.GITHUB_TOKEN }} | docker login docker.pkg.github.com --username ${{ github.actor }} --password-stdin
         docker push docker.pkg.github.com/${{ github.repository }}/banner:$(echo ${{ github.ref }} | sed 's/refs\/tags\///g')
+
+  publish-banner-data:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: banner-data - build and publish image
+      run: |
+        pushd ./banner-data
+        docker build -t docker.pkg.github.com/${{ github.repository }}/banner-data:$(echo ${{ github.ref }} | sed 's/refs\/tags\///g') .
+        echo ${{ secrets.GITHUB_TOKEN }} | docker login docker.pkg.github.com --username ${{ github.actor }} --password-stdin
+        docker push docker.pkg.github.com/${{ github.repository }}/banner-data:$(echo ${{ github.ref }} | sed 's/refs\/tags\///g')
+
+  publish-postfix:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: postfix - build and publish image
+      run: |
+        pushd ./postfix
+        docker build -t docker.pkg.github.com/${{ github.repository }}/postfix:$(echo ${{ github.ref }} | sed 's/refs\/tags\///g') .
+        echo ${{ secrets.GITHUB_TOKEN }} | docker login docker.pkg.github.com --username ${{ github.actor }} --password-stdin
+        docker push docker.pkg.github.com/${{ github.repository }}/postfix:$(echo ${{ github.ref }} | sed 's/refs\/tags\///g')
