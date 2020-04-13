@@ -69,6 +69,7 @@ dependencies:
   async: 3.2.0
   axios: 0.19.2
   axios-cookiejar-support: 1.0.0_2845374b1aeba3d8b86033c4a80e3f86
+  axios-mock-adapter: 1.18.1_axios@0.19.2
   babel-loader: 8.1.0_@babel+core@7.9.0+webpack@4.42.1
   bcrypt: 4.0.1
   bcrypt-nodejs: 0.0.3
@@ -2841,6 +2842,16 @@ packages:
       tough-cookie: '>=2.3.3'
     resolution:
       integrity: sha512-9pBlIU5jfrGZTnUQlt8symShviSTOSlOKGtryHx76lJPnKIXDqUT3JDAjJ1ywOQLyfiWrthIt4iJiVP2L2S4jA==
+  /axios-mock-adapter/1.18.1_axios@0.19.2:
+    dependencies:
+      axios: 0.19.2
+      fast-deep-equal: 3.1.1
+      is-buffer: 2.0.4
+    dev: false
+    peerDependencies:
+      axios: '>= 0.9.0'
+    resolution:
+      integrity: sha512-kFBZsG1Ma5yxjRGHq5KuuL55mPb7WzFULhypquEhzPg8SH5CXICb+qwC2CCA5u+GQVpiqGPwKSRkd3mBCs6gdw==
   /axios/0.19.2:
     dependencies:
       follow-redirects: 1.5.10
@@ -13781,6 +13792,7 @@ packages:
       async: 3.2.0
       axios: 0.19.2
       axios-cookiejar-support: 1.0.0_2845374b1aeba3d8b86033c4a80e3f86
+      axios-mock-adapter: 1.18.1_axios@0.19.2
       bcrypt: 4.0.1
       bcrypt-nodejs: 0.0.3
       chai: 4.2.0
@@ -13820,7 +13832,7 @@ packages:
     dev: false
     name: '@rush-temp/registrum-api'
     resolution:
-      integrity: sha512-shADn6AwM6dDrJrIFBCBYoY47T5xlnONNgem6+WoA7DCb+TlKSPUNYE9C6IvjmWZWIAkyQGAVDmW0Y2CjPhf/g==
+      integrity: sha512-SskKCTOqa9Llb7dVm7gsVgX/BlWaduVn2qDgt/+TChajSW1iKUrH2zxYshs16ogd8iMdoKlj9hjqlJnoxxqBng==
       tarball: 'file:projects/registrum-api.tgz'
     version: 0.0.0
   'file:projects/registrum-banner-data.tgz':
@@ -14070,6 +14082,7 @@ specifiers:
   async: ^3.2.0
   axios: ^0.19.2
   axios-cookiejar-support: ^1.0.0
+  axios-mock-adapter: ~1.18.1
   babel-loader: ^8.1.0
   bcrypt: ^4.0.1
   bcrypt-nodejs: ^0.0.3
