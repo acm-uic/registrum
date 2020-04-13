@@ -152,11 +152,12 @@ This monorepo uses rush <https://github.com/microsoft/rushstack/>.
 
 **DO NOT COMMIT `package-lock.json` FILES.**
 
-The shrinkwrap file is global to the monorepo located in `common/config/shrinkwrap.yml`
+The shrinkwrap file is global to the monorepo located in `common/config/pnpm-lock.yaml`
 
 Common clone workflow:
 
 ```powershell
+npm i -g @microsoft/rush
 git clone repo.git
 cd repo
 rush update # Similar to npm install, install and link dependencies
