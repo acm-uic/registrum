@@ -8,7 +8,7 @@ import morgan from 'morgan'
 import cors from 'cors'
 import router from './routes'
 import dotenv from 'dotenv'
-dotenv.config({ path: '../.env' })
+dotenv.config({ path: '.env' })
 // *  Create Express server
 const app = express()
 
