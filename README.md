@@ -27,7 +27,6 @@
     - [Production Deployment](#production-deployment)
     - [Developing with Docker](#developing-with-docker)
     - [Prerequisites](#prerequisites)
-    - [Getting the development container images](#getting-the-development-container-images)
     - [Running the development containers](#running-the-development-containers)
     - [Using commands in the containers](#using-commands-in-the-containers)
     - [Other common commands](#other-common-commands)
@@ -184,21 +183,6 @@ The docker containers expose the following services:
 - Install Docker <https://docs.docker.com/install/>.
 - Install Docker Compose <https://docs.docker.com/compose/install/>.
 
-### Getting the development container images
-
-```powershell
-# Login in to GitHub Package Registry (required for pulling containers)
-docker login docker.pkg.github.com --username <github_username>
-
-# Pull prebuilt development containers from GitHub Package Registry (not required if using build)
-docker-compose pull
-
-# Build the development containers (not required if using pull)
-docker-compose build --pull --no-cache
-# Builds can be sped up by using --parallel (can be slower if less resources are allocated to Docker)
-docker-compose build --pull --no-cache --parallel
-```
-
 ### Running the development containers
 
 ```powershell
@@ -219,23 +203,26 @@ docker-compose down
 # Run a shell inside a container.
 # Dev Containers are built with Debian base image which include bash among other utilities.
 # They are not available in production containers as they are built with alpine.
-docker-compose exec app-dev bash
+docker-compose exec mongo bash
 ```
 
 ### Other common commands
 
 ```powershell
 # Restart service
-docker-compose restart api
+docker-compose restart mongo
 ```
 
 The docker dev containers expose the following services:
 
-| Service Name        | Ports            | Description        |
-| ------------------- | ---------------- | ------------------ |
-| Registrum Node Apps | 3000, 4000, 4001 | Node.js apps       |
-| Mongo Express       | 8081             | MongoDB Web Client |
-| Redis Commander     | 8082             | Redis Web Client   |
+| Service Name    | Ports | Description                                |
+| --------------- | ----- | ------------------------------------------ |
+| MongoDB Server  | 27017 | MongoDB server needed by the API           |
+| Redis Server    | 6379  | Redis server needed by the API             |
+| Redis Server    | 6380  | Redis server needed by the Banner Services |
+| Mongo Express   | 8081  | MongoDB Web Client                         |
+| Redis Commander | 8082  | Redis Web Client                           |
+| Postfix         | 25    | SMTP Server needed by the API              |
 
 ## Sources
 
