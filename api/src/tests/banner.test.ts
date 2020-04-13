@@ -7,7 +7,6 @@ import app, { mongoose, redisClient } from '../app'
 import { response } from 'express'
 
 import { Class } from '../routes/models/interfaces/Class'
-import { Status } from '../routes/models/interfaces/Status'
 import { Server } from 'http'
 
 dotenv.config()
@@ -32,9 +31,9 @@ describe('Class Tests', () => {
     axiosCookieJarSupport(client)
 
     // * Chosen term
-    let term = ''
+    const term = ''
     // * Subjects
-    let subjects = []
+    const subjects = []
 
     // * Chosen Class for subscription
     let chosenClass: Class = null
@@ -51,20 +50,8 @@ describe('Class Tests', () => {
 
         expect(response.status).toBe(200)
 
-        // * Populate terms
-        const terms = (await client.get('/classes/terms')).data
-
-        // * Pick random term
-        term = terms[Math.floor(Math.random() * terms.length)]
-
-        // * Populate Subject list for random term
-        subjects = (await client.get(`/classes/subjects/${term}`)).data
-
-        // * Pick random subject
-        const subject = subjects[Math.floor(Math.random() * subjects.length)]
-
-        // * Retrieve classes for random class
-        const classes = (await client.get(`/classes/list/${subject}`)).data as Class[]
+        // * Retrieve classes for CS401
+        const classes = (await client.get(`/classes/listing/CS/401`)).data as Class[]
 
         // * Pick random class
         chosenClass = classes[Math.floor(Math.random() * classes.length)]
@@ -108,7 +95,7 @@ describe('Class Tests', () => {
 
         // * Unsubscribe from class
         await client.post('/banner/unsubscribe', {
-            crn: chosenClass.crn
+            crn: chosenClass.courseReferenceNumber
         })
     })
 
@@ -119,43 +106,43 @@ describe('Class Tests', () => {
     it('Correctly subscribe to class', async () => {
         // * Subscribe to chosen class
         await client.post('/banner/subscribe', {
-            crn: chosenClass.crn
+            crn: chosenClass.courseReferenceNumber
         })
 
         // * Make sure CRN is in subscription list
         const { data: user } = await client.get('/auth')
 
         // * Make sure class has CRN
-        expect(user.subscriptions).toContain(chosenClass.crn)
+        expect(user.subscriptions).toContain(chosenClass.courseReferenceNumber)
     })
 
     it('Correctly unsubscribe from class', async () => {
         // * Subscribe to chosen class
         await client.post('/banner/subscribe', {
-            crn: chosenClass.crn
+            crn: chosenClass.courseReferenceNumber
         })
 
         // * Unsubscribe from chosen class
         await client.post('/banner/unsubscribe', {
-            crn: chosenClass.crn
+            crn: chosenClass.courseReferenceNumber
         })
 
         // * Make sure CRN is not in subscription list
         const { data: user } = await client.get('/auth')
 
         // * Make sure class does not have CRN
-        expect(user.subscriptions).not.toContain(chosenClass.crn)
+        expect(user.subscriptions).not.toContain(chosenClass.courseReferenceNumber)
     })
 
     it('Subscribing twice does not create duplicate subscriptions', async () => {
         // * Subscribe to chosen class
         await client.post('/banner/subscribe', {
-            crn: chosenClass.crn
+            crn: chosenClass.courseReferenceNumber
         })
 
         // * Subscribe AGAIN to chosen class
         await client.post('/banner/subscribe', {
-            crn: chosenClass.crn
+            crn: chosenClass.courseReferenceNumber
         })
 
         // * Make sure CRN is not in subscription list twice
@@ -164,7 +151,7 @@ describe('Class Tests', () => {
         // * Make sure class does not have CRN
         let count = 0
         user.subscriptions.forEach(
-            subscription => (count += subscription === chosenClass.crn ? 1 : 0)
+            subscription => (count += subscription === chosenClass.courseReferenceNumber ? 1 : 0)
         )
 
         // * Expect one occurence
@@ -189,12 +176,12 @@ describe('Class Tests', () => {
         // * Pick second class
         let secondClass: Class = null
 
-        while (!secondClass || secondClass.crn === chosenClass.crn) {
-            // * Pick subject
-            const subject = subjects[Math.floor(Math.random() * subjects.length)]
-
+        while (
+            !secondClass ||
+            secondClass.courseReferenceNumber === chosenClass.courseReferenceNumber
+        ) {
             // * Get class list
-            const classes = (await client.get(`/classes/list/${subject}`)).data
+            const classes = (await client.get(`/classes/listing/CS/301`)).data
 
             // * Pick random class
             secondClass = classes[Math.floor(Math.random() * classes.length)]
@@ -202,30 +189,32 @@ describe('Class Tests', () => {
 
         // * Subscribe to chosen class
         await client.post('/banner/subscribe', {
-            crn: chosenClass.crn
+            crn: chosenClass.courseReferenceNumber
         })
 
         // * Subscribe to second class
         await client.post('/banner/subscribe', {
-            crn: secondClass.crn
+            crn: secondClass.courseReferenceNumber
         })
 
         // * Make sure user subscriptions contain both CRNs
         const { subscriptions } = (await client.get('/auth')).data
 
         // * Make sure both subscriptions registered in system
-        expect(subscriptions).toContain(chosenClass.crn)
-        expect(subscriptions).toContain(secondClass.crn)
+        expect(subscriptions).toContain(chosenClass.courseReferenceNumber)
+        expect(subscriptions).toContain(secondClass.courseReferenceNumber)
 
         // * Make sure status list contains all CRNs
-        const { data: statuslist } = await client.get('/banner/statuses')
-
+        const { data: statuslist } = await client.get('/banner/tracking')
         // * Make sure statuses contain
-        const statusCRNs = Array.from(statuslist as Status[], (status: Status) => status.crn)
-
+        const statusCRNs = Array.from(
+            statuslist as Class[],
+            (status: Class) => status.courseReferenceNumber
+        )
+        console.log(statuslist)
         // * Make sure both CRNs in status list
-        expect(statusCRNs).toContain(chosenClass.crn)
-        expect(statusCRNs).toContain(secondClass.crn)
+        expect(statusCRNs).toContain(chosenClass.courseReferenceNumber)
+        expect(statusCRNs).toContain(secondClass.courseReferenceNumber)
     })
 
     it('Cannot subscribe to class with invalid CRN', async () => {

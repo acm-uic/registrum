@@ -2,18 +2,23 @@ import dotenv from 'dotenv'
 import axios from 'axios'
 import axiosCookieJarSupport from 'axios-cookiejar-support'
 import { CookieJar } from 'tough-cookie'
-import User from '../routes/models/User'
 import app, { mongoose, redisClient } from '../app'
-import { response } from 'express'
 import { Server } from 'http'
+import express, { Request, Response } from 'express'
 
 dotenv.config()
 const port = process.env.API_PORT || 8085
 const basePath = process.env.API_BASE_PATH || '/api'
 const URL = `http://localhost:${port}${basePath}/`
 
+// * Create mock express isntance
+const mockApp = express()
+mockApp.get('/banner/subject', (req: Request, res: Response) => res.send(['CS']))
+mockApp.get('/banner/term', (req: Request, res: Response) => res.send(['12345']))
+mockApp.post('/banner/class', (req: Request, res: Response) => res.send({ courseNumber: '111' }))
 describe('Class Tests', () => {
     let server: Server
+    let bannerServer: Server
 
     // * Add Axios Cookie Jar
     const jar = new CookieJar()
@@ -26,11 +31,13 @@ describe('Class Tests', () => {
             return true
         }
     })
+
     axiosCookieJarSupport(client)
 
     beforeAll(async () => {
-        server = app.listen(port)
+        bannerServer = mockApp.listen(4001, () => console.log('MOCK APP LISTENING'))
 
+        server = app.listen(port)
         const response = await client.post('auth/signup', {
             firstname: 'John',
             lastname: 'Doe',
@@ -69,6 +76,7 @@ describe('Class Tests', () => {
 
         // * Close Server
         server.close()
+        bannerServer.close()
     })
 
     describe('Sanity tests', () => {
@@ -83,11 +91,8 @@ describe('Class Tests', () => {
         })
 
         it('Returns a valid list of subjects for a retrieved term', async () => {
-            // * Grab terms
-            const { data: terms } = await client.get('classes/terms')
-
             // * Grab subjects for given term
-            const { data: subjects } = await client.get(`classes/subjects/${terms[0]}`)
+            const { data: subjects } = await client.get(`classes/subjects`)
 
             // * Make sure each subject is a valid string
             subjects.forEach(subject => {
@@ -96,33 +101,23 @@ describe('Class Tests', () => {
         })
 
         it('Returns a valid list of courses for a given subject', async () => {
-            // * Grab terms
-            const { data: terms } = await client.get('classes/terms')
-
             // * Grab subjects for given term
-            const { data: subjects } = await client.get(`classes/subjects/${terms[0]}`)
+            const { data: subjects } = await client.get(`classes/subjects`)
 
             // * Grab classes for given subject
             const { data: classes } = await client.get(`classes/list/${subjects[0]}`)
-
+            console.log(classes)
             // * Make sure each class is a valid class object
             classes.forEach(cls => {
-                expect(cls).toHaveProperty('crn')
-                expect(cls).toHaveProperty('number')
+                expect(typeof cls).toBe(String)
             })
         })
     })
 
     describe('Edge case tests', () => {
-        it('Returns an empty array of subjects for an invalid term', async () => {
-            // * Try to retrieve subjects
-            const { data: subjects } = await client.get('/classes/subjects/invalid')
-            expect(subjects).toHaveLength(0)
-        })
-
         it('Returns an empty array of classes for an invalid subject', async () => {
             // * Try to retrieve classes
-            const { data: classes } = await client.get('/classes/list/invalid')
+            const { data: classes } = await client.get('/classes/list/invalidSubjectHere')
             expect(classes).toHaveLength(0)
         })
     })
