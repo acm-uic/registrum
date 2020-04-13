@@ -9,8 +9,8 @@
         "start": "node dist/server.js",
         "test": "jest -i --silent",
         "watch": "concurrently -n ts,node \"npm run watch:ts\" \"npm run watch:node\"",
+        "watch:node": "nodemon --watch dist dist/index.js",
         "watch:test": "npm run test -- --watchAll",
-        "watch:node": "nodemon dist/server.js",
         "watch:ts": "tsc -w --preserveWatchOutput"
     },
     "jest": {
@@ -88,16 +88,16 @@
         "@typescript-eslint/eslint-plugin": "^2.27.0",
         "@typescript-eslint/parser": "^2.27.0",
         "chai": "^4.2.0",
+        "concurrently": "^5.1.0",
         "eslint": "^6.8.0",
         "eslint-config-prettier": "^6.10.1",
         "eslint-plugin-prettier": "^3.1.2",
+        "nodemon": "^2.0.3",
         "prettier": "^2.0.4",
         "supertest": "^4.0.2",
         "ts-jest": "^25.3.1",
         "ts-node": "^8.8.2",
         "tslib": "^1.11.1",
-        "typescript": "^3.8.3",
-        "nodemon": "^2.0.3",
-        "concurrently": "^5.1.0"
+        "typescript": "^3.8.3"
     }
 }

@@ -9,9 +9,9 @@
         "start": "node dist/index.js",
         "test": "nyc --reporter=lcov --reporter=text mocha -r ts-node/register src/tests/**/*.spec.ts",
         "watch": "concurrently -n ts,node \"npm run watch:ts\" \"npm run watch:node\"",
+        "watch:node": "nodemon --watch dist dist/index.js",
         "watch:test": "npm run test -- --watch-files src --watch",
-        "watch:ts": "tsc -w --preserveWatchOutput",
-        "watch:node": "nodemon dist/index.js"
+        "watch:ts": "tsc -w --preserveWatchOutput"
     },
     "nyc": {
         "exclude": "**/*.spec.ts",
@@ -49,18 +49,18 @@
         "@typescript-eslint/eslint-plugin": "^2.27.0",
         "@typescript-eslint/parser": "^2.27.0",
         "chai": "^4.2.0",
+        "concurrently": "^5.1.0",
         "eslint": "^6.8.0",
         "eslint-config-prettier": "^6.10.1",
         "eslint-plugin-prettier": "^3.1.2",
-        "prettier": "^2.0.4",
         "is-redirect": "^1.0.0",
         "mocha": "^7.1.1",
+        "nodemon": "^2.0.3",
         "nyc": "^15.0.1",
         "pify": "^5.0.0",
+        "prettier": "^2.0.4",
         "ts-node": "^8.8.2",
         "tslib": "^1.11.1",
-        "typescript": "^3.8.3",
-        "nodemon": "^2.0.3",
-        "concurrently": "^5.1.0"
+        "typescript": "^3.8.3"
     }
 }

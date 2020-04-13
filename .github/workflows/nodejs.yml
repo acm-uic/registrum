@@ -19,7 +19,7 @@ jobs:
       - uses: actions/cache@v1
         with:
           path: common/temp/pnpm-store
-          key: ${{ runner.os }}-node-${{ hashFiles('common/config/rush/shrinkwrap.yml') }}
+          key: ${{ runner.os }}-node-${{ hashFiles('common/config/rush/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-node-
       - name: Start Docker for Mongodb

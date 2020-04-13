@@ -9,8 +9,8 @@
         "start": "node dist/index.js",
         "test": "nyc --reporter=lcov --reporter=text mocha -r ts-node/register src/tests/**/*.spec.ts",
         "watch": "concurrently -n ts,node \"npm run watch:ts\" \"npm run watch:node\"",
+        "watch:node": "nodemon --watch dist dist/index.js",
         "watch:test": "npm run test -- --watch-files src --watch",
-        "watch:node": "nodemon dist/index.js",
         "watch:ts": "tsc -w --preserveWatchOutput"
     },
     "nyc": {
@@ -24,8 +24,8 @@
         "dotenv": "^8.2.0",
         "mongoose": "^5.9.7",
         "node-cron": "^2.0.3",
-        "tough-cookie": "^4.0.0",
-        "registrum-banner": "^0.1.0"
+        "registrum-banner": "^0.1.0",
+        "tough-cookie": "^4.0.0"
     },
     "devDependencies": {
         "@types/argparse": "^1.0.38",
@@ -38,16 +38,16 @@
         "@typescript-eslint/eslint-plugin": "^2.27.0",
         "@typescript-eslint/parser": "^2.27.0",
         "chai": "^4.2.0",
+        "concurrently": "^5.1.0",
         "eslint": "^6.8.0",
+        "eslint-config-prettier": "^6.10.1",
+        "eslint-plugin-prettier": "^3.1.2",
         "mocha": "^7.1.1",
+        "nodemon": "^2.0.3",
         "nyc": "^15.0.1",
+        "prettier": "^2.0.4",
         "ts-node": "^8.8.2",
         "tslib": "^1.11.1",
-        "typescript": "^3.8.3",
-        "nodemon": "^2.0.3",
-        "concurrently": "^5.1.0",
-        "prettier": "^2.0.4",
-        "eslint-plugin-prettier": "^3.1.2",
-        "eslint-config-prettier": "^6.10.1"
+        "typescript": "^3.8.3"
     }
 }

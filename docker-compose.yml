@@ -1,108 +1,81 @@
 version: "3.7"
 
 services:
-  mongo:
-    image: mongo
-    container_name: mongo
-    hostname: mongo
-    restart: always
-    networks:
-      - registrum-net
-    volumes:
-      - mongo-data:/data/db/
-    ports:
-      - 27017:27017
-    healthcheck:
-      test: test $$(echo "rs.initiate().ok || rs.status().ok" | mongo) -eq 1
-      interval: 10s
-      start_period: 10s
-    command: ["--replSet", "rs0", "--bind_ip_all"]
+    mongo:
+        image: mongo
+        container_name: mongo
+        hostname: mongo
+        restart: always
+        networks:
+            - registrum-net
+        volumes:
+            - mongo-data:/data/db/
+        ports:
+            - 27017:27017
+        healthcheck:
+            test: test $$(echo "rs.initiate().ok || rs.status().ok" | mongo) -eq 1
+            interval: 10s
+            start_period: 10s
+        command: ["--replSet", "rs0", "--bind_ip_all"]
 
-  banner-redis:
-    image: redis
-    restart: always
-    ports:
-      - 6379:6379
-    networks:
-      - registrum-net
-    volumes:
-      - banner-redis-data:/data
-    command: --appendonly yes
+    banner-redis:
+        image: redis
+        restart: always
+        ports:
+            - 6380:6379
+        networks:
+            - registrum-net
+        volumes:
+            - banner-redis-data:/data
+        command: --appendonly yes
 
-  api-redis:
-    image: redis
-    restart: always
-    networks:
-      - registrum-net
-    volumes:
-      - api-redis-data:/data
-    command: --appendonly yes
+    api-redis:
+        image: redis
+        restart: always
+        ports:
+            - 6379:6379
+        networks:
+            - registrum-net
+        volumes:
+            - api-redis-data:/data
+        command: --appendonly yes
 
-  postfix:
-    build:
-      context: postfix
-    restart: always
-    networks:
-      - registrum-net
+    postfix:
+        build:
+            context: postfix
+        restart: always
+        networks:
+            - registrum-net
 
-  mongo-express:
-    image: mongo-express
-    restart: always
-    environment:
-      - ME_CONFIG_MONGODB_SERVER=mongo
-    ports:
-      - 8081:8081
-    depends_on:
-      - mongo
-    networks:
-      - registrum-net
+    mongo-express:
+        image: mongo-express
+        restart: always
+        environment:
+            - ME_CONFIG_MONGODB_SERVER=mongo
+        ports:
+            - 8081:8081
+        depends_on:
+            - mongo
+        networks:
+            - registrum-net
 
-  redis-commander:
-    image: rediscommander/redis-commander:latest
-    restart: always
-    environment:
-      - REDIS_HOSTS=api:api-redis:6379,banner:banner-redis:6379
-    ports:
-      - 8082:8081
-    depends_on:
-      - api-redis
-      - banner-redis
-    networks:
-      - registrum-net
-
-  app-dev:
-    image: node:buster
-    restart: always
-    working_dir: /usr/src/app
-    environment:
-      - MONGODB_URI=mongodb://mongo:27017/registrum
-      - API_REDIS_URL=redis://api-redis
-      - API_PORT=4000
-      - API_BASE_PATH=/api
-      - API_PROXY_URL=http://api:4000
-      - BANNER_REDIS_URL=redis://banner-redis
-      - BANNER_PORT=4001
-      - BANNER_BASE_PATH=/banner
-      - CLIENT_PORT=3000
-    ports:
-      - 3000:3000
-      - 4000:4000
-      - 4001:4001
-    volumes:
-      - .:/usr/src/app/
-    entrypoint: bash
-    command: init.sh
-    depends_on:
-      - mongo
-      - api-redis
-      - banner-redis
-    networks:
-      - registrum-net
+    redis-commander:
+        image: rediscommander/redis-commander:latest
+        restart: always
+        environment:
+            - REDIS_HOSTS=api:api-redis:6379,banner:banner-redis:6379
+        ports:
+            - 8082:8081
+        depends_on:
+            - api-redis
+            - banner-redis
+        networks:
+            - registrum-net
 
 networks:
-  registrum-net:
+    registrum-net:
 
 volumes:
-  mongo-data:
-  banner-redis-data:
-  api-redis-data:
+    mongo-data:
+    banner-redis-data:
+    api-redis-data:

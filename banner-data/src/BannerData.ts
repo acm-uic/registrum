@@ -44,8 +44,8 @@ ${pageOffset}, ${pageMaxSize}, ${sectionsFetchedCount}`)
         for (let retryCount = 0; retryCount < pageRetryCount; retryCount++) {
             const res = await banner.search({
                 pageMaxSize: `${size}`,
-                pageOffset: `${offset}`,
-                subject: 'CS'
+                pageOffset: `${offset}`
+                // subject: 'CS'
             })
             if (res.success) return res
             console.log('Retrying Page')
@@ -127,7 +127,7 @@ ${pageOffset}, ${pageMaxSize}, ${sectionsFetchedCount}`)
         await this.updateSubjects()
         console.log('Updating Terms')
         await this.updateTerms()
-        console.log('Updating Subjects')
+        console.log('Updating Courses')
         await this.updateCourses()
     }
 }
