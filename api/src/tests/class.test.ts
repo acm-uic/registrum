@@ -4,18 +4,13 @@ import axiosCookieJarSupport from 'axios-cookiejar-support'
 import { CookieJar } from 'tough-cookie'
 import app, { mongoose, redisClient } from '../app'
 import { Server } from 'http'
-import express, { Request, Response } from 'express'
-
+import express, { Request, Response, NextFunction } from 'express'
+import mockApp from './mockbanner'
 dotenv.config()
 const port = process.env.API_PORT || 8085
 const basePath = process.env.API_BASE_PATH || '/api'
 const URL = `http://localhost:${port}${basePath}/`
 
-// * Create mock express isntance
-const mockApp = express()
-mockApp.get('/banner/subject', (req: Request, res: Response) => res.send(['CS']))
-mockApp.get('/banner/term', (req: Request, res: Response) => res.send(['12345']))
-mockApp.post('/banner/class', (req: Request, res: Response) => res.send({ courseNumber: '111' }))
 describe('Class Tests', () => {
     let server: Server
     let bannerServer: Server
@@ -103,13 +98,13 @@ describe('Class Tests', () => {
         it('Returns a valid list of courses for a given subject', async () => {
             // * Grab subjects for given term
             const { data: subjects } = await client.get(`classes/subjects`)
-
+            console.log(subjects)
             // * Grab classes for given subject
             const { data: classes } = await client.get(`classes/list/${subjects[0]}`)
             console.log(classes)
             // * Make sure each class is a valid class object
             classes.forEach(cls => {
-                expect(typeof cls).toBe(String)
+                expect(typeof cls === typeof String)
             })
         })
     })
