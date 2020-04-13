@@ -24,22 +24,20 @@ export class HookController extends Controller {
             console.log(data.operationType)
             if (data && data.fullDocument && data.fullDocument.courseReferenceNumber) {
                 console.log('triggering')
-                this.#webHooks.trigger(data.fullDocument.courseReferenceNumber, {
-                    content: '```json\n' + JSON.stringify(data) + '\n```'
-                })
+                this.#webHooks.trigger(data.fullDocument.courseReferenceNumber, data.fullDocument)
             }
         })
     }
 
     #initializeRoutes = () => {
-        this.router.put(this.path, this.#addHook)
+        this.router.post(this.path, this.#addHook)
         this.router.delete(this.path, this.#deleteHook)
     }
 
-    #addHook = (request: Request, response: Response) => {
+    #addHook = async (request: Request, response: Response) => {
         const { crn, url } = request.body
         try {
-            this.#webHooks.add(crn, url)
+            await this.#webHooks.add(crn, url)
             this.created(response)
         } catch (error) {
             if (error instanceof URLExistsError) this.conflict(response)
@@ -47,10 +45,10 @@ export class HookController extends Controller {
         }
     }
 
-    #deleteHook = (request: Request, response: Response) => {
+    #deleteHook = async (request: Request, response: Response) => {
         const { crn, url } = request.body
         try {
-            this.#webHooks.remove(crn, url)
+            await this.#webHooks.remove(crn, url)
             this.ok(response)
         } catch (error) {
             if (error instanceof URLNotFoundError || error instanceof NameNotFoundError)
