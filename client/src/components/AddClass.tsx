@@ -1,14 +1,32 @@
 import React, { useState, useEffect } from 'react'
 
-import { Button, Modal, Form, Dropdown } from 'react-bootstrap'
+import { Button, Modal, Form, ListGroup } from 'react-bootstrap'
 import axios, { AxiosResponse } from 'axios'
 
-import { useDispatch } from 'react-redux'
+import { useDispatch, useStore } from 'react-redux'
 import { Class } from '../models/interfaces/Class'
 
 import { updateUser } from '../models/redux/actions/auth'
+import Select from 'react-select'
+
+import ClassListing from './ClassListing'
+interface Term {
+    _id: string
+    code: number
+    description: string
+}
+interface Subject {
+    _id: string
+    code: string
+    description: string
+}
 
 const AddClass = () => {
+    // * Get user from state
+    const store = useStore()
+    const { Auth } = store.getState()
+    const { user } = Auth
+
     // * Dispatch hook
     const dispatch = useDispatch()
 
@@ -16,20 +34,24 @@ const AddClass = () => {
     const [show, toggleShow] = useState(false)
 
     // * Current Term
-    const [currentTerm, setCurrentTerm] = useState('')
+    const [currentTerm, setCurrentTerm] = useState<Term | null>(null)
     // * Current Subject
-    const [currentSubject, setCurrentSubject] = useState('')
+    const [currentSubject, setCurrentSubject] = useState<Subject | null>(null)
+
     // * Current Class
-    const [currentClass, setCurrentClass] = useState<Class | null>(null)
+    const [currentClass, setCurrentClass] = useState<string | null>(null)
 
     // * Term list
-    const [terms, setTerms] = useState([])
+    const [terms, setTerms] = useState<Term[]>([])
 
     // * Subject list for given term
-    const [subjects, setSubjects] = useState([])
+    const [subjects, setSubjects] = useState<Subject[]>([])
 
     // * Classes for given subject
-    const [classes, setClasses] = useState<Class[]>([])
+    const [classes, setClasses] = useState<string[]>([])
+
+    // * Class listings for given class and course number
+    const [classListing, setClassListing] = useState<Class[]>([])
 
     // * Initial load that sets terms array
     useEffect(() => {
@@ -38,67 +60,84 @@ const AddClass = () => {
             axios.get('/api/classes/terms').then((res: AxiosResponse) => {
                 // * Destructure response from API
                 const { data: terms } = res
-
+                console.log(terms)
                 // * Set terms
                 setTerms(terms)
+                setClassListing([])
             })
         }
     }, [subjects])
 
     // * useEffect every time term changes, fetch subjects
     useEffect(() => {
-        if (currentTerm.length !== 0) {
+        if (currentTerm !== null) {
             // * Fetch Subject list for term
-            axios.get(`/api/classes/subjects/${currentTerm}`).then((res: AxiosResponse) => {
+            axios.get(`/api/classes/subjects`).then((res: AxiosResponse) => {
                 // * Destructure response from API
                 const { data: subjects } = res
-
+                console.log(subjects)
                 // * Set Subjects
                 setSubjects(subjects)
 
                 // * Reset Current Subject & Current Class
-                setCurrentSubject('')
+                setCurrentSubject(null)
                 setCurrentClass(null)
+                setClassListing([])
             })
         }
     }, [currentTerm])
 
     // * useEffect every time subject changes, fetch classes
     useEffect(() => {
-        if (currentSubject.length > 0) {
+        if (currentSubject != null) {
             // * Fetch class list for subject
-            axios.get(`/api/classes/list/${currentSubject}`).then((res: AxiosResponse) => {
+            axios.get(`/api/classes/list/${currentSubject.code}`).then((res: AxiosResponse) => {
                 // * Destructure response from API
                 const { data: classes } = res
-
+                console.log(classes)
                 // * Set Classes
                 setClasses(classes)
 
-                // * Reset Class
+                // * Reset Class & listings
                 setCurrentClass(null)
+                setClassListing([])
             })
         }
     }, [currentSubject])
 
-    // * Track class handler (subscribes to class)
-    const subscribeToClass = async () => {
-        if (currentClass) {
-            // * Subscribe to class
-            await axios.post('/api/banner/subscribe', {
-                crn: currentClass.crn
-            })
-
-            // * Reset Selections
-            setCurrentTerm('')
-            setCurrentSubject('')
-            setCurrentClass(null)
-
-            // * Close Modal
-            toggleShow(false)
-
-            // * update user
-            dispatch(updateUser())
+    useEffect(() => {
+        if (currentSubject !== null && currentClass !== null) {
+            // * Fetch class listings for subject and course
+            axios
+                .get(`/api/classes/listing/${currentSubject.code}/${currentClass}`)
+                .then((res: AxiosResponse) => {
+                    // * Destructure response from API
+                    const { data: listing } = res
+                    console.log(listing)
+                    // * Set Classes
+                    setClassListing(listing.reverse())
+                })
         }
+    }, [currentClass])
+
+    // * Track class handler (subscribes to class)
+    const subscribeToClass = async (crn: string) => {
+        // * Subscribe to class
+        await axios.post('/api/banner/subscribe', {
+            crn
+        })
+
+        // * Reset Selections
+        setCurrentTerm(null)
+        setCurrentSubject(null)
+        setCurrentClass(null)
+        setClassListing([])
+
+        // * Close Modal
+        toggleShow(false)
+
+        // * update user
+        dispatch(updateUser())
     }
     return (
         // * Terms > Subjects > Classes
@@ -126,85 +165,75 @@ const AddClass = () => {
                             <Form.Label>Select Semester Term</Form.Label>
                             {/* // * Render Drop down when term list fetched */}
                             {terms.length > 0 && (
-                                <Dropdown
-                                    onSelect={(eventKey: string) => {
-                                        setCurrentTerm(terms[parseInt(eventKey)])
-                                    }}
-                                >
-                                    <Dropdown.Toggle id="term-dropdown" title="term-dropdown">
-                                        {currentTerm.length > 0 ? currentTerm : 'Select Term'}
-                                    </Dropdown.Toggle>
-                                    <Dropdown.Menu>
-                                        {terms.map((term: string, index: number) => (
-                                            <Dropdown.Item key={index} eventKey={index.toString()}>
-                                                {term}
-                                            </Dropdown.Item>
-                                        ))}
-                                    </Dropdown.Menu>
-                                </Dropdown>
+                                <Select
+                                    onChange={option => setCurrentTerm(option.value)}
+                                    options={terms.map((term: Term) => {
+                                        return {
+                                            value: term,
+                                            label: `${term.code}- ${term.description}`
+                                        }
+                                    })}
+                                ></Select>
                             )}
                         </Form.Group>
 
                         {/* // * Select Subject */}
-                        {currentTerm.length > 0 && (
+                        {currentTerm !== null && (
                             <Form.Group>
                                 <Form.Label>Select Course Subject</Form.Label>
                                 {/* // * Render Drop down when term list fetched */}
                                 {subjects.length > 0 && (
-                                    <Dropdown
-                                        onSelect={(eventKey: string) => {
-                                            setCurrentSubject(subjects[parseInt(eventKey)])
-                                        }}
-                                    >
-                                        <Dropdown.Toggle id="term-dropdown" title="term-dropdown">
-                                            {currentSubject.length > 0
-                                                ? currentSubject
-                                                : 'Select Subject'}
-                                        </Dropdown.Toggle>
-                                        <Dropdown.Menu>
-                                            {subjects.map((subject: string, index: number) => (
-                                                <Dropdown.Item
-                                                    key={index}
-                                                    eventKey={index.toString()}
-                                                >
-                                                    {subject}
-                                                </Dropdown.Item>
-                                            ))}
-                                        </Dropdown.Menu>
-                                    </Dropdown>
+                                    <Select
+                                        onChange={option => setCurrentSubject(option.value)}
+                                        options={subjects.map((subject: Subject) => {
+                                            return {
+                                                value: subject,
+                                                label: `(${subject.code}) ${subject.description}`
+                                            }
+                                        })}
+                                    ></Select>
                                 )}
                             </Form.Group>
                         )}
 
                         {/* //* Select Class */}
-                        {currentSubject.length > 0 && (
+                        {currentSubject != null && (
                             <Form.Group>
                                 <Form.Label>Select Course Number</Form.Label>
                                 {/* // * Render Drop down when term list fetched */}
                                 {classes.length > 0 && (
-                                    <Dropdown
-                                        onSelect={(eventKey: string) => {
-                                            setCurrentClass(classes[parseInt(eventKey)])
-                                        }}
-                                    >
-                                        <Dropdown.Toggle id="term-dropdown" title="term-dropdown">
-                                            {currentClass !== null
-                                                ? currentClass.number
-                                                : 'Select Class'}
-                                        </Dropdown.Toggle>
-                                        <Dropdown.Menu>
-                                            {classes.map((cls: Class, index: number) => (
-                                                <Dropdown.Item
-                                                    key={index}
-                                                    eventKey={index.toString()}
-                                                >
-                                                    {cls.number}
-                                                </Dropdown.Item>
-                                            ))}
-                                        </Dropdown.Menu>
-                                    </Dropdown>
+                                    <Select
+                                        onChange={option => setCurrentClass(option.value)}
+                                        options={classes.map((cls: string) => {
+                                            return {
+                                                value: cls,
+                                                label: `${currentSubject.code} - ${cls}`
+                                            }
+                                        })}
+                                    ></Select>
                                 )}
                             </Form.Group>
+                        )}
+
+                        {/* //* Class Listing Group */}
+                        {classListing.length > 0 && (
+                            <div className="classListView">
+                                <ListGroup>
+                                    {classListing
+                                        .filter(cls => {
+                                            return !user.subscriptions.includes(
+                                                cls.courseReferenceNumber
+                                            )
+                                        })
+                                        .map((listing: Class, index) => (
+                                            <ClassListing
+                                                key={index}
+                                                listing={listing}
+                                                onTrack={subscribeToClass}
+                                            />
+                                        ))}
+                                </ListGroup>
+                            </div>
                         )}
                     </Form>
                 </Modal.Body>
