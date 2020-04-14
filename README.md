@@ -16,8 +16,10 @@
     - [Deliverables for checkpoint 2](#deliverables-for-checkpoint-2)
     - [Tests for checkpoint 4 (checkpoint 3 deliverable)](#tests-for-checkpoint-4-checkpoint-3-deliverable)
     - [Deliverables for checkpoint 4](#deliverables-for-checkpoint-4)
+    - [Checkpoint 4 write up](#checkpoint-4-write-up)
+      - [Final Submission Tests Goals](#final-submission-tests-goals)
+    - [Progress Report](#progress-report)
     - [Deliverables for final project](#deliverables-for-final-project)
-  - [Getting Started](#getting-started)
   - [CI/CD](#cicd)
     - [Node CI](#node-ci)
     - [Docker CI](#docker-ci)
@@ -30,6 +32,9 @@
     - [Running the development containers](#running-the-development-containers)
     - [Using commands in the containers](#using-commands-in-the-containers)
     - [Other common commands](#other-common-commands)
+  - [Getting a development environment up](#getting-a-development-environment-up)
+    - [Seeding banner api data (optional)](#seeding-banner-api-data-optional)
+    - [NOTES](#notes)
   - [Sources](#sources)
 
 ## Description
@@ -104,21 +109,26 @@ Tests to be written in Microservice API ( written as todo in test file )
 
 Basic microservice functionality, client completion (tenative), completed API(tenative).
 
+### Checkpoint 4 write up
+
+#### Final Submission Tests Goals
+More Client Tests
+  * Client correctly renders ClassListing Component
+  * Break up
+Finish API Tests
+  * Add more tests for class data
+      * Query by CRN
+      * Querying by invalid CRN yields invalid result
+(We will add much more tests if we find a way to more properly mock api requests between microservices)
+
+### Progress Report
+The progress report is located in the progress-report.md file in the root of the directory which can be accessed [here](progress-report.md)
+
+
 ### Deliverables for final project
 
 The full application will be completed with **an** API, Microservice Infrastructure and React/Typescript client and a defined production workflow.
 
-## Getting Started
-
-```powershell
-npm i -g @microsoft/rush
-
-git clone git@github.com:ckanich-classrooms/final-project-dream-team-1.git
-
-rush update # install and link dependencies, add git hooks
-rush build # build all projects
-rush watch # build, watch, and run all projects
-```
 
 You can also run `./init.sh` which runs `rush update`, `build`, and `watch`
 
@@ -225,6 +235,47 @@ The docker dev containers expose the following services:
 | Redis Commander | 8082  | Redis Web Client                           |
 | Postfix         | 25    | SMTP Server needed by the API              |
 
+## Getting a development environment up
+
+1. First make sure Microsoft's rush is installed, then clone the repo and setup rush by executing these commands in order
+```powershell
+npm i -g @microsoft/rush
+
+git clone git@github.com:ckanich-classrooms/final-project-dream-team-1.git
+
+rush update # install and link dependencies, add git hooks
+rush build # build all projects
+rush watch # build, watch, and run all projects
+```
+
+2. Start up docker-compose to make sure your services are available before starting up the application
+```powershell
+     docker-compose up # spin up the required services (MongoDB, Redis)
+```
+3. Now run this command to start up the app
+
+```powershell
+rush watch # build, watch, and run all projects
+```
+
+### Seeding banner api data (optional)
+The client may not work as expected because the database is not supplied the banner database data to begin with. You can build the banner-data service and run it to populate the needed data. Here are the commands you might need:
+```powershell
+cd banner-data # change into the banner-data project
+npm run build # build the project
+cd dist # change into the built project
+node index.js --now # * This tool will populate the needed data for the banner API to function as expected
+
+# MAKE SURE you have docker compose running during this entire process
+```
+This will seed data from only CS courses in the most recent term to prevent making too many requests to Banner in development. The app will have access to all classes in production.
+
+### NOTES
+* When running tests locally, make sure docker-compose is up and running so the app has access to the necessary services. Otherwise the tests will not pass!
+* Run said tests with the following command:
+  ```powershell
+    rush test
+  ```
 ## Sources
 
 Client Skeleton cloned from <https://github.com/alexchomiak/goto-react-app-2.0>

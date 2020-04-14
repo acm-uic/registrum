@@ -224,24 +224,4 @@ describe('Class Tests', () => {
             console.log(err.message)
         }
     })
-
-    it('Cannot subscribe to class with invalid CRN', async () => {
-        test.todo
-    })
-
-    it('Cannot unsubscribe to test with invalid CRN', async () => {
-        test.todo
-    })
-
-    it('Banner API returns all proper class information upon query', async () => {
-        test.todo
-    })
-
-    it('Correct subjects are retrieved for FALL 2020', async () => {
-        test.todo
-    })
-
-    it('Correct CS 141 Listings are retrieved for CS In FALL 2020', async () => {
-        test.todo
-    })
 })

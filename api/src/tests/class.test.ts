@@ -116,4 +116,14 @@ describe('Class Tests', () => {
             expect(classes).toHaveLength(0)
         })
     })
+
+    describe('CRN Tests', () => {
+        // * FINAL SUBMISSION DELIVERABLES
+        it('Can query by CRN', () => {
+            test.todo
+        })
+        it('Invalid CRN yields empty query', () => {
+            test.todo
+        })
+    })
 })
