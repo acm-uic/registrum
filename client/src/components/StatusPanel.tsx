@@ -1,15 +1,15 @@
 import React, { FC } from 'react'
 import { Card, Container } from 'react-bootstrap'
-import { Status } from '../models/interfaces/Status'
+import { Class } from '../models/interfaces/Class'
 import AddClass from './AddClass'
 
 interface StatusPanelProps {
-    statuses: Status[]
+    statuses: Class[]
 }
 export const StatusPanel: FC<StatusPanelProps> = ({ statuses }) => {
     let openCount = 0
     statuses.forEach(status => {
-        if (status.status == 'Open') openCount++
+        if (status.seatsAvailable > 0) openCount++
     })
 
     return (

@@ -2,7 +2,7 @@ import React, { FC, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { Container, Row, Col } from 'react-bootstrap'
 import axios from 'axios'
-import { Status } from '../models/interfaces/Status'
+import { Class } from '../models/interfaces/Class'
 
 import StatusList from '../components/StatusList'
 import StatusPanel from '../components/StatusPanel'
@@ -13,13 +13,15 @@ const Classes: FC = () => {
     const auth = useSelector((state: State) => state.Auth)
     const { user } = auth
 
-    const [statuses, setStatuses] = useState<Status[]>([])
+    const [statuses, setStatuses] = useState<Class[]>([])
 
     // * Refresh Class Data on Auth State Change
     useEffect(() => {
-        axios.get('/api/banner/statuses').then(res => {
+        // * Grab class data for use
+        axios.get('/api/banner/tracking').then(res => {
+            console.log(res.data)
             // * Update statuses
-            setStatuses(res.data as Status[])
+            setStatuses(res.data as Class[])
         })
     }, [auth.user])
 

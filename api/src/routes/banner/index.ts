@@ -17,16 +17,19 @@ router.post('/subscribe', isAuthenticated, async (req: Request, res: Response) =
     if (crn) {
         // * Add subscription to class model (addToSet ensures unique CRN's, no duplicates)
         await User.updateOne({ _id }, { $addToSet: { subscriptions: crn } })
-
+        console.log('SUBSCRIBING WITH ' + `http://localhost:4000/notify/${_id}/${crn}`)
         // * Subscribe via Banner API
         try {
             // * Waiting for Banner Client to be completely implemented
-            await BannerClient.post('/subscribe', {
-                hook: `/notify/${_id}/${crn}`
+            await BannerClient.post('/hook', {
+                url: `http://localhost:4000/notify/${_id}/${crn}`,
+                crn
             })
         } catch (err) {
             // ! DO NOTHING Since banner routes aren't implemented yet
-            // res.status(500).send('Error trying to subscribe to class')
+            console.log(err.message)
+            res.status(500).send(err.message)
+            return
         }
         res.status(200).send('Subscription Successful')
     } else {
@@ -47,13 +50,16 @@ router.post('/unsubscribe', isAuthenticated, async (req: Request, res: Response)
 
         // * Subscribe via Banner API
         try {
+            console.log('UNSUBSCRIBING WITH ' + `http://localhost:4000/notify/${_id}/${crn}`)
             // ! Waiting for Banner Client to be completely implemented
-            await BannerClient.post('/unsubscribe', {
-                hook: `/notify/${_id}/${crn}`
+            await BannerClient.post('/deletehook', {
+                url: `http://localhost:4000/notify/${_id}/${crn}`,
+                crn
             })
         } catch (err) {
             // * DO NOTHING Since banner routes aren't implemented yet
-            // res.status(500).send('Error trying to subscribe to class')
+            res.status(500).send('Error trying to unsubscribe to class')
+            return
         }
         // TODO: Subscribe to CRN with banner API
         res.status(200).send('Unsubscription Successful')
@@ -62,7 +68,7 @@ router.post('/unsubscribe', isAuthenticated, async (req: Request, res: Response)
     }
 })
 
-router.get('/statuses', isAuthenticated, async (req: Request, res: Response) => {
+router.get('/tracking', isAuthenticated, async (req: Request, res: Response) => {
     // * Grab user id from session
     const _id = (req.user as UserObject)._id
 
@@ -71,14 +77,12 @@ router.get('/statuses', isAuthenticated, async (req: Request, res: Response) => 
     // * Serialize CRNs
     const crns: string[] = user.subscriptions
 
-    // TODO: Get Class Data from Bharats data using list of CRNs
-    // * For now just map serialized CRNs to status array
-    res.send(
-        crns.map(crn => ({
-            status: 'Not Open',
-            crn
-        }))
-    )
+    // * Grab class JSONs from banner API
+    const { data: classes } = await BannerClient.post('/course', {
+        courseReferenceNumbers: crns
+    })
+    // * Send class JSONs
+    res.send(classes)
 })
 
 router.post('/notify/:id/:crn', async (req: Request, res: Response) => {

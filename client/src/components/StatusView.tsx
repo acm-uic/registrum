@@ -1,14 +1,14 @@
 import React, { FC } from 'react'
 import { useDispatch } from 'react-redux'
-import { Card, Button, Col } from 'react-bootstrap'
+import { Card, Button, Col, ListGroupItem } from 'react-bootstrap'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { Status } from '../models/interfaces/Status'
+import { Class } from '../models/interfaces/Class'
 import { updateUser } from '../models/redux/actions/auth'
 // import { removeClass } from '../utils/functions/authentication'
 
 interface StatusViewProps {
-    status: Status
+    status: Class
 }
 
 const StatusView: FC<StatusViewProps> = ({ status }) => {
@@ -16,7 +16,7 @@ const StatusView: FC<StatusViewProps> = ({ status }) => {
     const doRemoveClass = async () => {
         try {
             // * Delete class by CRN
-            await axios.post('/api/banner/unsubscribe', { crn: status.crn })
+            await axios.post('/api/banner/unsubscribe', { crn: status.courseReferenceNumber })
 
             // * update user
             dispatch(updateUser())
@@ -27,19 +27,31 @@ const StatusView: FC<StatusViewProps> = ({ status }) => {
 
     return (
         <Col className="statusView" lg={4}>
-            <Card>
-                <Card.Header>
-                    <Card.Title>
-                        {status.crn} -{status.status}
-                    </Card.Title>
-                </Card.Header>
-                <Card.Body>More Class Information Here (TODO)</Card.Body>
-                <Card.Footer>
-                    <Button variant="outline-danger" onClick={doRemoveClass}>
-                        Remove Class
-                    </Button>
-                </Card.Footer>
-            </Card>
+            <ListGroupItem
+                variant={status.seatsAvailable > 0 ? undefined : 'danger'}
+                className="list-group-item list-group-item-action flex-column align-items-start"
+            >
+                <Card.Title>
+                    {status.courseReferenceNumber} - {status.subject}
+                    {status.courseNumber}: {status.courseTitle} (
+                    {status.seatsAvailable > 0 ? 'OPEN' : 'FULL'})
+                </Card.Title>
+
+                <p className="mb-2">
+                    <i>
+                        {status.scheduleTypeDescription} -{' '}
+                        {status.faculty.length > 0 && status.faculty[0].displayName}{' '}
+                    </i>
+                </p>
+                <p className="mb-2">
+                    {status.enrollment} / {status.maximumEnrollment} enrolled in this class
+                </p>
+
+                <hr />
+                <Button block variant="outline-danger" onClick={doRemoveClass}>
+                    Remove Class
+                </Button>
+            </ListGroupItem>
         </Col>
     )
 }

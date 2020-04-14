@@ -6,7 +6,23 @@ import { store } from '../models/redux/store'
 import StatusView from '../components/StatusView'
 
 it('Renders StatusView Correctly', () => {
-    const status = { crn: '12345', status: 'Not Open' }
+    const status = {
+        courseReferenceNumber: '12347',
+        _id: '12345',
+        id: 12345,
+        subject: 'Subject',
+        subjectDescription: 'Subject Description',
+        campusDescription: 'Campus Description',
+        scheduleTypeDescription: 'scheduleTypeSubscription',
+        creditHours: '3',
+        seatsAvailable: 0,
+        enrollment: 50,
+        maximumEnrollment: 50,
+        faculty: [],
+        term: 'term',
+        courseTitle: 'Fun Class',
+        courseNumber: '12345'
+    }
     render(
         <Provider store={store}>
             <Router>
@@ -16,6 +32,6 @@ it('Renders StatusView Correctly', () => {
     )
 
     // * Test for Links in App
-    expect(screen.findByText(status.crn)).toBeDefined()
-    expect(screen.findByText(status.status)).toBeDefined()
+    expect(screen.findByText(status.courseReferenceNumber)).toBeDefined()
+    expect(screen.findByText('FULL')).toBeDefined()
 })
