@@ -7,7 +7,7 @@
         "lint": "eslint \"src/**/*.{js,ts}\"",
         "lint:fix": "npm run lint -- --fix",
         "start": "node dist/server.js",
-        "test": "jest -i --silent",
+        "test": "jest -i --silent --runInBand",
         "watch": "concurrently -n ts,node \"npm run watch:ts\" \"npm run watch:node\"",
         "watch:node": "nodemon --watch dist dist/index.js",
         "watch:test": "npm run test -- --watchAll",
@@ -58,7 +58,9 @@
         "request": "^2.88.2",
         "request-promise": "^4.2.5",
         "tough-cookie": "^4.0.0",
-        "uuid": "^7.0.3"
+        "uuid": "^7.0.3",
+        "registrum-banner": "^0.1.0",
+        "axios-mock-adapter": "~1.18.1"
     },
     "devDependencies": {
         "@types/async": "^3.2.0",

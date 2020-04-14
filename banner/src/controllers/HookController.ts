@@ -31,11 +31,12 @@ export class HookController extends Controller {
 
     #initializeRoutes = () => {
         this.router.post(this.path, this.#addHook)
-        this.router.delete(this.path, this.#deleteHook)
+        this.router.post('/deletehook', this.#deleteHook)
     }
 
     #addHook = async (request: Request, response: Response) => {
         const { crn, url } = request.body
+        console.log(crn)
         try {
             await this.#webHooks.add(crn, url)
             this.created(response)
