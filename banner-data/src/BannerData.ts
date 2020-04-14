@@ -45,7 +45,6 @@ ${pageOffset}, ${pageMaxSize}, ${sectionsFetchedCount}`)
             const res = await banner.search({
                 pageMaxSize: `${size}`,
                 pageOffset: `${offset}`
-                //subject: 'CS'
             })
             if (res.success) return res
             console.log('Retrying Page')
