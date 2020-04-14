@@ -166,7 +166,13 @@ const AddClass = () => {
                             {/* // * Render Drop down when term list fetched */}
                             {terms.length > 0 && (
                                 <Select
-                                    onChange={option => setCurrentTerm(option.value)}
+                                    onChange={option =>
+                                        setCurrentTerm(
+                                            // eslint-disable-next-line
+                                            // @ts-ignore
+                                            option.value
+                                        )
+                                    }
                                     options={terms.map((term: Term) => {
                                         return {
                                             value: term,
@@ -184,7 +190,13 @@ const AddClass = () => {
                                 {/* // * Render Drop down when term list fetched */}
                                 {subjects.length > 0 && (
                                     <Select
-                                        onChange={option => setCurrentSubject(option.value)}
+                                        onChange={option =>
+                                            setCurrentSubject(
+                                                // eslint-disable-next-line
+                                                // @ts-ignore
+                                                option.value
+                                            )
+                                        }
                                         options={subjects.map((subject: Subject) => {
                                             return {
                                                 value: subject,
@@ -203,7 +215,13 @@ const AddClass = () => {
                                 {/* // * Render Drop down when term list fetched */}
                                 {classes.length > 0 && (
                                     <Select
-                                        onChange={option => setCurrentClass(option.value)}
+                                        onChange={option =>
+                                            setCurrentClass(
+                                                // eslint-disable-next-line
+                                                // @ts-ignore
+                                                option.value
+                                            )
+                                        }
                                         options={classes.map((cls: string) => {
                                             return {
                                                 value: cls,
@@ -237,15 +255,6 @@ const AddClass = () => {
                         )}
                     </Form>
                 </Modal.Body>
-                <Modal.Footer>
-                    <Button
-                        disabled={currentClass == null}
-                        onClick={subscribeToClass}
-                        variant="primary"
-                    >
-                        Track
-                    </Button>
-                </Modal.Footer>
             </Modal>
         </>
     )

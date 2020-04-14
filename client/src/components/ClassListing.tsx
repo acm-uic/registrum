@@ -9,6 +9,10 @@ interface ClassListingProps {
 }
 
 const ClassListing: FC<ClassListingProps> = ({ listing, onTrack }) => {
+    if (listing === null) {
+        return <></>
+    }
+
     return (
         <ListGroupItem className="list-group-item list-group-item-action flex-column align-items-start">
             <div className="d-flex w-100 justify-content-between">
@@ -18,8 +22,13 @@ const ClassListing: FC<ClassListingProps> = ({ listing, onTrack }) => {
             </div>
 
             <h4 className="classListing-title">
-                {listing.faculty.length > 0 && listing.faculty[0].displayName} (
-                {listing.creditHours.length > 0 && `${listing.creditHours} credits)`}
+                {listing.faculty !== null &&
+                    listing.faculty.length > 0 &&
+                    listing.faculty[0].displayName}{' '}
+                (
+                {listing.creditHours !== null &&
+                    listing.creditHours.length > 0 &&
+                    `${listing.creditHours} credits)`}
             </h4>
             <p className="mb-2">{listing.scheduleTypeDescription}</p>
             <div className="d-flex w-100 justify-content-between">
