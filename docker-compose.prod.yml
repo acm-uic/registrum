@@ -1,106 +1,114 @@
 version: "3.7"
 
 services:
+    banner-redis:
+        image: redis
+        restart: always
+        networks:
+            - registrum-net
+        volumes:
+            - banner-redis-data:/data
+        command: --appendonly yes
 
-  banner-redis:
-    image: redis
-    restart: always
-    networks:
-      - registrum-net
-    volumes:
-      - banner-redis-data:/data
-    command: --appendonly yes
+    api-redis:
+        image: redis
+        restart: always
+        networks:
+            - registrum-net
+        volumes:
+            - api-redis-data:/data
+        command: --appendonly yes
 
-  api-redis:
-    image: redis
-    restart: always
-    networks:
-      - registrum-net
-    volumes:
-      - api-redis-data:/data
-    command: --appendonly yes
+    mongo:
+        image: mongo
+        container_name: mongo
+        hostname: mongo
+        restart: always
+        networks:
+            - registrum-net
+        volumes:
+            - mongo-data:/data/db/
+        healthcheck:
+            test: test $$(echo "rs.initiate().ok || rs.status().ok" | mongo) -eq 1
+            interval: 10s
+            start_period: 10s
+        command: ["--replSet", "rs0", "--bind_ip_all"]
 
-  mongo:
-    restart: always
-    image: mongo:latest
-    volumes:
-      - mongo-data:/data/db
-    networks:
-      - registrum-net
+    postfix:
+        build:
+            context: postfix
+        image: docker.pkg.github.com/ckanich-classrooms/final-project-dream-team-1/postfix:master
+        restart: always
+        networks:
+            - registrum-net
 
-  postfix:
-    build:
-      context: postfix
-    image: docker.pkg.github.com/ckanich-classrooms/final-project-dream-team-1/postfix:master
-    restart: always
-    networks:
-      - registrum-net
+    api:
+        build:
+            context: .
+            target: api
+        image: docker.pkg.github.com/ckanich-classrooms/final-project-dream-team-1/api:master
+        restart: always
+        environment:
+            - MONGODB_URI=mongodb://mongo:27017/registrum-api
+            - API_REDIS_URI=redis://api-redis
+            - NODE_ENV=production
+            - API_BASE_PATH=/api
+        depends_on:
+            - api-redis
+            - banner-redis
+        networks:
+            - registrum-net
 
-  api:
-    build:
-      context: api
-      target: prod
-    image: docker.pkg.github.com/ckanich-classrooms/final-project-dream-team-1/api:master
-    restart: always
-    environment:
-      - MONGODB_URI=mongodb://mongo:27017/registrum-api
-      - API_REDIS_URI=redis://api-redis
-      - NODE_ENV=production
-      - API_BASE_PATH=/api
-    depends_on:
-      - api-redis
-      - banner-redis
-    networks:
-      - registrum-net
+    banner:
+        build:
+            context: .
+            target: banner
+        image: docker.pkg.github.com/ckanich-classrooms/final-project-dream-team-1/banner:master
+        restart: always
+        environment:
+            - MONGODB_URI=mongodb://mongo:27017/registrum
+            - BANNER_REDIS_URI=redis://banner-redis
+            - NODE_ENV=production
+            - BANNER_BASE_PATH=/banner
+        depends_on:
+            - api-redis
+            - banner-redis
+        networks:
+            - registrum-net
 
-  banner:
-    build:
-      context: banner
-      target: prod
-    image: docker.pkg.github.com/ckanich-classrooms/final-project-dream-team-1/banner:master
-    restart: always
-    environment:
-      - MONGODB_URI=mongodb://mongo:27017/registrum-banner
-      - BANNER_REDIS_URI=redis://banner-redis
-      - NODE_ENV=production
-      - BANNER_BASE_PATH=/banner
-    depends_on:
-      - api-redis
-      - banner-redis
-    networks:
-      - registrum-net
+    banner-data:
+        build:
+            context: .
+            target: banner-data
+        image: docker.pkg.github.com/ckanich-classrooms/final-project-dream-team-1/banner-data:prod
+        restart: always
+        environment:
+            - MONGODB_URI=mongodb://mongo:27017/registrum
+            - BANNER_REDIS_URI=redis://banner-redis
+            - NODE_ENV=production
+        depends_on:
+            - mongo
+            - banner-redis
+        networks:
+            - registrum-net
 
-  banner-data:
-    build:
-      context: banner-data
-      target: prod
-    image: docker.pkg.github.com/ckanich-classrooms/final-project-dream-team-1/banner-data:prod
-    restart: always
-    environment:
-      - MONGODB_URI=mongodb://mongo:27017/registrum-banner-data
-      - NODE_ENV=production
-    depends_on:
-      - mongo
-    networks:
-      - registrum-net
-
-  client:
-    build:
-      context: client
-      target: prod
-    image: docker.pkg.github.com/ckanich-classrooms/final-project-dream-team-1/client:master
-    restart: always
-    depends_on:
-      - api
-    ports:
-      - 8080:80
-    networks:
-      - registrum-net
+    client:
+        build:
+            context: .
+            target: client
+        image: docker.pkg.github.com/ckanich-classrooms/final-project-dream-team-1/client:master
+        restart: always
+        depends_on:
+            - api
+        ports:
+            - 8080:80
+        networks:
+            - registrum-net
 
 networks:
-  registrum-net:
+    registrum-net:
 
 volumes:
-  mongo-data:
-  banner-redis-data:
-  api-redis-data:
+    mongo-data:
+    banner-redis-data:
+    api-redis-data:
