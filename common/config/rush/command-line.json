@@ -26,11 +26,19 @@
     },
     {
       "commandKind": "global",
-      "name": "watch",
+      "name": "watch:unix",
       "summary": "Runs linter in each project.",
       "description": "Runs linter in each project.",
       "allowWarningsInSuccessfulBuild": true,
       "shellCommand": "common/temp/node_modules/.bin/concurrently -n client,api,banner,banner-data \"cd client && npm run watch\" \"cd api && npm run watch\" \"cd banner && npm run watch\" \"cd banner-data && npm run watch\""
+    },
+    {
+      "commandKind": "global",
+      "name": "watch:windows",
+      "summary": "Runs linter in each project.",
+      "description": "Runs linter in each project.",
+      "allowWarningsInSuccessfulBuild": true,
+      "shellCommand": "common\\temp\\node_modules\\.bin\\concurrently -n client,api,banner,banner-data \"cd client && npm run watch\" \"cd api && npm run watch\" \"cd banner && npm run watch\" \"cd banner-data && npm run watch\""
     },
     {
       "commandKind": "global",
