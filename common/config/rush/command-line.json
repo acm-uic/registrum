@@ -1,6 +1,5 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/rush/v5/command-line.schema.json",
-
   "commands": [
     {
       "commandKind": "bulk",
@@ -30,7 +29,7 @@
       "summary": "Runs linter in each project.",
       "description": "Runs linter in each project.",
       "allowWarningsInSuccessfulBuild": true,
-      "shellCommand": "common/temp/node_modules/.bin/concurrently -n client,api,banner,banner-data \"cd client && npm run watch\" \"cd api && npm run watch\" \"cd banner && npm run watch\" \"cd banner-data && npm run watch\""
+      "shellCommand": "concurrently -k -n client,api,banner,banner-data \"cd client && npm run watch\" \"cd api && npm run watch\" \"cd banner && npm run watch\" \"cd banner-data && npm run watch\""
     },
     {
       "commandKind": "global",
@@ -40,6 +39,5 @@
       "shellCommand": "codecov"
     }
   ],
-
   "parameters": []
 }
