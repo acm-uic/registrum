@@ -12,3 +12,6 @@ yarn.lock                    merge=binary
 # For more information, see this issue: https://github.com/microsoft/rushstack/issues/1088
 #
 *.json                       linguist-language=JSON-with-Comments
+
+# Makes sure that line encodings are always LF independent of the OS
+* text=auto eol=lf
