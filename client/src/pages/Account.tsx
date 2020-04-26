@@ -24,6 +24,7 @@ const Account: FC = () => {
     // * Grab dispatcher for redux
     const dispatch = useDispatch()
 
+
     //* Using hooks to keep track of state
     const [currentPassword, setCurrentPassword] = useState('')
     const [password, setPassword] = useState('')
