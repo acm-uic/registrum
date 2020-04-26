@@ -10,6 +10,82 @@
 // To learn more about the benefits of this model and instructions on how to
 // opt-in, read https://bit.ly/CRA-PWA
 
+const applicationServerPublicKey = 'BK_0D9VS_RrjJh3BRbdBifq6Ump45KpzfwWxk6P6sVOSTcrc89TzWlgtM1f7R7hOiKQsOxZHlGNGRiex02n9-9g';
+
+// * this will ask the user for permission using a browser pop up
+async function askUserPermission() {
+    console.log("in askUserPermission")
+    return await Notification.requestPermission();
+}
+
+// * converting public key
+function urlB64ToUint8Array(base64String: string | any[]) {
+    const padding = '='.repeat((4 - base64String.length % 4) % 4);
+    const base64 = (base64String + padding)
+      .replace(/\-/g, '+')
+      .replace(/_/g, '/');
+  
+    const rawData = window.atob(base64);
+    const outputArray = new Uint8Array(rawData.length);
+  
+    for (let i = 0; i < rawData.length; ++i) {
+      outputArray[i] = rawData.charCodeAt(i);
+    }
+    return outputArray;
+  }
+
+function subscribeUser(swRegistration: ServiceWorkerRegistration ) {
+  const applicationServerKey = urlB64ToUint8Array(applicationServerPublicKey);
+  swRegistration.pushManager.subscribe({
+    userVisibleOnly: true,
+    applicationServerKey: applicationServerKey
+  })
+  .then(function(subscription) {
+    console.log('User is subscribed.');
+    console.log('Subscription object is: ' + subscription);
+
+    //updateSubscriptionOnServer(subscription);
+    // isSubscribed = true;
+  })
+  .catch(function(err: any) {
+    console.log('Failed to subscribe the user: ', err);
+  });
+}
+
+function initializeUI(swRegistration: ServiceWorkerRegistration) {
+    // Set the initial subscription value
+    swRegistration.pushManager.getSubscription()
+    .then(function(subscription) {
+      const isSubscribed = !(subscription === null);
+  
+      if (isSubscribed) {
+        console.log('User IS subscribed.');
+      } else {
+        console.log('User is NOT subscribed.');
+
+        // * ask for permission since user is not subscribed
+
+        askUserPermission().then(consent => {
+            // * check if user allows or blocks push notifications
+
+            if (consent !== "granted") {
+                //* user denied permission
+                //TODO: unsubscribe user on the server --> delete them from the database
+            }else{
+                //* user approved permission
+                subscribeUser(swRegistration);
+            }
+
+        });
+
+
+
+      }
+  
+    });
+}
+
+
 const isLocalhost = Boolean(
     window.location.hostname === 'localhost' ||
         // [::1] is the IPv6 localhost address.
@@ -27,6 +103,11 @@ function registerValidSW(swUrl: string, config?: Config) {
     navigator.serviceWorker
         .register(swUrl)
         .then(registration => {
+
+            console.log('Service Worker is registered', registration);
+
+            initializeUI(registration);
+
             registration.onupdatefound = () => {
                 const installingWorker = registration.installing
                 if (installingWorker == null) {
@@ -95,8 +176,13 @@ function checkValidServiceWorker(swUrl: string, config?: Config) {
         })
 }
 
+//! FIXME: need to get rid of production statement
 export function register(config?: Config) {
-    if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
+
+    if ('serviceWorker' in navigator ) {
+        
+        console.log('Service Worker is supported');
+
         // The URL constructor is available in all browsers that support SW.
         const publicUrl = new URL(process.env.PUBLIC_URL || '', window.location.href)
         if (publicUrl.origin !== window.location.origin) {
@@ -107,9 +193,14 @@ export function register(config?: Config) {
         }
 
         window.addEventListener('load', () => {
-            const swUrl = `${process.env.PUBLIC_URL}/service-worker.js`
+            let swUrl = `${process.env.PUBLIC_URL}/service-worker.js`
 
             if (isLocalhost) {
+
+                swUrl = `./service-worker.js`
+
+                console.log("in localhost")
+
                 // This is running on localhost. Let's check if a service worker still exists or not
                 checkValidServiceWorker(swUrl, config)
 
@@ -126,6 +217,8 @@ export function register(config?: Config) {
                 registerValidSW(swUrl, config)
             }
         })
+    }else{
+        console.log('statement not true')
     }
 }
 
