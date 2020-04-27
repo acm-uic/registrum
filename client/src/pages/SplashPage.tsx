@@ -14,15 +14,6 @@ import React, { FC } from 'react'
 const SplashPage: FC = () => {
 
 
-    //!FIXME: might need to register this
-    function testServiceWorker(){
-        if('serviceWorker' in navigator){
-            console.log("service worker is supported on react front end")
-        }
-    }
-
-    testServiceWorker()
-
     return(
         <div>SplashPage</div>
     )

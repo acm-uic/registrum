@@ -63,8 +63,28 @@ function updateSubscriptionOnServer(subscription: any) {
     });
     
     // TODO: write some code that enables and disables button on the front end that subscribes user for push notifications
-  }
+}
   
+function subscribeUserWithLogin(swRegistration: ServiceWorkerRegistration ) {
+    const applicationServerKey = urlB64ToUint8Array(applicationServerPublicKey);
+    swRegistration.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: applicationServerKey
+    })
+    .then(function(subscription) {
+        console.log('User is subscribed.');
+        const subscriptionObject = JSON.stringify(subscription);
+        console.log('Subscription object saving to localStorage: ' + subscriptionObject);
+
+        //! FIXME: needs to grab this before user logs in will it even be accessible by the time login api request is made cause service worker might take time to register?
+        //* possible solution: use a promise when registering service worker and wait till its done so that subscriptionObject from localStorage so it can be sent w/ login route
+        localStorage.setItem("subscriptionObject", subscriptionObject);
+
+    })
+    .catch(function(err: any) {
+        console.log('Failed to subscribe the user: ', err);
+    });
+}  
 
 function subscribeUser(swRegistration: ServiceWorkerRegistration ) {
   const applicationServerKey = urlB64ToUint8Array(applicationServerPublicKey);
@@ -207,6 +227,43 @@ function checkValidServiceWorker(swUrl: string, config?: Config) {
         .catch(() => {
             console.log('No internet connection found. App is running in offline mode.')
         })
+}
+
+function finishRegisteration(swUrl: string){
+
+    console.log("in finishRegisteration");
+    
+    navigator.serviceWorker.register(swUrl).then(registration => {
+
+        console.log('Service Worker is registered during login', registration);
+        subscribeUserWithLogin(registration)
+
+    }).catch(error => {
+        console.error('Error during service worker registration with login:', error)
+    });
+
+}
+
+export function registerWithLogin(){
+
+    if ('serviceWorker' in navigator ) {
+        
+        console.log('Service Worker is supported');
+
+        let swUrl = `${process.env.PUBLIC_URL}/service-worker.js`
+
+        if (isLocalhost) {
+            swUrl = `./service-worker.js`
+            finishRegisteration(swUrl)
+        } else {
+            // Is not localhost. Just register service worker
+            finishRegisteration(swUrl)
+        }
+
+    }else{
+        console.log('statement not true')
+    }
+
 }
 
 //! FIXME: need to get rid of production statement

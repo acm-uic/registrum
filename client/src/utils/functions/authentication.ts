@@ -44,9 +44,46 @@ export const signUp = async (fn: string, ln: string, em: string, pw: string) => 
     }
 }
 
+export async function unsubscribePushNotification(){
+
+    // const subscription = localStorage.getItem("subscriptionObject");
+
+    await client.post('http://localhost:4000/api/push-service/test');
+
+
+    // //@ts-ignore
+    // return new Promise(function(resolve) {
+
+    //     client.post('http://localhost:4000/api/push-service/unsubscribe-client', { subscription })
+       
+    // }).then((response: unknown) => {
+    //     console.log(response);
+    // });
+
+}
+
+export function registerWithLogin(){
+
+    if ('serviceWorker' in navigator ) {
+        
+        console.log('Service Worker is supported with registerWithLogin');
+
+    }else{
+        console.log('Service Worker is NOT supported with registerWithLogin')
+    }
+
+}
+
 export const signIn = async (email: string, password: string) => {
     try {
-        const response = await client.post('auth/login', { email, password })
+
+        //* getting subscription object from local storage to send it w/ login route
+        const subscriptionObject = localStorage.getItem("subscriptionObject");
+
+        console.log("subscriptionObject in signin method: " + subscriptionObject);
+
+        //! fixme: pass push notifcation subscription object here
+        const response = await client.post('auth/login', { email, password, subscriptionObject })
         if (response.status === 200) {
             toast('Signed in succesfully', {
                 type: 'success'

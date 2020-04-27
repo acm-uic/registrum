@@ -10,7 +10,16 @@
  */
 
 import React, { FC } from 'react'
+import { unsubscribePushNotification } from "../utils/functions/authentication"
 
-const Home: FC = () => <div>Home</div>
+const Home: FC = () => {
+
+    return(
+        <div>
+            Home
+            <button onClick={unsubscribePushNotification}> Unsubscribe Push Notification </button>
+        </div>
+    )
+}
 
 export default Home
