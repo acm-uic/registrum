@@ -13,6 +13,36 @@ const client = axios.create({
     withCredentials: true
 })
 
+const isLocalhost = Boolean(
+    window.location.hostname === 'localhost' ||
+        // [::1] is the IPv6 localhost address.
+        window.location.hostname === '[::1]' ||
+        // 127.0.0.0/8 are considered localhost for IPv4.
+        window.location.hostname.match(/^127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/)
+)
+
+async function getSubscriptionObject(){
+    if('serviceWorker' in navigator){
+
+        let swUrl = `${process.env.PUBLIC_URL}/service-worker.js`
+
+        if (isLocalhost) { 
+            swUrl = `./service-worker.js`
+        }
+
+        // * getting the registeration object
+        const registration = await navigator.serviceWorker.getRegistration(swUrl);
+
+        // * using the registeration object --> to get the subscription object
+        const subObject = await registration?.pushManager.getSubscription();
+
+        return JSON.stringify(subObject);
+
+    }else{
+        return null;
+    }
+}
+
 export const signUp = async (fn: string, ln: string, em: string, pw: string) => {
     try {
         const response = await client.post('auth/signup', {
@@ -44,23 +74,6 @@ export const signUp = async (fn: string, ln: string, em: string, pw: string) => 
     }
 }
 
-export async function unsubscribePushNotification(){
-
-    // const subscription = localStorage.getItem("subscriptionObject");
-
-    await client.post('http://localhost:4000/api/push-service/test');
-
-
-    // //@ts-ignore
-    // return new Promise(function(resolve) {
-
-    //     client.post('http://localhost:4000/api/push-service/unsubscribe-client', { subscription })
-       
-    // }).then((response: unknown) => {
-    //     console.log(response);
-    // });
-
-}
 
 export function registerWithLogin(){
 
@@ -78,10 +91,11 @@ export const signIn = async (email: string, password: string) => {
     try {
 
         //* getting subscription object from local storage to send it w/ login route
-        const subscriptionObject = localStorage.getItem("subscriptionObject");
+        let subscriptionObject = await getSubscriptionObject();
+        // let subscriptionObjectJSON = JSON.stringify(subscriptionObject);
 
         console.log("subscriptionObject in signin method: " + subscriptionObject);
-
+    
         //! fixme: pass push notifcation subscription object here
         const response = await client.post('auth/login', { email, password, subscriptionObject })
         if (response.status === 200) {
@@ -105,8 +119,24 @@ export const signIn = async (email: string, password: string) => {
     }
 }
 
+
+async function unsubscribeUser(){
+    if('serviceWorker' in navigator){
+
+        // * getting the subscription object so that it can be used to delete it from DB
+        let subscriptionObject = await getSubscriptionObject();
+
+        // * sending post requst to remove subscription object from DB
+        await client.post('/push-service/unsubscribe-client', { subscriptionObject });
+
+    }
+}
+
 export const signOut = async () => {
     try {
+
+        await unsubscribeUser();
+
         const response = await client.get('auth/logout')
 
         if (response.status === 200 || response.status === 401) {

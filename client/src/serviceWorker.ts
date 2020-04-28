@@ -73,13 +73,7 @@ function subscribeUserWithLogin(swRegistration: ServiceWorkerRegistration ) {
     })
     .then(function(subscription) {
         console.log('User is subscribed.');
-        const subscriptionObject = JSON.stringify(subscription);
-        console.log('Subscription object saving to localStorage: ' + subscriptionObject);
-
-        //! FIXME: needs to grab this before user logs in will it even be accessible by the time login api request is made cause service worker might take time to register?
-        //* possible solution: use a promise when registering service worker and wait till its done so that subscriptionObject from localStorage so it can be sent w/ login route
-        localStorage.setItem("subscriptionObject", subscriptionObject);
-
+        console.log("initial subscription: " + subscription);
     })
     .catch(function(err: any) {
         console.log('Failed to subscribe the user: ', err);
@@ -153,6 +147,7 @@ type Config = {
 }
 
 function registerValidSW(swUrl: string, config?: Config) {
+
     navigator.serviceWorker
         .register(swUrl)
         .then(registration => {
