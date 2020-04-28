@@ -92,12 +92,12 @@ export const signIn = async (email: string, password: string) => {
 
         //* getting subscription object from local storage to send it w/ login route
         let subscriptionObject = await getSubscriptionObject();
-        // let subscriptionObjectJSON = JSON.stringify(subscriptionObject);
 
-        console.log("subscriptionObject in signin method: " + subscriptionObject);
-    
-        //! fixme: pass push notifcation subscription object here
-        const response = await client.post('auth/login', { email, password, subscriptionObject })
+        const response = await client.post('auth/login', { email, password })
+
+        // * subscribe client using subscription object from service worker
+        await client.post('/push-service/save-client-subscriptions', { subscriptionObject });
+
         if (response.status === 200) {
             toast('Signed in succesfully', {
                 type: 'success'
