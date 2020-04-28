@@ -1,9 +1,7 @@
 import React, { useState } from 'react'
 
 import { Button, Modal, Form } from 'react-bootstrap'
-
 import { signIn } from '../utils/functions/authentication'
-import * as serviceWorker from '../serviceWorker'
 
 const SignIn = () => {
     const [show, toggleShow] = useState(false)
@@ -33,11 +31,6 @@ const SignIn = () => {
         toggleShow(false)
         setEmail('')
         setPassword('')
-
-        // todo: make a subscription object using service worker here and send it w/ login route
-
-
-        await serviceWorker.registerWithLogin();
 
         await signIn(email, password)
     }

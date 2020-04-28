@@ -8,6 +8,7 @@ self.addEventListener('push', function(event) {
 
     const serverMessage = event.data.text();
   
+    // * this is used to customize the push notification
     const title = 'Class Status';
     const options = {
       body: serverMessage,

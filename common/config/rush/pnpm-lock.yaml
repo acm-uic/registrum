@@ -90,7 +90,7 @@ dependencies:
   eslint-config-prettier: 6.10.1_eslint@6.8.0
   eslint-config-react: 1.1.7
   eslint-plugin-import: 2.20.2_eslint@6.8.0
-  eslint-plugin-prettier: 3.1.2_eslint@6.8.0+prettier@2.0.4
+  eslint-plugin-prettier: 3.1.2_eslint@6.8.0
   eslint-plugin-react: 7.19.0_eslint@6.8.0
   eslint-plugin-react-hooks: 3.0.0_eslint@6.8.0
   express: 4.17.1
@@ -116,7 +116,6 @@ dependencies:
   passport: 0.4.1
   passport-local: 1.0.0
   pify: 5.0.0
-  prettier: 2.0.4
   prop-types: 15.7.2
   react: 16.13.1
   react-app-polyfill: 1.0.6
@@ -5171,10 +5170,35 @@ packages:
       eslint: 2.x - 6.x
     resolution:
       integrity: sha512-FObidqpXrR8OnCh4iNsxy+WACztJLXAHBO5hK79T1Hc77PgQZkyDGA5Ag9xAvRpglvLNxhH/zSmZ70/pZ31dHg==
+  /eslint-plugin-prettier/3.1.2_eslint@6.8.0:
+    dependencies:
+      eslint: 6.8.0
+      prettier-linter-helpers: 1.0.0
+    dev: false
+    engines:
+      node: '>=6.0.0'
+    peerDependencies:
+      eslint: '>= 5.0.0'
+      prettier: '>= 1.13.0'
+    resolution:
+      integrity: sha512-GlolCC9y3XZfv3RQfwGew7NnuFDKsfI4lbvRK+PIIo23SFH+LemGs4cKwzAaRa+Mdb+lQO/STaIayno8T5sJJA==
   /eslint-plugin-prettier/3.1.2_eslint@6.8.0+prettier@2.0.4:
     dependencies:
       eslint: 6.8.0
       prettier: 2.0.4
+      prettier-linter-helpers: 1.0.0
+    dev: false
+    engines:
+      node: '>=6.0.0'
+    peerDependencies:
+      eslint: '>= 5.0.0'
+      prettier: '>= 1.13.0'
+    resolution:
+      integrity: sha512-GlolCC9y3XZfv3RQfwGew7NnuFDKsfI4lbvRK+PIIo23SFH+LemGs4cKwzAaRa+Mdb+lQO/STaIayno8T5sJJA==
+  /eslint-plugin-prettier/3.1.2_eslint@6.8.0+prettier@2.0.5:
+    dependencies:
+      eslint: 6.8.0
+      prettier: 2.0.5
       prettier-linter-helpers: 1.0.0
     dev: false
     engines:
@@ -10420,6 +10444,13 @@ packages:
     hasBin: true
     resolution:
       integrity: sha512-SVJIQ51spzFDvh4fIbCLvciiDMCrRhlN3mbZvv/+ycjvmF5E73bKdGfU8QDLNmjYJf+lsGnDBC4UUnvTe5OO0w==
+  /prettier/2.0.5:
+    dev: false
+    engines:
+      node: '>=10.13.0'
+    hasBin: true
+    resolution:
+      integrity: sha512-7PtVymN48hGcO4fGjybyBSIWDsLU4H4XlvOHfq91pz9kkGlonzwTfYkaIEwiRg/dAJF9YlbsduBAgtYLi+8cFg==
   /pretty-format/25.3.0:
     dependencies:
       '@jest/types': 25.3.0
@@ -14054,7 +14085,7 @@ packages:
       eslint-config-prettier: 6.10.1_eslint@6.8.0
       eslint-config-react: 1.1.7
       eslint-plugin-import: 2.20.2_eslint@6.8.0
-      eslint-plugin-prettier: 3.1.2_eslint@6.8.0+prettier@2.0.4
+      eslint-plugin-prettier: 3.1.2_eslint@6.8.0+prettier@2.0.5
       eslint-plugin-react: 7.19.0_eslint@6.8.0
       eslint-plugin-react-hooks: 3.0.0_eslint@6.8.0
       file-loader: 6.0.0_webpack@4.42.1
@@ -14064,7 +14095,7 @@ packages:
       jest: 25.3.0
       node-sass: 4.13.1
       nodemon: 2.0.3
-      prettier: 2.0.4
+      prettier: 2.0.5
       prop-types: 15.7.2
       react: 16.13.1
       react-app-polyfill: 1.0.6
@@ -14092,7 +14123,7 @@ packages:
     dev: false
     name: '@rush-temp/registrum-client'
     resolution:
-      integrity: sha512-eLl/DBbUnpqaRnB5mEcsHEMtCZ/L/QPbe24sVps4UhDy8ywT+hqpL13cDhThWH0Ua4WpHEMR8fqm6tSmv+j1TQ==
+      integrity: sha512-i2eJhExpEY/5AXmsIQH/sO77eT9aVx6sRywIvEubC+KSZbz03Nitz0/xC95cwn3f8qwlo0OGMNhfgskG8KxWBA==
       tarball: 'file:projects/registrum-client.tgz'
     version: 0.0.0
 registry: ''
@@ -14214,7 +14245,6 @@ specifiers:
   passport: ^0.4.1
   passport-local: ^1.0.0
   pify: ^5.0.0
-  prettier: ^2.0.4
   prop-types: ^15.7.2
   react: ^16.13.1
   react-app-polyfill: ^1.0.6

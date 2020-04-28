@@ -2,7 +2,7 @@ import express from 'express'
 import auth from './auth'
 import classes from './classes'
 import banner from './banner'
-import pushService from "./push-service"
+import pushService from './push-service'
 
 const router = express.Router()
 

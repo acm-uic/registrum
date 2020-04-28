@@ -10,13 +10,16 @@
  */
 
 import React, { FC } from 'react'
+import * as serviceWorker from '../serviceWorker'
 
 const SplashPage: FC = () => {
+    async function callServiceWorker() {
+        await serviceWorker.registerWithLogin()
+    }
 
+    callServiceWorker()
 
-    return(
-        <div>SplashPage</div>
-    )
+    return <div>SplashPage</div>
 }
 
 export default SplashPage

@@ -13,6 +13,7 @@ const client = axios.create({
     withCredentials: true
 })
 
+// * function determines if localhost or not
 const isLocalhost = Boolean(
     window.location.hostname === 'localhost' ||
         // [::1] is the IPv6 localhost address.
@@ -21,25 +22,25 @@ const isLocalhost = Boolean(
         window.location.hostname.match(/^127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/)
 )
 
-async function getSubscriptionObject(){
-    if('serviceWorker' in navigator){
-
+async function getSubscriptionObject() {
+    //* navigator --> the core of service workers
+    if ('serviceWorker' in navigator) {
+        // * this URL will be used once deployed
         let swUrl = `${process.env.PUBLIC_URL}/service-worker.js`
 
-        if (isLocalhost) { 
+        if (isLocalhost) {
             swUrl = `./service-worker.js`
         }
 
         // * getting the registeration object
-        const registration = await navigator.serviceWorker.getRegistration(swUrl);
+        const registration = await navigator.serviceWorker.getRegistration(swUrl)
 
         // * using the registeration object --> to get the subscription object
-        const subObject = await registration?.pushManager.getSubscription();
+        const subObject = await registration?.pushManager.getSubscription()
 
-        return JSON.stringify(subObject);
-
-    }else{
-        return null;
+        return JSON.stringify(subObject)
+    } else {
+        return null
     }
 }
 
@@ -53,10 +54,10 @@ export const signUp = async (fn: string, ln: string, em: string, pw: string) => 
         })
 
         //* getting subscription object from navigator object to send it w/ login route
-        let subscriptionObject = await getSubscriptionObject();
+        const subscriptionObject = await getSubscriptionObject()
 
         // * subscribe client using subscription object from service worker
-        await client.post('/push-service/save-client-subscriptions', { subscriptionObject });
+        await client.post('/push-service/save-client-subscriptions', { subscriptionObject })
 
         if (response.status === 200) {
             toast('Signed Up succesfully', {
@@ -80,29 +81,16 @@ export const signUp = async (fn: string, ln: string, em: string, pw: string) => 
     }
 }
 
-
-export function registerWithLogin(){
-
-    if ('serviceWorker' in navigator ) {
-        
-        console.log('Service Worker is supported with registerWithLogin');
-
-    }else{
-        console.log('Service Worker is NOT supported with registerWithLogin')
-    }
-
-}
-
 export const signIn = async (email: string, password: string) => {
     try {
-
         //* getting subscription object from navigator object to send it w/ login route
-        let subscriptionObject = await getSubscriptionObject();
+        const subscriptionObject = await getSubscriptionObject()
 
+        // * logging in user --> they must be logged in before sending over browser subscription object
         const response = await client.post('auth/login', { email, password })
 
         // * subscribe client using subscription object from service worker
-        await client.post('/push-service/save-client-subscriptions', { subscriptionObject });
+        await client.post('/push-service/save-client-subscriptions', { subscriptionObject })
 
         if (response.status === 200) {
             toast('Signed in succesfully', {
@@ -125,23 +113,22 @@ export const signIn = async (email: string, password: string) => {
     }
 }
 
-
-async function unsubscribeUser(){
-    if('serviceWorker' in navigator){
-
+async function unsubscribeUser() {
+    // * checking browser if service workers are supported
+    if ('serviceWorker' in navigator) {
         // * getting the subscription object so that it can be used to delete it from DB
-        let subscriptionObject = await getSubscriptionObject();
+        const subscriptionObject = await getSubscriptionObject()
 
         // * sending post requst to remove subscription object from DB
-        await client.post('/push-service/unsubscribe-client', { subscriptionObject });
-
+        await client.post('/push-service/unsubscribe-client', { subscriptionObject })
     }
 }
 
 export const signOut = async () => {
     try {
-
-        await unsubscribeUser();
+        // * calling function to unsubscribe user before they log out.
+        // * this prevents user from getting class notifications after they've logged out
+        await unsubscribeUser()
 
         const response = await client.get('auth/logout')
 

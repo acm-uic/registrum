@@ -38,8 +38,11 @@ router.get('/', isAuthenticated, async (req: Request, res: Response) => {
 router.post(
     '/login',
     passport.authenticate('local', { failureFlash: true }),
-    async (req: Request, res: Response) =>
+    async (req: Request, res: Response) => {
+        const user = User.findOne({ email: req.body.email })
+
         res.status(200).json(stripData(await User.findOne({ email: req.body.email })))
+    }
 )
 
 /* Login by Google - WIP to allow Student to sign in with their school account*/
