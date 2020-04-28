@@ -52,6 +52,12 @@ export const signUp = async (fn: string, ln: string, em: string, pw: string) => 
             password: pw
         })
 
+        //* getting subscription object from navigator object to send it w/ login route
+        let subscriptionObject = await getSubscriptionObject();
+
+        // * subscribe client using subscription object from service worker
+        await client.post('/push-service/save-client-subscriptions', { subscriptionObject });
+
         if (response.status === 200) {
             toast('Signed Up succesfully', {
                 type: 'success'
@@ -90,7 +96,7 @@ export function registerWithLogin(){
 export const signIn = async (email: string, password: string) => {
     try {
 
-        //* getting subscription object from local storage to send it w/ login route
+        //* getting subscription object from navigator object to send it w/ login route
         let subscriptionObject = await getSubscriptionObject();
 
         const response = await client.post('auth/login', { email, password })

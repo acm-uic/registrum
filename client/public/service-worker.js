@@ -8,7 +8,7 @@ self.addEventListener('push', function(event) {
 
     const serverMessage = event.data.text();
   
-    const title = 'Push Notification';
+    const title = 'Class Status';
     const options = {
       body: serverMessage,
     };
