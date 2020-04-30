@@ -50,14 +50,14 @@ export const notifyUser = async (user: UserObject, classData: any) => {
         //! FIXME: use env variables here
         // * GCMAPIKey is a cloud messaging id from google cloud console or firebase to help deliver the message
         // * GCMAPIKey must also be declared in manifest.json file as "gcm_sender_id"
-        webpush.setGCMAPIKey('565395438650')
+        webpush.setGCMAPIKey(process.env.GCMAPI)
 
         //* 2nd and 3rd arugment are keys generated once by web push only once
         //* 2nd arugment: public key & 3rd arugment: private key for server
         webpush.setVapidDetails(
-            'mailto:jigar@novusclub.org',
-            'BK_0D9VS_RrjJh3BRbdBifq6Ump45KpzfwWxk6P6sVOSTcrc89TzWlgtM1f7R7hOiKQsOxZHlGNGRiex02n9-9g',
-            'xRRruVND4fgEeBQoa3mld2ulOwXZxLtWAlaUyPuycpg'
+            process.env.WEBPUSHEMAIL,
+            process.env.WEBPUSHPUBLIC,
+            process.env.WEBPUSHPRIVATE
         )
 
         //* loop over subscription objects for the user and send push notifications

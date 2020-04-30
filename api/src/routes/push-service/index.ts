@@ -58,11 +58,11 @@ router.post('/send-notifications', isAuthenticated, async (req: Request, res: Re
 
     try {
         //! FIXME: use env variables here
-        webpush.setGCMAPIKey('565395438650')
+        webpush.setGCMAPIKey(process.env.GCMAPI)
         webpush.setVapidDetails(
-            'mailto:jigar@novusclub.org',
-            'BK_0D9VS_RrjJh3BRbdBifq6Ump45KpzfwWxk6P6sVOSTcrc89TzWlgtM1f7R7hOiKQsOxZHlGNGRiex02n9-9g',
-            'xRRruVND4fgEeBQoa3mld2ulOwXZxLtWAlaUyPuycpg'
+            process.env.WEBPUSHEMAIL,
+            process.env.WEBPUSHPUBLIC,
+            process.env.WEBPUSHPRIVATE
         )
 
         // * grab pushSubscription objects from database & send them to client --> check console

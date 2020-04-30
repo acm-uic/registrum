@@ -1,7 +1,5 @@
-//TODO: add active, install, and push eventListeners
-
 // * event handler for push notifications
-// TODO: this should only execute if user is logged in & tracking a class
+// * this needs to be here to listen for push event from server since it needs to be vanilla javascript
 self.addEventListener('push', function(event) {
     console.log('[Service Worker] Push Received.');
     console.log(`[Service Worker] Push had this data: "${event.data.text()}"`);
