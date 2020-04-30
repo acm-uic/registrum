@@ -3,30 +3,14 @@ name: Docker CI
 on: [push, pull_request]
 
 jobs:
-  build-docker:
+  build-images:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v2
-      - name: Build the Docker image
-        run: |
-          docker-compose build --pull --parallel
-      - if: github.ref == 'refs/heads/master'
-        name: Push the Docker image
-        run: |
-          echo ${{ secrets.GITHUB_TOKEN }} | docker login docker.pkg.github.com --username ${{ github.actor }} --password-stdin
-          docker-compose -f docker-compose.yml push
-
-  build-dev-docker:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v2
-      - name: Build the development Docker image
-        run: |
-          docker-compose build --pull --parallel
-      - if: github.ref == 'refs/heads/master'
-        name: Push the development Docker image
-        run: |
-          echo ${{ secrets.GITHUB_TOKEN }} | docker login docker.pkg.github.com --username ${{ github.actor }} --password-stdin
-          docker-compose push
+    - uses: actions/checkout@v2
+    - name: client - build and publish image
+      run: |
+        projects=( api banner banner-data client )
+        for project in "${projects[@]}"
+        do
+          docker build --target $project .
+        done

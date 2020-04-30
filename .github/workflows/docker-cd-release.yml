@@ -1,4 +1,4 @@
-name: Docker CD
+name: Docker CD - Release
 
 on:
   release:
@@ -17,21 +17,10 @@ jobs:
         echo ${{ secrets.GITHUB_TOKEN }} | docker login docker.pkg.github.com --username ${{ github.actor }} --password-stdin
 
         projects=( api banner banner-data client )
-        for $project in "${projects[@]}"
+        for project in "${projects[@]}"
         do
           docker build --target $project -t docker.pkg.github.com/${{ github.repository }}/client:$(echo ${{ github.ref }} | sed 's/refs\/tags\///g') .
           docker tag docker.pkg.github.com/${{ github.repository }}/client:$(echo ${{ github.ref }} | sed 's/refs\/tags\///g') docker.pkg.github.com/${{ github.repository }}/client:latest
           docker push docker.pkg.github.com/${{ github.repository }}/client:$(echo ${{ github.ref }} | sed 's/refs\/tags\///g')
           docker push docker.pkg.github.com/${{ github.repository }}/client:latest
         done
-
-  publish-postfix:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - name: postfix - build and publish image
-      run: |
-        pushd ./postfix
-        docker build -t docker.pkg.github.com/${{ github.repository }}/postfix:$(echo ${{ github.ref }} | sed 's/refs\/tags\///g') .
-        echo ${{ secrets.GITHUB_TOKEN }} | docker login docker.pkg.github.com --username ${{ github.actor }} --password-stdin
-        docker push docker.pkg.github.com/${{ github.repository }}/postfix:$(echo ${{ github.ref }} | sed 's/refs\/tags\///g')

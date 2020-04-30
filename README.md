@@ -233,7 +233,6 @@ The docker dev containers expose the following services:
 | Redis Server    | 6380  | Redis server needed by the Banner Services |
 | Mongo Express   | 8081  | MongoDB Web Client                         |
 | Redis Commander | 8082  | Redis Web Client                           |
-| Postfix         | 25    | SMTP Server needed by the API              |
 
 ## Getting a development environment up
 
