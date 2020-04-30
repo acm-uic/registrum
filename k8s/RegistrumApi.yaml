@@ -27,6 +27,7 @@ spec:
       containers:
         - name: registrum-api
           image: alexchomiak/registrum-api-test:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 4000
           env:
@@ -40,4 +41,3 @@ spec:
               value: redis://api-redis:6379
             - name: MONGODB_URI
               value: mongodb+srv://alex:chomiak@cluster0-mizbf.azure.mongodb.net/test?retryWrites=true&w=majority
-
