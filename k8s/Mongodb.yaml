@@ -1,0 +1,53 @@
+kind: StorageClass
+apiVersion: storage.k8s.io/v1beta1
+metadata:
+  name: registrum-local-storage-driver
+provisioner: Local
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: "mongo"
+  labels:
+    name: "mongo"
+spec:
+  ports:
+    - port: 27017
+      targetPort: 27017
+  clusterIP: None
+  selector:
+    app: "mongo"
+---
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: "mongo"
+spec:
+  serviceName: "mongo"
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: mongo
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+        - name: mongo
+          image: mongo
+          command:
+            - mongod
+            - "--replSet"
+            - rs0
+          ports:
+            - containerPort: 27017
+          volumeMounts:
+            - name: registrum-mongo-persistent
+              mountPath: /data/db
+  volumeClaimTemplates:
+    - metadata:
+        name: registrum-mongo-persistent
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 10Gi

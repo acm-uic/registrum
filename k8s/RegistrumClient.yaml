@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: client
+spec:
+  selector:
+    app: registrum-client
+  ports:
+    - name: "http"
+      port: 80
+      targetPort: 80
+    - name: "https"
+      port: 443
+      targetPort: 443
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: registrum-client-deployment
+spec:
+  selector:
+    matchLabels:
+      app: registrum-client
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: registrum-client
+    spec:
+      containers:
+        - name: registrum-client
+          image: alexchomiak/registrum-client-test:latest
+          ports:
+            - containerPort: 80
