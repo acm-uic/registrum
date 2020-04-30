@@ -29,6 +29,7 @@ dependencies:
   '@types/bcrypt-nodejs': 0.0.31
   '@types/chai': 4.2.11
   '@types/compression': 1.7.0
+  '@types/connect-redis': 0.0.13
   '@types/cors': 2.8.6
   '@types/enzyme': 3.10.5
   '@types/enzyme-adapter-react-16': 1.0.6
@@ -37,7 +38,6 @@ dependencies:
   '@types/express': 4.17.6
   '@types/express-flash': 0.0.2
   '@types/express-session': 1.17.0
-  '@types/ioredis': 4.14.9
   '@types/jest': 25.2.1
   '@types/lodash': 4.14.149
   '@types/lusca': 1.6.1
@@ -103,7 +103,6 @@ dependencies:
   gud: 1.0.0
   identity-obj-proxy: 3.0.0
   image-webpack-loader: 6.0.0
-  ioredis: 4.16.2
   is-redirect: 1.0.0
   jest: 25.3.0
   lodash: 4.17.15
@@ -1761,6 +1760,15 @@ packages:
     dev: false
     resolution:
       integrity: sha512-3LzWUM+3k3XdWOUk/RO+uSjv7YWOatYq2QADJntK1pjkk4DfVP0KrIEPDnXRJxAAGKe0VpIPRmlINLDuCedZWw==
+  /@types/connect-redis/0.0.13:
+    dependencies:
+      '@types/express': 4.17.6
+      '@types/express-session': 1.17.0
+      '@types/ioredis': 4.16.0
+      '@types/redis': 2.8.17
+    dev: false
+    resolution:
+      integrity: sha512-bHo/UWrUPbWkn05D1YAMs31wG+0dMt6GYXjv8Vfu8kAxO6CfD4N6lmHv/sAkjzYVdXFhc5jck/kEYLBDPJ90iQ==
   /@types/connect/3.4.33:
     dependencies:
       '@types/node': 13.11.1
@@ -1869,6 +1877,12 @@ packages:
     dev: false
     resolution:
       integrity: sha512-yNdzppM6vY4DYqXCnt4A3PXArxsMWeJCYxFlyl4AJKrNSGMEAP9TPcXR+8Q6zh9glcCtxmwMQhi4pwdqqHH3OA==
+  /@types/ioredis/4.16.0:
+    dependencies:
+      '@types/node': 13.11.1
+    dev: false
+    resolution:
+      integrity: sha512-fxR2oHLj0NIqdM9OT8/hwPmlHI05i77UVfP9deys8+ZutZuo0SneA7FvXm2Kage6drQyl8F5gHWiTGK0lXaCCA==
   /@types/istanbul-lib-coverage/2.0.1:
     dev: false
     resolution:
@@ -7166,6 +7180,22 @@ packages:
       node: '>=6'
     resolution:
       integrity: sha512-hlRK9q9K8pWpYIxUh079dWUWECiGNdI7+/AR21pgeqIBXQzjVKFnz0wXvmhEQZV3Hvv4saQpvJww9SkjwvPXZA==
+  /ioredis/4.16.3:
+    dependencies:
+      cluster-key-slot: 1.1.0
+      debug: 4.1.1
+      denque: 1.4.1
+      lodash.defaults: 4.2.0
+      lodash.flatten: 4.4.0
+      redis-commands: 1.5.0
+      redis-errors: 1.2.0
+      redis-parser: 3.0.0
+      standard-as-callback: 2.0.1
+    dev: false
+    engines:
+      node: '>=6'
+    resolution:
+      integrity: sha512-Ejvcs2yW19Vq8AipvbtfcX3Ig8XG9EAyFOvGbhI/Q1QoVOK9ZdgY092kdOyOWIYBnPHjfjMJhU9qhsnp0i0K1w==
   /ip-regex/2.1.0:
     dev: false
     engines:
@@ -13768,12 +13798,14 @@ packages:
       '@types/bcrypt-nodejs': 0.0.31
       '@types/chai': 4.2.11
       '@types/compression': 1.7.0
+      '@types/connect-redis': 0.0.13
       '@types/cors': 2.8.6
       '@types/errorhandler': 1.5.0
       '@types/eslint': 6.8.0
       '@types/express': 4.17.6
       '@types/express-flash': 0.0.2
       '@types/express-session': 1.17.0
+      '@types/ioredis': 4.16.0
       '@types/jest': 25.2.1
       '@types/lodash': 4.14.149
       '@types/lusca': 1.6.1
@@ -13809,6 +13841,7 @@ packages:
       express-flash: 0.0.2
       express-session: 1.17.0
       express-validator: 6.4.0
+      ioredis: 4.16.3
       jest: 25.3.0
       lodash: 4.17.15
       lusca: 1.6.1
@@ -13832,7 +13865,7 @@ packages:
     dev: false
     name: '@rush-temp/registrum-api'
     resolution:
-      integrity: sha512-SskKCTOqa9Llb7dVm7gsVgX/BlWaduVn2qDgt/+TChajSW1iKUrH2zxYshs16ogd8iMdoKlj9hjqlJnoxxqBng==
+      integrity: sha512-ngCWKczSTLVBYrDPZ3+aeT7JaIVLL9GPcVWhy4ZLWGUu3remPxtXsd0unV/MYTE/CGXbHR4J7kadTpNGB/SBLg==
       tarball: 'file:projects/registrum-api.tgz'
     version: 0.0.0
   'file:projects/registrum-banner-data.tgz':
@@ -14042,6 +14075,7 @@ specifiers:
   '@types/bcrypt-nodejs': ^0.0.31
   '@types/chai': ^4.2.11
   '@types/compression': ^1.7.0
+  '@types/connect-redis': ^0.0.13
   '@types/cors': ^2.8.6
   '@types/enzyme': ^3.10.5
   '@types/enzyme-adapter-react-16': ^1.0.6
@@ -14050,7 +14084,6 @@ specifiers:
   '@types/express': ^4.17.6
   '@types/express-flash': 0.0.2
   '@types/express-session': ^1.17.0
-  '@types/ioredis': ^4.14.9
   '@types/jest': ^25.2.1
   '@types/lodash': ^4.14.149
   '@types/lusca': ^1.6.1
@@ -14116,7 +14149,6 @@ specifiers:
   gud: ^1.0.0
   identity-obj-proxy: ^3.0.0
   image-webpack-loader: ^6.0.0
-  ioredis: ^4.16.2
   is-redirect: ^1.0.0
   jest: ^25.3.0
   lodash: ^4.17.15

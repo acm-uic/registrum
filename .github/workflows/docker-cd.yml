@@ -8,49 +8,22 @@ on:
 
 jobs:
 
-  publish-client:
+  publish-app-images:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
     - name: client - build and publish image
       run: |
-        pushd ./client
-        docker build -t docker.pkg.github.com/${{ github.repository }}/client:$(echo ${{ github.ref }} | sed 's/refs\/tags\///g') .
         echo ${{ secrets.GITHUB_TOKEN }} | docker login docker.pkg.github.com --username ${{ github.actor }} --password-stdin
-        docker push docker.pkg.github.com/${{ github.repository }}/client:$(echo ${{ github.ref }} | sed 's/refs\/tags\///g')
 
-  publish-api:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - name: api - build and publish image
-      run: |
-        pushd ./api
-        docker build -t docker.pkg.github.com/${{ github.repository }}/api:$(echo ${{ github.ref }} | sed 's/refs\/tags\///g') .
-        echo ${{ secrets.GITHUB_TOKEN }} | docker login docker.pkg.github.com --username ${{ github.actor }} --password-stdin
-        docker push docker.pkg.github.com/${{ github.repository }}/api:$(echo ${{ github.ref }} | sed 's/refs\/tags\///g')
-
-  publish-banner:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - name: banner - build and publish image
-      run: |
-        pushd ./banner
-        docker build -t docker.pkg.github.com/${{ github.repository }}/banner:$(echo ${{ github.ref }} | sed 's/refs\/tags\///g') .
-        echo ${{ secrets.GITHUB_TOKEN }} | docker login docker.pkg.github.com --username ${{ github.actor }} --password-stdin
-        docker push docker.pkg.github.com/${{ github.repository }}/banner:$(echo ${{ github.ref }} | sed 's/refs\/tags\///g')
-
-  publish-banner-data:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - name: banner-data - build and publish image
-      run: |
-        pushd ./banner-data
-        docker build -t docker.pkg.github.com/${{ github.repository }}/banner-data:$(echo ${{ github.ref }} | sed 's/refs\/tags\///g') .
-        echo ${{ secrets.GITHUB_TOKEN }} | docker login docker.pkg.github.com --username ${{ github.actor }} --password-stdin
-        docker push docker.pkg.github.com/${{ github.repository }}/banner-data:$(echo ${{ github.ref }} | sed 's/refs\/tags\///g')
+        projects=( api banner banner-data client )
+        for $project in "${projects[@]}"
+        do
+          docker build --target $project -t docker.pkg.github.com/${{ github.repository }}/client:$(echo ${{ github.ref }} | sed 's/refs\/tags\///g') .
+          docker tag docker.pkg.github.com/${{ github.repository }}/client:$(echo ${{ github.ref }} | sed 's/refs\/tags\///g') docker.pkg.github.com/${{ github.repository }}/client:latest
+          docker push docker.pkg.github.com/${{ github.repository }}/client:$(echo ${{ github.ref }} | sed 's/refs\/tags\///g')
+          docker push docker.pkg.github.com/${{ github.repository }}/client:latest
+        done
 
   publish-postfix:
     runs-on: ubuntu-latest
