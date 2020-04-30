@@ -11,18 +11,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Set vars
-      shell: bash
-      run: |
-        echo ::set-output name=branch::$(echo ${GITHUB_REF#refs/heads/})
-        echo ::set-output name=rev::$(git rev-parse --short=8 ${{ github.sha }})
-        echo ::set-output name=tag::$(echo ${{ github.ref }} | sed 's/refs\/tags\///g')
     - name: docker build, push
-      shell: bash
       run: |
-        echo branch: ${{ steps.extract_branch.outputs.branch }}
-        echo rev: ${{ steps.extract_branch.outputs.rev }}
-        echo tag: ${{ steps.extract_branch.outputs.tag }}
+        tag=$(echo ${{ github.ref }} | sed 's/refs\/tags\///g')
+        echo tag: $tag
 
         echo ${{ secrets.GITHUB_TOKEN }} | docker login docker.pkg.github.com --username ${{ github.actor }} --password-stdin
 
@@ -30,8 +22,8 @@ jobs:
         for project in "${projects[@]}"
         do
           echo Working on $project ...
-          docker build --target $project -t docker.pkg.github.com/${{ github.repository }}/$project:${{ steps.extract_branch.outputs.tag }} .
-          docker tag docker.pkg.github.com/${{ github.repository }}/$project:${{ steps.extract_branch.outputs.tag }} docker.pkg.github.com/${{ github.repository }}/$project:${{ steps.extract_branch.outputs.branch }}
-          docker push docker.pkg.github.com/${{ github.repository }}/$project:${{ steps.extract_branch.outputs.tag }}
-          docker push docker.pkg.github.com/${{ github.repository }}/$project:${{ steps.extract_branch.outputs.branch }}
+          docker build --target $project -t docker.pkg.github.com/${{ github.repository }}/$project:$tag .
+          docker tag docker.pkg.github.com/${{ github.repository }}/$project:$tag docker.pkg.github.com/${{ github.repository }}/$project:latest
+          docker push docker.pkg.github.com/${{ github.repository }}/$project:$tag
+          docker push docker.pkg.github.com/${{ github.repository }}/$project:latest
         done
