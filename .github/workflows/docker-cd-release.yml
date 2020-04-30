@@ -1,4 +1,4 @@
-name: Docker CD
+name: Docker CD - Release
 
 on:
   release:
@@ -8,7 +8,7 @@ on:
 
 jobs:
 
-  publish-app-images-release:
+  publish-app-images:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
