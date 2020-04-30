@@ -11,8 +11,8 @@
 // opt-in, read https://bit.ly/CRA-PWA
 
 // NOTE: have to hard code this one since env variable is running into ton of random issues. It only a public key so we should be fine
-const applicationServerPublicKey = 'BK_0D9VS_RrjJh3BRbdBifq6Ump45KpzfwWxk6P6sVOSTcrc89TzWlgtM1f7R7hOiKQsOxZHlGNGRiex02n9-9g'
-
+const applicationServerPublicKey =
+    'BK_0D9VS_RrjJh3BRbdBifq6Ump45KpzfwWxk6P6sVOSTcrc89TzWlgtM1f7R7hOiKQsOxZHlGNGRiex02n9-9g'
 
 // * this will ask the user for permission using a browser pop up
 async function askUserPermission() {
@@ -69,7 +69,7 @@ function initialize(swRegistration: ServiceWorkerRegistration) {
                     //TODO: unsubscribe user on the server --> delete them from the database
                 } else {
                     //* user approved permission
-                    subscribeUserWithLogin(swRegistration); 
+                    subscribeUserWithLogin(swRegistration)
                 }
             })
         }
@@ -89,7 +89,6 @@ type Config = {
     onUpdate?: (registration: ServiceWorkerRegistration) => void
 }
 
-
 function finishRegisteration(swUrl: string) {
     console.log('in finishRegisteration')
 
@@ -105,10 +104,12 @@ function finishRegisteration(swUrl: string) {
 }
 
 export function registerWithLogin() {
-    if ('serviceWorker' in navigator) {
-        console.log('serviceWorker' in navigator && (process.env.NODE_ENV === 'production' || isLocalhost))
+    if ('serviceWorker' in navigator && (process.env.NODE_ENV === 'production' || isLocalhost)) {
+        console.log(
+            'serviceWorker' in navigator && (process.env.NODE_ENV === 'production' || isLocalhost)
+        )
 
-        let swUrl = `./service-worker.js`
+        const swUrl = `./service-worker.js`
 
         if (isLocalhost) {
             finishRegisteration(swUrl)
