@@ -17,7 +17,7 @@ jobs:
         echo ${{ secrets.GITHUB_TOKEN }} | docker login docker.pkg.github.com --username ${{ github.actor }} --password-stdin
 
         projects=( api banner banner-data client )
-        for $project in "${projects[@]}"
+        for project in "${projects[@]}"
         do
           docker build --target $project -t docker.pkg.github.com/${{ github.repository }}/client:$(echo ${{ github.ref }} | sed 's/refs\/tags\///g') .
           docker tag docker.pkg.github.com/${{ github.repository }}/client:$(echo ${{ github.ref }} | sed 's/refs\/tags\///g') docker.pkg.github.com/${{ github.repository }}/client:latest

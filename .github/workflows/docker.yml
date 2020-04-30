@@ -10,7 +10,7 @@ jobs:
     - name: client - build and publish image
       run: |
         projects=( api banner banner-data client )
-        for $project in "${projects[@]}"
+        for project in "${projects[@]}"
         do
           docker build --target $project .
         done
