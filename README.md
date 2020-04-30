@@ -2,7 +2,8 @@
 
 [![Node CI](https://github.com/ckanich-classrooms/final-project-dream-team-1/workflows/Node%20CI/badge.svg)](https://github.com/ckanich-classrooms/final-project-dream-team-1/actions?query=workflow%3A%22Node+CI%22)
 [![Docker CI](https://github.com/ckanich-classrooms/final-project-dream-team-1/workflows/Docker%20CI/badge.svg)](https://github.com/ckanich-classrooms/final-project-dream-team-1/actions?query=workflow%3A%22Docker+CI%22)
-[![Docker CD](https://github.com/ckanich-classrooms/final-project-dream-team-1/workflows/Docker%20CD/badge.svg)](https://github.com/ckanich-classrooms/final-project-dream-team-1/actions?query=workflow%3A%22Docker+CD%22)
+[![Docker CD - Master](https://github.com/ckanich-classrooms/final-project-dream-team-1/workflows/Docker%20CD%20-%20Master/badge.svg)](https://github.com/ckanich-classrooms/final-project-dream-team-1/actions?query=workflow%3A%22Docker+CD+-+Master%22)
+[![Docker CD - Release](https://github.com/ckanich-classrooms/final-project-dream-team-1/workflows/Docker%20CD%20-%20Release/badge.svg)](https://github.com/ckanich-classrooms/final-project-dream-team-1/actions?query=workflow%3A%22Docker+CD+-+Release%22)
 [![codecov](https://codecov.io/gh/ckanich-classrooms/final-project-dream-team-1/branch/master/graph/badge.svg?token=5aYe8JnyLU)](https://codecov.io/gh/ckanich-classrooms/final-project-dream-team-1)
 
 ## Table of Contents

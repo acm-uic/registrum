@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: client - build and publish image
+    - name: docker build
       run: |
         projects=( api banner banner-data client )
         for project in "${projects[@]}"
