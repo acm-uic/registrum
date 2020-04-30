@@ -39,7 +39,6 @@ router.post(
     '/login',
     passport.authenticate('local', { failureFlash: true }),
     async (req: Request, res: Response) => {
-
         res.status(200).json(stripData(await User.findOne({ email: req.body.email })))
     }
 )
