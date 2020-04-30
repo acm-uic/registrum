@@ -36,7 +36,6 @@
         "axios": "^0.19.2",
         "axios-cookiejar-support": "^1.0.0",
         "bcrypt": "^4.0.1",
-        "bcrypt-nodejs": "^0.0.3",
         "compression": "^1.7.4",
         "connect-redis": "^4.0.4",
         "cors": "^2.8.5",
@@ -65,7 +64,6 @@
     "devDependencies": {
         "@types/async": "^3.2.0",
         "@types/bcrypt": "^3.0.0",
-        "@types/bcrypt-nodejs": "^0.0.31",
         "@types/chai": "^4.2.11",
         "@types/compression": "^1.7.0",
         "@types/cors": "^2.8.6",
