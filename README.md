@@ -247,7 +247,6 @@ git clone git@github.com:ckanich-classrooms/final-project-dream-team-1.git
 
 rush update # install and link dependencies, add git hooks
 rush build # build all projects
-rush watch # build, watch, and run all projects
 ```
 
 - Start up docker-compose to make sure your services are available before starting up the application
