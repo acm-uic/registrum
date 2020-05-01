@@ -1,9 +1,9 @@
 import { Banner } from '../lib/Banner'
-import 'mocha'
+import { jest } from '@jest/globals'
 
 describe('Banner Lib Test', () => {
     it('Static Operations', async function () {
-        this.timeout(10000)
+        jest.setTimeout(10000)
         const terms = await Banner.getTerm()
         const term = terms[0].code
         await Promise.all([
@@ -15,7 +15,7 @@ describe('Banner Lib Test', () => {
     })
 
     it('Course Operations', async function () {
-        this.timeout(20000)
+        jest.setTimeout(20000)
         const terms = await Banner.getTerm()
         const term = terms[0].code
         const banner = new Banner(term, 'CS')
