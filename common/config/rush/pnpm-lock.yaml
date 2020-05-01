@@ -17,7 +17,7 @@ dependencies:
   '@rush-temp/registrum-api': 'file:projects/registrum-api.tgz'
   '@rush-temp/registrum-banner': 'file:projects/registrum-banner.tgz'
   '@rush-temp/registrum-banner-data': 'file:projects/registrum-banner-data.tgz'
-  '@rush-temp/registrum-client': 'file:projects/registrum-client.tgz'
+  '@rush-temp/registrum-client': 'file:projects/registrum-client.tgz_prettier@2.0.5'
   '@sendgrid/mail': 7.0.0
   '@testing-library/dom': 7.2.1
   '@testing-library/jest-dom': 5.5.0
@@ -53,7 +53,7 @@ dependencies:
   '@types/react-dom': 16.9.6
   '@types/react-redux': 7.1.7
   '@types/react-router-dom': 5.1.4
-  '@types/react-select': 3.0.11
+  '@types/react-select': 3.0.12
   '@types/react-transition-group': 4.2.4
   '@types/request': 2.48.4
   '@types/request-promise': 4.1.46
@@ -90,7 +90,7 @@ dependencies:
   eslint-config-prettier: 6.10.1_eslint@6.8.0
   eslint-config-react: 1.1.7
   eslint-plugin-import: 2.20.2_eslint@6.8.0
-  eslint-plugin-prettier: 3.1.2_eslint@6.8.0+prettier@2.0.4
+  eslint-plugin-prettier: 3.1.2_eslint@6.8.0+prettier@2.0.5
   eslint-plugin-react: 7.19.0_eslint@6.8.0
   eslint-plugin-react-hooks: 3.0.0_eslint@6.8.0
   express: 4.17.1
@@ -113,7 +113,7 @@ dependencies:
   passport: 0.4.1
   passport-local: 1.0.0
   pify: 5.0.0
-  prettier: 2.0.4
+  prettier: 2.0.5
   prop-types: 15.7.2
   react: 16.13.1
   react-app-polyfill: 1.0.6
@@ -141,6 +141,7 @@ dependencies:
   tslib: 1.11.1
   typescript: 3.8.3
   uuid: 7.0.3
+  web-push: 3.4.3
   webpack: 4.42.1_webpack@4.42.1
   webpack-cli: 3.3.11_webpack@4.42.1
   webpack-dev-server: 3.10.3_9c809a0213c3012b049633c8e9149dfb
@@ -2233,14 +2234,14 @@ packages:
     dev: false
     resolution:
       integrity: sha512-RZPdCtZympi6X7EkGyaU7ISiAujDYTWgqMF9owE3P6efITw27IWQykcti0BvA5h4Mu1LLl5rxrpO3r8kHyUZ/Q==
-  /@types/react-select/3.0.11:
+  /@types/react-select/3.0.12:
     dependencies:
       '@types/react': 16.9.34
       '@types/react-dom': 16.9.6
       '@types/react-transition-group': 4.2.4
     dev: false
     resolution:
-      integrity: sha512-ggUsAdZuRFtLMjGMcdf9SeeE678TRq3lAKj1fbwGM8JAZTIzCu1CED0dvJgFVCPT2bDs8TcBD6+6SN6i4e7JYQ==
+      integrity: sha512-3NVEc1sbaNtI1b06smzr9dlNKTkYWttL27CdEsorMvd2EgTOM/PJmrzkClaVQmBDg52MzQO05xVwNZruEUKpHw==
   /@types/react-transition-group/4.2.4:
     dependencies:
       '@types/react': 16.9.34
@@ -2606,6 +2607,14 @@ packages:
     hasBin: true
     resolution:
       integrity: sha512-add7dgA5ppRPxCFJoAGfMDi7PIBXq1RtGo7BhbLaxwrXPOmw8gq48Y9ozT01hUKy9byMjlR20EJhu5zlkErEkg==
+  /agent-base/4.3.0:
+    dependencies:
+      es6-promisify: 5.0.0
+    dev: false
+    engines:
+      node: '>= 4.0.0'
+    resolution:
+      integrity: sha512-salcGninV0nPrwpGNn4VTXBb1SOuXQBiqbrNXoeizJsHrsL6ERFM2Ne3JUSBWRE6aeNJI2ROP/WEEIDUiDe3cg==
   /agent-base/5.1.1:
     dev: false
     engines:
@@ -2937,6 +2946,15 @@ packages:
     dev: false
     resolution:
       integrity: sha512-p32cOF5q0Zqs9uBiONKYLm6BClCoBCM5O9JfeUSlnQLBTxYdTK+pW+nXflm8UkKd2UYlEbYz5qEi0JuZR9ckSw==
+  /asn1.js/5.3.0:
+    dependencies:
+      bn.js: 4.11.8
+      inherits: 2.0.4
+      minimalistic-assert: 1.0.1
+      safer-buffer: 2.1.2
+    dev: false
+    resolution:
+      integrity: sha512-WHnQJFcOrIWT1RLOkFFBQkFVvyt9BPOOrH+Dp152Zk4R993rSzXUGPmkybIcUFhHE2d/iHH+nCaOWVCDbO8fgA==
   /asn1/0.2.4:
     dependencies:
       safer-buffer: 2.1.2
@@ -3580,6 +3598,10 @@ packages:
     optional: true
     resolution:
       integrity: sha1-DTM+PwDqxQqhRUq9MO+MKl2ackI=
+  /buffer-equal-constant-time/1.0.1:
+    dev: false
+    resolution:
+      integrity: sha1-+OcRMvf/5uAaXJaXpMbz5I1cyBk=
   /buffer-fill/1.0.0:
     dev: false
     optional: true
@@ -5111,6 +5133,12 @@ packages:
     dev: false
     resolution:
       integrity: sha1-OoOpBOVDUyh4dMVkt1SThoSamMk=
+  /ecdsa-sig-formatter/1.0.11:
+    dependencies:
+      safe-buffer: 5.2.0
+    dev: false
+    resolution:
+      integrity: sha512-nagl3RYrbNv6kQkeJIpt6NJZy8twLB/2vtz6yN9Z4vRKHN4/QZJIEbqohALSgwKdnksuY3k5Addp5lg8sVoVcQ==
   /ee-first/1.1.1:
     dev: false
     resolution:
@@ -5314,6 +5342,16 @@ packages:
     dev: false
     resolution:
       integrity: sha512-Um/+FxMr9CISWh0bi5Zv0iOD+4cFh5qLeks1qhAopKVAJw3drgKbKySikp7wGhDL0HPeaja0P5ULZrxLkniUVg==
+  /es6-promise/4.2.8:
+    dev: false
+    resolution:
+      integrity: sha512-HJDGx5daxeIvxdBxvG2cb9g4tEvwIk3i8+nhX0yGrYmZUzbkdg8QbDevheDB8gd0//uPj4c1EQua8Q+MViT0/w==
+  /es6-promisify/5.0.0:
+    dependencies:
+      es6-promise: 4.2.8
+    dev: false
+    resolution:
+      integrity: sha1-UQnWLz5W6pZ8S2NQWu8IKRyKUgM=
   /escape-goat/2.1.1:
     dev: false
     engines:
@@ -5400,6 +5438,19 @@ packages:
     dependencies:
       eslint: 6.8.0
       prettier: 2.0.4
+      prettier-linter-helpers: 1.0.0
+    dev: false
+    engines:
+      node: '>=6.0.0'
+    peerDependencies:
+      eslint: '>= 5.0.0'
+      prettier: '>= 1.13.0'
+    resolution:
+      integrity: sha512-GlolCC9y3XZfv3RQfwGew7NnuFDKsfI4lbvRK+PIIo23SFH+LemGs4cKwzAaRa+Mdb+lQO/STaIayno8T5sJJA==
+  /eslint-plugin-prettier/3.1.2_eslint@6.8.0+prettier@2.0.5:
+    dependencies:
+      eslint: 6.8.0
+      prettier: 2.0.5
       prettier-linter-helpers: 1.0.0
     dev: false
     engines:
@@ -7046,10 +7097,27 @@ packages:
       npm: '>=1.3.7'
     resolution:
       integrity: sha1-muzZJRFHcvPZW2WmCruPfBj7rOE=
+  /http_ece/1.1.0:
+    dependencies:
+      urlsafe-base64: 1.0.0
+    dev: false
+    engines:
+      node: '>=4'
+    resolution:
+      integrity: sha512-bptAfCDdPJxOs5zYSe7Y3lpr772s1G346R4Td5LgRUeCwIGpCGDUTJxRrhTNcAXbx37spge0kWEIH7QAYWNTlA==
   /https-browserify/1.0.0:
     dev: false
     resolution:
       integrity: sha1-7AbBDgo0wPL68Zn3/X/Hj//QPHM=
+  /https-proxy-agent/3.0.1:
+    dependencies:
+      agent-base: 4.3.0
+      debug: 3.2.6
+    dev: false
+    engines:
+      node: '>= 4.5.0'
+    resolution:
+      integrity: sha512-+ML2Rbh6DAuee7d07tYGEKOEi2voWPUGan+ExdPbPW6Z3svq+JCqr0v8WmKPOkz1vOVykPCBSuobe7G8GJUtVg==
   /https-proxy-agent/4.0.0:
     dependencies:
       agent-base: 5.1.1
@@ -8907,6 +8975,21 @@ packages:
       node: '>=8'
     resolution:
       integrity: sha512-pBxcB3LFc8QVgdggvZWyeys+hnrNWg4OcZIU/1X59k5jQdLBlCsYGRQaz234SqoRLTCgMH00fY0xRJH+F9METQ==
+  /jwa/1.4.1:
+    dependencies:
+      buffer-equal-constant-time: 1.0.1
+      ecdsa-sig-formatter: 1.0.11
+      safe-buffer: 5.2.0
+    dev: false
+    resolution:
+      integrity: sha512-qiLX/xhEEFKUAJ6FiBMbes3w9ATzyk5W7Hvzpa/SLYdxNtng+gcurvrI7TbACjIXlsJyr05/S1oUhZrc63evQA==
+  /jws/3.2.2:
+    dependencies:
+      jwa: 1.4.1
+      safe-buffer: 5.2.0
+    dev: false
+    resolution:
+      integrity: sha512-YHlZCB6lMTllWDtSPHz/ZXTsi8S00usEV6v1tjq8tOUZzw7DpSDWVXjXDre6ed1w/pd495ODpHZYSdkRTsa0HA==
   /kareem/2.3.1:
     dev: false
     resolution:
@@ -11046,6 +11129,13 @@ packages:
     hasBin: true
     resolution:
       integrity: sha512-SVJIQ51spzFDvh4fIbCLvciiDMCrRhlN3mbZvv/+ycjvmF5E73bKdGfU8QDLNmjYJf+lsGnDBC4UUnvTe5OO0w==
+  /prettier/2.0.5:
+    dev: false
+    engines:
+      node: '>=10.13.0'
+    hasBin: true
+    resolution:
+      integrity: sha512-7PtVymN48hGcO4fGjybyBSIWDsLU4H4XlvOHfq91pz9kkGlonzwTfYkaIEwiRg/dAJF9YlbsduBAgtYLi+8cFg==
   /pretty-format/25.3.0:
     dependencies:
       '@jest/types': 25.3.0
@@ -13901,6 +13991,10 @@ packages:
     dev: false
     resolution:
       integrity: sha1-iS/pWWCAXoVRnxzUOJ8stMu3ZS8=
+  /urlsafe-base64/1.0.0:
+    dev: false
+    resolution:
+      integrity: sha1-I/iQaabGL0bPOh07ABac77kL4MY=
   /use/3.1.1:
     dev: false
     engines:
@@ -14044,6 +14138,20 @@ packages:
     dev: false
     resolution:
       integrity: sha512-O84QOnr0icsbFGLS0O3bI5FswxzRr8/gHwWkDlQFskhSPryQXvrTMxjxGP4+iWYoauLoBvfDpkrOauZ+0iZpDA==
+  /web-push/3.4.3:
+    dependencies:
+      asn1.js: 5.3.0
+      http_ece: 1.1.0
+      https-proxy-agent: 3.0.1
+      jws: 3.2.2
+      minimist: 1.2.5
+      urlsafe-base64: 1.0.0
+    dev: false
+    engines:
+      node: '>= 6'
+    hasBin: true
+    resolution:
+      integrity: sha512-nt/hRSlfRDTwvem//7jle1+cy62lBoxFshad8ai2Q4SlHZS00oHnrw5Dul3jSWXR+bOcnZkwnRs3tW+daNTuyA==
   /webidl-conversions/4.0.2:
     dev: false
     resolution:
@@ -14608,10 +14716,11 @@ packages:
       tslib: 1.11.1
       typescript: 3.8.3
       uuid: 7.0.3
+      web-push: 3.4.3
     dev: false
     name: '@rush-temp/registrum-api'
     resolution:
-      integrity: sha512-plQm+dW5NiljecMNGUHcp0koQk4kmMNSFHEHvA3s2gKhHFTrjx4PG0oTfU1o3UJPPAZTN3ipzIMfqoyqnaKKOg==
+      integrity: sha512-AVwqsVTxVKeXnxtVOP2KxTBM/UiVDOe8bsYpn/QZojikQdTKS+jcVcKZ2Pp/KT2B/jYjxaL0I+e44a4BFemVhw==
       tarball: 'file:projects/registrum-api.tgz'
     version: 0.0.0
   'file:projects/registrum-banner-data.tgz':
@@ -14704,7 +14813,7 @@ packages:
       integrity: sha512-9vjHgs+wvnhVJSHd6BZMz+2LlxYfqkk/zjMnkZ8cnTNbWlAcL2u/pMNVSV/wfBEQfudru7oE91akhPbLe98w4A==
       tarball: 'file:projects/registrum-banner.tgz'
     version: 0.0.0
-  'file:projects/registrum-client.tgz':
+  'file:projects/registrum-client.tgz_prettier@2.0.5':
     dependencies:
       '@babel/cli': 7.8.4_@babel+core@7.9.0
       '@babel/core': 7.9.0
@@ -14733,7 +14842,7 @@ packages:
       '@types/react-dom': 16.9.6
       '@types/react-redux': 7.1.7
       '@types/react-router-dom': 5.1.4
-      '@types/react-select': 3.0.11
+      '@types/react-select': 3.0.12
       '@types/react-transition-group': 4.2.4
       '@types/testing-library__react': 10.0.1
       '@typescript-eslint/eslint-plugin': 2.27.0_1b16601d03b675251fc711870248ce8d
@@ -14752,7 +14861,7 @@ packages:
       eslint-config-prettier: 6.10.1_eslint@6.8.0
       eslint-config-react: 1.1.7
       eslint-plugin-import: 2.20.2_eslint@6.8.0
-      eslint-plugin-prettier: 3.1.2_eslint@6.8.0+prettier@2.0.4
+      eslint-plugin-prettier: 3.1.2_eslint@6.8.0+prettier@2.0.5
       eslint-plugin-react: 7.19.0_eslint@6.8.0
       eslint-plugin-react-hooks: 3.0.0_eslint@6.8.0
       file-loader: 6.0.0_webpack@4.42.1
@@ -14762,7 +14871,6 @@ packages:
       jest: 25.3.0
       node-sass: 4.13.1
       nodemon: 2.0.3
-      prettier: 2.0.4
       prop-types: 15.7.2
       react: 16.13.1
       react-app-polyfill: 1.0.6
@@ -14788,9 +14896,12 @@ packages:
       webpack-cli: 3.3.11_webpack@4.42.1
       webpack-dev-server: 3.10.3_9c809a0213c3012b049633c8e9149dfb
     dev: false
+    id: 'file:projects/registrum-client.tgz'
     name: '@rush-temp/registrum-client'
+    peerDependencies:
+      prettier: '*'
     resolution:
-      integrity: sha512-eLl/DBbUnpqaRnB5mEcsHEMtCZ/L/QPbe24sVps4UhDy8ywT+hqpL13cDhThWH0Ua4WpHEMR8fqm6tSmv+j1TQ==
+      integrity: sha512-pyVBaQXkM6gx2UQdrx2XuJ9aT5h5UnXsdOj0emAa7FbCzrWF1kgKUmzM1O7X0rG7HstafY0IU9V2mNTnwg1P6A==
       tarball: 'file:projects/registrum-client.tgz'
     version: 0.0.0
 registry: ''
@@ -14849,7 +14960,7 @@ specifiers:
   '@types/react-dom': ^16.9.6
   '@types/react-redux': ^7.1.7
   '@types/react-router-dom': ^5.1.4
-  '@types/react-select': ~3.0.11
+  '@types/react-select': ~3.0.12
   '@types/react-transition-group': ^4.2.4
   '@types/request': ^2.48.4
   '@types/request-promise': ^4.1.46
@@ -14937,6 +15048,7 @@ specifiers:
   tslib: ^1.11.1
   typescript: ^3.8.3
   uuid: ^7.0.3
+  web-push: ^3.4.3
   webpack: ^4.42.1
   webpack-cli: ^3.3.11
   webpack-dev-server: ^3.10.3

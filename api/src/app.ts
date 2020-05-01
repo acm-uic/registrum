@@ -23,7 +23,7 @@ const mongoUrl = process.env.MONGODB_URI || 'mongodb://localhost:27017/registrum
 const baseUrl = process.env.API_BASE_PATH || '/api'
 
 // * Express configuration
-app.options('*', cors)
+app.options('*', cors())
 app.use(compression())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))

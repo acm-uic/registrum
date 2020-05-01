@@ -59,7 +59,8 @@
         "uuid": "^7.0.3",
         "registrum-banner": "^0.1.0",
         "axios-mock-adapter": "~1.18.1",
-        "ioredis": "^4.16.3"
+        "ioredis": "^4.16.3",
+        "web-push": "^3.4.3"
     },
     "devDependencies": {
         "@types/async": "^3.2.0",
