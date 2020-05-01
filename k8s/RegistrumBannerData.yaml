@@ -36,3 +36,8 @@ spec:
                 secretKeyRef:
                   name: banner-data-secrets
                   key: REFRESH_INTERVAL
+            - name: MONGO_URIk
+              valueFrom:
+                secretKeyRef:
+                  name: banner-secrets
+                  key: MONGODB_URI

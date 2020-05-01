@@ -63,6 +63,7 @@ parser.addArgument(['--max-page-size'], {
 
 const args = parser.parseArgs()
 const mongoUri = process.env.MONGO_URI || 'mongodb://localhost:27017/banner-data'
+
 type AppConfig = {
     now: boolean
     cron: string
@@ -83,6 +84,7 @@ console.log('🛠 Config:', config)
 
 const boot = async () => {
     try {
+        console.log(`⚡️ Attempting mongo connection to ${mongoUri}`)
         await mongoose.connect(mongoUri, {
             useNewUrlParser: true,
             useUnifiedTopology: true
