@@ -1,5 +1,4 @@
 import { Banner } from '../lib/Banner'
-import { jest } from '@jest/globals'
 
 describe('Banner Lib Test', () => {
     it('Static Operations', async function () {

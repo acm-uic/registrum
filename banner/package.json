@@ -71,7 +71,6 @@
         "typescript": "^3.8.3",
         "jest": "^25.5.3",
         "ts-jest": "^25.4.0",
-        "@types/jest": "^25.2.1",
-        "@jest/globals": "^25.5.2"
+        "@types/jest": "^25.2.1"
     }
 }
