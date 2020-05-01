@@ -65,7 +65,7 @@ app.use(
         saveUninitialized: true,
         secret: process.env.SESSION_SECRET || 'This is not a secure secret!',
         store: SessionStore,
-        cookie: { secure: process.env.NODE_ENV === 'production' }
+        cookie: { secure: false } // * API Will be served behind reverse proxy, does not need to be secure
     })
 )
 

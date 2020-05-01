@@ -1,0 +1,12 @@
+# ----------------------------------------------------
+# apiVersion and kind of Kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ./Secrets.yaml
+  - ./ApiRedis.yaml
+  - ./BannerRedis.yaml
+  - ./RegistrumApi.yaml
+  - ./RegistrumClient.yaml
+  - ./RegistrumBanner.yaml
+  - ./RegistrumBannerData.yaml
