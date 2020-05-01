@@ -62,7 +62,7 @@ parser.addArgument(['--max-page-size'], {
 })
 
 const args = parser.parseArgs()
-const mongoUri = process.env.MONGO_URI || 'mongodb://localhost:27000/banner-data'
+const mongoUri = process.env.MONGO_URI || 'mongodb://localhost:27017/banner-data'
 type AppConfig = {
     now: boolean
     cron: string
@@ -70,7 +70,7 @@ type AppConfig = {
 }
 const config: AppConfig = {
     now: args.now,
-    cron: args.cron,
+    cron: args.cron || process.env.REFRESH_INTERVAL,
     bannerData: {
         pageRetryCount: args.page_retry_count,
         pageRetryTime: args.page_retry_time,

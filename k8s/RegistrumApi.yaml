@@ -31,13 +31,34 @@ spec:
           ports:
             - containerPort: 4000
           env:
+            # * Grab needed environmental variables from secrets
             - name: SENDGRID_EMAIL_ADDRESS
-              value: notifications@chom.es
+              valueFrom:
+                secretKeyRef:
+                  name: api-secrets
+                  key: SENDGRID_EMAIL
             - name: SENDGRID_API_KEY
-              value: SG.8-HelloWorld
+              valueFrom:
+                secretKeyRef:
+                  name: api-secrets
+                  key: SENDGRID_API_KEY
             - name: API_PORT
-              value: "4000"
+              valueFrom:
+                secretKeyRef:
+                  name: api-secrets
+                  key: API_PORT
             - name: API_REDIS_URI
-              value: redis://api-redis:6379
+              valueFrom:
+                secretKeyRef:
+                  name: api-secrets
+                  key: API_REDIS_URI
             - name: MONGODB_URI
-              value: mongodb+srv://alex:chomiak@cluster0-mizbf.azure.mongodb.net/test?retryWrites=true&w=majority
+              valueFrom:
+                secretKeyRef:
+                  name: api-secrets
+                  key: MONGODB_URI
+            - name: BANNER_URL
+              valueFrom:
+                secretKeyRef:
+                  name: api-secrets
+                  key: BANNER_URL

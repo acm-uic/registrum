@@ -16,7 +16,7 @@ const app = express()
 require('dotenv').config()
 app.set('port', process.env.API_PORT || 4000)
 const redisUri = process.env.API_REDIS_URI || 'redis://localhost:6379'
-const mongoUrl = process.env.MONGODB_URI || 'mongodb://localhost:27000/registrum'
+const mongoUrl = process.env.MONGODB_URI || 'mongodb://localhost:27017/registrum'
 const baseUrl = process.env.API_BASE_PATH || '/api'
 
 // * Express configuration

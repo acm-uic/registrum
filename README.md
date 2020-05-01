@@ -228,7 +228,7 @@ The docker dev containers expose the following services:
 
 | Service Name    | Ports | Description                                |
 | --------------- | ----- | ------------------------------------------ |
-| MongoDB Server  | 27000 | MongoDB server needed by the API           |
+| MongoDB Server  | 27017 | MongoDB server needed by the API           |
 | Redis Server    | 6379  | Redis server needed by the API             |
 | Redis Server    | 6380  | Redis server needed by the Banner Services |
 | Mongo Express   | 8081  | MongoDB Web Client                         |

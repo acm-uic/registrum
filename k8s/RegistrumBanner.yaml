@@ -1,0 +1,68 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: banner
+spec:
+  selector:
+    app: registrum-banner
+  ports:
+    - port: 4001
+      targetPort: 4001
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: registrum-banner-deployment
+spec:
+  selector:
+    matchLabels:
+      app: registrum-banner
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: registrum-banner
+    spec:
+      containers:
+        - name: registrum-banner
+          image: alexchomiak/registrum-banner-test:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 4001
+          env:
+            - name: BANNER_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: banner-secrets
+                  key: BANNER_PORT
+            - name: CACHE_TIME
+              valueFrom:
+                secretKeyRef:
+                  name: banner-secrets
+                  key: CACHE_TIME
+            - name: MONGODB_URI
+              valueFrom:
+                secretKeyRef:
+                  name: banner-secrets
+                  key: MONGODB_URI
+            - name: API_REDIS_URI
+              valueFrom:
+                secretKeyRef:
+                  name: api-secrets
+                  key: API_REDIS_URI
+            - name: BANNER_REDIS_URI
+              valueFrom:
+                secretKeyRef:
+                  name: banner-secrets
+                  key: BANNER_REDIS_URI
+            - name: API_PROXY_URL
+              valueFrom:
+                secretKeyRef:
+                  name: banner-secrets
+                  key: API_PROXY_URL
+            - name: BANNER_BASE_PATH
+              valueFrom:
+                secretKeyRef:
+                  name: banner-secrets
+                  key: BANNER_BASE_PATH

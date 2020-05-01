@@ -11,7 +11,7 @@ services:
         volumes:
             - mongo-data:/data/db/
         ports:
-            - 27000:27017
+            - 27017:27017
         healthcheck:
             test: test $$(echo "rs.initiate().ok || rs.status().ok" | mongo) -eq 1
             interval: 10s
