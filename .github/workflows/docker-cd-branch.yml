@@ -29,3 +29,12 @@ jobs:
           docker push docker.pkg.github.com/${{ github.repository }}/$project:$rev
           docker push docker.pkg.github.com/${{ github.repository }}/$project:$branch
         done
+    - name: Trigger Hooks - master
+      if: github.ref == 'refs/heads/master'
+      run: |
+        curl -X POST -H "Content-Type: application/json" -d "{}" ${{ secrets.MASTER_HOOK }}
+    - name: Trigger Hooks - staging
+      if: github.ref == 'refs/heads/master'
+      run: |
+        curl -X POST -H "Content-Type: application/json" -d "{}" ${{ secrets.STAGING_HOOK }}
+
