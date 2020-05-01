@@ -2,7 +2,8 @@
 
 [![Node CI](https://github.com/ckanich-classrooms/final-project-dream-team-1/workflows/Node%20CI/badge.svg)](https://github.com/ckanich-classrooms/final-project-dream-team-1/actions?query=workflow%3A%22Node+CI%22)
 [![Docker CI](https://github.com/ckanich-classrooms/final-project-dream-team-1/workflows/Docker%20CI/badge.svg)](https://github.com/ckanich-classrooms/final-project-dream-team-1/actions?query=workflow%3A%22Docker+CI%22)
-[![Docker CD](https://github.com/ckanich-classrooms/final-project-dream-team-1/workflows/Docker%20CD/badge.svg)](https://github.com/ckanich-classrooms/final-project-dream-team-1/actions?query=workflow%3A%22Docker+CD%22)
+[![Docker CD - Master](https://github.com/ckanich-classrooms/final-project-dream-team-1/workflows/Docker%20CD%20-%20Master/badge.svg)](https://github.com/ckanich-classrooms/final-project-dream-team-1/actions?query=workflow%3A%22Docker+CD+-+Master%22)
+[![Docker CD - Branch](https://github.com/ckanich-classrooms/final-project-dream-team-1/workflows/Docker%20CD%20-%20Branch/badge.svg)](https://github.com/ckanich-classrooms/final-project-dream-team-1/actions?query=workflow%3A%22Docker+CD+-+Branch%22)
 [![codecov](https://codecov.io/gh/ckanich-classrooms/final-project-dream-team-1/branch/master/graph/badge.svg?token=5aYe8JnyLU)](https://codecov.io/gh/ckanich-classrooms/final-project-dream-team-1)
 
 ## Table of Contents
@@ -112,23 +113,23 @@ Basic microservice functionality, client completion (tenative), completed API(te
 ### Checkpoint 4 write up
 
 #### Final Submission Tests Goals
-More Client Tests
-  * Client correctly renders ClassListing Component
-  * Break up
-Finish API Tests
-  * Add more tests for class data
-      * Query by CRN
-      * Querying by invalid CRN yields invalid result
+
+- More Client Tests
+  - Client correctly renders ClassListing Component
+  - Break up
+- Finish API Tests
+  - Add more tests for class data
+    - Query by CRN
+    - Querying by invalid CRN yields invalid result
 (We will add much more tests if we find a way to more properly mock api requests between microservices)
 
 ### Progress Report
-The progress report is located in the progress-report.md file in the root of the directory which can be accessed [here](progress-report.md)
 
+The progress report is located in the progress-report.md file in the root of the directory which can be accessed [here](progress-report.md)
 
 ### Deliverables for final project
 
 The full application will be completed with **an** API, Microservice Infrastructure and React/Typescript client and a defined production workflow.
-
 
 You can also run `./init.sh` which runs `rush update`, `build`, and `watch`
 
@@ -184,6 +185,7 @@ rush build # Build all projects
 
 The docker containers expose the following services:
 
+| Service Name | Ports | Description                                     |
 | ------------ | ----- | ----------------------------------------------- |
 | Nginx        | 8080  | Servers static files and proxies other services |
 
@@ -233,11 +235,11 @@ The docker dev containers expose the following services:
 | Redis Server    | 6380  | Redis server needed by the Banner Services |
 | Mongo Express   | 8081  | MongoDB Web Client                         |
 | Redis Commander | 8082  | Redis Web Client                           |
-| Postfix         | 25    | SMTP Server needed by the API              |
 
 ## Getting a development environment up
 
-1. First make sure Microsoft's rush is installed, then clone the repo and setup rush by executing these commands in order
+- First make sure Microsoft's rush is installed, then clone the repo and setup rush by executing these commands in order
+
 ```powershell
 npm i -g @microsoft/rush
 
@@ -248,18 +250,22 @@ rush build # build all projects
 rush watch # build, watch, and run all projects
 ```
 
-2. Start up docker-compose to make sure your services are available before starting up the application
+- Start up docker-compose to make sure your services are available before starting up the application
+
 ```powershell
      docker-compose up # spin up the required services (MongoDB, Redis)
 ```
-3. Now run this command to start up the app
+
+- Now run this command to start up the app
 
 ```powershell
 rush watch # build, watch, and run all projects
 ```
 
 ### Seeding banner api data (optional)
+
 The client may not work as expected because the database is not supplied the banner database data to begin with. You can build the banner-data service and run it to populate the needed data. Here are the commands you might need:
+
 ```powershell
 cd banner-data # change into the banner-data project
 npm run build # build the project
@@ -268,14 +274,18 @@ node index.js --now # * This tool will populate the needed data for the banner A
 
 # MAKE SURE you have docker compose running during this entire process
 ```
+
 This will seed data from only CS courses in the most recent term to prevent making too many requests to Banner in development. The app will have access to all classes in production.
 
 ### NOTES
-* When running tests locally, make sure docker-compose is up and running so the app has access to the necessary services. Otherwise the tests will not pass!
-* Run said tests with the following command:
-  ```powershell
-    rush test
-  ```
+
+- When running tests locally, make sure docker-compose is up and running so the app has access to the necessary services. Otherwise the tests will not pass!
+- Run said tests with the following command:
+
+```powershell
+  rush test
+```
+
 ## Sources
 
 Client Skeleton cloned from <https://github.com/alexchomiak/goto-react-app-2.0>

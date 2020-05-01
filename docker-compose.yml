@@ -40,13 +40,6 @@ services:
             - api-redis-data:/data
         command: --appendonly yes
 
-    postfix:
-        build:
-            context: postfix
-        restart: always
-        networks:
-            - registrum-net
-
     mongo-express:
         image: mongo-express
         restart: always
