@@ -1,6 +1,5 @@
 import { WebHooks } from '../lib/WebHooks'
 import * as chai from 'chai'
-import 'mocha'
 import * as Redis from 'ioredis'
 import * as http from 'http'
 
@@ -45,7 +44,7 @@ describe('WebHooks Test', () => {
     const protocol = 'http'
     let host: string
     let baseUrl: string
-    before(async () => {
+    beforeAll(async () => {
         server.listen(0)
         port = await new Promise(resolve => {
             server.on('listening', () => {
@@ -64,7 +63,7 @@ describe('WebHooks Test', () => {
     afterEach(async () => {
         await unlinkAllKeys()
     })
-    after(async () => {
+    afterAll(async () => {
         await redisClient.quit()
         server.close()
     })
