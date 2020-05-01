@@ -63,7 +63,7 @@ parser.addArgument(['--max-page-size'], {
 
 const args = parser.parseArgs()
 
-const mongoUri = process.env.MONGO_URI || 'mongodb://localhost:27017/banner-data'
+const mongoUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/banner-data'
 
 type AppConfig = {
     now: boolean
