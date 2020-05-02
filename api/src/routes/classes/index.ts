@@ -28,7 +28,6 @@ router.get('/subjects', async (req: Request, res: Response) => {
         const { data: subjectsResponse } = await BannerClient.get('/subject')
         res.send(subjectsResponse)
     } catch (err) {
-        console.error(err)
         res.send([])
     }
 })
@@ -38,7 +37,6 @@ router.get('/terms', async (req: Request, res: Response) => {
         const { data: termResponse } = await BannerClient.get('/term')
         res.send(termResponse)
     } catch (err) {
-        console.error(err)
         res.send([])
     }
 })
@@ -52,7 +50,6 @@ router.get('/listing/:subject/:courseNumber', async (req: Request, res: Response
         })
         res.send(listingResponse)
     } catch (err) {
-        console.error(err)
         res.send([])
     }
 })
