@@ -30,8 +30,7 @@ module.exports = {
         new CopyPlugin([
             {
                 from: 'public/',
-                to: './',
-                ignore: ['*.js']
+                to: './'
             }
         ]),
         new webpack.DefinePlugin(env),
