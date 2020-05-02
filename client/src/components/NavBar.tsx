@@ -10,7 +10,6 @@ import { Navbar, NavDropdown, Nav } from 'react-bootstrap'
 import { User } from '../models/interfaces/User'
 import SignIn from './SignIn'
 import SignUp from './SignUp'
-import UICLogo from './UICLogo'
 import { signOut } from '../utils/functions/authentication'
 
 const NavBar = () => {
@@ -19,7 +18,7 @@ const NavBar = () => {
     return (
         <Navbar expand="md" bg="light" className="align-middle">
             <Navbar.Brand as={Link} to="/">
-                <UICLogo size={30} /> <b>Registrum</b>
+                <img src="/images/icon-72x72.png" height={30} /> <b>Registrum</b>
             </Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">

@@ -41,4 +41,4 @@ ENTRYPOINT [ "rushx", "start" ]
 
 FROM nginx:alpine as client
 COPY ./nginx.conf /etc/nginx/conf.d/default.conf
-COPY --from=base /usr/src/app/client/build /usr/share/nginx/html
+COPY --from=base /usr/src/app/client/dist /usr/share/nginx/html
