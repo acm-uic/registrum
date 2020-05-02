@@ -27,3 +27,7 @@ jobs:
           docker push docker.pkg.github.com/${{ github.repository }}/$project:$tag
           docker push docker.pkg.github.com/${{ github.repository }}/$project:latest
         done
+
+    - name: Trigger Hooks
+      run: |
+        curl -X POST -H "Content-Type: application/json" -d "{}" '${{ secrets.PROD_HOOK }}'
