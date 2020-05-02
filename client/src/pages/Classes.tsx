@@ -19,7 +19,6 @@ const Classes: FC = () => {
     useEffect(() => {
         // * Grab class data for use
         axios.get('/api/banner/tracking').then(res => {
-            console.log(res.data)
             // * Update statuses
             setStatuses(res.data as Class[])
         })

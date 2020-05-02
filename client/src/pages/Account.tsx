@@ -19,7 +19,6 @@ const Account: FC = () => {
     const store = useStore()
     const { Auth } = store.getState()
     const user = Auth.user as User
-    console.log(user)
 
     // * Grab dispatcher for redux
     const dispatch = useDispatch()
