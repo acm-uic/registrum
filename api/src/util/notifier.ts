@@ -42,7 +42,7 @@ export const notifyUser = async (user: UserObject, classData: any) => {
             console.log('EMAIL SENT TO ' + user.email)
             console.log(msg)
         } catch (err) {
-            throw new Error('Error sending email to user')
+            console.log('Error sending email to user')
         }
     }
 

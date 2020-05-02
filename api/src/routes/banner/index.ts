@@ -6,6 +6,10 @@ import { BannerClient } from '../../util/banner'
 // * All routes under /classes/*
 const router = Router()
 
+const API_HOST = process.env.API_HOST || 'http://localhost:4000'
+const API_BASE_PATH = process.env.API_BASE_PATH
+const notifyUrl = `${API_HOST}${API_BASE_PATH}/banner`
+
 // * | >>>>> Bharat's API ()
 router.post('/subscribe', isAuthenticated, async (req: Request, res: Response) => {
     // * Grab user id from session
@@ -17,12 +21,12 @@ router.post('/subscribe', isAuthenticated, async (req: Request, res: Response) =
     if (crn) {
         // * Add subscription to class model (addToSet ensures unique CRN's, no duplicates)
         await User.updateOne({ _id }, { $addToSet: { subscriptions: crn } })
-        console.log('SUBSCRIBING WITH ' + `http://localhost:4000/notify/${_id}/${crn}`)
+        console.log('SUBSCRIBING WITH ' + `${notifyUrl}/notify/${_id}/${crn}`)
         // * Subscribe via Banner API
         try {
             // * Waiting for Banner Client to be completely implemented
             await BannerClient.post('/hook', {
-                url: `http://localhost:4000/notify/${_id}/${crn}`,
+                url: `${notifyUrl}/notify/${_id}/${crn}`,
                 crn
             })
         } catch (err) {
@@ -50,10 +54,10 @@ router.post('/unsubscribe', isAuthenticated, async (req: Request, res: Response)
 
         // * Subscribe via Banner API
         try {
-            console.log('UNSUBSCRIBING WITH ' + `http://localhost:4000/notify/${_id}/${crn}`)
+            console.log('UNSUBSCRIBING WITH ' + `${notifyUrl}/notify/${_id}/${crn}`)
             // ! Waiting for Banner Client to be completely implemented
             await BannerClient.post('/deletehook', {
-                url: `http://localhost:4000/notify/${_id}/${crn}`,
+                url: `${notifyUrl}/notify/${_id}/${crn}`,
                 crn
             })
         } catch (err) {
@@ -88,7 +92,7 @@ router.get('/tracking', isAuthenticated, async (req: Request, res: Response) => 
 router.post('/notify/:id/:crn', async (req: Request, res: Response) => {
     // * Grab needed params off of request
     const { id: _id } = req.params
-    const { classJSON } = req.body
+    const classJSON = req.body
 
     try {
         // * Resolve updated user
