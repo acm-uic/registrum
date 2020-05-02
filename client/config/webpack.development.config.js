@@ -22,8 +22,8 @@ module.exports = {
         contentBase: path.resolve(__dirname, `../public/`),
         port: settings.port,
         hot: true,
-        before: function(app) {
-            app.use(function(req, res, next) {
+        before: function (app) {
+            app.use(function (req, res, next) {
                 console.log(`>>>> ${req.url}`)
                 next()
             })
@@ -32,7 +32,7 @@ module.exports = {
         compress: true,
         historyApiFallback: true,
         overlay: true,
-        host: '0.0.0.0',
+        host: 'localhost',
         proxy: {
             '/api': {
                 target: settings.apiProxyUrl,
@@ -40,6 +40,7 @@ module.exports = {
             }
         },
         watchOptions: {
+            ignored: ['build/**, node_modules/**'],
             poll: true
         }
     },

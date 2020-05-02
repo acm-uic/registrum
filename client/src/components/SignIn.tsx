@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 
 import { Button, Modal, Form } from 'react-bootstrap'
-
 import { signIn } from '../utils/functions/authentication'
 
 const SignIn = () => {

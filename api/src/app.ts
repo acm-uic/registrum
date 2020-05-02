@@ -1,4 +1,4 @@
-import express from 'express'
+import express, { Request, Response, NextFunction } from 'express'
 import compression from 'compression' // compresses requests
 import session from 'express-session'
 import flash from 'express-flash'
@@ -23,7 +23,7 @@ const mongoUrl = process.env.MONGODB_URI || 'mongodb://localhost:27017/registrum
 const baseUrl = process.env.API_BASE_PATH || '/api'
 
 // * Express configuration
-app.options('*', cors)
+app.options('*', cors())
 app.use(compression())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
@@ -62,10 +62,11 @@ const SessionStore = new RedisStore({ client: redisClient })
 app.use(
     session({
         resave: true,
+        proxy: process.env.NODE_ENV == 'production',
         saveUninitialized: true,
         secret: process.env.SESSION_SECRET || 'This is not a secure secret!',
         store: SessionStore,
-        cookie: { secure: process.env.NODE_ENV === 'production' }
+        cookie: { secure: process.env.NODE_ENV == 'production' } // * API Will be served behind reverse proxy, does not need to be secure
     })
 )
 
@@ -78,6 +79,12 @@ app.use(flash())
 
 // * Bind Routes to app
 app.use(baseUrl, router)
+
+// * Set No Cache
+router.use((req: Request, res: Response, next: NextFunction) => {
+    res.set('Cache-Control', 'no-store')
+    next()
+})
 
 export default app
 export { mongoose, redisClient }

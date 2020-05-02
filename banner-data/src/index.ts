@@ -62,7 +62,9 @@ parser.addArgument(['--max-page-size'], {
 })
 
 const args = parser.parseArgs()
+
 const mongoUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/banner-data'
+
 type AppConfig = {
     now: boolean
     cron: string
@@ -70,7 +72,7 @@ type AppConfig = {
 }
 const config: AppConfig = {
     now: args.now,
-    cron: args.cron,
+    cron: args.cron || process.env.REFRESH_INTERVAL,
     bannerData: {
         pageRetryCount: args.page_retry_count,
         pageRetryTime: args.page_retry_time,
@@ -83,6 +85,7 @@ console.log('🛠 Config:', config)
 
 const boot = async () => {
     try {
+        console.log(`⚡️ Attempting mongo connection to ${mongoUri}`)
         await mongoose.connect(mongoUri, {
             useNewUrlParser: true,
             useUnifiedTopology: true

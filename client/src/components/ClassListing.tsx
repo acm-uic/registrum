@@ -3,7 +3,7 @@ import { Button, ListGroupItem } from 'react-bootstrap'
 
 import { Class } from '../models/interfaces/Class'
 
-interface ClassListingProps {
+export interface ClassListingProps {
     onTrack: (crn: string) => void
     listing: Class
 }
