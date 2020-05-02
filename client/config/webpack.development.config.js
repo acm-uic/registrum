@@ -40,7 +40,7 @@ module.exports = {
             }
         },
         watchOptions: {
-            ignored: ['node_modules/**'],
+            ignored: ['build/**, node_modules/**'],
             poll: true
         }
     },
