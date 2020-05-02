@@ -37,7 +37,8 @@ export type State = {} & { [prop: string]: any }
 export const store = createStore(
     persistReducer(persistOptions, reducers),
     {},
-    composeWithDevTools(applyMiddleware(thunk))
+    process.env.NODE_ENV === 'development'
+        ? composeWithDevTools(applyMiddleware(thunk))
+        : applyMiddleware(thunk)
 )
 export const persistor = persistStore(store)
-console.log('Configured Store', store.getState())

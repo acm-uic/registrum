@@ -60,7 +60,7 @@ const AddClass = () => {
             axios.get('/api/classes/terms').then((res: AxiosResponse) => {
                 // * Destructure response from API
                 const { data: terms } = res
-                console.log(terms)
+
                 // * Set terms
                 setTerms(terms)
                 setClassListing([])
@@ -75,7 +75,7 @@ const AddClass = () => {
             axios.get(`/api/classes/subjects`).then((res: AxiosResponse) => {
                 // * Destructure response from API
                 const { data: subjects } = res
-                console.log(subjects)
+
                 // * Set Subjects
                 setSubjects(subjects)
 
@@ -94,7 +94,6 @@ const AddClass = () => {
             axios.get(`/api/classes/list/${currentSubject.code}`).then((res: AxiosResponse) => {
                 // * Destructure response from API
                 const { data: classes } = res
-                console.log(classes)
                 // * Set Classes
                 setClasses(classes)
 
@@ -113,7 +112,7 @@ const AddClass = () => {
                 .then((res: AxiosResponse) => {
                     // * Destructure response from API
                     const { data: listing } = res
-                    console.log(listing)
+
                     // * Set Classes
                     setClassListing(listing.reverse())
                 })

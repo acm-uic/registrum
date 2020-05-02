@@ -76,7 +76,6 @@ const SignUp = () => {
                                     }
                                 }}
                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                    console.log(e.target.value)
                                     setFName(e.target.value)
                                 }}
                             />
