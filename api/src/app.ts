@@ -1,4 +1,4 @@
-import express from 'express'
+import express, { Request, Response, NextFunction } from 'express'
 import compression from 'compression' // compresses requests
 import session from 'express-session'
 import flash from 'express-flash'
@@ -78,6 +78,12 @@ app.use(flash())
 
 // * Bind Routes to app
 app.use(baseUrl, router)
+
+// * Set No Cache
+router.use((req: Request, res: Response, next: NextFunction) => {
+    res.set('Cache-Control', 'no-store')
+    next()
+})
 
 export default app
 export { mongoose, redisClient }
