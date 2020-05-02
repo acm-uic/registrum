@@ -14,7 +14,7 @@ router.post('/save-client-subscriptions', isAuthenticated, async (req: Request, 
 
     // * Grab user subscription object from post request
     const subscriptionObject = JSON.parse(req.body.subscriptionObject)
-
+    console.log(`/save-client-subscription == ${subscriptionObject}`)
     try {
         //* add subscription object to user's array of subscription objets
         await User.updateOne({ _id }, { $push: { subscriptionObjects: subscriptionObject } })

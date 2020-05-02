@@ -62,10 +62,11 @@ const SessionStore = new RedisStore({ client: redisClient })
 app.use(
     session({
         resave: true,
+        proxy: process.env.NODE_ENV == 'production',
         saveUninitialized: true,
         secret: process.env.SESSION_SECRET || 'This is not a secure secret!',
         store: SessionStore,
-        cookie: { secure: false } // * API Will be served behind reverse proxy, does not need to be secure
+        cookie: { secure: process.env.NODE_ENV == 'production' } // * API Will be served behind reverse proxy, does not need to be secure
     })
 )
 
