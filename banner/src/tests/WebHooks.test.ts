@@ -203,7 +203,7 @@ describe('WebHooks Test', () => {
                     assert.equal(statusReceived, status)
                     assert.equal(nameReceived, name)
                     assert.equal(
-                        bodyReceived,
+                        JSON.stringify(bodyReceived),
                         JSON.stringify({
                             headers: {
                                 ...headerData,

@@ -14,21 +14,21 @@ describe('Authentication Tests', () => {
     let server: Server
 
     beforeAll(async () => {
-        await new Promise((resolve, reject) => {
+        await new Promise(resolve => {
             server = app.listen(port, resolve)
         })
     })
 
     afterAll(async () => {
         // * Remove all users from DB
-        await new Promise((resolve, reject) => {
-            mongoose.connection.db.dropCollection('users', function (err, result) {
+        await new Promise(resolve => {
+            mongoose.connection.db.dropCollection('users', () => {
                 resolve()
             })
         })
 
         // * Close DB Connection
-        await new Promise((resolve, reject) => {
+        await new Promise(resolve => {
             mongoose.connection.close(() => {
                 resolve()
             })

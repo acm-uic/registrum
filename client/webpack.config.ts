@@ -1,18 +1,42 @@
 import * as path from 'path'
 import * as webpack from 'webpack'
-import * as WorkboxPlugin from 'workbox-webpack-plugin'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import CopyPlugin from 'copy-webpack-plugin'
 
+import * as tsconfig from './tsconfig.json'
+
+function tsConfigPathsToAliases({ webpackConfigBasePath = __dirname } = {}) {
+    if (!tsconfig.compilerOptions.paths) return {}
+
+    const paths: { [key: string]: string[] } = tsconfig.compilerOptions.paths
+
+    const aliases: { [key: string]: string } = {}
+
+    Object.keys(paths).forEach(item => {
+        const key = item.replace('/*', '')
+        const value = path.resolve(
+            webpackConfigBasePath,
+            paths[item][0].replace('/*', '').replace('*', '')
+        )
+
+        aliases[key] = value
+    })
+    return aliases
+}
+
 const config: webpack.Configuration = {
-    entry: './src/index',
+    entry: {
+        bundle: './src/index',
+        serviceWorker: './src/serviceWorker'
+    },
     output: {
         path: path.join(__dirname, '/dist'),
-        filename: 'bundle.js'
+        filename: '[name].js'
     },
 
     resolve: {
-        extensions: ['.ts', '.tsx', '.js']
+        extensions: ['.ts', '.tsx', '.js'],
+        alias: tsConfigPathsToAliases()
     },
     devServer: {
         historyApiFallback: true
@@ -50,8 +74,7 @@ const config: webpack.Configuration = {
         ]),
         new HtmlWebpackPlugin({
             template: path.resolve(__dirname, 'public/index.html')
-        }),
-        new WorkboxPlugin.GenerateSW()
+        })
     ]
 }
 
