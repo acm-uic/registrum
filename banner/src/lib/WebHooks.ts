@@ -1,6 +1,5 @@
 import * as crypto from 'crypto'
-import * as https from 'https'
-import * as http from 'http'
+import fetch from 'node-fetch'
 import { parse as urlParse } from 'url'
 import { Redis } from 'ioredis'
 import { EventEmitter } from 'events'
@@ -69,64 +68,19 @@ export class WebHooks {
         this.#emitter.emit('setListeners')
     }
 
-    #postRequest = async (
-        url: string,
-        jsonData: {},
-        headersData?: {}
-    ): Promise<PostRequestResponse> => {
-        console.log(url)
-        const { host, port, path } = urlParse(url)
-        console.log(host, port, path)
-        const body = JSON.stringify(jsonData)
-        // const HTTP = protocol === 'https' ? https : http
-        return new Promise((resolve, reject) => {
-            const req = http.request(
-                {
-                    host,
-                    port,
-                    path,
-                    method: 'POST',
-                    headers: {
-                        ...headersData,
-                        'Content-Length': body.length
-                    }
-                },
-                res => {
-                    const { statusCode } = res
-                    const buffer: Uint8Array[] = []
-                    if (statusCode < 200 || statusCode >= 300) {
-                        return reject(new Error('statusCode=' + statusCode))
-                    }
-                    res.on('data', chunk => {
-                        buffer.push(chunk)
-                    })
-                    res.on('end', () => {
-                        const body = Buffer.concat(buffer).toString()
-                        resolve({ body, statusCode })
-                    })
-                }
-            )
-            req.on('error', err => {
-                reject(err)
-            })
-            req.write(body)
-            req.end()
-        })
-    }
-
     #getRequestFunction = (url: string): RequestFunction => {
         return async (name: string, jsonData: {}, headersData?: {}): Promise<void> => {
-            console.log('==========', url)
-            const { body, statusCode } = await this.#postRequest(url, JSON.stringify(jsonData), {
+            const res = await fetch(url, {
+                method: 'POST',
+                body: JSON.stringify(jsonData),
                 headers: {
-                    headers: {
-                        ...headersData,
-                        'Content-Type': 'application/json'
-                    }
+                    ...headersData,
+                    'Content-Type': 'application/json'
                 }
             })
-
-            this.#emitter.emit(`${name}.status`, name, statusCode, body)
+            const { status } = res
+            const body = await res.text()
+            this.#emitter.emit(`${name}.status`, name, status, body)
         }
     }
 

@@ -187,7 +187,7 @@ describe('WebHooks Test', () => {
         const data = { data: 123123123 }
         const body = JSON.stringify(data)
         const status = 200
-        const headerData = {
+        const headerData: { [key: string]: string } = {
             custom: 'data'
         }
         const name = 'testTrigger'
@@ -202,21 +202,19 @@ describe('WebHooks Test', () => {
                 (nameReceived: string, statusReceived: number, bodyReceived: string) => {
                     assert.equal(statusReceived, status)
                     assert.equal(nameReceived, name)
-                    assert.equal(
-                        JSON.stringify(bodyReceived),
-                        JSON.stringify({
-                            headers: {
-                                ...headerData,
-                                'content-type': 'application/json',
-                                host,
-                                'content-length': body.length.toString(),
-                                connection: 'close'
-                            },
-                            method: 'POST',
-                            url,
-                            body
-                        })
-                    )
+
+                    const parsed = JSON.parse(bodyReceived)
+
+                    assert.equal(parsed.body, body)
+                    assert.equal(parsed.method, 'POST')
+                    assert.equal(parsed.url, url)
+                    assert.equal(parsed.headers['content-type'], 'application/json')
+                    assert.equal(parsed.headers['content-length'], body.length.toString())
+
+                    Object.keys(headerData).forEach(key => {
+                        assert.equal(parsed.headers[key], headerData[key])
+                    })
+
                     resolve()
                 }
             )

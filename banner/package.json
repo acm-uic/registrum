@@ -23,7 +23,8 @@
         "ioredis": "^4.16.3",
         "mongoose": "^5.9.11",
         "morgan": "^1.10.0",
-        "tough-cookie": "^4.0.0"
+        "tough-cookie": "^4.0.0",
+        "node-fetch": "^2.6.0"
     },
     "devDependencies": {
         "@types/chai": "^4.2.11",
@@ -48,6 +49,7 @@
         "prettier": "^2.0.5",
         "ts-jest": "^25.4.0",
         "ts-node": "^8.9.1",
-        "typescript": "^3.8.3"
+        "typescript": "^3.8.3",
+        "@types/node-fetch": "^2.5.7"
     }
 }
