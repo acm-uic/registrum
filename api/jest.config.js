@@ -1,14 +1,12 @@
 module.exports = {
     collectCoverage: true,
-    coverageDirectory: "./coverage/",
+    coverageDirectory: './coverage/',
     globals: {
-        "ts-jest": {
-            packageJson: "package.json"
+        'ts-jest': {
+            packageJson: 'package.json'
         }
     },
-    preset: "ts-jest",
-    testEnvironment: "node",
-    testPathIgnorePatterns: [
-        "<rootDir>/dist/"
-    ]
+    preset: 'ts-jest',
+    testEnvironment: 'node',
+    testPathIgnorePatterns: ['<rootDir>/dist/']
 }

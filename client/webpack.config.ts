@@ -21,6 +21,7 @@ function tsConfigPathsToAliases({ webpackConfigBasePath = __dirname } = {}) {
 
         aliases[key] = value
     })
+
     return aliases
 }
 

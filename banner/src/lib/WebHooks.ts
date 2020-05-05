@@ -1,6 +1,5 @@
 import * as crypto from 'crypto'
 import fetch from 'node-fetch'
-import { parse as urlParse } from 'url'
 import { Redis } from 'ioredis'
 import { EventEmitter } from 'events'
 

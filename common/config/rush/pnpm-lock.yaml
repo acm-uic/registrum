@@ -14,9 +14,10 @@ dependencies:
   '@rush-temp/registrum-banner-data': 'file:projects/registrum-banner-data.tgz'
   '@rush-temp/registrum-client': 'file:projects/registrum-client.tgz_prettier@2.0.5'
   '@sendgrid/mail': 7.1.0
+  '@testing-library/jest-dom': 5.5.0
   '@testing-library/react': 10.0.4_react-dom@16.13.1+react@16.13.1
+  '@testing-library/user-event': 10.1.0
   '@types/argparse': 1.0.38
-  '@types/axios': 0.14.0
   '@types/bcrypt': 3.0.0
   '@types/chai': 4.2.11
   '@types/compression': 1.7.0
@@ -35,6 +36,7 @@ dependencies:
   '@types/morgan': 1.9.0
   '@types/node': 13.13.4
   '@types/node-cron': 2.0.3
+  '@types/node-fetch': 2.5.7
   '@types/passport': 1.0.3
   '@types/passport-local': 1.0.33
   '@types/react': 16.9.34
@@ -43,7 +45,9 @@ dependencies:
   '@types/react-router-dom': 5.1.5
   '@types/react-select': 3.0.12
   '@types/supertest': 2.0.9
+  '@types/testing-library__jest-dom': 5.0.3
   '@types/testing-library__react': 10.0.1
+  '@types/testing-library__user-event': 4.1.1
   '@types/tough-cookie': 4.0.0
   '@types/webpack': 4.41.12
   '@types/webpack-dev-server': 3.10.1
@@ -82,6 +86,7 @@ dependencies:
   mongoose: 5.9.11_mongoose@5.9.11
   morgan: 1.10.0
   node-cron: 2.0.3
+  node-fetch: 2.6.0
   node-sass: 4.14.0
   nodemon: 2.0.3
   passport: 0.4.1
@@ -95,6 +100,7 @@ dependencies:
   react-redux: 7.2.0_49f644e2f7de4182503f8b93abece808
   react-router-dom: 5.1.2_react@16.13.1
   react-select: 3.1.0_react-dom@16.13.1+react@16.13.1
+  react-test-renderer: 16.13.1_react@16.13.1
   react-toastify: 5.5.0_react-dom@16.13.1+react@16.13.1
   redux: 4.0.5
   redux-devtools-extension: 2.13.8_redux@4.0.5
@@ -1785,13 +1791,13 @@ packages:
       integrity: sha512-g+gT//COYh2FgRrlgcgdkifkjqSk7wQIS7F8jbrf6yoEsh85PJUJ/QtO0bJ9QU7pQPYQgKcgqNJsOs0dlyFYag==
   /@testing-library/jest-dom/5.5.0:
     dependencies:
-      '@babel/runtime': 7.9.2
+      '@babel/runtime': 7.9.6
       '@types/testing-library__jest-dom': 5.0.3
       chalk: 3.0.0
       css: 2.2.4
       css.escape: 1.5.1
-      jest-diff: 25.3.0
-      jest-matcher-utils: 25.3.0
+      jest-diff: 25.5.0
+      jest-matcher-utils: 25.5.0
       lodash: 4.17.15
       redent: 3.0.0
     dev: false
@@ -1816,9 +1822,7 @@ packages:
       react-dom: '*'
     resolution:
       integrity: sha512-2e1B5debfuiIGbvUuiSXybskuh7ZTVJDDvG/IxlzLOY9Co/mKFj9hIklAe2nGZYcOUxFaiqWrRZ9vCVGzJfRlQ==
-  /@testing-library/user-event/10.1.0_@testing-library+dom@7.2.2:
-    dependencies:
-      '@testing-library/dom': 7.2.2
+  /@testing-library/user-event/10.1.0:
     dev: false
     peerDependencies:
       '@testing-library/dom': '>=5'
@@ -2410,6 +2414,10 @@ packages:
     dev: false
     resolution:
       integrity: sha512-RbDwmActAckbujLZeVO/daSfdL1pnjVqas25UueOkAY5r7vriavWf0Zqg7ghXMHa8ycD/kLkv8QOj31LmSYwww==
+  /@types/testing-library__user-event/4.1.1:
+    dev: false
+    resolution:
+      integrity: sha512-CIpTxvHwoLEe88deUttZ724SE28hX/x3zAdJIQLoltnngl//akeEKFB5DeNqBOWu7ZCEHFiTqRBMKuswXJqYqg==
   /@types/tough-cookie/4.0.0:
     dev: false
     resolution:
@@ -7675,6 +7683,11 @@ packages:
       node: '>= 8.3'
     resolution:
       integrity: sha512-aktF0kCar8+zxRHxQZwxMy70stc9R1mOmrLsT5VO3pIT0uzGRSDAXxSlz4NqQWpuLjPpuMhPRl7H+5FRsvIQAg==
+  /jest-dom/4.0.0:
+    deprecated: "\U0001F6A8 jest-dom has moved to @testing-library/jest-dom. Please uninstall jest-dom and install @testing-library/jest-dom instead, or use an older version of jest-dom. Learn more about this change here: https://github.com/testing-library/dom-testing-library/issues/260 Thanks! :)"
+    dev: false
+    resolution:
+      integrity: sha512-gBxYZlZB1Jgvf2gP2pRfjjUWF8woGBHj/g5rAQgFPB/0K2atGuhVcPO+BItyjWeKg9zM+dokgcMOH01vrWVMFA==
   /jest-each/25.5.0:
     dependencies:
       '@jest/types': 25.5.0
@@ -7773,17 +7786,6 @@ packages:
       node: '>= 8.3'
     resolution:
       integrity: sha512-rV7JdLsanS8OkdDpZtgBf61L5xZ4NnYLBq72r6ldxahJWWczZjXawRsoHyXzibM5ed7C2QRjpp6ypgwGdKyoVA==
-  /jest-matcher-utils/25.3.0:
-    dependencies:
-      chalk: 3.0.0
-      jest-diff: 25.3.0
-      jest-get-type: 25.2.6
-      pretty-format: 25.3.0
-    dev: false
-    engines:
-      node: '>= 8.3'
-    resolution:
-      integrity: sha512-ZBUJ2fchNIZt+fyzkuCFBb8SKaU//Rln45augfUtbHaGyVxCO++ANARdBK9oPGXU3hEDgyy7UHnOP/qNOJXFUg==
   /jest-matcher-utils/25.5.0:
     dependencies:
       chalk: 3.0.0
@@ -13986,7 +13988,7 @@ packages:
     dev: false
     name: '@rush-temp/registrum-banner-data'
     resolution:
-      integrity: sha512-ANf+vzeDDmn/SfgkQuYHwJ5O317EFJ7YxhBXkAlSeeDCZtwmJ7Hkms7EfwbymJ8vGsl+lCrPOF2f6dkbE34+IQ==
+      integrity: sha512-1BoAvHX83Dlk6RbD4lRRwAh3cn9Tez2EQOQafBxsM9kkDWWJzTsKJhLZ98B+jDyo3HZhW5nJm8PC40waZCCdYw==
       tarball: 'file:projects/registrum-banner-data.tgz'
     version: 0.0.0
   'file:projects/registrum-banner.tgz':
@@ -14039,7 +14041,7 @@ packages:
     dev: false
     name: '@rush-temp/registrum-banner'
     resolution:
-      integrity: sha512-IFEd5czcxg7Xr3H9DytaBmHnpDpjddMYv1dkU6YyzhQgiKF23gzoGaqSqyRAgbN3oO1CXQvR4JRH7EZwXXOa0w==
+      integrity: sha512-E2tFsLRuuS97fPjaefglQTN6A8u1ZR5QP90k+/ntXQDy8gzGQt8dXmvpn/94x4Dg6sTlk3f2ci4oDnI4pgAuuw==
       tarball: 'file:projects/registrum-banner.tgz'
     version: 0.0.0
   'file:projects/registrum-client.tgz_prettier@2.0.5':
@@ -14069,7 +14071,7 @@ packages:
       '@testing-library/dom': 7.2.2
       '@testing-library/jest-dom': 5.5.0
       '@testing-library/react': 10.0.4_react-dom@16.13.1+react@16.13.1
-      '@testing-library/user-event': 10.1.0_@testing-library+dom@7.2.2
+      '@testing-library/user-event': 10.1.0
       '@types/copy-webpack-plugin': 5.0.0
       '@types/enzyme': 3.10.5
       '@types/enzyme-adapter-react-16': 1.0.6
@@ -14083,7 +14085,9 @@ packages:
       '@types/react-router-dom': 5.1.5
       '@types/react-select': 3.0.12
       '@types/react-transition-group': 4.2.4
+      '@types/testing-library__jest-dom': 5.0.3
       '@types/testing-library__react': 10.0.1
+      '@types/testing-library__user-event': 4.1.1
       '@types/webpack': 4.41.12
       '@types/webpack-dev-server': 3.10.1
       '@types/workbox-webpack-plugin': 5.1.0
@@ -14112,6 +14116,7 @@ packages:
       html-webpack-plugin: 4.3.0_webpack@4.43.0
       http-server: 0.12.3
       jest: 25.5.4
+      jest-dom: 4.0.0
       node-sass: 4.14.0
       prop-types: 15.7.2
       react: 16.13.1
@@ -14122,6 +14127,7 @@ packages:
       react-redux: 7.2.0_49f644e2f7de4182503f8b93abece808
       react-router-dom: 5.1.2_react@16.13.1
       react-select: 3.1.0_react-dom@16.13.1+react@16.13.1
+      react-test-renderer: 16.13.1_react@16.13.1
       react-toastify: 5.5.0_react-dom@16.13.1+react@16.13.1
       react-transition-group: 4.3.0_react-dom@16.13.1+react@16.13.1
       redux: 4.0.5
@@ -14152,7 +14158,7 @@ packages:
     peerDependencies:
       prettier: '*'
     resolution:
-      integrity: sha512-pvfheo6qrDJE03n2/iPe2yxDQiYSCVgFv1/Mxr9VawO2yRRH/jYipZe/KKn/H3EVUSxpPeB/BmhoHOGwr0Latg==
+      integrity: sha512-fJ/nEPKjzSrJgSfnuzEHxkl9PAqC0kDFhlLd3TP991VPY2Q6LZ0LHtRO4mOKjsoaf/coZstdkdHbPPr5SJJThQ==
       tarball: 'file:projects/registrum-client.tgz'
     version: 0.0.0
 registry: ''
@@ -14172,9 +14178,10 @@ specifiers:
   '@rush-temp/registrum-banner-data': 'file:./projects/registrum-banner-data.tgz'
   '@rush-temp/registrum-client': 'file:./projects/registrum-client.tgz'
   '@sendgrid/mail': ^7.1.0
+  '@testing-library/jest-dom': ^5.5.0
   '@testing-library/react': ^10.0.4
+  '@testing-library/user-event': ^10.1.0
   '@types/argparse': ^1.0.38
-  '@types/axios': ^0.14.0
   '@types/bcrypt': ^3.0.0
   '@types/chai': ^4.2.11
   '@types/compression': ^1.7.0
@@ -14193,6 +14200,7 @@ specifiers:
   '@types/morgan': ^1.9.0
   '@types/node': ^13.13.4
   '@types/node-cron': ^2.0.3
+  '@types/node-fetch': ^2.5.7
   '@types/passport': ^1.0.3
   '@types/passport-local': ^1.0.33
   '@types/react': ^16.9.34
@@ -14201,7 +14209,9 @@ specifiers:
   '@types/react-router-dom': ^5.1.5
   '@types/react-select': ~3.0.12
   '@types/supertest': ^2.0.9
+  '@types/testing-library__jest-dom': ^5.0.3
   '@types/testing-library__react': ^10.0.1
+  '@types/testing-library__user-event': ^4.1.1
   '@types/tough-cookie': ^4.0.0
   '@types/webpack': ^4.41.12
   '@types/webpack-dev-server': ^3.10.1
@@ -14240,6 +14250,7 @@ specifiers:
   mongoose: ^5.9.11
   morgan: ^1.10.0
   node-cron: ^2.0.3
+  node-fetch: ^2.6.0
   node-sass: ^4.14.0
   nodemon: ^2.0.3
   passport: ^0.4.1
@@ -14253,6 +14264,7 @@ specifiers:
   react-redux: ^7.2.0
   react-router-dom: ^5.1.2
   react-select: ~3.1.0
+  react-test-renderer: ^16.13.1
   react-toastify: ^5.5.0
   redux: ^4.0.5
   redux-devtools-extension: ^2.13.8
