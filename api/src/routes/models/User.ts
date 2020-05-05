@@ -22,7 +22,7 @@ export interface UserObject extends Document {
     email: string
     password: string
     subscriptions: string[]
-    subscriptionObjects: []
+    subscriptionObjects: SubscriptionsObject[]
     emailNotificationsEnabled: boolean
     pushNotificationsEnabled: boolean
 }
@@ -36,7 +36,7 @@ const UserSchema: Schema = new Schema({
     subscriptions: [String],
     subscriptionObjects: [
         {
-            endpoint: String,
+            endpoint: { type: String, unique: true },
             expirationTime: String,
             keys: {
                 p256dh: String,
@@ -44,14 +44,8 @@ const UserSchema: Schema = new Schema({
             }
         }
     ],
-    emailNotificationsEnabled: {
-        type: Boolean,
-        default: true
-    },
-    pushNotificationsEnabled: {
-        type: Boolean,
-        default: true
-    }
+    emailNotificationsEnabled: { type: Boolean, default: true },
+    pushNotificationsEnabled: { type: Boolean, default: true }
 })
 
 // Export the model
