@@ -14,32 +14,31 @@ jobs:
     - name: docker build, push
       shell: pwsh
       run: |
-        $branch="${GITHUB_REF#refs/heads/}"
-        $rev="${GITHUB_SHA}".Substring(0,8)
-
+        $branch="${{github.ref}}".Split("refs/heads/")
         Write-Host branch: $branch
+
+        $rev="${{github.sha}}".Substring(0,8)
         Write-Host rev: $rev
 
-        Write-Host ${{ secrets.GITHUB_TOKEN }} | docker login docker.pkg.github.com --username ${{ github.actor }} --password-stdin
+        docker login docker.pkg.github.com --username ${{github.actor}} --password ${{secrets.GITHUB_TOKEN}}
 
         docker build -t registrum_base -f Base.Dockerfile .
 
         $projects=@("api", "banner", "banner-data", "client")
-        projects=( api banner banner-data client )
         foreach($project in $projects) {
           Write-Host Working on $project ...
-          docker build --target $project -t docker.pkg.github.com/${{ github.repository }}/$($project):$rev .
-          docker tag docker.pkg.github.com/${{ github.repository }}/$($project):$rev docker.pkg.github.com/${{ github.repository }}/$($project):$branch
-          docker push docker.pkg.github.com/${{ github.repository }}/$($project):$rev
-          docker push docker.pkg.github.com/${{ github.repository }}/$($project):$branch
+          docker build --target $project -t docker.pkg.github.com/${{github.repository}}/$($project):$rev .
+          docker tag docker.pkg.github.com/${{github.repository}}/$($project):$rev docker.pkg.github.com/${{github.repository}}/$($project):$branch
+          docker push docker.pkg.github.com/${{github.repository}}/$($project):$rev
+          docker push docker.pkg.github.com/${{github.repository}}/$($project):$branch
         }
     - name: Trigger Hooks - master
       shell: pwsh
       if: github.ref == 'refs/heads/master'
       run: |
-        Invoke-WebRequest -Method POST -Body @{} -Uri '${{ secrets.MASTER_HOOK }}'
+        curl --request POST --data '{}' --header 'Content-Type: application/json' '${{ secrets.MASTER_HOOK }}'
     - name: Trigger Hooks - staging
       shell: pwsh
       if: github.ref == 'refs/heads/staging'
       run: |
-        Invoke-WebRequest -Method POST -Body @{} -Uri '${{ secrets.STAGING_HOOK }}'
+        curl --request POST --data '{}' --header 'Content-Type: application/json' '${{ secrets.STAGING_HOOK }}'
