@@ -32,4 +32,4 @@ jobs:
 
     - name: Trigger Hooks
       run: |
-        curl -X POST -H "Content-Type: application/json" -d "{}" '${{secrets.PROD_HOOK}}'
+        curl --request POST --data '{}' --header 'Content-Type: application/json' '${{ secrets.PROD_HOOK }}'
