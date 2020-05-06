@@ -119,7 +119,7 @@ const Account: FC = () => {
                 </Card.Header>
                 <Card.Body>
                     <Form>
-                        <Form.Group controlId="formBasicPassword">
+                        <Form.Group controlId="password">
                             <Card.Title>
                                 Please enter your current password to make any changes...
                             </Card.Title>
@@ -127,6 +127,7 @@ const Account: FC = () => {
                                 type="password"
                                 placeholder="Enter Password"
                                 value={currentPassword}
+                                autoComplete={'current-password'}
                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                     setCurrentPassword(e.target.value)
                                 }}
@@ -135,26 +136,28 @@ const Account: FC = () => {
 
                         <hr />
 
-                        <Form.Group controlId="formBasicPassword">
+                        <Form.Group controlId="newPassword">
                             <Card.Title>Change your password</Card.Title>
                             <Form.Control
                                 disabled={currentPassword.length == 0}
                                 type="password"
                                 placeholder="Enter password"
                                 value={password}
+                                autoComplete={'new-password'}
                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                     setPassword(e.target.value)
                                 }}
                             />
                         </Form.Group>
                         {password.length > 0 && (
-                            <Form.Group>
+                            <Form.Group controlId="repeatPassword">
                                 <Form.Label>Re-type New Password</Form.Label>
                                 <Form.Control
                                     disabled={currentPassword.length == 0}
                                     type="password"
                                     placeholder="Confirm new password"
                                     value={retypePassword}
+                                    autoComplete={'new-password'}
                                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                         setRetypePassword(e.target.value)
                                     }}
@@ -162,7 +165,7 @@ const Account: FC = () => {
                             </Form.Group>
                         )}
 
-                        <Form.Group controlId="formBasicEmail">
+                        <Form.Group controlId="firstName">
                             <Card.Title>Change your first name</Card.Title>
                             <Form.Control
                                 disabled={currentPassword.length == 0}
@@ -175,20 +178,21 @@ const Account: FC = () => {
                             />
                         </Form.Group>
 
-                        <Form.Group controlId="formBasicEmail">
+                        <Form.Group controlId="email">
                             <Card.Title>Change your last name</Card.Title>
                             <Form.Control
                                 disabled={currentPassword.length == 0}
                                 type="text"
                                 placeholder="Enter new last name"
                                 value={lName}
+                                autoComplete={'username'}
                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                     setLName(e.target.value)
                                 }}
                             />
                         </Form.Group>
 
-                        <Form.Group controlId="formNotifications">
+                        <Form.Group controlId="notifications">
                             <Card.Title>Notification Options</Card.Title>
 
                             <Form.Check

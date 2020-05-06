@@ -56,10 +56,6 @@ export const initializeSW = (registration: ServiceWorkerRegistration) => {
 
 export function register() {
     if ('serviceWorker' in navigator && (process.env.NODE_ENV === 'production' || isLocalhost)) {
-        console.log(
-            'serviceWorker' in navigator && (process.env.NODE_ENV === 'production' || isLocalhost)
-        )
-
         const swUrl = `./serviceWorker.js`
 
         if ('Notification' in self)

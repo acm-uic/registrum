@@ -35,8 +35,9 @@ router.post('/unsubscribe-client', isAuthenticated, async (req: Request, res: Re
         // * Grab user subscription object from post request
         const subscriptionObject = JSON.parse(req.body.subscription) as SubscriptionsObject
 
-        //* Remove subscription object to user's array of subscription objets
-        await User.updateOne({ _id }, { $pull: { subscriptionObjects: subscriptionObject } })
+        if (subscriptionObject !== null)
+            //* Remove subscription object to user's array of subscription objets
+            await User.updateOne({ _id }, { $pull: { subscriptionObjects: subscriptionObject } })
     } catch (err) {
         console.error(err.message)
         res.status(500).end()

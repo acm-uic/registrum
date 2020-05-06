@@ -28,7 +28,7 @@ async function getSubscriptionObject() {
             const subscription = await registration.pushManager.getSubscription()
 
             // * Return subscription if not null
-            return JSON.stringify(subscription)
+            return subscription !== null ? JSON.stringify(subscription) : null
         } catch (err) {
             console.error(err)
             return null
