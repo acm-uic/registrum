@@ -2,20 +2,13 @@ coverage:
   status:
     project:
       default: off
-      client:
-        threshold: 0%
-        flags:
-          - client
       api:
-        threshold: 0%
         flags:
           - api
       banner:
-        threshold: 0%
         flags:
           - banner
       banner-data:
-        threshold: 0%
         flags:
           - banner-data
 
@@ -23,9 +16,6 @@ flags:
   api:
     paths:
       - api/
-  client:
-    paths:
-      - client/
   banner:
     paths:
       - banner/
