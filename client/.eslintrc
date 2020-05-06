@@ -21,7 +21,9 @@
         "browser": true,
         "jasmine": true,
         "jest": true,
-        "node": true
+        "node": true,
+        "worker": true,
+        "serviceworker": true
     },
     "settings": {
         "react": {
