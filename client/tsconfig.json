@@ -7,7 +7,8 @@
         "lib": [
             "dom",
             "dom.iterable",
-            "esnext"
+            "esnext",
+            "webworker"
         ],
         "strict": true,
         "noEmit": true,
@@ -18,15 +19,33 @@
         "resolveJsonModule": true,
         "baseUrl": "src",
         "paths": {
-            "@utils": ["utils"],
-            "@actions": ["models/redux/actions"],
-            "@reducers": ["models/redux/reducers"],
-            "@redux": ["models/redux"],
-            "@components": ["components"],
-            "@styles": ["styles"],
-            "@assets": ["assets"],
-            "@interfaces": ["models/interfaces"],
-            "@pages": ["pages"]
+            "@utils": [
+                "utils"
+            ],
+            "@actions": [
+                "models/redux/actions"
+            ],
+            "@reducers": [
+                "models/redux/reducers"
+            ],
+            "@redux": [
+                "models/redux"
+            ],
+            "@components": [
+                "components"
+            ],
+            "@styles": [
+                "styles"
+            ],
+            "@assets": [
+                "assets"
+            ],
+            "@interfaces": [
+                "models/interfaces"
+            ],
+            "@pages": [
+                "pages"
+            ]
         }
     },
     "exclude": [
