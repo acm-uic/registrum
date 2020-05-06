@@ -49,7 +49,7 @@ mongoose
     })
     .catch(err => {
         console.log('MongoDB connection error. Please make sure MongoDB is running. ' + err)
-        process.exit()
+        process.exit(1)
     })
 
 // * Initialize Redis Client and Redis Session Store
@@ -77,14 +77,14 @@ app.use(passport.session())
 // * Setup express-flash for route messaging
 app.use(flash())
 
-// * Bind Routes to app
-app.use(baseUrl, router)
-
 // * Set No Cache
 router.use((req: Request, res: Response, next: NextFunction) => {
     res.set('Cache-Control', 'no-store')
     next()
 })
+
+// * Bind Routes to app
+app.use(baseUrl, router)
 
 export default app
 export { mongoose, redisClient }
