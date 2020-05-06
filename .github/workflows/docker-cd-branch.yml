@@ -36,9 +36,9 @@ jobs:
       shell: pwsh
       if: github.ref == 'refs/heads/master'
       run: |
-        Invoke-WebRequest -Method POST -Body @{} -Uri '${{ secrets.MASTER_HOOK }}'
+        curl -X POST -H "Content-Type: application/json" -d "{}" '${{ secrets.MASTER_HOOK }}'
     - name: Trigger Hooks - staging
       shell: pwsh
       if: github.ref == 'refs/heads/staging'
       run: |
-        Invoke-WebRequest -Method POST -Body @{} -Uri '${{ secrets.STAGING_HOOK }}'
+        curl -X POST -H "Content-Type: application/json" -d "{}" '${{ secrets.STAGING_HOOK }}'
