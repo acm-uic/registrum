@@ -7,11 +7,11 @@ type Config = {
 
 // * Checks if client is on localhost
 const isLocalhost = Boolean(
-    window.location.hostname === 'localhost' ||
+    self.location.hostname === 'localhost' ||
         // [::1] is the IPv6 localhost address.
-        window.location.hostname === '[::1]' ||
+        self.location.hostname === '[::1]' ||
         // 127.0.0.0/8 are considered localhost for IPv4.
-        window.location.hostname.match(/^127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/)
+        self.location.hostname.match(/^127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/)
 )
 
 // * Converting public key
@@ -19,7 +19,7 @@ function toByteArray(base64String: string) {
     const padding = '='.repeat((4 - (base64String.length % 4)) % 4)
     const base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/')
 
-    const rawData = window.atob(base64)
+    const rawData = self.atob(base64)
     const outputArray = new Uint8Array(rawData.length)
 
     for (let i = 0; i < rawData.length; ++i) {
@@ -61,7 +61,7 @@ export function register() {
 
         const swUrl = `./serviceWorker.js`
 
-        if ('Notification' in window)
+        if ('Notification' in self)
             navigator.serviceWorker
                 .register(swUrl)
                 .then(() => {

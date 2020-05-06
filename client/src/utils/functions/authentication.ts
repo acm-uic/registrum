@@ -111,22 +111,16 @@ export const signIn = async (email: string, password: string) => {
     }
 }
 
-async function unsubscribeUser() {
-    // * checking browser if service workers are supported
-    if ('serviceWorker' in navigator) {
-        // * getting the subscription object so that it can be used to delete it from DB
-        const subscriptionObject = await getSubscriptionObject()
-
-        // * sending post requst to remove subscription object from DB
-        await client.post('/push-service/unsubscribe-client', { subscriptionObject })
-    }
-}
-
 export const signOut = async () => {
     try {
-        // * calling function to unsubscribe user before they log out.
-        // * this prevents user from getting class notifications after they've logged out
-        await unsubscribeUser()
+        // * checking browser if service workers are supported
+        if ('serviceWorker' in navigator) {
+            // * getting the subscription object so that it can be used to delete it from DB
+            const subscription = await getSubscriptionObject()
+
+            // * sending post requst to remove subscription object from DB
+            await client.post('/push-service/unsubscribe-client', { subscription })
+        }
 
         const response = await client.get('auth/logout')
 

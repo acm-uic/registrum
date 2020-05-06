@@ -36,7 +36,7 @@ const UserSchema: Schema = new Schema({
     subscriptions: [String],
     subscriptionObjects: [
         {
-            endpoint: { type: String, unique: true },
+            endpoint: String,
             expirationTime: String,
             keys: {
                 p256dh: String,

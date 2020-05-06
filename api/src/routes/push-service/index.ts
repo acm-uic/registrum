@@ -10,10 +10,10 @@ router.post('/save-client-subscriptions', isAuthenticated, async (req: Request, 
     // * Grab user id from session
     const _id = (req.user as UserObject)._id
 
-    // * Grab user subscription object from post request
-    const subscriptionObject = JSON.parse(req.body.subscriptionObject) as SubscriptionsObject
-
     try {
+        // * Grab user subscription object from post request
+        const subscriptionObject = JSON.parse(req.body.subscription) as SubscriptionsObject
+
         //* Add subscription object to user's array of subscription objets
         await User.updateOne({ _id }, { $push: { subscriptionObjects: subscriptionObject } })
     } catch (err) {
@@ -31,10 +31,10 @@ router.post('/unsubscribe-client', isAuthenticated, async (req: Request, res: Re
     // * Grab user id from session
     const _id = (req.user as UserObject)._id
 
-    // * Grab user subscription object from post request
-    const subscriptionObject = JSON.parse(req.body.subscriptionObject) as SubscriptionsObject
-
     try {
+        // * Grab user subscription object from post request
+        const subscriptionObject = JSON.parse(req.body.subscription) as SubscriptionsObject
+
         //* Remove subscription object to user's array of subscription objets
         await User.updateOne({ _id }, { $pull: { subscriptionObjects: subscriptionObject } })
     } catch (err) {

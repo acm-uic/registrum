@@ -2,10 +2,10 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSignOutAlt, faUser, faUserCircle } from '@fortawesome/free-solid-svg-icons'
+import { faSignOutAlt, faUser } from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom'
 
-import { Navbar, NavDropdown, Nav } from 'react-bootstrap'
+import { Navbar, Nav } from 'react-bootstrap'
 
 import { User } from '../models/interfaces/User'
 import SignIn from './SignIn'
@@ -43,23 +43,13 @@ const NavBar = () => {
                     )}
 
                     {user != null && (
-                        <NavDropdown
-                            title={
-                                <>
-                                    <FontAwesomeIcon icon={faUserCircle} />
-                                    {user.firstname}
-                                </>
-                            }
-                            id="basic-nav-dropdown"
-                            alignRight
-                        >
-                            <NavDropdown.Item as={Link} to="/account">
+                        <>
+                            <Nav.Link as={Link} to="/account">
                                 <FontAwesomeIcon icon={faUser} />
                                 {'  '}
-                                Account
-                            </NavDropdown.Item>
-                            <NavDropdown.Divider />
-                            <NavDropdown.Item
+                                {user.firstname}
+                            </Nav.Link>
+                            <Nav.Link
                                 onClick={async (e: any) => {
                                     e.preventDefault()
                                     await signOut()
@@ -67,8 +57,8 @@ const NavBar = () => {
                             >
                                 <FontAwesomeIcon icon={faSignOutAlt} />
                                 Sign Out
-                            </NavDropdown.Item>
-                        </NavDropdown>
+                            </Nav.Link>
+                        </>
                     )}
                 </Nav>
             </Navbar.Collapse>
