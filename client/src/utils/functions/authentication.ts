@@ -51,15 +51,21 @@ export const signUp = async (fn: string, ln: string, em: string, pw: string) => 
             toast('Signed Up succesfully', {
                 type: 'success'
             })
-            // * Set user
-            store.dispatch(setUser(response.data as User))
 
-            //* Get subscription from navigator object
-            const subscription = await getSubscriptionObject()
+            // * Get user data
+            const user = response.data as User
 
-            // * Subscribe client using subscription from service worker if available
-            if (subscription !== null) {
-                await client.post('/push-service/save-client-subscriptions', { subscription })
+            // * Set user data
+            store.dispatch(setUser(user))
+
+            if (user.emailNotificationsEnabled && 'serviceWorker' in navigator) {
+                //* Get subscription from navigator object
+                const subscription = await getSubscriptionObject()
+
+                // * Subscribe client using subscription from service worker if available
+                if (subscription !== null) {
+                    await client.post('/push-service/save-client-subscriptions', { subscription })
+                }
             }
         } else {
             toast(response.data, { type: response.status === 400 ? 'info' : 'error' })
@@ -86,15 +92,21 @@ export const signIn = async (email: string, password: string) => {
             toast('Signed in succesfully', {
                 type: 'success'
             })
-            // * Set user
-            store.dispatch(setUser(response.data as User))
 
-            //* Get subscription from navigator object
-            const subscription = await getSubscriptionObject()
+            // * Get user data
+            const user = response.data as User
 
-            // * Subscribe client using subscription from service worker if available
-            if (subscription !== null) {
-                await client.post('/push-service/save-client-subscriptions', { subscription })
+            // * Set user data
+            store.dispatch(setUser(user))
+
+            if (user.emailNotificationsEnabled && 'serviceWorker' in navigator) {
+                //* Get subscription from navigator object
+                const subscription = await getSubscriptionObject()
+
+                // * Subscribe client using subscription from service worker if available
+                if (subscription !== null) {
+                    await client.post('/push-service/save-client-subscriptions', { subscription })
+                }
             }
         } else {
             toast(response.data, { type: response.status === 400 ? 'info' : 'error' })
@@ -115,11 +127,16 @@ export const signOut = async () => {
     try {
         // * checking browser if service workers are supported
         if ('serviceWorker' in navigator) {
-            // * getting the subscription object so that it can be used to delete it from DB
-            const subscription = await getSubscriptionObject()
+            // * Getting the registeration object
+            const registration = await navigator.serviceWorker.ready
 
-            // * sending post requst to remove subscription object from DB
-            await client.post('/push-service/unsubscribe-client', { subscription })
+            // * using the registeration object --> to get the subscription object
+            const subscription = JSON.stringify(await registration.pushManager.getSubscription())
+
+            // * Sending POST requst to remove subscription object from DB
+            if (subscription !== null) {
+                await client.post('/push-service/unsubscribe-client', { subscription })
+            }
         }
 
         const response = await client.get('auth/logout')

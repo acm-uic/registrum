@@ -1,10 +1,5 @@
 declare let self: ServiceWorkerGlobalScope
 
-type Config = {
-    onSuccess?: (registration: ServiceWorkerRegistration) => void
-    onUpdate?: (registration: ServiceWorkerRegistration) => void
-}
-
 // * Checks if client is on localhost
 const isLocalhost = Boolean(
     self.location.hostname === 'localhost' ||
@@ -33,24 +28,30 @@ const publicKey = toByteArray(
 
 // * Finish SW Setup (Subscribe to Notifications)
 export const initializeSW = (registration: ServiceWorkerRegistration) => {
-    // * Ask for permission since user
-    Notification.requestPermission().then(consent => {
-        // * Check if user allows or blocks push notifications
-        if (consent === 'granted') {
-            registration.pushManager
-                .subscribe({
-                    userVisibleOnly: true,
-                    applicationServerKey: publicKey
-                })
-                .then(function (subscription) {
-                    console.log('User is subscribed.')
-                    console.log('initial subscription: ' + subscription)
-                })
-                .catch(function (err) {
-                    console.log('Failed to subscribe the user: ', err)
-                })
-        }
-    })
+    // * Ask for permission
+    if (Notification.permission === 'default') {
+        Notification.requestPermission().then(() => {
+            // * Permission has been set
+        })
+    }
+
+    // * Permission granted -> Subscribe
+    if (Notification.permission === 'granted') {
+        console.log('Permission Granted')
+
+        registration.pushManager
+            .subscribe({
+                userVisibleOnly: true,
+                applicationServerKey: publicKey
+            })
+            .then(function (subscription) {
+                console.log('User is subscribed.')
+                console.log('initial subscription: ' + subscription)
+            })
+            .catch(function (err) {
+                console.log('Failed to subscribe the user: ', err)
+            })
+    }
 }
 
 export function register() {
@@ -66,23 +67,6 @@ export function register() {
                 .register(swUrl)
                 .then(() => {
                     // * Successfully registered Service Worker
-                    Notification.requestPermission().then(consent => {
-                        // * Check if user allows or blocks push notifications
-                        if (consent === 'granted') {
-                            self.addEventListener<'push'>('push', event => {
-                                const message = event.data?.text()
-
-                                // * Setup the title and options
-                                const title = 'Registrum: Class Status'
-                                const options = {
-                                    body: message
-                                }
-
-                                // * Show the notification
-                                event.waitUntil(self.registration.showNotification(title, options))
-                            })
-                        }
-                    })
                 })
                 .catch(error => {
                     console.error('Error during service worker registration:', error)
@@ -104,17 +88,15 @@ export function unregister() {
     }
 }
 
-// self.addEventListener('push', function (event) {
-//     console.log('[Service Worker] Push Received.')
-//     console.log(`[Service Worker] Push had this data: "${event.data.text()}"`)
+self.addEventListener('push', event => {
+    const message = event.data?.text()
 
-//     const serverMessage = event.data.text()
+    // * Setup the title and options
+    const title = 'Registrum: Class Status'
+    const options = {
+        body: message
+    }
 
-//     // * this is used to customize the push notification
-//     const title = 'Class Status'
-//     const options = {
-//         body: serverMessage
-//     }
-
-//     event.waitUntil(self.registration.showNotification(title, options))
-// })
+    // * Show the notification
+    event.waitUntil(self.registration.showNotification(title, options))
+})
