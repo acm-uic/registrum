@@ -40,7 +40,14 @@ const config: webpack.Configuration = {
         alias: tsConfigPathsToAliases()
     },
     devServer: {
-        historyApiFallback: true
+        historyApiFallback: true,
+        stats: {
+            children: false,
+            maxModules: 0
+        },
+        before: app => {
+            app.use(require('morgan')('tiny'))
+        }
     },
     module: {
         rules: [
