@@ -9,12 +9,13 @@ import { initializeSW } from '../../serviceWorker'
 const basePath = process.env.API_BASE_PATH || '/api'
 const URL = `${basePath}/`
 
-const client = axios.create({
+export const client = axios.create({
     baseURL: URL,
     validateStatus: () => true,
     withCredentials: true
 })
 
+// * Initialize SW + Return subscribtion
 async function getSubscriptionObject() {
     //* navigator --> the core of service workers
     if ('serviceWorker' in navigator) {
@@ -85,7 +86,7 @@ export const signUp = async (fn: string, ln: string, em: string, pw: string) => 
 
 export const signIn = async (email: string, password: string) => {
     try {
-        // * logging in user --> they must be logged in before sending over browser subscription object
+        // * Logging in user --> they must be logged in before sending over browser subscription object
         const response = await client.post('auth/login', { email, password })
 
         if (response.status === 200) {
