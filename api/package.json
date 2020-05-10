@@ -36,7 +36,8 @@
         "passport-local": "^1.0.0",
         "tough-cookie": "^4.0.0",
         "ioredis": "^4.16.3",
-        "web-push": "^3.4.3"
+        "web-push": "^3.4.3",
+        "helmet": "~3.22.0"
     },
     "devDependencies": {
         "@types/bcrypt": "^3.0.0",
@@ -71,6 +72,7 @@
         "tslib": "^1.11.1",
         "typescript": "^3.8.3",
         "@types/ioredis": "^4.16.0",
-        "@types/connect-redis": "^0.0.13"
+        "@types/connect-redis": "^0.0.13",
+        "@types/helmet": "~0.0.46"
     }
 }
