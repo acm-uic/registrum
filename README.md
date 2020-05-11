@@ -1,14 +1,14 @@
-# Dream Team Final Project
+# Registrum
 
-[![Node CI](https://github.com/ckanich-classrooms/final-project-dream-team-1/workflows/Node%20CI/badge.svg)](https://github.com/ckanich-classrooms/final-project-dream-team-1/actions?query=workflow%3A%22Node+CI%22)
-[![Docker CI](https://github.com/ckanich-classrooms/final-project-dream-team-1/workflows/Docker%20CI/badge.svg)](https://github.com/ckanich-classrooms/final-project-dream-team-1/actions?query=workflow%3A%22Docker+CI%22)
-[![Docker CD - Master](https://github.com/ckanich-classrooms/final-project-dream-team-1/workflows/Docker%20CD%20-%20Master/badge.svg)](https://github.com/ckanich-classrooms/final-project-dream-team-1/actions?query=workflow%3A%22Docker+CD+-+Master%22)
-[![Docker CD - Branch](https://github.com/ckanich-classrooms/final-project-dream-team-1/workflows/Docker%20CD%20-%20Branch/badge.svg)](https://github.com/ckanich-classrooms/final-project-dream-team-1/actions?query=workflow%3A%22Docker+CD+-+Branch%22)
-[![codecov](https://codecov.io/gh/ckanich-classrooms/final-project-dream-team-1/branch/master/graph/badge.svg?token=5aYe8JnyLU)](https://codecov.io/gh/ckanich-classrooms/final-project-dream-team-1)
+[![Node CI](https://github.com/acm-uic/registrum/workflows/Node%20CI/badge.svg)](https://github.com/acm-uic/registrum/actions?query=workflow%3A%22Node+CI%22)
+[![Docker CI](https://github.com/acm-uic/registrum/workflows/Docker%20CI/badge.svg)](https://github.com/acm-uic/registrum/actions?query=workflow%3A%22Docker+CI%22)
+[![Docker CD - Master](https://github.com/acm-uic/registrum/workflows/Docker%20CD%20-%20Master/badge.svg)](https://github.com/acm-uic/registrum/actions?query=workflow%3A%22Docker+CD+-+Master%22)
+[![Docker CD - Branch](https://github.com/acm-uic/registrum/workflows/Docker%20CD%20-%20Branch/badge.svg)](https://github.com/acm-uic/registrum/actions?query=workflow%3A%22Docker+CD+-+Branch%22)
+[![codecov](https://codecov.io/gh/acm-uic/registrum/branch/master/graph/badge.svg?token=5aYe8JnyLU)](https://codecov.io/gh/acm-uic/registrum)
 
 ## Table of Contents
 
-- [Dream Team Final Project](#dream-team-final-project)
+- [Registrum](#registrum)
   - [Table of Contents](#table-of-contents)
   - [Description](#description)
   - [Authors, Specialization](#authors-specialization)
@@ -243,7 +243,7 @@ The docker dev containers expose the following services:
 ```powershell
 npm i -g @microsoft/rush
 
-git clone git@github.com:ckanich-classrooms/final-project-dream-team-1.git
+git clone git@github.com:acm-uic/registrum.git
 
 rush update # install and link dependencies, add git hooks
 rush build # build all projects

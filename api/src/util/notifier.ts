@@ -13,9 +13,9 @@ interface ClassJSON {
 }
 
 //* this route is sending email notification and looping over subscription objects to send push notifications
-export const notifyUser = async (user: UserObject, classData: any) => {
+export const notifyUser = async (user: UserObject, classData: ClassJSON) => {
     // * Cast class data to classJSON interface
-    const classJSON = classData as ClassJSON
+    const classJSON = classData
 
     // * Determine status message
     const statusMessage = classJSON.seatsAvailable > 0 ? 'OPEN' : 'CLOSED'
@@ -26,28 +26,22 @@ export const notifyUser = async (user: UserObject, classData: any) => {
     // * If user has email notifications enabled, send email notification
     if (user.emailNotificationsEnabled) {
         try {
-            console.log('Attempting to send email to ' + user.email)
             // * Construct email message
-            const msg = {
-                to: user.email,
-                from: process.env.SENDGRID_EMAIL_ADDRESS,
-                subject: `TRACKING CLASS CRN ${courseReferenceNumber} HAS STATUS: ${statusMessage}`,
-                text: 'Thanks for using Registrum!',
-                html: '<strong>Thanks for using Registrum!</strong>'
-            }
-
-            // // * SEND EMAIL
+            // const msg = {
+            //     to: user.email,
+            //     from: process.env.SENDGRID_EMAIL_ADDRESS,
+            //     subject: `TRACKING CLASS CRN ${courseReferenceNumber} HAS STATUS: ${statusMessage}`,
+            //     text: 'Thanks for using Registrum!',
+            //     html: '<strong>Thanks for using Registrum!</strong>'
+            // }
+            // * SEND EMAIL
             // await sgMail.send(msg)
-
-            console.log('EMAIL SENT TO ' + user.email)
-            console.log(msg)
         } catch (err) {
             console.log('Error sending email to user')
         }
     }
 
     if (user.pushNotificationsEnabled) {
-        //! FIXME: use env variables here
         // * GCMAPIKey is a cloud messaging id from google cloud console or firebase to help deliver the message
         // * GCMAPIKey must also be declared in manifest.json file as "gcm_sender_id"
         webpush.setGCMAPIKey(process.env.GCMAPI)
@@ -60,7 +54,7 @@ export const notifyUser = async (user: UserObject, classData: any) => {
             process.env.WEBPUSHPRIVATE
         )
 
-        //* loop over subscription objects for the user and send push notifications
+        //* Loop over subscription objects for the user and send push notifications
         //* database will have collection of subscription objects that represent different browsers they're logged into
         user.subscriptionObjects.forEach(element => {
             webpush.sendNotification(element, 'CRN:' + courseReferenceNumber + ' ' + statusMessage)

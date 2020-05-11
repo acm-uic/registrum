@@ -4,7 +4,6 @@ import axiosCookieJarSupport from 'axios-cookiejar-support'
 import { CookieJar } from 'tough-cookie'
 import app, { mongoose, redisClient } from '../app'
 import { Server } from 'http'
-import express, { Request, Response, NextFunction } from 'express'
 import mockApp from './mockbanner'
 dotenv.config()
 const port = process.env.API_PORT || 8085
@@ -45,14 +44,14 @@ describe('Class Tests', () => {
 
     afterAll(async () => {
         // * Remove all users from DB
-        await new Promise((resolve, reject) => {
-            mongoose.connection.db.dropCollection('users', function (err, result) {
+        await new Promise(resolve => {
+            mongoose.connection.db.dropCollection('users', () => {
                 resolve()
             })
         })
 
         // * Close DB Connection
-        await new Promise((resolve, reject) => {
+        await new Promise(resolve => {
             mongoose.connection.close(() => {
                 resolve()
             })
@@ -80,7 +79,7 @@ describe('Class Tests', () => {
             const { data: terms } = await client.get('classes/terms')
 
             // * Assure each term is valid by checking it is a number
-            terms.forEach(term => {
+            terms.forEach((term: string) => {
                 expect(() => parseInt(term)).not.toThrow()
             })
         })
@@ -90,7 +89,7 @@ describe('Class Tests', () => {
             const { data: subjects } = await client.get(`classes/subjects`)
 
             // * Make sure each subject is a valid string
-            subjects.forEach(subject => {
+            subjects.forEach((subject: string) => {
                 expect(typeof subject === typeof String)
             })
         })
@@ -103,7 +102,7 @@ describe('Class Tests', () => {
             const { data: classes } = await client.get(`classes/list/${subjects[0]}`)
             console.log(classes)
             // * Make sure each class is a valid class object
-            classes.forEach(cls => {
+            classes.forEach((cls: string) => {
                 expect(typeof cls === typeof String)
             })
         })

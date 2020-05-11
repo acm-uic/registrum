@@ -2,15 +2,14 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSignOutAlt, faUser, faUserCircle } from '@fortawesome/free-solid-svg-icons'
+import { faSignOutAlt, faUser } from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom'
 
-import { Navbar, NavDropdown, Nav } from 'react-bootstrap'
+import { Navbar, Nav } from 'react-bootstrap'
 
 import { User } from '../models/interfaces/User'
 import SignIn from './SignIn'
 import SignUp from './SignUp'
-import UICLogo from './UICLogo'
 import { signOut } from '../utils/functions/authentication'
 
 const NavBar = () => {
@@ -19,7 +18,7 @@ const NavBar = () => {
     return (
         <Navbar expand="md" bg="light" className="align-middle">
             <Navbar.Brand as={Link} to="/">
-                <UICLogo size={30} /> <b>Registrum</b>
+                <img src="/images/icon-72x72.png" height={30} /> <b>Registrum</b>
             </Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
@@ -44,23 +43,13 @@ const NavBar = () => {
                     )}
 
                     {user != null && (
-                        <NavDropdown
-                            title={
-                                <>
-                                    <FontAwesomeIcon icon={faUserCircle} />
-                                    {user.firstname}
-                                </>
-                            }
-                            id="basic-nav-dropdown"
-                            alignRight
-                        >
-                            <NavDropdown.Item as={Link} to="/account">
+                        <>
+                            <Nav.Link as={Link} to="/account">
                                 <FontAwesomeIcon icon={faUser} />
                                 {'  '}
-                                Account
-                            </NavDropdown.Item>
-                            <NavDropdown.Divider />
-                            <NavDropdown.Item
+                                {user.firstname}
+                            </Nav.Link>
+                            <Nav.Link
                                 onClick={async (e: any) => {
                                     e.preventDefault()
                                     await signOut()
@@ -68,8 +57,8 @@ const NavBar = () => {
                             >
                                 <FontAwesomeIcon icon={faSignOutAlt} />
                                 Sign Out
-                            </NavDropdown.Item>
-                        </NavDropdown>
+                            </Nav.Link>
+                        </>
                     )}
                 </Nav>
             </Navbar.Collapse>

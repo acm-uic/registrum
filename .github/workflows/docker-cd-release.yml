@@ -12,21 +12,23 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: docker build, push
+      shell: pwsh
       run: |
-        tag=$(echo ${{ github.ref }} | sed 's/refs\/tags\///g')
-        echo tag: $tag
+        $tag="${{ github.ref }}".Split("refs/tags/")[1]
+        Write-Host tag: $tag
 
-        echo ${{ secrets.GITHUB_TOKEN }} | docker login docker.pkg.github.com --username ${{ github.actor }} --password-stdin
+        docker login ${{ secrets.REGISTRY_HOST }} --username ${{ secrets.REGISTRY_USER }} --password ${{ secrets.REGISTRY_PASSWORD }}
 
-        projects=( api banner banner-data client )
-        for project in "${projects[@]}"
-        do
-          echo Working on $project ...
-          docker build --target $project -t docker.pkg.github.com/${{ github.repository }}/$project:$tag .
-          docker tag docker.pkg.github.com/${{ github.repository }}/$project:$tag docker.pkg.github.com/${{ github.repository }}/$project:latest
-          docker push docker.pkg.github.com/${{ github.repository }}/$project:$tag
-          docker push docker.pkg.github.com/${{ github.repository }}/$project:latest
-        done
+        docker build -t registrum_base -f Base.Dockerfile .
+
+        $projects=@("api", "banner", "banner-data", "client")
+        foreach($project in $projects) {
+          Write-Host Working on $project ...
+          docker build --target $project -t ${{ secrets.REGISTRY_HOST }}/${{ github.repository }}/$($project):$tag .
+          docker tag ${{ secrets.REGISTRY_HOST }}/${{ github.repository }}/$($project):$tag ${{ secrets.REGISTRY_HOST }}/${{ github.repository }}/$($project):latest
+          docker push ${{ secrets.REGISTRY_HOST }}/${{ github.repository }}/$($project):$tag
+          docker push ${{ secrets.REGISTRY_HOST }}/${{ github.repository }}/$($project):latest
+        }
 
     - name: Trigger Hooks
       run: |

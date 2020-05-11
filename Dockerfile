@@ -1,44 +1,43 @@
-FROM node:12-alpine AS base
-
-ENV NODE_ENV=development \
-    CI=true
-
-RUN apk add --no-cache \
-    autoconf \
-    automake \
-    bash \
-    g++ \
-    libc6-compat \
-    libjpeg-turbo-dev \
-    libpng-dev \
-    make \
-    nasm
-
-RUN npm i -g @microsoft/rush
-
-WORKDIR /usr/src/app
-
-COPY . .
-
-RUN rush install --no-link
-RUN rush link
-RUN rush build
-
-FROM base as api
+FROM node:12-alpine as api
 ENV NODE_ENV=production
 WORKDIR /usr/src/app/api
-ENTRYPOINT [ "rushx", "start" ]
 
-FROM base as banner
+COPY --from=registrum_base /usr/src/app/api/package.json .
+RUN npm install --production
+COPY --from=registrum_base /usr/src/app/api/dist dist
+
+ENTRYPOINT [ "npm", "run", "start" ]
+
+
+FROM node:12-alpine as banner
 ENV NODE_ENV=production
 WORKDIR /usr/src/app/banner
-ENTRYPOINT [ "rushx", "start" ]
 
-FROM base as banner-data
+COPY --from=registrum_base /usr/src/app/banner/package.json .
+RUN npm install --production
+COPY --from=registrum_base /usr/src/app/banner/dist dist
+
+ENTRYPOINT [ "npm", "run", "start" ]
+
+
+FROM node:12-alpine as banner-data
 ENV NODE_ENV=production
+WORKDIR /usr/src/app/banner
+
+COPY --from=registrum_base /usr/src/app/banner/package.json .
+COPY --from=registrum_base /usr/src/app/banner/dist dist
+RUN npm link
+
 WORKDIR /usr/src/app/banner-data
-ENTRYPOINT [ "rushx", "start" ]
+COPY --from=registrum_base /usr/src/app/banner-data/package.json .
+RUN npm link registrum-banner
+RUN npm install --production
+COPY --from=registrum_base /usr/src/app/banner-data/dist dist
+
+ENTRYPOINT [ "npm", "run", "start" ]
+
 
 FROM nginx:alpine as client
+
 COPY ./nginx.conf /etc/nginx/conf.d/default.conf
-COPY --from=base /usr/src/app/client/build /usr/share/nginx/html
+COPY --from=registrum_base /usr/src/app/client/dist /usr/share/nginx/html

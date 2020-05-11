@@ -2,26 +2,20 @@ coverage:
   status:
     project:
       default: off
-      client:
-        flags: 
-          - client
       api:
-        flags: 
+        flags:
           - api
       banner:
-        flags: 
+        flags:
           - banner
       banner-data:
-        flags: 
+        flags:
           - banner-data
 
 flags:
   api:
     paths:
       - api/
-  client:
-    paths:
-      - client/
   banner:
     paths:
       - banner/

@@ -14,6 +14,7 @@ jobs:
           node-version: 12.x
       - name: Get npm cache directory
         id: npm-cache
+        shell: pwsh
         run: |
           echo "::set-output name=dir::$(npm config get cache)"
       - uses: actions/cache@v1
@@ -23,20 +24,28 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
       - name: Start Docker for Mongodb
+        shell: pwsh
         run: docker run -d -p 27017:27017 mongo
       - name: Start Docker for redis
+        shell: pwsh
         run: docker run -d  -p 6379:6379 redis
       - name: rush install
+        shell: pwsh
         run: node common/scripts/install-run-rush.js install --no-link
       - name: rush link
+        shell: pwsh
         run: node common/scripts/install-run-rush.js link
       - name: rush lint
+        shell: pwsh
         run: node common/scripts/install-run-rush.js lint
       - name: rush build
+        shell: pwsh
         run: node common/scripts/install-run-rush.js build --verbose
       - name: rush test
+        shell: pwsh
         run: node common/scripts/install-run-rush.js test
       - name: rush coverage
+        shell: pwsh
         run: node common/scripts/install-run-rush.js coverage
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}

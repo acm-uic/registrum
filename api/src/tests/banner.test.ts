@@ -2,7 +2,6 @@ import dotenv from 'dotenv'
 import axios from 'axios'
 import axiosCookieJarSupport from 'axios-cookiejar-support'
 import { CookieJar } from 'tough-cookie'
-import User from '../routes/models/User'
 import app, { mongoose, redisClient } from '../app'
 
 import { Class } from '../routes/models/interfaces/Class'
@@ -31,11 +30,6 @@ describe('Class Tests', () => {
     })
     axiosCookieJarSupport(client)
 
-    // * Chosen term
-    const term = ''
-    // * Subjects
-    const subjects = []
-
     // * Chosen Class for subscription
     let chosenClass: Class = null
 
@@ -61,14 +55,14 @@ describe('Class Tests', () => {
 
     afterAll(async () => {
         // * Remove all users from DB
-        await new Promise((resolve, reject) => {
-            mongoose.connection.db.dropCollection('users', function (err, result) {
+        await new Promise(resolve => {
+            mongoose.connection.db.dropCollection('users', () => {
                 resolve()
             })
         })
 
         // * Close DB Connection
-        await new Promise((resolve, reject) => {
+        await new Promise(resolve => {
             mongoose.connection.close(() => {
                 resolve()
             })

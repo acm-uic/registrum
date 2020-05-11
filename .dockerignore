@@ -1,7 +1,13 @@
 .github
 .vscode
 common/temp
-docker-bits
+k8s
+design-assets
+.vscode
+build-images.ps1
+docker-compose*.yml
+*Dockerfile
+*.md
 */node_modules
 */dist
 */build

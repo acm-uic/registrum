@@ -3,7 +3,7 @@ version: "3"
 services:
 
   api:
-    image: docker.pkg.github.com/ckanich-classrooms/final-project-dream-team-1/api:latest
+    image: acmuic.azurecr.io/acm-uic/registrum/api:latest
     restart: always
     environment:
       - API_BASE_PATH=/api
@@ -11,7 +11,7 @@ services:
       - registrum-net
 
   banner:
-    image: docker.pkg.github.com/ckanich-classrooms/final-project-dream-team-1/banner:latest
+    image: acmuic.azurecr.io/acm-uic/registrum/banner:latest
     restart: always
     environment:
       - BANNER_BASE_PATH=/banner
@@ -19,13 +19,13 @@ services:
       - registrum-net
 
   banner-data:
-    image: docker.pkg.github.com/ckanich-classrooms/final-project-dream-team-1/banner-data:latest
+    image: acmuic.azurecr.io/acm-uic/registrum/banner-data:latest
     restart: always
     networks:
       - registrum-net
 
   client:
-    image: docker.pkg.github.com/ckanich-classrooms/final-project-dream-team-1/client:latest
+    image: acmuic.azurecr.io/acm-uic/registrum/client:latest
     restart: always
     ports:
       - 8080:80

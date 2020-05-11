@@ -1,5 +1,5 @@
-import * as request from 'request-promise-native'
 import * as crypto from 'crypto'
+import fetch from 'node-fetch'
 import { Redis } from 'ioredis'
 import { EventEmitter } from 'events'
 
@@ -16,6 +16,11 @@ interface HashTable<T> {
 }
 
 type RequestFunction = (name: string, jsonData: {}, headersData?: {}) => Promise<void>
+
+type PostRequestResponse = {
+    body: string
+    statusCode: number
+}
 
 export class URLExistsError extends Error {
     constructor(message: string) {
@@ -64,20 +69,17 @@ export class WebHooks {
 
     #getRequestFunction = (url: string): RequestFunction => {
         return async (name: string, jsonData: {}, headersData?: {}): Promise<void> => {
-            /* istanbul ignore next */
-            const { statusCode, body } = await request({
+            const res = await fetch(url, {
                 method: 'POST',
-                uri: url,
-                strictSSL: false,
+                body: JSON.stringify(jsonData),
                 headers: {
                     ...headersData,
                     'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(jsonData),
-                resolveWithFullResponse: true
+                }
             })
-            /* istanbul ignore next */
-            this.#emitter.emit(`${name}.status`, name, statusCode, body)
+            const { status } = res
+            const body = await res.text()
+            this.#emitter.emit(`${name}.status`, name, status, body)
         }
     }
 
