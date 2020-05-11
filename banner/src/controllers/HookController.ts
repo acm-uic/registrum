@@ -1,19 +1,16 @@
 import { Request, Response } from 'express'
 import { Controller } from '../interfaces/Controller'
 import { WebHooks, URLExistsError, URLNotFoundError, NameNotFoundError } from '../lib/WebHooks'
-import Redis from 'ioredis'
 import * as mongoose from 'mongoose'
 import { CourseSchema } from '../interfaces/Schemas'
 import { Course } from '../lib/Banner'
 
 export class HookController extends Controller {
     #webHooks: WebHooks
-    #redisClient: Redis.Redis
 
-    constructor(path: string, redisUri: string) {
+    constructor(path: string) {
         super(path)
-        this.#redisClient = new Redis(redisUri)
-        this.#webHooks = new WebHooks({ redisClient: this.#redisClient })
+        this.#webHooks = new WebHooks({ mongooseConnection: mongoose.connection })
         this.#initializeRoutes()
         this.#initWatcher()
     }

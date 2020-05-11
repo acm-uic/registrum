@@ -46,16 +46,6 @@ spec:
                 secretKeyRef:
                   name: banner-secrets
                   key: MONGODB_URI
-            - name: API_REDIS_URI
-              valueFrom:
-                secretKeyRef:
-                  name: api-secrets
-                  key: API_REDIS_URI
-            - name: BANNER_REDIS_URI
-              valueFrom:
-                secretKeyRef:
-                  name: banner-secrets
-                  key: BANNER_REDIS_URI
             - name: API_PROXY_URL
               valueFrom:
                 secretKeyRef:

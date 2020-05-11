@@ -88,7 +88,9 @@ const boot = async () => {
         console.log(`⚡️ Attempting mongo connection to ${mongoUri}`)
         await mongoose.connect(mongoUri, {
             useNewUrlParser: true,
-            useUnifiedTopology: true
+            useCreateIndex: true,
+            useUnifiedTopology: true,
+            useFindAndModify: false
         })
         console.log('✅ MongoDB connection successful.')
     } catch (error) {

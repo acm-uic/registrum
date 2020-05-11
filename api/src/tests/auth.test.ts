@@ -2,7 +2,7 @@ import dotenv from 'dotenv'
 import axios from 'axios'
 import axiosCookieJarSupport from 'axios-cookiejar-support'
 import { CookieJar } from 'tough-cookie'
-import app, { mongoose, redisClient } from '../app'
+import app, { mongoose } from '../app'
 import { Server } from 'http'
 
 dotenv.config()
@@ -34,14 +34,6 @@ describe('Authentication Tests', () => {
             })
         })
 
-        // * Quit Redis Client
-        await new Promise(resolve => {
-            redisClient.quit(() => {
-                resolve()
-            })
-        })
-        // ? SOURCE: https://stackoverflow.com/questions/52939575/node-js-jest-redis-quit-but-open-handle-warning-persists
-        // * redis.quit() creates a thread to close the connection.
         // * We wait until all threads have been run once to ensure the connection closes.
         await new Promise(resolve => setImmediate(resolve))
 

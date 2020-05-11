@@ -59,6 +59,7 @@ ${pageOffset}, ${pageMaxSize}, ${sectionsFetchedCount}`)
                 _id: term.code
             }
         })
+
         await TermModel.collection.bulkWrite(
             res.map(r => {
                 return {
@@ -66,7 +67,7 @@ ${pageOffset}, ${pageMaxSize}, ${sectionsFetchedCount}`)
                         filter: {
                             _id: r._id
                         },
-                        update: r,
+                        update: { $set: r },
                         upsert: true
                     }
                 }
@@ -89,7 +90,7 @@ ${pageOffset}, ${pageMaxSize}, ${sectionsFetchedCount}`)
                         filter: {
                             _id: r._id
                         },
-                        update: r,
+                        update: { $set: r },
                         upsert: true
                     }
                 }
@@ -113,7 +114,7 @@ ${pageOffset}, ${pageMaxSize}, ${sectionsFetchedCount}`)
                         filter: {
                             _id: r._id
                         },
-                        update: r,
+                        update: { $set: r },
                         upsert: true
                     }
                 }

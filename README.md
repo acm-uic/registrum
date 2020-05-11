@@ -42,7 +42,7 @@ This project uses GitHub Actions to automate build and release pipelines.
 
 Triggers: `push`, `pull_request`
 
-- Starts MongoDB and Redis services in Docker.
+- Starts MongoDB service in Docker.
 - Run `npm install`, `npm run test`, and `npm run build` on the Node.js projects.
 
 ### Docker CI
@@ -132,10 +132,7 @@ The docker dev containers expose the following services:
 | Service Name    | Ports | Description                                |
 | --------------- | ----- | ------------------------------------------ |
 | MongoDB Server  | 27017 | MongoDB server needed by the API           |
-| Redis Server    | 6379  | Redis server needed by the API             |
-| Redis Server    | 6380  | Redis server needed by the Banner Services |
 | Mongo Express   | 8081  | MongoDB Web Client                         |
-| Redis Commander | 8082  | Redis Web Client                           |
 
 ## Getting a development environment up
 
@@ -153,7 +150,7 @@ rush build # build all projects
 - Start up docker-compose to make sure your services are available before starting up the application
 
 ```powershell
-     docker-compose up # spin up the required services (MongoDB, Redis)
+     docker-compose up # spin up the required services (MongoDB)
 ```
 
 - Now run this command to start up the app
