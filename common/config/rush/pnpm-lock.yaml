@@ -54,6 +54,7 @@ dependencies:
   '@types/testing-library__react': 10.0.1
   '@types/testing-library__user-event': 4.1.1
   '@types/tough-cookie': 4.0.0
+  '@types/web-push': 3.3.0
   '@types/webpack': 4.41.12
   '@types/webpack-dev-server': 3.10.1
   '@typescript-eslint/eslint-plugin': 2.30.0_696401c5c7047c2332f703e0635826dc
@@ -2666,6 +2667,12 @@ packages:
     dev: false
     resolution:
       integrity: sha1-DSUBJorY+ZYrdA04fEZU9fjiPlI=
+  /@types/web-push/3.3.0:
+    dependencies:
+      '@types/node': 13.13.4
+    dev: false
+    resolution:
+      integrity: sha512-QHEQCPrVy1JZtZK0cA8DHT2MhuCJNyI3m+DzuOTSGa56VM6g2bjdD+hMp8A/2Ca9w0GfmdcStrLgfXAUKKlvJg==
   /@types/webpack-dev-server/3.10.1:
     dependencies:
       '@types/connect-history-api-fallback': 1.3.3
@@ -14489,6 +14496,7 @@ packages:
       '@types/request-promise': 4.1.46
       '@types/supertest': 2.0.9
       '@types/tough-cookie': 4.0.0
+      '@types/web-push': 3.3.0
       '@typescript-eslint/eslint-plugin': 2.30.0_696401c5c7047c2332f703e0635826dc
       '@typescript-eslint/parser': 2.30.0_eslint@6.8.0+typescript@3.8.3
       async: 3.2.0
@@ -14537,7 +14545,7 @@ packages:
     dev: false
     name: '@rush-temp/registrum-api'
     resolution:
-      integrity: sha512-3jTFLzaJzXB8UyiioQxPBBiAPAyqv4AYw9OdbRm6Vx5v0/N4M18OnK7u9OLU8CqDRIDCRURKrEGrGklRWuJLJA==
+      integrity: sha512-qbzhSqDpaR5E5cNxtXhba6ib+XYj4HA+iqa76j9TD7MSmgssf+wFW5A18VEncPIFmmoZGrzEDzwtw/qyjUu8Ow==
       tarball: 'file:projects/registrum-api.tgz'
     version: 0.0.0
   'file:projects/registrum-banner-data.tgz':
@@ -14814,6 +14822,7 @@ specifiers:
   '@types/testing-library__react': ^10.0.1
   '@types/testing-library__user-event': ^4.1.1
   '@types/tough-cookie': ^4.0.0
+  '@types/web-push': ~3.3.0
   '@types/webpack': ^4.41.12
   '@types/webpack-dev-server': ^3.10.1
   '@typescript-eslint/eslint-plugin': ^2.30.0

@@ -73,6 +73,7 @@
         "typescript": "^3.8.3",
         "@types/ioredis": "^4.16.0",
         "@types/connect-redis": "^0.0.13",
-        "@types/helmet": "~0.0.46"
+        "@types/helmet": "~0.0.46",
+        "@types/web-push": "~3.3.0"
     }
 }
