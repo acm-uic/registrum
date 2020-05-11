@@ -24,10 +24,10 @@ jobs:
         $projects=@("api", "banner", "banner-data", "client")
         foreach($project in $projects) {
           Write-Host Working on $project ...
-          docker build --target $project -t ${{ secrets.REGISTRY_HOST }}/${{ github.repository }}/$($project):$tag .
-          docker tag ${{ secrets.REGISTRY_HOST }}/${{ github.repository }}/$($project):$tag ${{ secrets.REGISTRY_HOST }}/${{ github.repository }}/$($project):latest
-          docker push ${{ secrets.REGISTRY_HOST }}/${{ github.repository }}/$($project):$tag
-          docker push ${{ secrets.REGISTRY_HOST }}/${{ github.repository }}/$($project):latest
+          docker build --target $project -t acmuic.azurecr.io/${{ github.repository }}/$($project):$tag .
+          docker tag acmuic.azurecr.io/${{ github.repository }}/$($project):$tag acmuic.azurecr.io/${{ github.repository }}/$($project):latest
+          docker push acmuic.azurecr.io/${{ github.repository }}/$($project):$tag
+          docker push acmuic.azurecr.io/${{ github.repository }}/$($project):latest
         }
 
     - name: Trigger Hooks
