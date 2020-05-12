@@ -91,7 +91,7 @@ describe('Class Tests', () => {
             const { data: subjects } = await client.get(`classes/subjects`)
             console.log(subjects)
             // * Grab classes for given subject
-            const { data: classes } = await client.get(`classes/list/${subjects[0]}`)
+            const { data: classes } = await client.get(`classes/list/220208/${subjects[0]}`)
             console.log(classes)
             // * Make sure each class is a valid class object
             classes.forEach((cls: string) => {
@@ -103,7 +103,7 @@ describe('Class Tests', () => {
     describe('Edge case tests', () => {
         it('Returns an empty array of classes for an invalid subject', async () => {
             // * Try to retrieve classes
-            const { data: classes } = await client.get('/classes/list/invalidSubjectHere')
+            const { data: classes } = await client.get('/classes/list/220208/invalidSubjectHere')
             expect(classes).toHaveLength(0)
         })
     })

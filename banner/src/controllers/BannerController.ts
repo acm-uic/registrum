@@ -1,13 +1,10 @@
 import { Request, Response } from 'express'
 import { Controller } from '../interfaces/Controller'
 import { TermModel, SubjectModel, CourseModel } from '../interfaces/Models'
-// import * as apicache from 'apicache'
 
 export class BannerController extends Controller {
-    constructor(path: string, cacheTime: string) {
+    constructor(path: string) {
         super(path)
-        // ! disable cache for dev
-        // this.router.use(apicache.middleware(cacheTime))
         this.#initializeRoutes()
     }
 
@@ -20,31 +17,19 @@ export class BannerController extends Controller {
     }
 
     #getClass = async (request: Request, response: Response) => {
-        const { subject, courseNumber } = request.body
-        if (subject == undefined && courseNumber == undefined) {
+        const { subject, courseNumber, term } = request.body
+        if (!subject && !courseNumber && !term) {
             response.status(400).send('Params not provided!')
-        } else if (subject == undefined) {
-            this.ok(
-                response,
-                await CourseModel.find({
-                    courseNumber: { $in: courseNumber }
-                })
-            )
-        } else if (courseNumber == undefined) {
-            this.ok(
-                response,
-                await CourseModel.find({
-                    subject: { $in: subject }
-                })
-            )
         } else {
-            this.ok(
-                response,
-                await CourseModel.find({
-                    subject: { $in: subject },
-                    courseNumber: { $in: courseNumber }
-                })
-            )
+            const filter = {
+                subject: { $in: subject },
+                courseNumber: { $in: courseNumber },
+                term: { $in: term }
+            }
+            if (!subject) delete filter.subject
+            if (!courseNumber) delete filter.courseNumber
+            if (!term) delete filter.term
+            this.ok(response, await CourseModel.find(filter))
         }
     }
     #getCourse = async (request: Request, response: Response) => {

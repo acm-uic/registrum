@@ -47,7 +47,7 @@ describe('Class Tests', () => {
         expect(response.status).toBe(200)
 
         // * Retrieve classes for CS401
-        const classes = (await client.get(`/classes/listing/CS/401`)).data as Class[]
+        const classes = (await client.get(`/classes/listing/220208/CS/401`)).data as Class[]
 
         // * Pick random class
         chosenClass = classes[Math.floor(Math.random() * classes.length)]
@@ -171,7 +171,7 @@ describe('Class Tests', () => {
                 secondClass.courseReferenceNumber === chosenClass.courseReferenceNumber
             ) {
                 // * Get class list
-                const classes = (await client.get(`/classes/listing/CS/301`)).data
+                const classes = (await client.get(`/classes/220208/listing/CS/301`)).data
 
                 // * Pick random class
                 secondClass = classes[Math.floor(Math.random() * classes.length)]
