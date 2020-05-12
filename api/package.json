@@ -70,6 +70,7 @@
         "ts-node": "^8.10.1",
         "tslib": "^1.11.2",
         "typescript": "^3.8.3",
+        "@types/web-push": "~3.3.0",
         "@types/helmet": "^0.0.46",
         "@types/mongodb": "^3.5.16"
     }

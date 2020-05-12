@@ -14,6 +14,8 @@ interface ClassJSON {
 
 //* this route is sending email notification and looping over subscription objects to send push notifications
 export const notifyUser = async (user: UserObject, classData: ClassJSON) => {
+    console.log(classData)
+
     // * Cast class data to classJSON interface
     const classJSON = classData
 
@@ -57,7 +59,14 @@ export const notifyUser = async (user: UserObject, classData: ClassJSON) => {
         //* Loop over subscription objects for the user and send push notifications
         //* database will have collection of subscription objects that represent different browsers they're logged into
         user.subscriptionObjects.forEach(element => {
-            webpush.sendNotification(element, 'CRN:' + courseReferenceNumber + ' ' + statusMessage)
+            try {
+                webpush.sendNotification(
+                    element,
+                    'CRN:' + courseReferenceNumber + ' ' + statusMessage
+                )
+            } catch (err) {
+                // * Device not online, skipping
+            }
         })
     }
 }

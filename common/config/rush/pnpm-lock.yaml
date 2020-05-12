@@ -54,6 +54,7 @@ dependencies:
   '@types/testing-library__react': 10.0.1
   '@types/testing-library__user-event': 4.1.1
   '@types/tough-cookie': 4.0.0
+  '@types/web-push': 3.3.0
   '@types/webpack': 4.41.12
   '@types/webpack-dev-server': 3.10.1
   '@typescript-eslint/eslint-plugin': 2.32.0_2160a05cb011c94b475617773071e5de
@@ -2286,6 +2287,12 @@ packages:
     dev: false
     resolution:
       integrity: sha1-DSUBJorY+ZYrdA04fEZU9fjiPlI=
+  /@types/web-push/3.3.0:
+    dependencies:
+      '@types/node': 13.13.4
+    dev: false
+    resolution:
+      integrity: sha512-QHEQCPrVy1JZtZK0cA8DHT2MhuCJNyI3m+DzuOTSGa56VM6g2bjdD+hMp8A/2Ca9w0GfmdcStrLgfXAUKKlvJg==
   /@types/webpack-dev-server/3.10.1:
     dependencies:
       '@types/connect-history-api-fallback': 1.3.3
@@ -12814,6 +12821,7 @@ packages:
       '@types/passport-local': 1.0.33
       '@types/supertest': 2.0.9
       '@types/tough-cookie': 4.0.0
+      '@types/web-push': 3.3.0
       '@typescript-eslint/eslint-plugin': 2.32.0_8604b08f235e1c457c7c23917c71a370
       '@typescript-eslint/parser': 2.32.0_eslint@7.0.0+typescript@3.8.3
       axios: 0.19.2
@@ -13074,6 +13082,7 @@ specifiers:
   '@types/testing-library__react': ^10.0.1
   '@types/testing-library__user-event': ^4.1.1
   '@types/tough-cookie': ^4.0.0
+  '@types/web-push': ~3.3.0
   '@types/webpack': ^4.41.12
   '@types/webpack-dev-server': ^3.10.1
   '@typescript-eslint/eslint-plugin': ^2.32.0
