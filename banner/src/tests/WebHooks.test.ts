@@ -6,7 +6,7 @@ const { assert } = chai
 
 describe('WebHooks Test', () => {
     const clearDb = async () => {
-        await HookModel.remove({})
+        await HookModel.deleteMany({})
     }
 
     const requestHandler = (request: http.IncomingMessage, response: http.ServerResponse) => {

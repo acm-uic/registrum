@@ -7,13 +7,10 @@ import passport from 'passport'
 import morgan from 'morgan'
 import cors from 'cors'
 import router from './routes'
-import dotenv from 'dotenv'
 import connectMongo from 'connect-mongo'
 import helmet from 'helmet'
-
 import 'dotenv/config'
 
-dotenv.config({ path: '.env' })
 // *  Create Express server
 const app = express()
 
@@ -72,7 +69,7 @@ app.use(passport.session())
 app.use(flash())
 
 // * Set No Cache
-router.use((req: Request, res: Response, next: NextFunction) => {
+router.use((_: Request, res: Response, next: NextFunction) => {
     res.set('Cache-Control', 'no-store')
     next()
 })

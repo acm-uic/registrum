@@ -284,10 +284,10 @@ export class Banner {
         ).data
     }
 
-    public static getLatestTerm = async (): Promise<Term> =>
-        (await Banner.getTerm()).reduce((prev, term) =>
-            parseInt(term.code) > parseInt(prev.code) ? term : prev
-        )
+    public static getLatestTerm = async (numberOfTerms: number = 1): Promise<Term[]> =>
+        (await Banner.getTerm())
+            .sort((a, b) => parseInt(a.code) - parseInt(b.code))
+            .slice(-numberOfTerms)
     public static getTerm = async (params?: GetTermProps): Promise<GetTermResponse> =>
         await Banner.staticOperations('getTerms', params)
     public static getSubject = async (params: GetSubjectProps): Promise<GetSubjectResponse> =>

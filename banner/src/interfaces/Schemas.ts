@@ -1,4 +1,10 @@
 import { Schema } from 'mongoose'
+
+export const HookSchema = new Schema({
+    _id: String,
+    urls: [String]
+})
+
 export const FacultySchema = new Schema({
     bannerId: Number,
     category: String,
