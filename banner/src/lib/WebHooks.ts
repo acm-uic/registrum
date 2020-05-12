@@ -2,16 +2,12 @@ import * as crypto from 'crypto'
 import fetch from 'node-fetch'
 import { EventEmitter } from 'events'
 import * as mongoose from 'mongoose'
+import { HookSchema } from '../interfaces/Schemas'
 
 export type Hook = {
     _id: string
     urls: string[]
 }
-
-export const HookSchema = new mongoose.Schema({
-    _id: String,
-    urls: [String]
-})
 
 export const HookModel = mongoose.model<Hook & mongoose.Document>('Hook', HookSchema)
 

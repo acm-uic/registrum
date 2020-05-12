@@ -5,12 +5,11 @@ import { BannerController } from './controllers/BannerController'
 
 dotenv.config()
 
-const cacheTime = process.env.CACHE_TIME || '100 minutes'
 const basePath = process.env.BANNER_BASE_PATH || '/banner'
 const port = parseInt(process.env.BANNER_PORT) || 4001
-const mongoUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/banner-data'
+const mongoUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/registrum'
 
-const app = new App([new HookController('/hook'), new BannerController('/', cacheTime)], {
+const app = new App([new HookController('/hook'), new BannerController('/')], {
     port,
     basePath,
     mongoUri

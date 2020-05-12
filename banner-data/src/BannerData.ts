@@ -1,15 +1,24 @@
 import { Banner, SearchResponse, Course, Subject, Term } from 'registrum-banner/dist/lib/Banner'
-import { CourseSchema, SubjectSchema, TermSchema } from 'registrum-banner/dist/interfaces/Schemas'
+import { Hook } from 'registrum-banner/dist/lib/WebHooks'
+import {
+    CourseSchema,
+    SubjectSchema,
+    TermSchema,
+    HookSchema
+} from 'registrum-banner/dist/interfaces/Schemas'
 import { Document, model } from 'mongoose'
 export const TermModel = model<Term & Document>('Term', TermSchema)
 export const SubjectModel = model<Subject & Document>('Subject', SubjectSchema)
 export const CourseModel = model<Course & Document>('Course', CourseSchema)
+export const HookModel = model<Hook & Document>('Hook', HookSchema)
 
 export type BannerDataConfig = {
     maxPageSize: number
     waitBetweenPages: number
     pageRetryCount: number
     pageRetryTime: number
+    termsToUpdate: number
+    waitBetweenTerms: number
 }
 
 export class BannerData {
@@ -52,14 +61,13 @@ ${pageOffset}, ${pageMaxSize}, ${sectionsFetchedCount}`)
         }
     }
     updateTerms = async () => {
-        const terms = await Banner.getTerm()
+        const terms = await Banner.getLatestTerm(this.#config.termsToUpdate)
         const res = terms.map(term => {
             return {
                 ...term,
                 _id: term.code
             }
         })
-
         await TermModel.collection.bulkWrite(
             res.map(r => {
                 return {
@@ -76,32 +84,89 @@ ${pageOffset}, ${pageMaxSize}, ${sectionsFetchedCount}`)
     }
 
     updateSubjects = async () => {
-        const subjects = await Banner.getSubject({ term: (await Banner.getLatestTerm()).code })
-        const res = subjects.map(subject => {
-            return {
-                ...subject,
-                _id: subject.code
-            }
-        })
-        await SubjectModel.collection.bulkWrite(
-            res.map(r => {
+        const terms = await Banner.getLatestTerm(this.#config.termsToUpdate)
+        for (const term of terms) {
+            console.log(term.code)
+            const subjects = await Banner.getSubject({
+                term: term.code
+            })
+            const res = subjects.map(subject => {
                 return {
-                    updateOne: {
-                        filter: {
-                            _id: r._id
-                        },
-                        update: { $set: r },
-                        upsert: true
-                    }
+                    ...subject,
+                    _id: subject.code
                 }
             })
-        )
+            await SubjectModel.collection.bulkWrite(
+                res.map(r => {
+                    return {
+                        updateOne: {
+                            filter: {
+                                _id: r._id
+                            },
+                            update: { $set: r },
+                            upsert: true
+                        }
+                    }
+                })
+            )
+        }
+    }
+
+    updateAllCourses = async () => {
+        const terms = await Banner.getLatestTerm(this.#config.termsToUpdate)
+        for (const term of terms) {
+            console.log(term.code)
+            const banner = new Banner(term.code)
+
+            const courses: SearchResponse = await this.#getAllPages(banner)
+            const res = courses.data.map(course => {
+                return {
+                    ...course,
+                    _id: course.courseReferenceNumber
+                }
+            })
+            await CourseModel.collection.bulkWrite(
+                res.map(r => {
+                    return {
+                        updateOne: {
+                            filter: {
+                                _id: r._id
+                            },
+                            update: { $set: r },
+                            upsert: true
+                        }
+                    }
+                })
+            )
+            await new Promise(resolve => setTimeout(resolve, this.#config.waitBetweenTerms))
+        }
     }
 
     updateCourses = async () => {
-        const banner = new Banner((await Banner.getLatestTerm()).code)
-        const courses: SearchResponse = await this.#getAllPages(banner)
-        const res = courses.data.map(course => {
+        const crns = (await HookModel.find({})).map(hook => hook._id)
+        const dbCourses = await CourseModel.find({
+            _id: {
+                $in: crns
+            }
+        })
+        if (crns.length !== dbCourses.length) {
+            this.updateAllCourses()
+        }
+        const bannerCourses = (
+            await Promise.all(
+                dbCourses.map(async dbCourse => {
+                    const { term, subject, courseNumber, courseReferenceNumber } = dbCourse
+                    const banner = new Banner(term)
+                    const res = await banner.search({
+                        subject,
+                        courseNumber
+                    })
+                    res.data.filter(r => r.courseReferenceNumber === courseReferenceNumber)
+                    return res.data
+                })
+            )
+        ).flat(1)
+        const res = bannerCourses.map(course => {
             return {
                 ...course,
                 _id: course.courseReferenceNumber
@@ -123,12 +188,15 @@ ${pageOffset}, ${pageMaxSize}, ${sectionsFetchedCount}`)
     }
 
     updateDb = async () => {
-        console.log('Updating Subjects')
-        await this.updateSubjects()
         console.log('Updating Terms')
         await this.updateTerms()
-        console.log('Updating Courses')
-        await this.updateCourses()
+        console.log('Updated Terms')
+        console.log('Updating Subjects')
+        await this.updateSubjects()
+        console.log('Updated Subjects')
+        console.log('Updating All Courses')
+        await this.updateAllCourses()
+        console.log('Updated All Courses')
     }
 }
 

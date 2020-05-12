@@ -4,11 +4,11 @@ const router = Router()
 
 import { BannerClient } from '../../util/banner'
 
-router.get('/list/:subject', async (req: Request, res: Response) => {
-    const { subject } = req.params
+router.get('/list/:term/:subject', async (req: Request, res: Response) => {
+    const { subject, term } = req.params
     // * FOR NOW, CHECK AGAINST HASH MAP
     const courseNumbers = {}
-    const { data: classes } = await BannerClient.post('/class', { subject })
+    const { data: classes } = await BannerClient.post('/class', { term, subject })
     classes.forEach(cls => {
         if (!courseNumbers[cls.courseNumber]) courseNumbers[cls.courseNumber] = true
         else return
@@ -41,12 +41,13 @@ router.get('/terms', async (req: Request, res: Response) => {
     }
 })
 
-router.get('/listing/:subject/:courseNumber', async (req: Request, res: Response) => {
+router.get('/listing/:term/:subject/:courseNumber', async (req: Request, res: Response) => {
     try {
-        const { subject, courseNumber } = req.params
+        const { subject, courseNumber, term } = req.params
         const { data: listingResponse } = await BannerClient.post('/class', {
             subject,
-            courseNumber
+            courseNumber,
+            term
         })
         res.send(listingResponse)
     } catch (err) {

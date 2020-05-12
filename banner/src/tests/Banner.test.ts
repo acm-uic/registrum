@@ -16,7 +16,7 @@ describe('Banner Lib Test', () => {
 
     it('Course Operations', async () => {
         jest.setTimeout(20000)
-        const { code } = await Banner.getLatestTerm()
+        const { code } = (await Banner.getLatestTerm()).pop()
         const banner = new Banner(code, 'CS')
         const courseReferenceNumber = (await banner.search({ courseNumber: '111' })).data[0]
             .courseReferenceNumber
@@ -33,7 +33,7 @@ describe('Banner Lib Test', () => {
 
     it('Term Operations', async () => {
         jest.setTimeout(5000)
-        const { code } = await Banner.getLatestTerm()
+        const { code } = (await Banner.getLatestTerm()).pop()
         const banner = new Banner(code)
         await banner.search({ courseNumber: '111' })
     })

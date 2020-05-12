@@ -91,16 +91,18 @@ const AddClass = () => {
     useEffect(() => {
         if (currentSubject != null) {
             // * Fetch class list for subject
-            axios.get(`/api/classes/list/${currentSubject.code}`).then((res: AxiosResponse) => {
-                // * Destructure response from API
-                const { data: classes } = res
-                // * Set Classes
-                setClasses(classes)
+            axios
+                .get(`/api/classes/list/${currentTerm.code}/${currentSubject.code}`)
+                .then((res: AxiosResponse) => {
+                    // * Destructure response from API
+                    const { data: classes } = res
+                    // * Set Classes
+                    setClasses(classes)
 
-                // * Reset Class & listings
-                setCurrentClass(null)
-                setClassListing([])
-            })
+                    // * Reset Class & listings
+                    setCurrentClass(null)
+                    setClassListing([])
+                })
         }
     }, [currentSubject])
 
@@ -108,7 +110,9 @@ const AddClass = () => {
         if (currentSubject !== null && currentClass !== null) {
             // * Fetch class listings for subject and course
             axios
-                .get(`/api/classes/listing/${currentSubject.code}/${currentClass}`)
+                .get(
+                    `/api/classes/listing/${currentTerm.code}/${currentSubject.code}/${currentClass}`
+                )
                 .then((res: AxiosResponse) => {
                     // * Destructure response from API
                     const { data: listing } = res

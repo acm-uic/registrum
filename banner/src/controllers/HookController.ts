@@ -32,10 +32,10 @@ export class HookController extends Controller {
     }
 
     #addHook = async (request: Request, response: Response) => {
-        const { crn, url } = request.body
-        console.log(crn)
+        const { key, url } = request.body
+        console.log(key)
         try {
-            await this.#webHooks.add(crn, url)
+            await this.#webHooks.add(key, url)
             this.created(response)
         } catch (error) {
             if (error instanceof URLExistsError) this.conflict(response)
@@ -44,9 +44,9 @@ export class HookController extends Controller {
     }
 
     #deleteHook = async (request: Request, response: Response) => {
-        const { crn, url } = request.body
+        const { key, url } = request.body
         try {
-            await this.#webHooks.remove(crn, url)
+            await this.#webHooks.remove(key, url)
             this.ok(response)
         } catch (error) {
             if (error instanceof URLNotFoundError || error instanceof NameNotFoundError)
