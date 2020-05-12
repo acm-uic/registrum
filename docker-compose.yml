@@ -18,28 +18,6 @@ services:
             start_period: 10s
         command: ["--replSet", "rs0", "--bind_ip_all"]
 
-    banner-redis:
-        image: redis
-        restart: always
-        ports:
-            - 6380:6379
-        networks:
-            - registrum-net
-        volumes:
-            - banner-redis-data:/data
-        command: --appendonly yes
-
-    api-redis:
-        image: redis
-        restart: always
-        ports:
-            - 6379:6379
-        networks:
-            - registrum-net
-        volumes:
-            - api-redis-data:/data
-        command: --appendonly yes
-
     mongo-express:
         image: mongo-express
         restart: always
@@ -52,23 +30,8 @@ services:
         networks:
             - registrum-net
 
-    redis-commander:
-        image: rediscommander/redis-commander:latest
-        restart: always
-        environment:
-            - REDIS_HOSTS=api:api-redis:6379,banner:banner-redis:6379
-        ports:
-            - 8082:8081
-        depends_on:
-            - api-redis
-            - banner-redis
-        networks:
-            - registrum-net
-
 networks:
     registrum-net:
 
 volumes:
     mongo-data:
-    banner-redis-data:
-    api-redis-data:

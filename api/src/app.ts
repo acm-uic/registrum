@@ -8,8 +8,7 @@ import morgan from 'morgan'
 import cors from 'cors'
 import router from './routes'
 import dotenv from 'dotenv'
-import Redis from 'ioredis'
-import connectRedis from 'connect-redis'
+import connectMongo from 'connect-mongo'
 import helmet from 'helmet'
 
 import 'dotenv/config'
@@ -20,7 +19,6 @@ const app = express()
 
 // * Retrieve environment variables
 app.set('port', process.env.API_PORT || 4000)
-const redisUri = process.env.API_REDIS_URI || 'redis://localhost:6379'
 const mongoUrl = process.env.MONGODB_URI || 'mongodb://localhost:27017/registrum'
 const baseUrl = process.env.API_BASE_PATH || '/api'
 
@@ -50,16 +48,12 @@ mongoose
         process.exit(1)
     })
 
-// * Initialize Redis Client and Redis Session Store
-const redisClient = new Redis(redisUri)
-
-const RedisStore = connectRedis(session)
-const SessionStore = new RedisStore({ client: redisClient })
+const MongoStore = connectMongo(session)
 
 // * Setup Express Session
 app.use(
     session({
-        store: SessionStore,
+        store: new MongoStore({ mongooseConnection: mongoose.connection }),
         name: '_session',
         resave: false,
         saveUninitialized: false,
@@ -87,4 +81,4 @@ router.use((req: Request, res: Response, next: NextFunction) => {
 app.use(baseUrl, router)
 
 export default app
-export { mongoose, redisClient }
+export { mongoose }

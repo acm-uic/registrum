@@ -1,10 +1,22 @@
 import * as crypto from 'crypto'
 import fetch from 'node-fetch'
-import { Redis } from 'ioredis'
 import { EventEmitter } from 'events'
+import * as mongoose from 'mongoose'
+
+export type Hook = {
+    _id: string
+    urls: string[]
+}
+
+export const HookSchema = new mongoose.Schema({
+    _id: String,
+    urls: [String]
+})
+
+export const HookModel = mongoose.model<Hook & mongoose.Document>('Hook', HookSchema)
 
 type Options = {
-    redisClient?: Redis
+    mongooseConnection?: mongoose.Connection
 }
 
 interface DB {
@@ -44,24 +56,23 @@ export class NameNotFoundError extends Error {
 }
 
 export class WebHooks {
-    #redisClient: Redis
+    #mongooseConnection: mongoose.Connection
     #emitter: EventEmitter
     #requestFunctions: HashTable<RequestFunction>
-    constructor({ redisClient }: Options) {
-        this.#redisClient = redisClient
+    constructor({ mongooseConnection }: Options) {
+        this.#mongooseConnection = mongooseConnection
         this.#emitter = new EventEmitter()
         this.#requestFunctions = {}
         this.#setListeners()
     }
 
     #setListeners = async () => {
-        const keys = await this.#redisClient.keys('*')
-        keys.map(async (key: string) => {
-            const urls: string[] = JSON.parse(await this.#redisClient.get(key))
-            urls.forEach(url => {
+        const hooks = await HookModel.find({})
+        hooks.map(async (hook: Hook) => {
+            hook.urls.forEach(url => {
                 const encUrl = crypto.createHash('md5').update(url).digest('hex')
                 this.#requestFunctions[encUrl] = this.#getRequestFunction(url)
-                this.#emitter.on(key, this.#requestFunctions[encUrl])
+                this.#emitter.on(hook._id, this.#requestFunctions[encUrl])
             })
         })
         this.#emitter.emit('setListeners')
@@ -84,17 +95,17 @@ export class WebHooks {
     }
 
     #removeUrlFromName = async (name: string, url: string): Promise<void> => {
-        const urls: string[] = JSON.parse(await this.#redisClient.get(name))
+        const urls = (await HookModel.findById(name)).urls
         if (urls.indexOf(url) !== -1) {
             urls.splice(urls.indexOf(url), 1)
-            await this.#redisClient.set(name, JSON.stringify(urls))
+            await HookModel.findByIdAndUpdate(name, { urls })
         } else {
             throw new URLNotFoundError(`URL(${url}) not found wile removing from Name(${name}).`)
         }
     }
 
     #removeName = async (name: string): Promise<void> => {
-        await this.#redisClient.unlink(name)
+        await HookModel.findByIdAndDelete(name)
     }
 
     /**
@@ -113,15 +124,22 @@ export class WebHooks {
      * @param  {string} url
      */
     add = async (name: string, url: string): Promise<void> => {
-        const urls = (await this.#redisClient.exists(name))
-            ? JSON.parse(await this.#redisClient.get(name))
-            : []
+        const hook = await HookModel.findById(name)
+        const urls = !!hook ? hook.urls : []
+
         if (urls.indexOf(url) === -1) {
             urls.push(url)
             const encUrl = crypto.createHash('md5').update(url).digest('hex')
             this.#requestFunctions[encUrl] = this.#getRequestFunction(url)
             this.#emitter.on(name, this.#requestFunctions[encUrl])
-            await this.#redisClient.set(name, JSON.stringify(urls))
+            if (!!hook) {
+                await HookModel.findByIdAndUpdate(name, { urls })
+            } else {
+                await HookModel.create({
+                    _id: name,
+                    urls
+                })
+            }
         } else {
             throw new URLExistsError(`URL(${url}) already exists for name(${name}).`)
         }
@@ -134,8 +152,8 @@ export class WebHooks {
      * @param  {string} url?
      */
     remove = async (name: string, url?: string): Promise<void> => {
-        if (!(await this.#redisClient.exists(name)))
-            throw new NameNotFoundError(`Name(${name}) not found while removing.`)
+        const hook = await HookModel.findById(name)
+        if (!hook) throw new NameNotFoundError(`Name(${name}) not found while removing.`)
         if (url) {
             await this.#removeUrlFromName(name, url)
             const urlKey = crypto.createHash('md5').update(url).digest('hex')
@@ -143,8 +161,7 @@ export class WebHooks {
             delete this.#requestFunctions[urlKey]
         } else {
             this.#emitter.removeAllListeners(name)
-            const urls: string[] = JSON.parse(await this.#redisClient.get(name))
-            urls.forEach(url => {
+            hook.urls.forEach(url => {
                 const urlKey = crypto.createHash('md5').update(url).digest('hex')
                 delete this.#requestFunctions[urlKey]
             })
@@ -158,13 +175,8 @@ export class WebHooks {
      * @returns Promise
      */
     getDB = async (): Promise<DB> => {
-        const keys = await this.#redisClient.keys('*')
-        const pairs = await Promise.all(
-            keys.map(async (key: string) => {
-                const urls = JSON.parse(await this.#redisClient.get(key))
-                return [key, urls]
-            })
-        )
+        const hooks = await HookModel.find({})
+        const pairs = await Promise.all(hooks.map(async (hook: Hook) => [hook._id, hook.urls]))
         return Object.fromEntries(pairs)
     }
 
@@ -174,18 +186,11 @@ export class WebHooks {
      * @param  {string} name
      * @returns Promise
      */
-    getWebHook = async (name: string): Promise<string> => {
-        if (!(await this.#redisClient.exists(name)))
-            throw new NameNotFoundError(`Name(${name}) not found while getWebHook.`)
-        return await this.#redisClient.get(name)
+    getWebHook = async (name: string): Promise<string[]> => {
+        const hook = await HookModel.findById(name)
+        if (!hook) throw new NameNotFoundError(`Name(${name}) not found while getWebHook.`)
+        return hook.urls
     }
-
-    /**
-     * Return array of URLs for specified name.
-     *
-     * @param  {string} name
-     * @returns Promise
-     */
 
     /**
      * Return all request functions hash table

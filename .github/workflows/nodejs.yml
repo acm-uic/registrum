@@ -26,9 +26,6 @@ jobs:
       - name: Start Docker for Mongodb
         shell: pwsh
         run: docker run -d -p 27017:27017 mongo
-      - name: Start Docker for redis
-        shell: pwsh
-        run: docker run -d  -p 6379:6379 redis
       - name: rush install
         shell: pwsh
         run: node common/scripts/install-run-rush.js install --no-link

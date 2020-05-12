@@ -1,22 +1,12 @@
-import { WebHooks } from '../lib/WebHooks'
+import { WebHooks, HookModel } from '../lib/WebHooks'
 import * as chai from 'chai'
-import * as Redis from 'ioredis'
+import * as mongoose from 'mongoose'
 import * as http from 'http'
-
 const { assert } = chai
 
 describe('WebHooks Test', () => {
-    const redisClient = new Redis('redis://localhost')
-
-    redisClient.on('error', async () => {
-        console.error('Redis Error')
-        await redisClient.quit()
-        process.exit(1)
-    })
-
-    const unlinkAllKeys = async () => {
-        const keys = await redisClient.keys('*')
-        await Promise.all(keys.map(key => redisClient.unlink(key)))
+    const clearDb = async () => {
+        await HookModel.remove({})
     }
 
     const requestHandler = (request: http.IncomingMessage, response: http.ServerResponse) => {
@@ -45,6 +35,19 @@ describe('WebHooks Test', () => {
     let host: string
     let baseUrl: string
     beforeAll(async () => {
+        try {
+            await mongoose.connect('mongodb://localhost:27017/registrum', {
+                useNewUrlParser: true,
+                useCreateIndex: true,
+                useUnifiedTopology: true,
+                useFindAndModify: false
+            })
+            console.log('Mongoose connected')
+        } catch (e) {
+            console.error('Mongoose Error')
+            mongoose.disconnect()
+            process.exit(1)
+        }
         server.listen(0)
         port = await new Promise(resolve => {
             server.on('listening', () => {
@@ -58,13 +61,13 @@ describe('WebHooks Test', () => {
         })
         host = `localhost:${port}`
         baseUrl = `${protocol}://${host}`
-        await unlinkAllKeys()
+        await clearDb()
     })
     afterEach(async () => {
-        await unlinkAllKeys()
+        await clearDb()
     })
     afterAll(async () => {
-        await redisClient.quit()
+        mongoose.disconnect()
         server.close()
     })
 
@@ -79,12 +82,15 @@ describe('WebHooks Test', () => {
             '/testRemove/12369'
         ]
         const truth = urls.map(url => `${baseUrl}${url}`)
-        redisClient.set(name, JSON.stringify(truth))
-        const webHooks = new WebHooks({ redisClient })
+        await HookModel.create({
+            _id: name,
+            urls: truth
+        })
+        const webHooks = new WebHooks({ mongooseConnection: mongoose.connection })
         const removedUrl = truth.pop()
         await webHooks.remove(name, removedUrl)
         await webHooks.remove(name, truth.pop())
-        const dbValue = JSON.parse(await redisClient.get(name))
+        const dbValue = (await HookModel.findById(name)).urls
         assert.deepEqual(dbValue, truth)
         try {
             await webHooks.remove(name, removedUrl)
@@ -96,8 +102,9 @@ describe('WebHooks Test', () => {
             )
         }
         await webHooks.remove(name)
-        const dbExists = await redisClient.exists(name)
-        assert.equal(dbExists, 0)
+        const hook = await HookModel.findById(name)
+        const dbExists = !!hook
+        assert.equal(dbExists, false)
         try {
             await webHooks.remove(name)
             assert.fail()
@@ -120,14 +127,14 @@ describe('WebHooks Test', () => {
     })
 
     it('test add', async () => {
-        const webHooks = new WebHooks({ redisClient })
+        const webHooks = new WebHooks({ mongooseConnection: mongoose.connection })
         const name = 'testAdd'
         const urls = ['/testAdd/123', '/testAdd/1235', '/testAdd/1236']
         const truth = urls.map(url => `${baseUrl}${url}`)
         for (const i in truth) {
             await webHooks.add(name, truth[i])
         }
-        const dbValue = JSON.parse(await redisClient.get(name))
+        const dbValue = (await HookModel.findById(name)).urls
         assert.deepEqual(dbValue, truth)
         try {
             await webHooks.add(name, truth[0])
@@ -141,9 +148,12 @@ describe('WebHooks Test', () => {
         const name = 'testGetWebHook'
         const urls = ['/testGetWebHook/123', '/testGetWebHook/1235', '/testGetWebHook/1236']
         const truth = urls.map(url => `${baseUrl}${url}`)
-        redisClient.set(name, JSON.stringify(truth))
-        const webHooks = new WebHooks({ redisClient })
-        const getWebHookResponse = JSON.parse(await webHooks.getWebHook(name))
+        await HookModel.create({
+            _id: name,
+            urls: truth
+        })
+        const webHooks = new WebHooks({ mongooseConnection: mongoose.connection })
+        const getWebHookResponse = await webHooks.getWebHook(name)
         assert.deepEqual(getWebHookResponse, truth)
         const badName = 'testGetWebHook-bad'
         try {
@@ -155,7 +165,7 @@ describe('WebHooks Test', () => {
     })
 
     it('test get requestFunctions', () => {
-        const webHooks = new WebHooks({ redisClient })
+        const webHooks = new WebHooks({ mongooseConnection: mongoose.connection })
         const { requestFunctions } = webHooks
         assert.typeOf(requestFunctions, 'object')
     })
@@ -176,9 +186,12 @@ describe('WebHooks Test', () => {
         const values = Object.values(db)
         const keys = Object.keys(db)
         for (const i in keys) {
-            redisClient.set(keys[i], JSON.stringify(values[i]))
+            await HookModel.create({
+                _id: keys[i],
+                urls: values[i]
+            })
         }
-        const webHooks = new WebHooks({ redisClient })
+        const webHooks = new WebHooks({ mongooseConnection: mongoose.connection })
         const val = await webHooks.getDB()
         assert.deepEqual(val, db)
     })
@@ -192,9 +205,12 @@ describe('WebHooks Test', () => {
         }
         const name = 'testTrigger'
         const url = '/testTrigger/123'
-        await redisClient.set(name, JSON.stringify([`${baseUrl}${url}`]))
+        await HookModel.create({
+            _id: name,
+            urls: [`${baseUrl}${url}`]
+        })
 
-        const webHooks = new WebHooks({ redisClient })
+        const webHooks = new WebHooks({ mongooseConnection: mongoose.connection })
         await new Promise(resolve => setTimeout(resolve, 100))
         await new Promise(resolve => {
             webHooks.emitter.on(

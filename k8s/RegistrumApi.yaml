@@ -47,11 +47,6 @@ spec:
                 secretKeyRef:
                   name: api-secrets
                   key: API_PORT
-            - name: API_REDIS_URI
-              valueFrom:
-                secretKeyRef:
-                  name: api-secrets
-                  key: API_REDIS_URI
             - name: MONGODB_URI
               valueFrom:
                 secretKeyRef:
