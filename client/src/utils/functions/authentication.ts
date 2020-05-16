@@ -1,8 +1,8 @@
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { User } from '../../models/interfaces/User'
-import { setUser } from '../../models/redux/actions/auth'
-import { store } from '../../models/redux/store'
+import User from '../../models/interfaces/User'
+import { setUser, unsetUser } from '../../models/store/auth/actions'
+import { store } from '../../models/store'
 
 import { initializeSW } from '../../serviceWorker'
 
@@ -72,7 +72,7 @@ export const signUp = async (fn: string, ln: string, em: string, pw: string) => 
             toast(response.data, { type: response.status === 400 ? 'info' : 'error' })
 
             // * Set user to null
-            store.dispatch(setUser(null))
+            store.dispatch(unsetUser())
         }
     } catch (err) {
         toast(err.message as string, {
@@ -80,7 +80,7 @@ export const signUp = async (fn: string, ln: string, em: string, pw: string) => 
         })
 
         // * Set user to null
-        store.dispatch(setUser(null))
+        store.dispatch(unsetUser())
     }
 }
 
@@ -112,7 +112,7 @@ export const signIn = async (email: string, password: string) => {
         } else {
             toast(response.data, { type: response.status === 400 ? 'info' : 'error' })
             // * Set user to null
-            store.dispatch(setUser(null))
+            store.dispatch(unsetUser())
         }
     } catch (err) {
         toast(err.message as string, {
@@ -120,7 +120,7 @@ export const signIn = async (email: string, password: string) => {
         })
 
         // * Set user to null
-        store.dispatch(setUser(null))
+        store.dispatch(unsetUser())
     }
 }
 
@@ -145,7 +145,7 @@ export const signOut = async () => {
         if (response.status === 200 || response.status === 401) {
             toast('Signed out succesfully', { type: 'success' })
             // * Set user to null
-            store.dispatch(setUser(null))
+            store.dispatch(unsetUser())
         } else {
             toast('ERROR: Contact Administrator', {
                 type: 'error'

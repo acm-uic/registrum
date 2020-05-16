@@ -2,9 +2,9 @@ import React from 'react'
 import { Provider } from 'react-redux'
 import { render, screen } from '@testing-library/react'
 import { BrowserRouter as Router } from 'react-router-dom'
-import { store } from '../models/redux/store'
+import { store } from '../models/store'
 import StatusList from '../components/StatusList'
-import { Class } from '../models/interfaces/Class'
+import Class from '../models/interfaces/Class'
 it('Renders StatusList Correctly', () => {
     const statuses: Class[] = [
         {

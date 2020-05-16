@@ -3,8 +3,8 @@ import { useDispatch } from 'react-redux'
 import { Card, Button, Col, ListGroupItem } from 'react-bootstrap'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { Class } from '../models/interfaces/Class'
-import { updateUser } from '../models/redux/actions/auth'
+import Class from '../models/interfaces/Class'
+import { updateUser } from '../models/store/auth/thunk'
 // import { removeClass } from '../utils/functions/authentication'
 
 interface StatusViewProps {

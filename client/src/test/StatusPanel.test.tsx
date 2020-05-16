@@ -2,7 +2,7 @@ import React from 'react'
 import { Provider } from 'react-redux'
 import { render, screen } from '@testing-library/react'
 import { BrowserRouter as Router } from 'react-router-dom'
-import { store } from '../models/redux/store'
+import { store } from '../models/store'
 import StatusList from '../components/StatusList'
 
 it('Renders StatusPanel Correctly', () => {

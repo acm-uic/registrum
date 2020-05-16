@@ -1,6 +1,6 @@
-import { Class } from './Class'
+import Class from './Class'
 
-export interface User {
+interface User {
     _id: string
     firstname: string
     lastname: string
@@ -8,3 +8,5 @@ export interface User {
     classes: Class[]
     emailNotificationsEnabled: boolean
 }
+
+export default User

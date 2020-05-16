@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react'
-
 import { Button, Modal, Form, ListGroup } from 'react-bootstrap'
 import axios, { AxiosResponse } from 'axios'
-
-import { useDispatch, useStore } from 'react-redux'
-import { Class } from '../models/interfaces/Class'
-
-import { updateUser } from '../models/redux/actions/auth'
+import { useDispatch } from 'react-redux'
 import Select from 'react-select'
+
+import Class from '../models/interfaces/Class'
+import { useSelector } from '../models/store'
+import { updateUser } from '../models/store/auth/thunk'
 
 import ClassListing from './ClassListing'
 interface Term {
@@ -23,9 +22,7 @@ interface Subject {
 
 const AddClass = () => {
     // * Get user from state
-    const store = useStore()
-    const { Auth } = store.getState()
-    const { user } = Auth
+    const { user } = useSelector(state => state.auth)
 
     // * Dispatch hook
     const dispatch = useDispatch()
@@ -89,7 +86,7 @@ const AddClass = () => {
 
     // * useEffect every time subject changes, fetch classes
     useEffect(() => {
-        if (currentSubject != null) {
+        if (currentTerm !== null && currentSubject != null) {
             // * Fetch class list for subject
             axios
                 .get(`/api/classes/list/${currentTerm.code}/${currentSubject.code}`)
@@ -107,7 +104,7 @@ const AddClass = () => {
     }, [currentSubject])
 
     useEffect(() => {
-        if (currentSubject !== null && currentClass !== null) {
+        if (currentTerm !== null && currentSubject !== null && currentClass !== null) {
             // * Fetch class listings for subject and course
             axios
                 .get(
@@ -242,7 +239,7 @@ const AddClass = () => {
                                 <ListGroup>
                                     {classListing
                                         .filter(cls => {
-                                            return !user.subscriptions.includes(
+                                            return !user?.subscriptions.includes(
                                                 cls.courseReferenceNumber
                                             )
                                         })

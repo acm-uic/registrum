@@ -1,5 +1,4 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSignOutAlt, faUser } from '@fortawesome/free-solid-svg-icons'
@@ -7,13 +6,13 @@ import { Link } from 'react-router-dom'
 
 import { Navbar, Nav } from 'react-bootstrap'
 
-import { User } from '../models/interfaces/User'
 import SignIn from './SignIn'
 import SignUp from './SignUp'
 import { signOut } from '../utils/functions/authentication'
+import { useSelector } from '../models/store'
 
 const NavBar = () => {
-    const user: User | null = useSelector((state: any) => state.Auth.user)
+    const { user } = useSelector(state => state.auth)
 
     return (
         <Navbar expand="md" bg="light" className="align-middle">

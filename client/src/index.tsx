@@ -7,7 +7,7 @@ import 'bootstrap/dist/css/bootstrap.css'
 import { register } from './serviceWorker'
 
 // ! Configure Redux Store
-import { store } from './models/redux/store'
+import { store } from './models/store'
 
 // * Import styles
 import './styles/index.scss'

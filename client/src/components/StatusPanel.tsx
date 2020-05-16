@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 import { Card, Container } from 'react-bootstrap'
-import { Class } from '../models/interfaces/Class'
+import Class from '../models/interfaces/Class'
 import AddClass from './AddClass'
 
 interface StatusPanelProps {

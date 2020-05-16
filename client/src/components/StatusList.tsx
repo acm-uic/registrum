@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import { Container, Row } from 'react-bootstrap'
 import StatusView from './StatusView'
-import { Class } from '../models/interfaces/Class'
+import Class from '../models/interfaces/Class'
 
 interface StatusListProps {
     statuses: Class[]

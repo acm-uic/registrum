@@ -4,8 +4,8 @@ import { toast } from 'react-toastify'
 import axios from 'axios'
 
 import { useDispatch, useStore } from 'react-redux'
-import { updateUser } from '../models/redux/actions/auth'
-import { User } from '../models/interfaces/User'
+import { updateUser } from '../models/store/auth/thunk'
+import User from '../models/interfaces/User'
 interface UserUpdate {
     // * Update Interface
     firstname?: string

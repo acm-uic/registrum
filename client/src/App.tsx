@@ -13,19 +13,19 @@ import React, { FC, useEffect } from 'react'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import Home from './pages/Home'
 import SplashPage from './pages/SplashPage'
 import Classes from './pages/Classes'
 import Account from './pages/Account'
 import NavBar from './components/NavBar'
-import { State } from './models/redux/store'
 
-import { updateUser } from './models/redux/actions/auth'
+import { useSelector } from './models/store'
+import { updateUser } from './models/store/auth/thunk'
 
 export const App: FC = () => {
     // * Grab current user
-    const auth = useSelector((state: State) => state.Auth)
+    const auth = useSelector(state => state.auth)
     const { user } = auth
     const dispatch = useDispatch()
 

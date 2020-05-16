@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import { Button, ListGroupItem } from 'react-bootstrap'
 
-import { Class } from '../models/interfaces/Class'
+import Class from '../models/interfaces/Class'
 
 export interface ClassListingProps {
     onTrack: (crn: string) => void
