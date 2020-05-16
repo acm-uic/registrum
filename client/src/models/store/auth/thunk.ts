@@ -1,4 +1,4 @@
-import axios, { AxiosError } from 'axios'
+import axios from 'axios'
 
 import User from '../../interfaces/User'
 import { AppThunk } from '../'

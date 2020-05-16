@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSignOutAlt, faUser } from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom'
 
-import { Navbar, Nav, SafeAnchorProps } from 'react-bootstrap'
+import { Navbar, Nav } from 'react-bootstrap'
 
 import SignIn from './SignIn'
 import SignUp from './SignUp'
