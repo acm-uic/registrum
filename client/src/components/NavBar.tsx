@@ -1,10 +1,10 @@
-import React from 'react'
+import React, { MouseEvent } from 'react'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSignOutAlt, faUser } from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom'
 
-import { Navbar, Nav } from 'react-bootstrap'
+import { Navbar, Nav, SafeAnchorProps } from 'react-bootstrap'
 
 import SignIn from './SignIn'
 import SignUp from './SignUp'
@@ -48,15 +48,15 @@ const NavBar = () => {
                                 {'  '}
                                 {user.firstname}
                             </Nav.Link>
-                            <Nav.Link
-                                onClick={async (e: any) => {
+                            <Nav
+                                onClick={async (e: React.MouseEvent<HTMLElement>) => {
                                     e.preventDefault()
                                     await signOut()
                                 }}
                             >
                                 <FontAwesomeIcon icon={faSignOutAlt} />
                                 Sign Out
-                            </Nav.Link>
+                            </Nav>
                         </>
                     )}
                 </Nav>
