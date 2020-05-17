@@ -7,7 +7,14 @@ module.exports = {
     modulePaths: ['<rootDir>'],
     moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
     moduleNameMapper: {
-        '\\.(css|less)$': 'identity-obj-proxy'
+        '\\.(css|less)$': 'identity-obj-proxy',
+        '^@utils(.*)$': '<rootDir>/src/utils$1',
+        '^@redux(.*)$': '<rootDir>/src/models/store$1',
+        '^@components(.*)$': '<rootDir>/src/components$1',
+        '^@styles(.*)$': '<rootDir>/src/styles$1',
+        '^@assets(.*)$': '<rootDir>/src/assets$1',
+        '^@interfaces(.*)$': '<rootDir>/src/models/interfaces$1',
+        '^@pages(.*)$': '<rootDir>/src/pages$1'
     },
     transform: {
         '^.+\\.tsx?$': 'babel-jest',
