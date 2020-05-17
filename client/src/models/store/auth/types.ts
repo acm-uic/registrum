@@ -33,3 +33,19 @@ interface RemoveClassAction extends Action {
 
 // * Cummalative Type
 export type UserActionTypes = SetUserAction | UnsetUserAction | AddClassAction | RemoveClassAction
+
+// * Data needed to register a new user
+export interface SignUpProps {
+    firstname: string
+    lastname: string
+    email: string
+    password: string
+    emailNotificationsEnabled: boolean
+    boolEmail: boolean
+}
+
+// * Data needed to login using email / password
+export interface SignInProps {
+    email: string
+    password: string
+}

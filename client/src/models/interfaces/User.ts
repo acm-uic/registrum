@@ -1,12 +1,11 @@
-import Class from './Class'
-
 interface User {
     _id: string
     firstname: string
     lastname: string
     email: string
-    classes: Class[]
+    classes: string[]
     emailNotificationsEnabled: boolean
+    boolEmail: boolean
 }
 
 export default User
