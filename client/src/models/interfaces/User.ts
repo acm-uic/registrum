@@ -1,4 +1,4 @@
-interface User {
+export default interface User {
     _id: string
     firstname: string
     lastname: string
@@ -7,5 +7,3 @@ interface User {
     emailNotificationsEnabled: boolean
     boolEmail: boolean
 }
-
-export default User

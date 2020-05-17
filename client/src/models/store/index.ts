@@ -4,12 +4,14 @@ import thunk, { ThunkAction } from 'redux-thunk' // * Middleware used for asynch
 import { useSelector as useReduxSelector, TypedUseSelectorHook } from 'react-redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
 
-import { AuthReducer } from './auth/reducer'
+import { AuthReducer } from '@redux/auth/reducer'
+import { BannerReducer } from '@redux/banner/reducer'
 
 // * Bind reducers into single object
 const reducers = combineReducers({
     // ! Add more reducers in this object
-    auth: AuthReducer
+    auth: AuthReducer,
+    banner: BannerReducer
 })
 
 // * Configure store

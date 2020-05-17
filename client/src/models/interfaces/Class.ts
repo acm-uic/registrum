@@ -4,7 +4,7 @@ interface Faculty {
     displayName: string
 }
 
-interface Class {
+export default interface Class {
     courseReferenceNumber: string
     _id: string
     id: number
@@ -21,5 +21,3 @@ interface Class {
     courseTitle: string
     courseNumber: string
 }
-
-export default Class
