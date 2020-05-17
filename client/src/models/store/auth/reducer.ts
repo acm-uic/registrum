@@ -1,5 +1,5 @@
-import User from '../../interfaces/User'
-import { SET_USER, UNSET_USER, UserActionTypes } from './types'
+import User from '@interfaces/User'
+import { SET_USER, UNSET_USER, UserActionTypes } from '@redux/auth/types'
 
 // * Type for the AuthState
 export interface AuthState {
