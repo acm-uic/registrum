@@ -19,32 +19,26 @@
         "resolveJsonModule": true,
         "baseUrl": "src",
         "paths": {
-            "@utils": [
-                "utils"
+            "@utils/*": [
+                "utils/*"
             ],
-            "@actions": [
-                "models/redux/actions"
+            "@redux/*": [
+                "models/store/*"
             ],
-            "@reducers": [
-                "models/redux/reducers"
+            "@components/*": [
+                "components/*"
             ],
-            "@redux": [
-                "models/redux"
+            "@styles/*": [
+                "styles/*"
             ],
-            "@components": [
-                "components"
+            "@assets/*": [
+                "assets/*"
             ],
-            "@styles": [
-                "styles"
+            "@interfaces/*": [
+                "models/interfaces/*"
             ],
-            "@assets": [
-                "assets"
-            ],
-            "@interfaces": [
-                "models/interfaces"
-            ],
-            "@pages": [
-                "pages"
+            "@pages/*": [
+                "pages/*"
             ]
         }
     },

@@ -5,7 +5,7 @@ import CopyPlugin from 'copy-webpack-plugin'
 
 import * as tsconfig from './tsconfig.json'
 
-function tsConfigPathsToAliases({ webpackConfigBasePath = __dirname } = {}) {
+const tsConfigPathsToAliases = () => {
     if (!tsconfig.compilerOptions.paths) return {}
 
     const paths: { [key: string]: string[] } = tsconfig.compilerOptions.paths
@@ -14,14 +14,12 @@ function tsConfigPathsToAliases({ webpackConfigBasePath = __dirname } = {}) {
 
     Object.keys(paths).forEach(item => {
         const key = item.replace('/*', '')
-        const value = path.resolve(
-            webpackConfigBasePath,
-            paths[item][0].replace('/*', '').replace('*', '')
-        )
+        const value = path.resolve(__dirname, `src/${paths[item][0].replace('*', '')}`)
 
         aliases[key] = value
     })
 
+    console.log(aliases)
     return aliases
 }
 
