@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { Controller } from '../interfaces/Controller'
-import { WebHooks } from '@bmiddha/WebHooks'
+import { WebHooks } from '@bmiddha/webhooks'
 import * as mongoose from 'mongoose'
 import { CourseSchema } from 'registrum-common/dist/schemas/Banner'
 import { Course } from 'registrum-common/dist/lib/Banner'
