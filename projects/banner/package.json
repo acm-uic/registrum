@@ -7,7 +7,7 @@
         "lint": "eslint \"**/*.{js,ts}\"",
         "lint:fix": "npm run lint -- --fix",
         "start": "node dist/index.js",
-        "test": "jest -i --silent --runInBand",
+        "test": "jest --passWithNoTests",
         "watch": "concurrently -n ts,node \"npm run watch:ts\" \"npm run watch:node\"",
         "watch:node": "nodemon --watch dist dist/index.js",
         "watch:test": "npm run test -- --watch-files src --watch",
@@ -23,7 +23,9 @@
         "mongoose": "^5.9.13",
         "morgan": "^1.10.0",
         "tough-cookie": "^4.0.0",
-        "node-fetch": "^2.6.0"
+        "node-fetch": "^2.6.0",
+        "@bmiddha/webhooks": "^1.1.3",
+        "registrum-common": "^0.1.0"
     },
     "devDependencies": {
         "@types/chai": "^4.2.11",
@@ -48,6 +50,8 @@
         "ts-jest": "^25.5.1",
         "ts-node": "^8.10.1",
         "typescript": "^3.8.3",
-        "@types/node-fetch": "^2.5.7"
+        "@types/node-fetch": "^2.5.7",
+        "ioredis": "^4.17.1",
+        "@types/ioredis": "^4.16.2"
     }
 }

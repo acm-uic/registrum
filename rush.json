@@ -30,6 +30,10 @@
     {
       "packageName": "registrum-api",
       "projectFolder": "projects/api"
+    },
+    {
+      "packageName": "registrum-common",
+      "projectFolder": "projects/common"
     }
   ]
 }

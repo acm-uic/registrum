@@ -20,7 +20,8 @@
         "projects/api",
         "projects/client",
         "projects/banner",
-        "projects/banner-data"
+        "projects/banner-data",
+        "projects/common"
     ],
     "editor.codeActionsOnSave": {
         "source.fixAll.eslint": true

@@ -1,11 +1,8 @@
-import { Banner, SearchResponse, Course, Subject, Term } from 'registrum-banner/dist/lib/Banner'
-import { Hook } from 'registrum-banner/dist/lib/WebHooks'
-import {
-    CourseSchema,
-    SubjectSchema,
-    TermSchema,
-    HookSchema
-} from 'registrum-banner/dist/interfaces/Schemas'
+import { Banner, SearchResponse, Course, Subject, Term } from 'registrum-common/dist/lib/Banner'
+import { Hook } from 'registrum-common/dist/types/Hook'
+import { CourseSchema, SubjectSchema, TermSchema } from 'registrum-common/dist/schemas/Banner'
+import { HookSchema } from 'registrum-common/dist/schemas/Hook'
+
 import { Document, model } from 'mongoose'
 export const TermModel = model<Term & Document>('Term', TermSchema)
 export const SubjectModel = model<Subject & Document>('Subject', SubjectSchema)
