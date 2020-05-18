@@ -2,12 +2,12 @@ import dotenv from 'dotenv'
 import axios from 'axios'
 import axiosCookieJarSupport from 'axios-cookiejar-support'
 import { CookieJar } from 'tough-cookie'
-import app, { mongoose } from '../app'
+import { app } from '..'
 
-import { Class } from '../routes/models/interfaces/Class'
+import { Class } from '../models/interfaces/Class'
 import { Server } from 'http'
 import mockApp from './mockbanner'
-import { UserObject } from '../routes/models/User'
+import { UserObject } from '../models/User'
 
 dotenv.config()
 const port = process.env.API_PORT || 8085

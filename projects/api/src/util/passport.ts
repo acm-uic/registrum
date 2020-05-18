@@ -1,6 +1,6 @@
 import passport from 'passport'
 import Local from 'passport-local'
-import User, { UserObject } from '../models/User'
+import User, { UserObject } from '../routes/models/User'
 import bcrypt from 'bcrypt'
 import { NextFunction, Request, Response } from 'express'
 

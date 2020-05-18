@@ -1,81 +1,39 @@
-import express, { Request, Response, NextFunction } from 'express'
-import compression from 'compression'
+import { Request, Response, NextFunction } from 'express'
 import session from 'express-session'
 import flash from 'express-flash'
 import mongoose from 'mongoose'
 import passport from 'passport'
-import morgan from 'morgan'
-import cors from 'cors'
-import router from './routes'
 import connectMongo from 'connect-mongo'
 import helmet from 'helmet'
+import { Controller } from 'registrum-common/dist/classes/Controller'
+import { ExpressApp, AppConfig } from 'registrum-common/dist/classes/ExpressApp'
 import 'dotenv/config'
 
-// *  Create Express server
-const app: express.Application = express()
-
-// * Retrieve environment variables
-app.set('port', process.env.API_PORT || 4000)
-const mongoUrl = process.env.MONGODB_URI || 'mongodb://localhost:27017/registrum'
-const baseUrl = process.env.API_BASE_PATH || '/api'
-
-// * Express configuration
-app.options('*', cors())
-app.use(compression())
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
-app.use(morgan('tiny'))
-app.use(helmet())
-
-// Connect to MongoDB
-mongoose.Promise = globalThis.Promise
-
-mongoose
-    .connect(mongoUrl, {
-        useNewUrlParser: true,
-        useCreateIndex: true,
-        useUnifiedTopology: true,
-        useFindAndModify: false
-    })
-    .then(() => {
-        console.log('✅ Connected to MongoDB 💾')
-    })
-    .catch(() => {
-        console.log('❌ Could not connect to MondoDB. Please make sure MongoDB is running.')
-        process.exit(1)
-    })
-
-const MongoStore = connectMongo(session)
-
-// * Setup Express Session
-app.use(
-    session({
-        store: new MongoStore({ mongooseConnection: mongoose.connection }),
-        name: '_session',
-        resave: false,
-        saveUninitialized: false,
-        unset: 'destroy',
-        secret: process.env.SESSION_SECRET || 'This is not a secure secret!',
-        proxy: process.env.NODE_ENV == 'production',
-        cookie: { secure: 'auto', sameSite: true }
-    })
-)
-
-// * Setup passport
-app.use(passport.initialize())
-app.use(passport.session())
-
-// * Setup express-flash for route messaging
-app.use(flash())
-
-// * Set No Cache
-router.use((_: Request, res: Response, next: NextFunction) => {
-    res.set('Cache-Control', 'no-store')
-    next()
-})
-
-// * Bind Routes to app
-app.use(baseUrl, router)
-
-export default app
-export { mongoose }
+export class App extends ExpressApp {
+    constructor(controllers: Controller[], config: AppConfig) {
+        super(controllers, config)
+        this.#initializeMiddlewares()
+    }
+    #initializeMiddlewares = () => {
+        this.app.use(helmet())
+        this.app.use(
+            session({
+                store: new (connectMongo(session))({ mongooseConnection: mongoose.connection }),
+                name: '_session',
+                resave: false,
+                saveUninitialized: false,
+                unset: 'destroy',
+                secret: process.env.SESSION_SECRET || 'This is not a secure secret!',
+                proxy: process.env.NODE_ENV == 'production',
+                cookie: { secure: 'auto', sameSite: true }
+            })
+        )
+        this.app.use(passport.initialize())
+        this.app.use(passport.session())
+        this.app.use(flash())
+        this.app.use((_: Request, res: Response, next: NextFunction) => {
+            res.set('Cache-Control', 'no-store')
+            next()
+        })
+    }
+}

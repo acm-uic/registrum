@@ -1,4 +1,4 @@
-import { UserObject } from '../routes/models/User'
+import { UserObject } from '../models/User'
 import webpush from 'web-push'
 
 const sgMail = require('@sendgrid/mail')
