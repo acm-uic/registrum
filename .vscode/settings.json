@@ -17,10 +17,10 @@
     "typescript.referencesCodeLens.enabled": true,
     "eslint.alwaysShowStatus": true,
     "eslint.workingDirectories": [
-        "api",
-        "client",
-        "banner",
-        "banner-data"
+        "projects/api",
+        "projects/client",
+        "projects/banner",
+        "projects/banner-data"
     ],
     "editor.codeActionsOnSave": {
         "source.fixAll.eslint": true
