@@ -4,7 +4,6 @@ import { CookieJar } from 'tough-cookie'
 import { URLSearchParams } from 'url'
 
 const bannerHost = process.env.BANNER_PROXY || 'https://banner.apps.uillinois.edu'
-
 type SearchProps = {
     courseNumber?: string
     subject?: string

@@ -11,14 +11,20 @@ coverage:
       banner-data:
         flags:
           - banner-data
+      common:
+        flags:
+          - common
 
 flags:
   api:
     paths:
-      - api/
+      - projects/api/
   banner:
     paths:
-      - banner/
+      - projects/banner/
   banner-data:
     paths:
-      - banner-data/
+      - projects/banner-data/
+  common:
+    paths:
+      - projects/common/

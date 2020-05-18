@@ -1,9 +1,9 @@
 import { Request, Response } from 'express'
 import { Controller } from '../interfaces/Controller'
-import { WebHooks, URLExistsError, URLNotFoundError, NameNotFoundError } from '../lib/WebHooks'
+import { WebHooks } from '@bmiddha/webhooks'
 import * as mongoose from 'mongoose'
-import { CourseSchema } from '../interfaces/Schemas'
-import { Course } from '../lib/Banner'
+import { CourseSchema } from 'registrum-common/dist/schemas/Banner'
+import { Course } from 'registrum-common/dist/lib/Banner'
 
 export class HookController extends Controller {
     #webHooks: WebHooks
@@ -34,24 +34,13 @@ export class HookController extends Controller {
     #addHook = async (request: Request, response: Response) => {
         const { key, url } = request.body
         console.log(key)
-        try {
-            await this.#webHooks.add(key, url)
-            this.created(response)
-        } catch (error) {
-            if (error instanceof URLExistsError) this.conflict(response)
-            else this.fail(response, error)
-        }
+        await this.#webHooks.add(key, url)
+        this.created(response)
     }
 
     #deleteHook = async (request: Request, response: Response) => {
         const { key, url } = request.body
-        try {
-            await this.#webHooks.remove(key, url)
-            this.ok(response)
-        } catch (error) {
-            if (error instanceof URLNotFoundError || error instanceof NameNotFoundError)
-                this.notFound(response)
-            else this.fail(response, error)
-        }
+        await this.#webHooks.remove(key, url)
+        this.ok(response)
     }
 }
