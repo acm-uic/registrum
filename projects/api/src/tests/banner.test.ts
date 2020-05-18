@@ -7,6 +7,7 @@ import app, { mongoose } from '../app'
 import { Class } from '../routes/models/interfaces/Class'
 import { Server } from 'http'
 import mockApp from './mockbanner'
+import { UserObject } from '../routes/models/User'
 
 dotenv.config()
 const port = process.env.API_PORT || 8085
@@ -135,7 +136,7 @@ describe('Class Tests', () => {
         })
 
         // * Make sure CRN is not in subscription list twice
-        const { data: user } = await client.get('/auth')
+        const user: UserObject = (await client.get('/auth')).data
 
         // * Make sure class does not have CRN
         let count = 0

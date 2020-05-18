@@ -6,7 +6,7 @@ import bcrypt from 'bcrypt'
 import './passport'
 import { isAuthenticated } from './passport'
 
-const router = Router()
+const router: Router = Router()
 
 // * Defining RegExp statement
 
@@ -23,7 +23,7 @@ const emailRegex = RegExp(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\
 const passwordRegex = RegExp(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/)
 
 // * Remove data shouldn't be sent to client
-const stripData = data => {
+const stripData = (data: UserObject) => {
     const result = JSON.parse(JSON.stringify(data))
     delete result['password']
     return result

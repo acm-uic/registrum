@@ -1,5 +1,5 @@
 import express, { Request, Response, NextFunction } from 'express'
-import compression from 'compression' // compresses requests
+import compression from 'compression'
 import session from 'express-session'
 import flash from 'express-flash'
 import mongoose from 'mongoose'
@@ -12,7 +12,7 @@ import helmet from 'helmet'
 import 'dotenv/config'
 
 // *  Create Express server
-const app = express()
+const app: express.Application = express()
 
 // * Retrieve environment variables
 app.set('port', process.env.API_PORT || 4000)

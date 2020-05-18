@@ -3,7 +3,7 @@ import * as compression from 'compression'
 import * as cors from 'cors'
 import * as morgan from 'morgan'
 import * as mongoose from 'mongoose'
-import { Controller } from './interfaces/Controller'
+import { Controller } from 'registrum-common/dist/classes/Controller'
 export type AppConfig = {
     port: number
     basePath: string

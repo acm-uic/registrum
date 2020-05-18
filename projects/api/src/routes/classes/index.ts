@@ -1,14 +1,18 @@
 import { Router, Request, Response } from 'express'
 // * All routes under /classes/*
-const router = Router()
+const router: Router = Router()
 
 import { BannerClient } from '../../util/banner'
 
 router.get('/list/:term/:subject', async (req: Request, res: Response) => {
     const { subject, term } = req.params
     // * FOR NOW, CHECK AGAINST HASH MAP
-    const courseNumbers = {}
-    const { data: classes } = await BannerClient.post('/class', { term, subject })
+    const courseNumbers: {
+        [key: string]: boolean
+    } = {}
+    const classes: { courseNumber: string }[] = (
+        await BannerClient.post('/class', { term, subject })
+    ).data
     classes.forEach(cls => {
         if (!courseNumbers[cls.courseNumber]) courseNumbers[cls.courseNumber] = true
         else return

@@ -2,7 +2,7 @@ import { Router, Request, Response } from 'express'
 import { isAuthenticated } from '../auth/passport'
 import User, { UserObject, SubscriptionsObject } from '../models/User'
 // * All routes under /classes/*
-const router = Router()
+const router: Router = Router()
 
 // * This is subscribing for push notifications and not specific classes
 // * This route is triggered when a user logs in to save subscription obj to the database

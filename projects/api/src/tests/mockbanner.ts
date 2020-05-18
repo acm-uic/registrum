@@ -6,7 +6,7 @@ const courses = [
     { courseNumber: '401', courseReferenceNumber: '401' }
 ]
 // * Create mock express isntance
-const mockApp = express()
+const mockApp: express.Application = express()
 mockApp.use(express.json())
 mockApp.use(express.urlencoded({ extended: true }))
 mockApp.get('/banner/subject', (req: Request, res: Response) => res.send(['CS']))

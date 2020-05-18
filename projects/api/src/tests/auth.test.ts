@@ -1,11 +1,10 @@
-import dotenv from 'dotenv'
 import axios from 'axios'
 import axiosCookieJarSupport from 'axios-cookiejar-support'
 import { CookieJar } from 'tough-cookie'
 import app, { mongoose } from '../app'
 import { Server } from 'http'
+import 'dotenv/config'
 
-dotenv.config()
 const port = process.env.API_PORT || 8085
 const basePath = process.env.API_BASE_PATH || '/api'
 const URL = `http://localhost:${port}${basePath}/auth/`

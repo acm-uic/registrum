@@ -4,7 +4,7 @@ import User, { UserObject } from '../models/User'
 import { notifyUser } from '../../util/notifier'
 import { BannerClient } from '../../util/banner'
 // * All routes under /classes/*
-const router = Router()
+const router: Router = Router()
 
 const API_HOST = process.env.API_HOST || 'http://localhost:4000'
 const API_BASE_PATH = process.env.API_BASE_PATH

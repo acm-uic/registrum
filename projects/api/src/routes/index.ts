@@ -4,7 +4,7 @@ import classes from './classes'
 import banner from './banner'
 import pushService from './push-service'
 
-const router = express.Router()
+const router: express.Router = express.Router()
 
 router.use('/auth', auth)
 router.use('/classes', classes)
