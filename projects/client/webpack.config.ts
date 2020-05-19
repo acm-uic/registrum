@@ -19,7 +19,6 @@ const tsConfigPathsToAliases = () => {
         aliases[key] = value
     })
 
-    console.log(aliases)
     return aliases
 }
 

@@ -4,7 +4,7 @@ import axios from 'axios'
 import Select from 'react-select'
 
 import Listing from '../models/interfaces/Listing'
-import { useSelector } from '@redux/.'
+import { useSelector, useDispatch } from '@redux/.'
 import { updateUser } from '@redux/auth/thunk'
 import { getCourses, getListings } from '@redux/banner/thunk'
 import ClassListing from './ClassListing'
@@ -13,6 +13,9 @@ import Subject from '@interfaces/Subject'
 import Course from '@interfaces/Course'
 
 const AddClass = () => {
+    // * Dispatch hook
+    const dispatch = useDispatch()
+
     // * Get user from state
     const { user } = useSelector(state => state.auth)
     const { terms, subjects, courses, listings } = useSelector(state => state.banner)
@@ -28,14 +31,14 @@ const AddClass = () => {
     useEffect(() => {
         if (term && subject) {
             // * Fetch course list
-            getCourses({ term, subject })
+            dispatch(getCourses({ term, subject }))
         }
     }, [term, subject])
 
     useEffect(() => {
         if (term && subject && course) {
             // * Fetch course listings
-            getListings({ term, subject, course })
+            dispatch(getListings({ term, subject, course }))
         }
     }, [term, subject, course])
 
@@ -50,7 +53,7 @@ const AddClass = () => {
         setCourse(undefined)
 
         // * Update User
-        updateUser()
+        dispatch(updateUser())
     }
     return (
         // * Terms > Subjects > Classes

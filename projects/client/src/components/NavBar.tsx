@@ -9,7 +9,7 @@ import { Navbar, Nav } from 'react-bootstrap'
 import SignIn from './SignIn'
 import SignUp from './SignUp'
 import { signOut } from '../utils/functions/authentication'
-import { useSelector } from '../models/store'
+import { useSelector } from '@redux/.'
 
 const NavBar = () => {
     const { user } = useSelector(state => state.auth)

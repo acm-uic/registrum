@@ -1,10 +1,10 @@
 import React, { FC } from 'react'
-import { useDispatch } from 'react-redux'
 import { Card, Button, Col, ListGroupItem } from 'react-bootstrap'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import Listing from '../models/interfaces/Listing'
 import { updateUser } from '../models/store/auth/thunk'
+import { useDispatch } from '@redux/.'
 // import { removeClass } from '../utils/functions/authentication'
 
 interface StatusViewProps {
@@ -12,7 +12,9 @@ interface StatusViewProps {
 }
 
 const StatusView: FC<StatusViewProps> = ({ status }) => {
+    // * Dispatch hook
     const dispatch = useDispatch()
+
     const doRemoveClass = async () => {
         try {
             // * Delete class by CRN

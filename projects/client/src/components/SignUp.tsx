@@ -3,8 +3,12 @@ import React, { useState } from 'react'
 import { Button, Modal, Form } from 'react-bootstrap'
 
 import { signUpUser } from '@redux/auth/thunk'
+import { useDispatch } from '@redux/.'
 
 const SignUp = () => {
+    // * Dispatch hook
+    const dispatch = useDispatch()
+
     const [show, toggleShow] = useState(false)
     const [validated, setValidated] = useState(false)
 
@@ -48,14 +52,16 @@ const SignUp = () => {
         setEmail('')
         setPassword('')
 
-        signUpUser({
-            firstname,
-            lastname,
-            email,
-            password,
-            emailNotificationsEnabled: true,
-            boolEmail: true
-        })
+        dispatch(
+            signUpUser({
+                firstname,
+                lastname,
+                email,
+                password,
+                emailNotificationsEnabled: true,
+                boolEmail: true
+            })
+        )
     }
 
     return (

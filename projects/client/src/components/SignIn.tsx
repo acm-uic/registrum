@@ -2,8 +2,12 @@ import React, { useState } from 'react'
 
 import { Button, Modal, Form } from 'react-bootstrap'
 import { signInUser } from '@redux/auth/thunk'
+import { useDispatch } from '@redux/.'
 
 const SignIn = () => {
+    // * Dispatch hook
+    const dispatch = useDispatch()
+
     const [show, toggleShow] = useState(false)
     const [validated, setValidated] = useState(false)
 
@@ -32,7 +36,7 @@ const SignIn = () => {
         setEmail('')
         setPassword('')
 
-        signInUser({ email, password })
+        dispatch(signInUser({ email, password }))
     }
 
     return (

@@ -1,7 +1,11 @@
 // ? This file configures the redux store within an application
 import { createStore, applyMiddleware, combineReducers, Action } from 'redux'
 import thunk, { ThunkAction } from 'redux-thunk' // * Middleware used for asynchronous events that affect state
-import { useSelector as useReduxSelector, TypedUseSelectorHook } from 'react-redux'
+import {
+    useSelector as useReduxSelector,
+    TypedUseSelectorHook,
+    useDispatch as useReduxDispatch
+} from 'react-redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
 
 import { AuthReducer } from '@redux/auth/reducer'
@@ -29,3 +33,5 @@ export const useSelector: TypedUseSelectorHook<ReturnType<typeof reducers>> = us
 
 // * Thunk Action type that matches out reducers (less bloated code)
 export type AppThunk = ThunkAction<void, ReturnType<typeof reducers>, unknown, Action<string>>
+
+export const useDispatch = () => useReduxDispatch()

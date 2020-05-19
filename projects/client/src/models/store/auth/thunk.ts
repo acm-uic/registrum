@@ -19,6 +19,8 @@ export const client = axios.create({
 })
 
 export const updateUser = (): AppThunk => async (dispatch, getState) => {
+    console.log('Called updateUser')
+
     const { auth } = getState()
 
     try {

@@ -19,19 +19,25 @@ import Classes from '@pages/Classes'
 import Account from '@pages/Account'
 import NavBar from '@components/NavBar'
 
-import { useSelector } from '@redux/.'
-import { updateUser } from '@redux/auth/thunk'
-import { getTerms } from '@redux/banner/thunk'
+import { useSelector, useDispatch } from '@redux/.'
 
-export const App = () => {
+import { updateUser } from '@redux/auth/thunk'
+import { getTerms, getSubjects } from '@redux/banner/thunk'
+
+export const App: React.FC = () => {
     // * Grab current user
     const { user } = useSelector(state => state.auth)
 
+    // * Dispatch hook
+    const dispatch = useDispatch()
+
     useEffect(() => {
         // * Update user on app load / auth state change
-        updateUser()
-        getTerms()
-    }, [user])
+        console.log('Hello')
+        dispatch(updateUser())
+        dispatch(getTerms())
+        dispatch(getSubjects())
+    })
 
     return (
         <>
