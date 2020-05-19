@@ -2,14 +2,14 @@ import React, { useState } from 'react'
 
 import { Button, Modal, Form } from 'react-bootstrap'
 
-import { signUp } from '../utils/functions/authentication'
+import { signUpUser } from '@redux/auth/thunk'
 
 const SignUp = () => {
     const [show, toggleShow] = useState(false)
     const [validated, setValidated] = useState(false)
 
-    const [fName, setFName] = useState('')
-    const [lName, setLName] = useState('')
+    const [firstname, setFName] = useState('')
+    const [lastname, setLName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
@@ -18,7 +18,7 @@ const SignUp = () => {
         setValidated(true)
 
         const nameRegex = /[a-zA-Z]+[a-zA-Z-\s]+[a-zA-Z]/
-        if (!nameRegex.test(fName) || !nameRegex.test(lName)) {
+        if (!nameRegex.test(firstname) || !nameRegex.test(lastname)) {
             return
         }
 
@@ -48,7 +48,14 @@ const SignUp = () => {
         setEmail('')
         setPassword('')
 
-        await signUp(fName, lName, email, password)
+        signUpUser({
+            firstname,
+            lastname,
+            email,
+            password,
+            emailNotificationsEnabled: true,
+            boolEmail: true
+        })
     }
 
     return (
@@ -65,14 +72,14 @@ const SignUp = () => {
                             <Form.Label>First Name</Form.Label>
                             <Form.Control
                                 placeholder="Jon"
-                                value={fName}
+                                value={firstname}
                                 type="text"
                                 required
                                 pattern="[a-zA-Z]+[a-zA-Z0-9\s]+[a-zA-Z]"
                                 onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
                                     if (e.key === ' ') {
                                         e.preventDefault()
-                                        setFName(`${fName} `)
+                                        setFName(`${firstname} `)
                                     }
                                 }}
                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -89,13 +96,13 @@ const SignUp = () => {
                             <Form.Label>Last Name</Form.Label>
                             <Form.Control
                                 placeholder="Doe"
-                                value={lName}
+                                value={lastname}
                                 required
                                 pattern="[a-zA-Z]+[a-zA-Z0-9\s]+[a-zA-Z]"
                                 onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
                                     if (e.key === ' ') {
                                         e.preventDefault()
-                                        setLName(`${lName} `)
+                                        setLName(`${lastname} `)
                                     }
                                 }}
                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {

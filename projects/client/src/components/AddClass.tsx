@@ -1,124 +1,43 @@
 import React, { useState, useEffect } from 'react'
 import { Button, Modal, Form, ListGroup } from 'react-bootstrap'
-import axios, { AxiosResponse } from 'axios'
-import { useDispatch } from 'react-redux'
+import axios from 'axios'
 import Select from 'react-select'
 
 import Listing from '../models/interfaces/Listing'
-import { useSelector } from '../models/store'
-import { updateUser } from '../models/store/auth/thunk'
-
+import { useSelector } from '@redux/.'
+import { updateUser } from '@redux/auth/thunk'
+import { getCourses, getListings } from '@redux/banner/thunk'
 import ClassListing from './ClassListing'
-interface Term {
-    _id: string
-    code: number
-    description: string
-}
-interface Subject {
-    _id: string
-    code: string
-    description: string
-}
+import Term from '@interfaces/Term'
+import Subject from '@interfaces/Subject'
+import Course from '@interfaces/Course'
 
 const AddClass = () => {
     // * Get user from state
     const { user } = useSelector(state => state.auth)
-
-    // * Dispatch hook
-    const dispatch = useDispatch()
+    const { terms, subjects, courses, listings } = useSelector(state => state.banner)
 
     // * Modal state
     const [show, toggleShow] = useState(false)
 
-    // * Current Term
-    const [currentTerm, setCurrentTerm] = useState<Term | null>(null)
-    // * Current Subject
-    const [currentSubject, setCurrentSubject] = useState<Subject | null>(null)
-
-    // * Current Class
-    const [currentClass, setCurrentClass] = useState<string | null>(null)
-
-    // * Term list
-    const [terms, setTerms] = useState<Term[]>([])
-
-    // * Subject list for given term
-    const [subjects, setSubjects] = useState<Subject[]>([])
-
-    // * Classes for given subject
-    const [classes, setClasses] = useState<string[]>([])
-
-    // * Class listings for given class and course number
-    const [classListing, setClassListing] = useState<Listing[]>([])
-
-    // * Initial load that sets terms array
-    useEffect(() => {
-        if (terms.length === 0) {
-            // * Fetch subjects from API
-            axios.get('/api/classes/terms').then((res: AxiosResponse) => {
-                // * Destructure response from API
-                const { data: terms } = res
-
-                // * Set terms
-                setTerms(terms)
-                setClassListing([])
-            })
-        }
-    }, [subjects])
-
-    // * useEffect every time term changes, fetch subjects
-    useEffect(() => {
-        if (currentTerm !== null) {
-            // * Fetch Subject list for term
-            axios.get(`/api/classes/subjects`).then((res: AxiosResponse) => {
-                // * Destructure response from API
-                const { data: subjects } = res
-
-                // * Set Subjects
-                setSubjects(subjects)
-
-                // * Reset Current Subject & Current Class
-                setCurrentSubject(null)
-                setCurrentClass(null)
-                setClassListing([])
-            })
-        }
-    }, [currentTerm])
+    const [term, setTerm] = useState<number>()
+    const [subject, setSubject] = useState<string>()
+    const [course, setCourse] = useState<number>()
 
     // * useEffect every time subject changes, fetch classes
     useEffect(() => {
-        if (currentTerm !== null && currentSubject != null) {
-            // * Fetch class list for subject
-            axios
-                .get(`/api/classes/list/${currentTerm.code}/${currentSubject.code}`)
-                .then((res: AxiosResponse) => {
-                    // * Destructure response from API
-                    const { data: classes } = res
-                    // * Set Classes
-                    setClasses(classes)
-
-                    // * Reset Class & listings
-                    setCurrentClass(null)
-                    setClassListing([])
-                })
+        if (term && subject) {
+            // * Fetch course list
+            getCourses({ term, subject })
         }
-    }, [currentSubject])
+    }, [term, subject])
 
     useEffect(() => {
-        if (currentTerm !== null && currentSubject !== null && currentClass !== null) {
-            // * Fetch class listings for subject and course
-            axios
-                .get(
-                    `/api/classes/listing/${currentTerm.code}/${currentSubject.code}/${currentClass}`
-                )
-                .then((res: AxiosResponse) => {
-                    // * Destructure response from API
-                    const { data: listing } = res
-
-                    // * Set Classes
-                    setClassListing(listing.reverse())
-                })
+        if (term && subject && course) {
+            // * Fetch course listings
+            getListings({ term, subject, course })
         }
-    }, [currentClass])
+    }, [term, subject, course])
 
     // * Track class handler (subscribes to class)
     const subscribeToClass = async (crn: string) => {
@@ -128,16 +47,10 @@ const AddClass = () => {
         })
 
         // * Reset Selections
-        setCurrentTerm(null)
-        setCurrentSubject(null)
-        setCurrentClass(null)
-        setClassListing([])
+        setCourse(undefined)
 
-        // * Close Modal
-        toggleShow(false)
-
-        // * update user
-        dispatch(updateUser())
+        // * Update User
+        updateUser()
     }
     return (
         // * Terms > Subjects > Classes
@@ -166,17 +79,20 @@ const AddClass = () => {
                             {/* // * Render Drop down when term list fetched */}
                             {terms.length > 0 && (
                                 <Select
-                                    onChange={option =>
-                                        setCurrentTerm(
+                                    onChange={option => {
+                                        setTerm(
                                             // eslint-disable-next-line
                                             // @ts-ignore
                                             option.value
                                         )
-                                    }
-                                    options={terms.map((term: Term) => {
+
+                                        setSubject(undefined)
+                                        setCourse(undefined)
+                                    }}
+                                    options={terms.map((t: Term) => {
                                         return {
-                                            value: term,
-                                            label: `${term.code}- ${term.description}`
+                                            value: t.code,
+                                            label: `${t.code}- ${t.description}`
                                         }
                                     })}
                                 ></Select>
@@ -184,23 +100,24 @@ const AddClass = () => {
                         </Form.Group>
 
                         {/* // * Select Subject */}
-                        {currentTerm !== null && (
+                        {term && (
                             <Form.Group>
                                 <Form.Label>Select Course Subject</Form.Label>
                                 {/* // * Render Drop down when term list fetched */}
                                 {subjects.length > 0 && (
                                     <Select
-                                        onChange={option =>
-                                            setCurrentSubject(
+                                        onChange={option => {
+                                            setSubject(
                                                 // eslint-disable-next-line
                                                 // @ts-ignore
                                                 option.value
                                             )
-                                        }
-                                        options={subjects.map((subject: Subject) => {
+                                            setCourse(undefined)
+                                        }}
+                                        options={subjects.map((s: Subject) => {
                                             return {
-                                                value: subject,
-                                                label: `(${subject.code}) ${subject.description}`
+                                                value: s.code,
+                                                label: `(${s.code}) ${s.description}`
                                             }
                                         })}
                                     ></Select>
@@ -209,44 +126,54 @@ const AddClass = () => {
                         )}
 
                         {/* //* Select Class */}
-                        {currentSubject != null && (
+                        {subject && (
                             <Form.Group>
                                 <Form.Label>Select Course Number</Form.Label>
                                 {/* // * Render Drop down when term list fetched */}
-                                {classes.length > 0 && (
+                                {courses.filter(c => c.subject === subject && c.term === term)
+                                    .length > 0 && (
                                     <Select
                                         onChange={option =>
-                                            setCurrentClass(
+                                            setCourse(
                                                 // eslint-disable-next-line
                                                 // @ts-ignore
                                                 option.value
                                             )
                                         }
-                                        options={classes.map((cls: string) => {
-                                            return {
-                                                value: cls,
-                                                label: `${currentSubject.code} - ${cls}`
-                                            }
-                                        })}
+                                        options={courses
+                                            .filter(c => c.subject === subject && c.term === term)
+                                            .map((cls: Course) => {
+                                                return {
+                                                    value: cls.number,
+                                                    label: `${cls.subject} - ${cls.number}`
+                                                }
+                                            })}
                                     ></Select>
                                 )}
                             </Form.Group>
                         )}
 
                         {/* //* Class Listing Group */}
-                        {classListing.length > 0 && (
+                        {listings.filter(
+                            l =>
+                                l.subject === subject &&
+                                l.term === terms.find(t => t.code === term)?.description &&
+                                l.courseNumber === course?.toString()
+                        ).length > 0 && (
                             <div className="classListView">
                                 <ListGroup>
-                                    {classListing
-                                        .filter(cls => {
-                                            return !user?.subscriptions.includes(
-                                                cls.courseReferenceNumber
-                                            )
+                                    {listings
+                                        .filter(l => {
+                                            !user?.classes.includes(l.courseReferenceNumber) &&
+                                                l.subject === subject &&
+                                                l.term ===
+                                                    terms.find(t => t.code === term)?.description &&
+                                                l.courseNumber === course?.toString()
                                         })
-                                        .map((listing: Listing, index) => (
+                                        .map((l: Listing, index) => (
                                             <ClassListing
                                                 key={index}
-                                                listing={listing}
+                                                listing={l}
                                                 onTrack={subscribeToClass}
                                             />
                                         ))}

@@ -19,7 +19,7 @@ export const client = axios.create({
     validateStatus: () => true
 })
 
-export const getTerm = (): AppThunk => async (dispatch, getState) => {
+export const getTerms = (): AppThunk => async (dispatch, getState) => {
     const { terms } = getState().banner
 
     // * Term have already been pulled

@@ -9,30 +9,29 @@
  * Author Github: https://github.com/alexchomiak
  */
 
-import React, { FC, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-import { useDispatch } from 'react-redux'
-import Home from './pages/Home'
-import SplashPage from './pages/SplashPage'
-import Classes from './pages/Classes'
-import Account from './pages/Account'
-import NavBar from './components/NavBar'
+import Home from '@pages/Home'
+import SplashPage from '@pages/SplashPage'
+import Classes from '@pages/Classes'
+import Account from '@pages/Account'
+import NavBar from '@components/NavBar'
 
-import { useSelector } from './models/store'
-import { updateUser } from './models/store/auth/thunk'
+import { useSelector } from '@redux/.'
+import { updateUser } from '@redux/auth/thunk'
+import { getTerms } from '@redux/banner/thunk'
 
-export const App: FC = () => {
+export const App = () => {
     // * Grab current user
-    const auth = useSelector(state => state.auth)
-    const { user } = auth
-    const dispatch = useDispatch()
+    const { user } = useSelector(state => state.auth)
 
     useEffect(() => {
         // * Update user on app load / auth state change
-        dispatch(updateUser())
-    }, [auth])
+        updateUser()
+        getTerms()
+    }, [user])
 
     return (
         <>
@@ -52,7 +51,7 @@ export const App: FC = () => {
                     <>
                         <Route exact path="/classes" component={Classes} />
                         <Route exact path="/account" component={Account} />
-                        <Route exact path="/" component={Home} />{' '}
+                        <Route exact path="/" component={Home} />
                     </>
                 ) : (
                     <SplashPage />

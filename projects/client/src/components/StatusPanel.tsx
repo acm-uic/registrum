@@ -1,16 +1,14 @@
 import React, { FC } from 'react'
 import { Card, Container } from 'react-bootstrap'
-import Listing from '../models/interfaces/Listing'
+
+import Listing from '@interfaces/Listing'
 import AddClass from './AddClass'
 
 interface StatusPanelProps {
     statuses: Listing[]
 }
 export const StatusPanel: FC<StatusPanelProps> = ({ statuses }) => {
-    let openCount = 0
-    statuses.forEach(status => {
-        if (status.seatsAvailable > 0) openCount++
-    })
+    const openCount = statuses.filter(status => status.seatsAvailable > 0).length
 
     return (
         <Container className="statuses">

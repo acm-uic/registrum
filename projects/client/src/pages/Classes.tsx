@@ -1,26 +1,25 @@
 import React, { FC, useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
 import { Container, Row, Col } from 'react-bootstrap'
 import axios from 'axios'
-import { Class } from '../models/interfaces/Listing'
+import Listing from '../models/interfaces/Listing'
 
 import StatusList from '../components/StatusList'
 import StatusPanel from '../components/StatusPanel'
 
-import { State } from '../models/redux/store'
+import { useSelector } from '@redux/.'
 
 const Classes: FC = () => {
-    const auth = useSelector((state: State) => state.Auth)
+    const auth = useSelector(state => state.auth)
     const { user } = auth
 
-    const [statuses, setStatuses] = useState<Class[]>([])
+    const [statuses, setStatuses] = useState<Listing[]>([])
 
     // * Refresh Class Data on Auth State Change
     useEffect(() => {
         // * Grab class data for use
         axios.get('/api/banner/tracking').then(res => {
             // * Update statuses
-            setStatuses(res.data as Class[])
+            setStatuses(res.data as Listing[])
         })
     }, [auth.user])
 

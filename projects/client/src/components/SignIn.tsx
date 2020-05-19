@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 
 import { Button, Modal, Form } from 'react-bootstrap'
-import { signIn } from '../utils/functions/authentication'
+import { signInUser } from '@redux/auth/thunk'
 
 const SignIn = () => {
     const [show, toggleShow] = useState(false)
@@ -32,7 +32,7 @@ const SignIn = () => {
         setEmail('')
         setPassword('')
 
-        await signIn(email, password)
+        signInUser({ email, password })
     }
 
     return (
