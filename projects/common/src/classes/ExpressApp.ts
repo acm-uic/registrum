@@ -57,8 +57,9 @@ export abstract class ExpressApp {
         })
     }
 
-    listen() {
-        this.#app.listen(this.#config.port, () => {
+    listen = (port?: number) => {
+        console.log('AAAAAAAAAAAAAAAAAAAAAAA', port)
+        return this.#app.listen(port || this.#config.port, () => {
             console.log(
                 `🚀 ${this.#config.serviceName} service running on port ${this.#config.port}. 🤘`
             )

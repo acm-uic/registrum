@@ -1,18 +1,18 @@
 {
-  "compilerOptions": {
-    "module": "es6",
-    "allowSyntheticDefaultImports": true,
-    "target": "es2019",
-    "noImplicitAny": true,
-    "sourceMap": true,
-    "moduleResolution": "node",
-    "declaration": true,
-    "lib": ["es2020"],
-    "outDir": "dist",
-    "baseUrl": "src",
-    "paths": {
-        "*": ["node_modules/*"]
-    }
-  },
-  "include": ["src/**/*"]
-}
+    "compilerOptions": {
+      "module": "commonjs",
+      "allowSyntheticDefaultImports": true,
+      "target": "es2019",
+      "noImplicitAny": true,
+      "sourceMap": true,
+      "moduleResolution": "node",
+      "declaration": true,
+      "lib": ["es2020"],
+      "outDir": "dist",
+      "baseUrl": ".",
+      "paths": {
+          "*": ["node_modules/*", "src/types/*"]
+      }
+    },
+    "include": ["src/**/*"]
+  }

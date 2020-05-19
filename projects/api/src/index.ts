@@ -13,10 +13,12 @@ const serviceName = 'Registrum-API'
 
 export const app = new App(
     [
-        new ClassesController('/classes'),
-        new AuthController('/auth'),
-        new BannerController('/banner', { notifyUrl: 'http://localhost:4000/api/banner' }),
-        new PushServiceController('/push-service')
+        new ClassesController(`${basePath}/classes`),
+        new AuthController(`${basePath}/auth`),
+        new BannerController(`${basePath}/banner`, {
+            notifyUrl: 'http://localhost:4000/api/banner'
+        }),
+        new PushServiceController(`${basePath}/push-service`)
     ],
     {
         port,
@@ -26,4 +28,11 @@ export const app = new App(
     }
 )
 
-app.listen()
+if (require.main === module) {
+    console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
+    console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
+    console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
+    console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
+    console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
+    app.listen()
+}

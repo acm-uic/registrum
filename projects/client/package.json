@@ -8,7 +8,7 @@
         "lint:fix": "npm run lint -- --fix",
         "refresh": "node ./scripts/refresh.js",
         "start": "http-server dist",
-        "test": "jest --silent",
+        "test": "jest --silent --passWithNoTests",
         "watch": "webpack-dev-server --mode=development"
     },
     "dependencies": {

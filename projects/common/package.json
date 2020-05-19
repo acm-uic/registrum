@@ -8,7 +8,7 @@
         "lint": "eslint \"**/*.{js,ts}\"",
         "lint:fix": "npm run lint -- --fix",
         "start": "exit 0",
-        "test": "jest --passWithNoTests",
+        "test": "jest --silent --passWithNoTests",
         "watch": "tsc -w --preserveWatchOutput"
     },
     "peerDependencies": {

@@ -1,23 +1,26 @@
-import dotenv from 'dotenv'
 import axios from 'axios'
 import axiosCookieJarSupport from 'axios-cookiejar-support'
 import { CookieJar } from 'tough-cookie'
-import app, { mongoose } from '../app'
+import { app } from '..'
+import mongoose from 'mongoose'
 import { Server } from 'http'
+import { MongoMemoryServer } from 'mongodb-memory-server'
 import mockApp from './mockbanner'
-dotenv.config()
-const port = process.env.API_PORT || 8085
+import 'dotenv/config'
+
+let port: number
 const basePath = process.env.API_BASE_PATH || '/api'
-const URL = `http://localhost:${port}${basePath}/`
+let apiUrl: string
 
 describe('Class Tests', () => {
     let server: Server
+    let mongoServer: MongoMemoryServer
     let bannerServer: Server
 
     // * Add Axios Cookie Jar
     const jar = new CookieJar()
     const client = axios.create({
-        baseURL: URL,
+        baseURL: apiUrl,
         withCredentials: true,
         jar: jar,
         validateStatus: () => {
@@ -29,9 +32,34 @@ describe('Class Tests', () => {
     axiosCookieJarSupport(client)
 
     beforeAll(async () => {
+        mongoServer = new MongoMemoryServer()
+        try {
+            await mongoose.connect(await mongoServer.getUri(), {
+                useNewUrlParser: true,
+                useCreateIndex: true,
+                useUnifiedTopology: true,
+                useFindAndModify: false
+            })
+            console.log('Mongoose connected')
+        } catch (e) {
+            console.error('Mongoose Error')
+            mongoose.disconnect()
+            process.exit(1)
+        }
+        server = app.listen(0)
+        port = await new Promise(resolve => {
+            server.on('listening', () => {
+                const addressInfo = server.address().valueOf() as {
+                    address: string
+                    family: string
+                    port: number
+                }
+                resolve(addressInfo.port)
+            })
+        })
+        apiUrl = `http://localhost:${port}${basePath}/`
         bannerServer = mockApp.listen(4001, () => console.log('MOCK APP LISTENING'))
 
-        server = app.listen(port)
         const response = await client.post('auth/signup', {
             firstname: 'John',
             lastname: 'Doe',

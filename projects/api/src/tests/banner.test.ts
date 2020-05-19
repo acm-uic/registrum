@@ -1,27 +1,28 @@
-import dotenv from 'dotenv'
 import axios from 'axios'
 import axiosCookieJarSupport from 'axios-cookiejar-support'
 import { CookieJar } from 'tough-cookie'
 import { app } from '..'
-
+import mongoose from 'mongoose'
+import { MongoMemoryServer } from 'mongodb-memory-server'
 import { Class } from '../models/interfaces/Class'
 import { Server } from 'http'
 import mockApp from './mockbanner'
 import { UserObject } from '../models/User'
+import 'dotenv/config'
 
-dotenv.config()
-const port = process.env.API_PORT || 8085
+let port: number
 const basePath = process.env.API_BASE_PATH || '/api'
-const URL = `http://localhost:${port}${basePath}/`
+let apiUrl: string
 
 describe('Class Tests', () => {
     let server: Server
     let bannerServer: Server
+    let mongoServer: MongoMemoryServer
 
     // * Add Axios Cookie Jar
     const jar = new CookieJar()
     const client = axios.create({
-        baseURL: URL,
+        baseURL: apiUrl,
         withCredentials: true,
         jar: jar,
         validateStatus: () => {
@@ -32,13 +33,38 @@ describe('Class Tests', () => {
     axiosCookieJarSupport(client)
 
     // * Chosen Class for subscription
-    let chosenClass: Class = null
+    let chosenClass: Class
 
     beforeAll(async () => {
-        server = app.listen(port)
+        mongoServer = new MongoMemoryServer()
+        try {
+            await mongoose.connect(await mongoServer.getUri(), {
+                useNewUrlParser: true,
+                useCreateIndex: true,
+                useUnifiedTopology: true,
+                useFindAndModify: false
+            })
+            console.log('Mongoose connected')
+        } catch (e) {
+            console.error('Mongoose Error')
+            mongoose.disconnect()
+            process.exit(1)
+        }
+        server = app.listen(0)
+        port = await new Promise(resolve => {
+            server.on('listening', () => {
+                const addressInfo = server.address().valueOf() as {
+                    address: string
+                    family: string
+                    port: number
+                }
+                resolve(addressInfo.port)
+            })
+        })
+        apiUrl = `http://localhost:${port}${basePath}/`
         bannerServer = mockApp.listen(4001, () => console.log('MOCK APP LISTENING'))
 
-        const response = await client.post('auth/signup', {
+        const response = await client.post('/auth/signup', {
             firstname: 'John',
             lastname: 'Doe',
             email: 'registrum@example.com',
@@ -78,7 +104,7 @@ describe('Class Tests', () => {
     })
 
     beforeEach(async () => {
-        await client.post('auth/login', {
+        await client.post('/auth/login', {
             email: 'registrum@example.com',
             password: 'theRealApp1$'
         })

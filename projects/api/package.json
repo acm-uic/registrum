@@ -7,7 +7,7 @@
         "lint": "eslint \"src/**/*.{js,ts}\"",
         "lint:fix": "npm run lint -- --fix",
         "start": "node dist/server.js",
-        "test": "jest -i --silent --runInBand",
+        "test": "jest --silent --runInBand --passWithNoTests",
         "watch": "concurrently -n ts,node \"npm run watch:ts\" \"npm run watch:node\"",
         "watch:node": "nodemon --watch dist dist/index.js",
         "watch:test": "npm run test -- --watchAll",
@@ -71,6 +71,8 @@
         "typescript": "^3.8.3",
         "@types/web-push": "~3.3.0",
         "@types/helmet": "^0.0.46",
-        "@types/mongodb": "^3.5.16"
+        "@types/mongodb": "^3.5.16",
+        "mongodb-memory-server": "^6.6.0",
+        "mongodb-memory-server-core": "^6.6.0"
     }
 }
