@@ -1,10 +1,9 @@
-// ! Temp class object interface
 // * Will be changed when we have real data coming from Banner API
 interface Faculty {
     displayName: string
 }
 
-export default interface Class {
+export default interface Listing {
     courseReferenceNumber: string
     _id: string
     id: number

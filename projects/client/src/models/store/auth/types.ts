@@ -1,5 +1,5 @@
 import User from '../../interfaces/User'
-import Class from 'models/interfaces/Class'
+import Listing from '@interfaces/Listing'
 import { Action } from 'redux'
 
 export const SET_USER = 'SET_USER'
@@ -22,7 +22,7 @@ interface UnsetUserAction extends Action {
 // * Add a class to the user
 interface AddClassAction extends Action {
     type: typeof ADD_CLASS
-    payload: Class
+    payload: Listing
 }
 
 // * Add a class to the user

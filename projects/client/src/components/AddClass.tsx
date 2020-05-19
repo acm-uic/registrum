@@ -4,7 +4,7 @@ import axios, { AxiosResponse } from 'axios'
 import { useDispatch } from 'react-redux'
 import Select from 'react-select'
 
-import Class from '../models/interfaces/Class'
+import Listing from '../models/interfaces/Listing'
 import { useSelector } from '../models/store'
 import { updateUser } from '../models/store/auth/thunk'
 
@@ -48,7 +48,7 @@ const AddClass = () => {
     const [classes, setClasses] = useState<string[]>([])
 
     // * Class listings for given class and course number
-    const [classListing, setClassListing] = useState<Class[]>([])
+    const [classListing, setClassListing] = useState<Listing[]>([])
 
     // * Initial load that sets terms array
     useEffect(() => {
@@ -243,7 +243,7 @@ const AddClass = () => {
                                                 cls.courseReferenceNumber
                                             )
                                         })
-                                        .map((listing: Class, index) => (
+                                        .map((listing: Listing, index) => (
                                             <ClassListing
                                                 key={index}
                                                 listing={listing}

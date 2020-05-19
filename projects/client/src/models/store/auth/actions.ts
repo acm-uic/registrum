@@ -1,6 +1,6 @@
 import User from '@interfaces/User'
 import { UserActionTypes, SET_USER, UNSET_USER, ADD_CLASS, REMOVE_CLASS } from '@redux/auth/types'
-import Class from '@interfaces/Class'
+import Listing from '@interfaces/Listing'
 
 // * Set the user in state to the user in the payload
 export const setUser = (user: User): UserActionTypes => ({
@@ -14,7 +14,7 @@ export const unsetUser = (): UserActionTypes => ({
 })
 
 // * Add a class to the user
-export const addClass = (cls: Class): UserActionTypes => ({
+export const addClass = (cls: Listing): UserActionTypes => ({
     type: ADD_CLASS,
     payload: cls
 })

@@ -4,9 +4,9 @@ import { render, screen } from '@testing-library/react'
 import { BrowserRouter as Router } from 'react-router-dom'
 import { store } from '../models/store'
 import StatusList from '../components/StatusList'
-import Class from '../models/interfaces/Class'
+import Listing from '../models/interfaces/Listing'
 it('Renders StatusList Correctly', () => {
-    const statuses: Class[] = [
+    const statuses: Listing[] = [
         {
             courseReferenceNumber: '12345',
             _id: '12345',

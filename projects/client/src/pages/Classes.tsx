@@ -2,7 +2,7 @@ import React, { FC, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { Container, Row, Col } from 'react-bootstrap'
 import axios from 'axios'
-import { Class } from '../models/interfaces/Class'
+import { Class } from '../models/interfaces/Listing'
 
 import StatusList from '../components/StatusList'
 import StatusPanel from '../components/StatusPanel'

@@ -1,10 +1,10 @@
 import React, { FC } from 'react'
 import { Container, Row } from 'react-bootstrap'
 import StatusView from './StatusView'
-import Class from '../models/interfaces/Class'
+import Listing from '../models/interfaces/Listing'
 
 interface StatusListProps {
-    statuses: Class[]
+    statuses: Listing[]
 }
 
 const StatusList: FC<StatusListProps> = ({ statuses }) => (

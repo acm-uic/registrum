@@ -3,12 +3,12 @@ import { useDispatch } from 'react-redux'
 import { Card, Button, Col, ListGroupItem } from 'react-bootstrap'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import Class from '../models/interfaces/Class'
+import Listing from '../models/interfaces/Listing'
 import { updateUser } from '../models/store/auth/thunk'
 // import { removeClass } from '../utils/functions/authentication'
 
 interface StatusViewProps {
-    status: Class
+    status: Listing
 }
 
 const StatusView: FC<StatusViewProps> = ({ status }) => {

@@ -1,22 +1,35 @@
-import { BannerActionTypes, SET_TERMS, SET_SUBJECTS, ADD_CLASSES } from '@redux/banner/types'
+import {
+    BannerActionTypes,
+    ADD_TERMS,
+    ADD_SUBJECTS,
+    ADD_LISTINGS,
+    ADD_COURSES
+} from '@redux/banner/types'
 import Term from '@interfaces/Term'
-import Class from '@interfaces/Class'
+import Listing from '@interfaces/Listing'
 import Subject from '@interfaces/Subject'
+import Course from '@interfaces/Course'
 
-// * Populates the term with the payload
-export const setUser = (terms: Term[]): BannerActionTypes => ({
+// * Populates the terms with the payload
+export const setTerms = (terms: Term[]): BannerActionTypes => ({
     payload: terms,
-    type: SET_TERMS
+    type: ADD_TERMS
 })
 
-// * No payload needed since it will be set to null
-export const unsetUser = (subjects: Subject[]): BannerActionTypes => ({
-    type: SET_SUBJECTS,
+// * Populates the subjects with the payload
+export const setSubjects = (subjects: Subject[]): BannerActionTypes => ({
+    type: ADD_SUBJECTS,
     payload: subjects
 })
 
-// * Add a class to the user
-export const addClass = (cls: Class[]): BannerActionTypes => ({
-    type: ADD_CLASSES,
-    payload: cls
+// * Populates the courses with the payload
+export const addCourses = (courses: Course[]): BannerActionTypes => ({
+    type: ADD_COURSES,
+    payload: courses
+})
+
+// * Populates the listing with the payload
+export const addListings = (listings: Listing[]): BannerActionTypes => ({
+    type: ADD_LISTINGS,
+    payload: listings
 })
