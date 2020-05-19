@@ -1,67 +1,42 @@
 import * as express from 'express'
-import * as compression from 'compression'
-import * as cors from 'cors'
-import * as morgan from 'morgan'
-import * as mongoose from 'mongoose'
 import { Controller } from './Controller'
-export type AppConfig = {
-    port: number
-    basePath: string
-    serviceName: string
-    mongoUri?: string
-}
+
+type Middleware = (req: express.Request, res: express.Response, next: express.NextFunction) => void
 
 export abstract class ExpressApp {
     #app: express.Application
-    #config: AppConfig
+    #basePath: string
+    #serviceName: string
+    #port: number
 
-    constructor(controllers: Controller[], config: AppConfig) {
+    constructor(port: number, basePath: string, serviceName: string) {
+        this.#port = port
+        this.#basePath = basePath
+        this.#serviceName = serviceName
         this.#app = express()
-        this.#config = config
-
-        this.#initializeBaseMiddlewares()
-        this.#initializeDatabase()
-        this.#initializeControllers(controllers)
     }
     get app() {
         return this.#app
     }
 
-    #initializeDatabase = async () => {
-        if (!this.#config.mongoUri) return
-        try {
-            await mongoose.connect(this.#config.mongoUri, {
-                useNewUrlParser: true,
-                useCreateIndex: true,
-                useUnifiedTopology: true,
-                useFindAndModify: false
+    bindMiddlewares = (middlewares?: Middleware[]) => {
+        if (middlewares) for (const middleware of middlewares) this.#app.use(middleware)
+    }
+
+    bindControllers = (controllers?: Controller[]) => {
+        if (controllers)
+            controllers.forEach(controller => {
+                this.#app.use(`${this.#basePath}${controller.path}`, controller.router)
             })
-            console.log('✅ MongoDB connection successful.')
-        } catch (error) {
-            console.log('❌ MongoDB connection unsuccessful.')
-        }
-    }
-
-    #initializeBaseMiddlewares = () => {
-        this.#app.set('port', this.#config.port)
-        this.#app.use(morgan('tiny'))
-        this.#app.use(express.urlencoded({ extended: true }))
-        this.#app.use(express.json())
-        this.#app.use(compression())
-        this.#app.options('*', cors)
-    }
-
-    #initializeControllers = (controllers: Controller[]) => {
-        controllers.forEach(controller => {
-            this.#app.use(this.#config.basePath, controller.router)
-        })
     }
 
     listen = (port?: number) => {
-        console.log('AAAAAAAAAAAAAAAAAAAAAAA', port)
-        return this.#app.listen(port || this.#config.port, () => {
+        this.#app.set('port', port !== undefined ? port : this.#port)
+        return this.#app.listen(this.#app.get('port'), () => {
             console.log(
-                `🚀 ${this.#config.serviceName} service running on port ${this.#config.port}. 🤘`
+                `🚀 ${this.#serviceName} service running on port ${this.#app.get(
+                    'port'
+                )}. 🤘`
             )
         })
     }

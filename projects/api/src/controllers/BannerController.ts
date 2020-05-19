@@ -31,7 +31,7 @@ export class BannerController extends Controller {
                 // * Subscribe via Banner API
                 try {
                     // * Waiting for Banner Client to be completely implemented
-                    await BannerClient.post('/hook', {
+                    await BannerClient.post('/hook/addHook', {
                         url: `${this.#notifyUrl}/notify/${_id}/${crn}`,
                         crn
                     })
@@ -62,7 +62,7 @@ export class BannerController extends Controller {
                 try {
                     console.log('UNSUBSCRIBING WITH ' + `${this.#notifyUrl}/notify/${_id}/${crn}`)
                     // ! Waiting for Banner Client to be completely implemented
-                    await BannerClient.post('/deletehook', {
+                    await BannerClient.post('/hook/deletehook', {
                         url: `${this.#notifyUrl}/notify/${_id}/${crn}`,
                         crn
                     })

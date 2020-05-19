@@ -32,11 +32,11 @@ mockApp.post('/banner/course', (req: Request, res: Response) => {
     )
 })
 
-mockApp.post('/banner/hook', (req: Request, res: Response) => {
+mockApp.post('/banner/hook/addHook', (req: Request, res: Response) => {
     res.send('OK')
 })
 
-mockApp.post('/banner/deletehook', (req: Request, res: Response) => {
+mockApp.post('/banner/hook/deletehook', (req: Request, res: Response) => {
     res.send('OK')
 })
 

@@ -5,18 +5,60 @@ import mongoose from 'mongoose'
 import passport from 'passport'
 import connectMongo from 'connect-mongo'
 import helmet from 'helmet'
-import { Controller } from 'registrum-common/dist/classes/Controller'
-import { ExpressApp, AppConfig } from 'registrum-common/dist/classes/ExpressApp'
+import { ExpressApp } from 'registrum-common/dist/classes/ExpressApp'
 import 'dotenv/config'
+import { ClassesController } from './controllers/ClassesController'
+import { AuthController } from './controllers/AuthController'
+import { BannerController } from './controllers/BannerController'
+import { PushServiceController } from './controllers/PushServiceController'
+import compression from 'compression'
+import express from 'express'
+import cors from 'cors'
+import morgan from 'morgan'
+
+type Config = {
+    mongoUri: string;
+    port: number;
+    basePath: string;
+    serviceName: string;
+}
 
 export class App extends ExpressApp {
-    constructor(controllers: Controller[], config: AppConfig) {
-        super(controllers, config)
-        this.#initializeMiddlewares()
+    config: Config
+    constructor(config: Config) {
+        super(config.port, config.basePath, config.serviceName)
+        this.config = config
+        this.initializeDatabase().then(() => {
+            this.initializeMiddlewares()
+            this.initializeControllers()
+            this.configure()
+        })
     }
-    #initializeMiddlewares = () => {
-        this.app.use(helmet())
-        this.app.use(
+
+    configure = () => {
+        this.app.options('*', cors)
+    }
+
+    initializeDatabase = async () => {
+        try {
+            await mongoose.connect(this.config.mongoUri, {
+                useNewUrlParser: true,
+                useCreateIndex: true,
+                useUnifiedTopology: true,
+                useFindAndModify: false
+            })
+            console.log('✅ MongoDB connection successful.')
+        } catch (error) {
+            throw '❌ MongoDB connection unsuccessful.'
+        }
+    }
+    initializeMiddlewares = () => {
+        this.bindMiddlewares([
+            morgan('tiny'),
+            express.urlencoded({ extended: true }),
+            express.json(),
+            compression(),
+            helmet(),
             session({
                 store: new (connectMongo(session))({ mongooseConnection: mongoose.connection }),
                 name: '_session',
@@ -26,14 +68,23 @@ export class App extends ExpressApp {
                 secret: process.env.SESSION_SECRET || 'This is not a secure secret!',
                 proxy: process.env.NODE_ENV == 'production',
                 cookie: { secure: 'auto', sameSite: true }
-            })
-        )
-        this.app.use(passport.initialize())
-        this.app.use(passport.session())
-        this.app.use(flash())
-        this.app.use((_: Request, res: Response, next: NextFunction) => {
-            res.set('Cache-Control', 'no-store')
-            next()
-        })
+            }),
+            passport.initialize(),
+            passport.session(),
+            flash(),
+            (_: Request, res: Response, next: NextFunction) => {
+                res.set('Cache-Control', 'no-store')
+                next()
+            }
+        ])
     }
+    initializeControllers = () => {
+        this.bindControllers([new ClassesController(`/classes`),
+        new AuthController(`/auth`),
+        new BannerController(`/banner`, {
+            notifyUrl: 'http://localhost:4000/api/banner'
+        }),
+        new PushServiceController(`/push-service`)])
+    }
+
 }

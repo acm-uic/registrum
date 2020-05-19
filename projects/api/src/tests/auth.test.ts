@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios, { AxiosInstance } from 'axios'
 import axiosCookieJarSupport from 'axios-cookiejar-support'
 import { CookieJar } from 'tough-cookie'
 import { app } from '..'
@@ -7,13 +7,14 @@ import { MongoMemoryServer } from 'mongodb-memory-server'
 import { Server } from 'http'
 import 'dotenv/config'
 
-let port: number
-const basePath = process.env.API_BASE_PATH || '/api'
-let apiUrl: string
-
 describe('Authentication Tests', () => {
     let server: Server
     let mongoServer: MongoMemoryServer
+    let port: number
+    const basePath = process.env.API_BASE_PATH || '/api'
+    let baseURL: string
+    const jar = new CookieJar()
+    let client: AxiosInstance
 
     beforeAll(async () => {
         mongoServer = new MongoMemoryServer()
@@ -27,7 +28,7 @@ describe('Authentication Tests', () => {
             console.log('Mongoose connected')
         } catch (e) {
             console.error('Mongoose Error')
-            mongoose.disconnect()
+            await mongoose.disconnect()
             process.exit(1)
         }
         server = app.listen(0)
@@ -41,7 +42,17 @@ describe('Authentication Tests', () => {
                 resolve(addressInfo.port)
             })
         })
-        apiUrl = `http://localhost:${port}${basePath}/auth/`
+        baseURL = `http://localhost:${port}${basePath}/auth`
+        client = axios.create({
+            withCredentials: true,
+            baseURL,
+            jar,
+            validateStatus: () => {
+                /* always resolve on any HTTP status */
+                return true
+            }
+        })
+        axiosCookieJarSupport(client)
     })
 
     afterAll(async () => {
@@ -55,6 +66,8 @@ describe('Authentication Tests', () => {
         await new Promise(resolve => setImmediate(resolve))
 
         // * Close Server
+        await mongoose.disconnect()
+        mongoServer.stop()
         server.close()
     })
 
@@ -62,19 +75,6 @@ describe('Authentication Tests', () => {
         // * To allow changing info during test case
         let userEmail = 'registrum@example.com'
         let userPassword = 'theRealApp1$'
-
-        // * Add Axios Cookie Jar
-        const jar = new CookieJar()
-        const client = axios.create({
-            baseURL: apiUrl,
-            withCredentials: true,
-            jar: jar,
-            validateStatus: () => {
-                /* always resolve on any HTTP status */
-                return true
-            }
-        })
-        axiosCookieJarSupport(client)
 
         // * Sign up
         it('Register an account', async () => {
@@ -105,7 +105,7 @@ describe('Authentication Tests', () => {
         })
 
         it('Logs user in correctly using email, password', async () => {
-            const response = await client.post('login', {
+            const response = await client.post('/login', {
                 email: userEmail,
                 password: userPassword
             })
@@ -116,7 +116,7 @@ describe('Authentication Tests', () => {
 
         // Test Login status by accessing restricted page
         it('Access restricted resource only available to logged in user', async () => {
-            const response = await client.get('')
+            const response = await client.get('/')
 
             expect(response.status).toBe(200)
         })
@@ -135,7 +135,7 @@ describe('Authentication Tests', () => {
             expect(response.data.email).toBe(userEmail)
 
             // Login with new password
-            const retryLoginResponse = await client.post('login', {
+            const retryLoginResponse = await client.post('/login', {
                 email: userEmail,
                 password: userPassword
             })
@@ -266,7 +266,7 @@ describe('Authentication Tests', () => {
 
         // Check if logout is working
         it('Logs user out correctly', async () => {
-            const response = await client.get('logout')
+            const response = await client.get('/logout')
 
             expect(response.status).toBe(200)
             expect(response.data).toBe('OK')
@@ -274,7 +274,7 @@ describe('Authentication Tests', () => {
 
         // Attempting to login with incorrect email
         it('Cannot login with incorrect email', async () => {
-            const response = await client.post('login', {
+            const response = await client.post('/login', {
                 email: userEmail + '.fake',
                 password: userPassword
             })
@@ -285,7 +285,7 @@ describe('Authentication Tests', () => {
 
         // Attempting to login with incorrect password
         it('Cannot login with incorrect password', async () => {
-            const response = await client.post('login', {
+            const response = await client.post('/login', {
                 email: userEmail,
                 password: 'theFakeApp1$'
             })
@@ -322,7 +322,7 @@ describe('Authentication Tests', () => {
 
         // Attempting to register with invalid email
         it('Register with invalid email', async () => {
-            const response = await client.post('signup', {
+            const response = await client.post('/signup', {
                 firstname: 'John',
                 lastname: 'Doe',
                 email: 'registrum-example.com',
@@ -335,7 +335,7 @@ describe('Authentication Tests', () => {
 
         // Attempting to register with invalid password
         it('Register with invalid password', async () => {
-            const response = await client.post('signup', {
+            const response = await client.post('/signup', {
                 firstname: 'John',
                 lastname: 'Doe',
                 email: 'registrum@example.com',
@@ -349,7 +349,7 @@ describe('Authentication Tests', () => {
         // Run through a sequence of Change user info process
         it('Can update user correctly', async () => {
             // * Sign up
-            await client.post('signup', {
+            await client.post('/signup', {
                 firstname: 'Jimmy',
                 lastname: 'Falcon',
                 email: 'jimmy@example.com',

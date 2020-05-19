@@ -41,7 +41,7 @@ async function getSubscriptionObject() {
 
 export const signUp = async (fn: string, ln: string, em: string, pw: string) => {
     try {
-        const response = await client.post('auth/signup', {
+        const response = await client.post('/auth/signup', {
             firstname: fn,
             lastname: ln,
             email: em,
@@ -87,7 +87,7 @@ export const signUp = async (fn: string, ln: string, em: string, pw: string) => 
 export const signIn = async (email: string, password: string) => {
     try {
         // * Logging in user --> they must be logged in before sending over browser subscription object
-        const response = await client.post('auth/login', { email, password })
+        const response = await client.post('/auth/login', { email, password })
 
         if (response.status === 200) {
             toast('Signed in succesfully', {
@@ -140,7 +140,7 @@ export const signOut = async () => {
             }
         }
 
-        const response = await client.get('auth/logout')
+        const response = await client.get('/auth/logout')
 
         if (response.status === 200 || response.status === 401) {
             toast('Signed out succesfully', { type: 'success' })

@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios, { AxiosInstance } from 'axios'
 import axiosCookieJarSupport from 'axios-cookiejar-support'
 import { CookieJar } from 'tough-cookie'
 import { app } from '..'
@@ -8,28 +8,17 @@ import { MongoMemoryServer } from 'mongodb-memory-server'
 import mockApp from './mockbanner'
 import 'dotenv/config'
 
-let port: number
-const basePath = process.env.API_BASE_PATH || '/api'
-let apiUrl: string
-
 describe('Class Tests', () => {
     let server: Server
     let mongoServer: MongoMemoryServer
     let bannerServer: Server
+    let port: number
+    const basePath = process.env.API_BASE_PATH || '/api'
+    let baseURL: string
 
     // * Add Axios Cookie Jar
     const jar = new CookieJar()
-    const client = axios.create({
-        baseURL: apiUrl,
-        withCredentials: true,
-        jar: jar,
-        validateStatus: () => {
-            /* always resolve on any HTTP status */
-            return true
-        }
-    })
-
-    axiosCookieJarSupport(client)
+    let client: AxiosInstance
 
     beforeAll(async () => {
         mongoServer = new MongoMemoryServer()
@@ -43,7 +32,7 @@ describe('Class Tests', () => {
             console.log('Mongoose connected')
         } catch (e) {
             console.error('Mongoose Error')
-            mongoose.disconnect()
+            await mongoose.disconnect()
             process.exit(1)
         }
         server = app.listen(0)
@@ -57,10 +46,20 @@ describe('Class Tests', () => {
                 resolve(addressInfo.port)
             })
         })
-        apiUrl = `http://localhost:${port}${basePath}/`
+        baseURL = `http://localhost:${port}${basePath}/`
         bannerServer = mockApp.listen(4001, () => console.log('MOCK APP LISTENING'))
+        client = axios.create({
+            withCredentials: true,
+            baseURL,
+            jar,
+            validateStatus: () => {
+                /* always resolve on any HTTP status */
+                return true
+            }
+        })
+        axiosCookieJarSupport(client)
 
-        const response = await client.post('auth/signup', {
+        const response = await client.post('/auth/signup', {
             firstname: 'John',
             lastname: 'Doe',
             email: 'registrum@example.com',
@@ -90,13 +89,15 @@ describe('Class Tests', () => {
 
         // * Close Server
         server.close()
+        await mongoose.disconnect()
+        mongoServer.stop()
         bannerServer.close()
     })
 
     describe('Sanity tests', () => {
         it('Returns a valid list of terms', async () => {
             // * Grab terms
-            const { data: terms } = await client.get('classes/terms')
+            const { data: terms } = await client.get('/classes/terms')
 
             // * Assure each term is valid by checking it is a number
             terms.forEach((term: string) => {
@@ -106,7 +107,7 @@ describe('Class Tests', () => {
 
         it('Returns a valid list of subjects for a retrieved term', async () => {
             // * Grab subjects for given term
-            const { data: subjects } = await client.get(`classes/subjects`)
+            const { data: subjects } = await client.get(`/classes/subjects`)
 
             // * Make sure each subject is a valid string
             subjects.forEach((subject: string) => {
@@ -116,10 +117,10 @@ describe('Class Tests', () => {
 
         it('Returns a valid list of courses for a given subject', async () => {
             // * Grab subjects for given term
-            const { data: subjects } = await client.get(`classes/subjects`)
+            const { data: subjects } = await client.get(`/classes/subjects`)
             console.log(subjects)
             // * Grab classes for given subject
-            const { data: classes } = await client.get(`classes/list/220208/${subjects[0]}`)
+            const { data: classes } = await client.get(`/classes/list/220208/${subjects[0]}`)
             console.log(classes)
             // * Make sure each class is a valid class object
             classes.forEach((cls: string) => {

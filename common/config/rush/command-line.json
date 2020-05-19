@@ -29,7 +29,7 @@
       "summary": "Runs linter in each project.",
       "description": "Runs linter in each project.",
       "allowWarningsInSuccessfulBuild": true,
-      "shellCommand": "concurrently -k -n client,api,banner,banner-data \"cd client && npm run watch\" \"cd api && npm run watch\" \"cd banner && npm run watch\" \"cd banner-data && npm run watch\""
+      "shellCommand": "concurrently -k -n client,api,banner,banner-data \"cd projects/client && npm run watch\" \"cd projects/api && npm run watch\" \"cd projects/banner && npm run watch\" \"cd projects/banner-data && npm run watch\""
     },
     {
       "commandKind": "global",
@@ -37,7 +37,7 @@
       "summary": "Runs linter in each project.",
       "description": "Runs linter in each project.",
       "allowWarningsInSuccessfulBuild": true,
-      "shellCommand": "concurrently -k -n client,api,banner,banner-data \"cd client && npm run start\" \"cd api && npm run start\" \"cd banner && npm run start\" \"cd banner-data && npm run start\""
+      "shellCommand": "concurrently -k -n client,api,banner,banner-data \"cd projects/client && npm run start\" \"cd projects/api && npm run start\" \"cd projects/banner && npm run start\" \"cd projects/banner-data && npm run start\""
     },
     {
       "commandKind": "global",

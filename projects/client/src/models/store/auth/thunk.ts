@@ -9,11 +9,11 @@ import { getSubscriptionObject } from '@utils/globals'
 
 // * Setting the path for the api calls
 const basePath = process.env.API_BASE_PATH || '/api'
-const URL = `${basePath}/`
+const baseURL = `${basePath}/`
 
 // * Single axios client for continuity
 export const client = axios.create({
-    baseURL: URL,
+    baseURL,
     validateStatus: () => true,
     withCredentials: true
 })
@@ -59,7 +59,7 @@ export const signUpUser = (data: SignUpProps): AppThunk => async (dispatch, getS
 
     try {
         // * Try to register the user
-        const response = await client.post('auth/signup', data)
+        const response = await client.post('/auth/signup', data)
 
         if (response.status === 200) {
             // * Get user data
@@ -100,7 +100,7 @@ export const signInUser = (data: SignInProps): AppThunk => async (dispatch, getS
 
     try {
         // * Logging in user --> they must be logged in before sending over browser subscription object
-        const response = await client.post('auth/login', data)
+        const response = await client.post('/auth/login', data)
 
         if (response.status === 200) {
             // * Get user data
@@ -154,7 +154,7 @@ export const signOutUser = (): AppThunk => async (dispatch, getState) => {
             }
         }
 
-        const response = await client.get('auth/logout')
+        const response = await client.get('/auth/logout')
 
         // * Checking if server successfully signed out
         if (response.status === 200 || response.status === 401) {

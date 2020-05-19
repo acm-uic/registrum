@@ -6,6 +6,7 @@
   // "yarnVersion": "1.9.4",
   "pnpmOptions": {},
   "gitPolicy": {},
+  "ensureConsistentVersions": true,
   "repository": {},
   "eventHooks": {
     "preRushInstall": [],

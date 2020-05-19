@@ -41,8 +41,5 @@
                 "pages/*"
             ]
         }
-    },
-    "exclude": [
-        "node_modules"
-    ]
+    }
 }

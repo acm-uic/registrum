@@ -107,7 +107,7 @@ export class AuthController extends Controller {
             await user.save()
 
             // * Login User
-            req.login(user, () => {
+            req.login(user, passport.authenticate('local', { failureFlash: true }), () => {
                 /* Return user data is successfully signup */
                 res.status(200).json(AuthController.stripData(user))
             })

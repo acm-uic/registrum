@@ -18,7 +18,7 @@
         "axios": "^0.19.2",
         "axios-cookiejar-support": "^1.0.0",
         "dotenv": "^8.2.0",
-        "mongoose": "^5.9.13",
+        "mongoose": "^5.9.14",
         "node-cron": "^2.0.3",
         "registrum-common": "^0.1.0",
         "tough-cookie": "^4.0.0"

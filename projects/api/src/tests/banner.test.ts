@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios, { AxiosInstance } from 'axios'
 import axiosCookieJarSupport from 'axios-cookiejar-support'
 import { CookieJar } from 'tough-cookie'
 import { app } from '..'
@@ -10,27 +10,17 @@ import mockApp from './mockbanner'
 import { UserObject } from '../models/User'
 import 'dotenv/config'
 
-let port: number
-const basePath = process.env.API_BASE_PATH || '/api'
-let apiUrl: string
-
 describe('Class Tests', () => {
     let server: Server
     let bannerServer: Server
     let mongoServer: MongoMemoryServer
+    let port: number
+    const basePath = process.env.API_BASE_PATH || '/api'
+    let baseURL: string
 
     // * Add Axios Cookie Jar
     const jar = new CookieJar()
-    const client = axios.create({
-        baseURL: apiUrl,
-        withCredentials: true,
-        jar: jar,
-        validateStatus: () => {
-            /* always resolve on any HTTP status */
-            return true
-        }
-    })
-    axiosCookieJarSupport(client)
+    let client: AxiosInstance
 
     // * Chosen Class for subscription
     let chosenClass: Class
@@ -47,7 +37,7 @@ describe('Class Tests', () => {
             console.log('Mongoose connected')
         } catch (e) {
             console.error('Mongoose Error')
-            mongoose.disconnect()
+            await mongoose.disconnect()
             process.exit(1)
         }
         server = app.listen(0)
@@ -61,8 +51,18 @@ describe('Class Tests', () => {
                 resolve(addressInfo.port)
             })
         })
-        apiUrl = `http://localhost:${port}${basePath}/`
+        baseURL = `http://localhost:${port}${basePath}/`
         bannerServer = mockApp.listen(4001, () => console.log('MOCK APP LISTENING'))
+        client = axios.create({
+            withCredentials: true,
+            baseURL,
+            jar,
+            validateStatus: () => {
+                /* always resolve on any HTTP status */
+                return true
+            }
+        })
+        axiosCookieJarSupport(client)
 
         const response = await client.post('/auth/signup', {
             firstname: 'John',
@@ -100,6 +100,8 @@ describe('Class Tests', () => {
 
         // * Close Server
         server.close()
+        await mongoose.disconnect()
+        mongoServer.stop()
         bannerServer.close()
     })
 
