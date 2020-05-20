@@ -44,7 +44,7 @@ export class AuthController extends Controller {
         /* Login by passport.authenticate */
         this.router.post(
             '/login',
-            passport.authenticate('local', { failureFlash: true }),
+            passport.authenticate('local', { failureFlash: false }),
             async (req: Request, res: Response) => {
                 res.status(200).json(
                     AuthController.stripData(await User.findOne({ email: req.body.email }))
@@ -107,7 +107,7 @@ export class AuthController extends Controller {
             await user.save()
 
             // * Login User
-            req.login(user, passport.authenticate('local', { failureFlash: true }), () => {
+            req.login(user, passport.authenticate('local', { failureFlash: false }), () => {
                 /* Return user data is successfully signup */
                 res.status(200).json(AuthController.stripData(user))
             })

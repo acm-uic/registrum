@@ -34,9 +34,7 @@ export abstract class ExpressApp {
         this.#app.set('port', port !== undefined ? port : this.#port)
         return this.#app.listen(this.#app.get('port'), () => {
             console.log(
-                `🚀 ${this.#serviceName} service running on port ${this.#app.get(
-                    'port'
-                )}. 🤘`
+                `🚀 ${this.#serviceName} service running on port ${this.#app.get('port')}. 🤘`
             )
         })
     }

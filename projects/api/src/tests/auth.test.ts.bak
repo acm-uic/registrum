@@ -27,9 +27,9 @@ describe('Authentication Tests', () => {
             })
             console.log('Mongoose connected')
         } catch (e) {
+            console.error(e.message)
             console.error('Mongoose Error')
             await mongoose.disconnect()
-            process.exit(1)
         }
         server = app.listen(0)
         port = await new Promise(resolve => {

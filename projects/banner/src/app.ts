@@ -8,10 +8,10 @@ import cors from 'cors'
 import morgan from 'morgan'
 
 type Config = {
-    mongoUri: string;
-    port: number;
-    basePath: string;
-    serviceName: string;
+    mongoUri: string
+    port: number
+    basePath: string
+    serviceName: string
 }
 
 export class App extends ExpressApp {
@@ -48,10 +48,10 @@ export class App extends ExpressApp {
 
     initializeMiddlewares = () => {
         this.bindMiddlewares([
-        morgan('tiny'),
-        express.urlencoded({ extended: true }),
-        express.json(),
-        compression(),
+            morgan('tiny'),
+            express.urlencoded({ extended: true }),
+            express.json(),
+            compression()
         ])
     }
 

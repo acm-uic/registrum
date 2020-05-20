@@ -1,7 +1,7 @@
 import axios, { AxiosInstance } from 'axios'
 import axiosCookieJarSupport from 'axios-cookiejar-support'
 import { CookieJar } from 'tough-cookie'
-import { app } from '..'
+import { App } from '../app'
 import mongoose from 'mongoose'
 import { MongoMemoryServer } from 'mongodb-memory-server'
 import { Class } from '../models/interfaces/Class'
@@ -10,10 +10,32 @@ import mockApp from './mockbanner'
 import { UserObject } from '../models/User'
 import 'dotenv/config'
 
+jest.setTimeout(60000)
+
+let mongoServer: MongoMemoryServer
+let mongoUri: string
+beforeAll(async () => {
+    mongoServer = new MongoMemoryServer()
+    mongoUri = 'mongodb://localhost:27017/testing1'
+    // mongoUri = mongoServer.getUri()
+    try {
+        await mongoose.connect(mongoUri, {
+            useNewUrlParser: true,
+            useCreateIndex: true,
+            useUnifiedTopology: true,
+            useFindAndModify: false
+        })
+        console.log('Mongoose connected')
+    } catch (e) {
+        console.error(e.message)
+        console.error('Mongoose Error')
+        await mongoose.disconnect()
+    }
+})
+
 describe('Class Tests', () => {
     let server: Server
     let bannerServer: Server
-    let mongoServer: MongoMemoryServer
     let port: number
     const basePath = process.env.API_BASE_PATH || '/api'
     let baseURL: string
@@ -26,21 +48,13 @@ describe('Class Tests', () => {
     let chosenClass: Class
 
     beforeAll(async () => {
-        mongoServer = new MongoMemoryServer()
-        try {
-            await mongoose.connect(await mongoServer.getUri(), {
-                useNewUrlParser: true,
-                useCreateIndex: true,
-                useUnifiedTopology: true,
-                useFindAndModify: false
-            })
-            console.log('Mongoose connected')
-        } catch (e) {
-            console.error('Mongoose Error')
-            await mongoose.disconnect()
-            process.exit(1)
-        }
-        server = app.listen(0)
+        const expressApp = new App({
+            port: 4000,
+            basePath,
+            mongoUri: mongoUri,
+            serviceName: 'API'
+        })
+        server = expressApp.listen(0)
         port = await new Promise(resolve => {
             server.on('listening', () => {
                 const addressInfo = server.address().valueOf() as {
@@ -100,7 +114,7 @@ describe('Class Tests', () => {
 
         // * Close Server
         server.close()
-        await mongoose.disconnect()
+        mongoose.disconnect()
         mongoServer.stop()
         bannerServer.close()
     })
@@ -200,7 +214,7 @@ describe('Class Tests', () => {
                 secondClass.courseReferenceNumber === chosenClass.courseReferenceNumber
             ) {
                 // * Get class list
-                const classes = (await client.get(`/classes/220208/listing/CS/301`)).data
+                const classes = (await client.get(`/classes/listing/220208/CS/301`)).data
 
                 // * Pick random class
                 secondClass = classes[Math.floor(Math.random() * classes.length)]

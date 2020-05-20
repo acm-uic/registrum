@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
 import session from 'express-session'
-import flash from 'express-flash'
 import mongoose from 'mongoose'
 import passport from 'passport'
 import connectMongo from 'connect-mongo'
@@ -17,10 +16,10 @@ import cors from 'cors'
 import morgan from 'morgan'
 
 type Config = {
-    mongoUri: string;
-    port: number;
-    basePath: string;
-    serviceName: string;
+    mongoUri: string
+    port: number
+    basePath: string
+    serviceName: string
 }
 
 export class App extends ExpressApp {
@@ -71,7 +70,6 @@ export class App extends ExpressApp {
             }),
             passport.initialize(),
             passport.session(),
-            flash(),
             (_: Request, res: Response, next: NextFunction) => {
                 res.set('Cache-Control', 'no-store')
                 next()
@@ -79,12 +77,13 @@ export class App extends ExpressApp {
         ])
     }
     initializeControllers = () => {
-        this.bindControllers([new ClassesController(`/classes`),
-        new AuthController(`/auth`),
-        new BannerController(`/banner`, {
-            notifyUrl: 'http://localhost:4000/api/banner'
-        }),
-        new PushServiceController(`/push-service`)])
+        this.bindControllers([
+            new ClassesController(`/classes`),
+            new AuthController(`/auth`),
+            new BannerController(`/banner`, {
+                notifyUrl: 'http://localhost:4000/api/banner'
+            }),
+            new PushServiceController(`/push-service`)
+        ])
     }
-
 }
