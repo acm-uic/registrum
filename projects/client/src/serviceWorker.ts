@@ -22,12 +22,11 @@ function toByteArray(base64String: string) {
     }
     return outputArray
 }
-const publicKey = toByteArray(
-    'BK_0D9VS_RrjJh3BRbdBifq6Ump45KpzfwWxk6P6sVOSTcrc89TzWlgtM1f7R7hOiKQsOxZHlGNGRiex02n9-9g'
-)
 
 // * Finish SW Setup (Subscribe to Notifications)
 export const initializeSW = (registration: ServiceWorkerRegistration) => {
+    if (!process.env.WEBPUSHPUBLIC) return
+
     // * Ask for permission
     if (Notification.permission === 'default') {
         Notification.requestPermission().then(() => {
@@ -42,7 +41,7 @@ export const initializeSW = (registration: ServiceWorkerRegistration) => {
         registration.pushManager
             .subscribe({
                 userVisibleOnly: true,
-                applicationServerKey: publicKey
+                applicationServerKey: toByteArray(process.env.WEBPUSHPUBLIC)
             })
             .then(function (subscription) {
                 console.log('User is subscribed.')
