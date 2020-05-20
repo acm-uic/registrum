@@ -5,7 +5,7 @@ import bcrypt from 'bcrypt'
 // * Bind Passport strategies
 import '../util/passport'
 import { isAuthenticated } from '../util/passport'
-import { Controller } from 'registrum-common/dist/classes/Controller'
+import { Controller } from './Controller'
 
 export class AuthController extends Controller {
     constructor(path: string) {
@@ -107,7 +107,7 @@ export class AuthController extends Controller {
             await user.save()
 
             // * Login User
-            req.login(user, passport.authenticate('local', { failureFlash: false }), () => {
+            req.login(user, () => {
                 /* Return user data is successfully signup */
                 res.status(200).json(AuthController.stripData(user))
             })

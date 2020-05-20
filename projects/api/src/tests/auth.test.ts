@@ -1,74 +1,85 @@
 import axios, { AxiosInstance } from 'axios'
 import axiosCookieJarSupport from 'axios-cookiejar-support'
 import { CookieJar } from 'tough-cookie'
-import { app } from '..'
+import { App } from '../app'
 import mongoose from 'mongoose'
 import { MongoMemoryServer } from 'mongodb-memory-server'
 import { Server } from 'http'
-import 'dotenv/config'
 
 describe('Authentication Tests', () => {
-    let server: Server
-    let mongoServer: MongoMemoryServer
-    let port: number
+    // * ENV variables
     const basePath = process.env.API_BASE_PATH || '/api'
-    let baseURL: string
+
+    const port = 8085
+    const baseURL = `http://localhost:${port}${basePath}/auth`
+
+    // * Mongo Setup
+    const mongoServer: MongoMemoryServer = new MongoMemoryServer()
+    const mongoUri = 'mongodb://localhost:27017/testing1'
+    // const mongoUri = mongoServer.getUri()
+
+    // * Create the app with the configurations
+    const expressApp = new App({
+        port,
+        basePath,
+        mongoUri: mongoUri,
+        serviceName: 'API'
+    })
+
+    let server: Server
     const jar = new CookieJar()
-    let client: AxiosInstance
+
+    // * Create axios client
+    const client: AxiosInstance = axios.create({
+        withCredentials: true,
+        baseURL,
+        jar,
+        validateStatus: () => {
+            /* always resolve on any HTTP status */
+            return true
+        }
+    })
+    axiosCookieJarSupport(client)
 
     beforeAll(async () => {
-        mongoServer = new MongoMemoryServer()
-        try {
-            await mongoose.connect(await mongoServer.getUri(), {
-                useNewUrlParser: true,
-                useCreateIndex: true,
-                useUnifiedTopology: true,
-                useFindAndModify: false
-            })
-            console.log('Mongoose connected')
-        } catch (e) {
-            console.error(e.message)
-            console.error('Mongoose Error')
-            await mongoose.disconnect()
-        }
-        server = app.listen(0)
-        port = await new Promise(resolve => {
-            server.on('listening', () => {
-                const addressInfo = server.address().valueOf() as {
-                    address: string
-                    family: string
-                    port: number
-                }
-                resolve(addressInfo.port)
-            })
-        })
-        baseURL = `http://localhost:${port}${basePath}/auth`
-        client = axios.create({
-            withCredentials: true,
-            baseURL,
-            jar,
-            validateStatus: () => {
-                /* always resolve on any HTTP status */
-                return true
-            }
-        })
-        axiosCookieJarSupport(client)
+        // * Finish app setup
+        await expressApp.initializeDatabase()
+        expressApp.initializeMiddlewares()
+        expressApp.initializeControllers()
+        expressApp.configure()
+
+        // * Start listening
+        server = expressApp.listen()
     })
 
     afterAll(async () => {
         // * Remove all users from DB
-        await mongoose.connection.db.dropCollection('users')
+        await new Promise(resolve => {
+            mongoose.connection.db.dropCollection('users', () => {
+                resolve()
+            })
+        })
 
         // * Close DB Connection
-        await mongoose.connection.close()
+        await new Promise(resolve => {
+            mongoose.connection.close(() => {
+                resolve()
+            })
+        })
+
+        // * Close Server
+        await new Promise(resolve => {
+            server.close(() => {
+                resolve()
+            })
+        })
 
         // * We wait until all threads have been run once to ensure the connection closes.
         await new Promise(resolve => setImmediate(resolve))
 
-        // * Close Server
+        // * Close Others
         await mongoose.disconnect()
-        mongoServer.stop()
-        server.close()
+        await mongoServer.stop()
     })
 
     describe('Sanity Tests', () => {

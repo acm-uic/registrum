@@ -3,7 +3,7 @@ import { isAuthenticated } from '../util/passport'
 import User, { UserObject } from '../models/User'
 import { notifyUser } from '../util/notifier'
 import { BannerClient } from '../util/banner'
-import { Controller } from 'registrum-common/dist/classes/Controller'
+import { Controller } from './Controller'
 
 export type BannerControllerConfig = {
     notifyUrl: string

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { Controller } from 'registrum-common/dist/classes/Controller'
+import { Controller } from './Controller'
 import { BannerClient } from '../util/banner'
 
 export class ClassesController extends Controller {
@@ -12,7 +12,7 @@ export class ClassesController extends Controller {
         this.router.get('/list/:term/:subject', this.#getList)
         this.router.get('/subjects', this.#getSubjects)
         this.router.get('/terms', this.#getTerms)
-        this.router.post('/listing/:term/:subject/:courseNumber', this.#getListing)
+        this.router.get('/listing/:term/:subject/:courseNumber', this.#getListing)
     }
 
     #getList = async (req: Request, res: Response) => {

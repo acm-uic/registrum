@@ -1,6 +1,4 @@
 import axios, { AxiosInstance } from 'axios'
-import axiosCookieJarSupport from 'axios-cookiejar-support'
-import { CookieJar } from 'tough-cookie'
 import { App } from '../app'
 import mongoose from 'mongoose'
 import { MongoMemoryServer } from 'mongodb-memory-server'
@@ -8,75 +6,59 @@ import { Class } from '../models/interfaces/Class'
 import { Server } from 'http'
 import mockApp from './mockbanner'
 import { UserObject } from '../models/User'
-import 'dotenv/config'
+import { CookieJar } from 'tough-cookie'
+import axiosCookieJarSupport from 'axios-cookiejar-support'
 
 jest.setTimeout(60000)
 
-let mongoServer: MongoMemoryServer
-let mongoUri: string
-beforeAll(async () => {
-    mongoServer = new MongoMemoryServer()
-    mongoUri = 'mongodb://localhost:27017/testing1'
-    // mongoUri = mongoServer.getUri()
-    try {
-        await mongoose.connect(mongoUri, {
-            useNewUrlParser: true,
-            useCreateIndex: true,
-            useUnifiedTopology: true,
-            useFindAndModify: false
-        })
-        console.log('Mongoose connected')
-    } catch (e) {
-        console.error(e.message)
-        console.error('Mongoose Error')
-        await mongoose.disconnect()
-    }
-})
-
 describe('Class Tests', () => {
-    let server: Server
-    let bannerServer: Server
-    let port: number
+    // * ENV variables
     const basePath = process.env.API_BASE_PATH || '/api'
-    let baseURL: string
 
-    // * Add Axios Cookie Jar
+    const port = 8085
+    const baseURL = `http://localhost:${port}${basePath}/`
+
+    // * Mongo Setup
+    const mongoServer: MongoMemoryServer = new MongoMemoryServer()
+    const mongoUri = 'mongodb://localhost:27017/testing1'
+    // const mongoUri = mongoServer.getUri()
+
+    // * Create the app with the configurations
+    const expressApp = new App({
+        port,
+        basePath,
+        mongoUri: mongoUri,
+        serviceName: 'API'
+    })
+
+    let server: Server
     const jar = new CookieJar()
-    let client: AxiosInstance
+    const bannerServer: Server = mockApp.listen(4001, () => console.log('MOCK APP LISTENING'))
+
+    // * Create axios client
+    const client: AxiosInstance = axios.create({
+        withCredentials: true,
+        baseURL,
+        jar,
+        validateStatus: () => {
+            /* always resolve on any HTTP status */
+            return true
+        }
+    })
+    axiosCookieJarSupport(client)
 
     // * Chosen Class for subscription
     let chosenClass: Class
 
     beforeAll(async () => {
-        const expressApp = new App({
-            port: 4000,
-            basePath,
-            mongoUri: mongoUri,
-            serviceName: 'API'
-        })
-        server = expressApp.listen(0)
-        port = await new Promise(resolve => {
-            server.on('listening', () => {
-                const addressInfo = server.address().valueOf() as {
-                    address: string
-                    family: string
-                    port: number
-                }
-                resolve(addressInfo.port)
-            })
-        })
-        baseURL = `http://localhost:${port}${basePath}/`
-        bannerServer = mockApp.listen(4001, () => console.log('MOCK APP LISTENING'))
-        client = axios.create({
-            withCredentials: true,
-            baseURL,
-            jar,
-            validateStatus: () => {
-                /* always resolve on any HTTP status */
-                return true
-            }
-        })
-        axiosCookieJarSupport(client)
+        // * Finish app setup
+        await expressApp.initializeDatabase()
+        expressApp.initializeMiddlewares()
+        expressApp.initializeControllers()
+        expressApp.configure()
+
+        // * Start listening
+        server = expressApp.listen()
 
         const response = await client.post('/auth/signup', {
             firstname: 'John',
@@ -109,13 +91,19 @@ describe('Class Tests', () => {
             })
         })
 
+        // * Close Server
+        await new Promise(resolve => {
+            server.close(() => {
+                resolve()
+            })
+        })
+
         // * We wait until all threads have been run once to ensure the connection closes.
         await new Promise(resolve => setImmediate(resolve))
 
-        // * Close Server
-        server.close()
-        mongoose.disconnect()
-        mongoServer.stop()
+        // * Close Others
+        await mongoose.disconnect()
+        await mongoServer.stop()
         bannerServer.close()
     })
 
