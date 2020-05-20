@@ -20,6 +20,7 @@ describe('Authentication Tests', () => {
 
     // * Create the app with the configurations
     const expressApp = new App({
+        auto: false,
         port,
         basePath,
         mongoUri: mongoUri,

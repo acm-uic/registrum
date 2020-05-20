@@ -15,6 +15,7 @@ import cors from 'cors'
 import morgan from 'morgan'
 
 type Config = {
+    auto: boolean
     mongoUri: string
     port: number
     basePath: string
@@ -26,11 +27,13 @@ export class App extends ExpressApp {
     constructor(config: Config) {
         super(config.port, config.basePath, config.serviceName)
         this.config = config
-        this.initializeDatabase().then(() => {
-            this.initializeMiddlewares()
-            this.initializeControllers()
-            this.configure()
-        })
+
+        if (config.auto)
+            this.initializeDatabase().then(() => {
+                this.initializeMiddlewares()
+                this.initializeControllers()
+                this.configure()
+            })
     }
 
     configure = () => {

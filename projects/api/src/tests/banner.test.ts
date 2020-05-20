@@ -9,8 +9,6 @@ import { UserObject } from '../models/User'
 import { CookieJar } from 'tough-cookie'
 import axiosCookieJarSupport from 'axios-cookiejar-support'
 
-jest.setTimeout(60000)
-
 describe('Class Tests', () => {
     // * ENV variables
     const basePath = process.env.API_BASE_PATH || '/api'
@@ -25,6 +23,7 @@ describe('Class Tests', () => {
 
     // * Create the app with the configurations
     const expressApp = new App({
+        auto: false,
         port,
         basePath,
         mongoUri: mongoUri,
@@ -91,13 +90,6 @@ describe('Class Tests', () => {
             })
         })
 
-        // * Close Server
-        await new Promise(resolve => {
-            server.close(() => {
-                resolve()
-            })
-        })
-
         // * We wait until all threads have been run once to ensure the connection closes.
         await new Promise(resolve => setImmediate(resolve))
 
@@ -105,6 +97,7 @@ describe('Class Tests', () => {
         await mongoose.disconnect()
         await mongoServer.stop()
         bannerServer.close()
+        server.close()
     })
 
     beforeEach(async () => {
