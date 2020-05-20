@@ -44,10 +44,10 @@ export const getTerms = (): AppThunk => async (dispatch, getState) => {
 }
 
 export const getSubjects = (): AppThunk => async (dispatch, getState) => {
-    const { terms } = getState().banner
+    const { subjects } = getState().banner
 
     // * Term have already been pulled
-    if (terms.length > 0) return
+    if (subjects.length > 0) return
 
     try {
         const response = await axios.get('/classes/subjects')

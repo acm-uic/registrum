@@ -34,4 +34,4 @@ export const useSelector: TypedUseSelectorHook<ReturnType<typeof reducers>> = us
 // * Thunk Action type that matches out reducers (less bloated code)
 export type AppThunk = ThunkAction<void, ReturnType<typeof reducers>, unknown, Action<string>>
 
-export const useDispatch = () => useReduxDispatch()
+export const useDispatch = useReduxDispatch
