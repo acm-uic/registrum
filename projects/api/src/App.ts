@@ -25,7 +25,7 @@ type Config = {
 
 export class App extends ExpressApp {
     config: Config
-    constructor(config: Config, cb?: (...args: any) => void) {
+    constructor(config: Config, cb?: () => void) {
         super(config.port, config.basePath, config.serviceName)
         this.config = config
 
@@ -33,7 +33,7 @@ export class App extends ExpressApp {
             this.initializeMiddlewares()
             this.initializeControllers()
             this.configure()
-            cb()
+            if (cb) cb()
         })
     }
 
