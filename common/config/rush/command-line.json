@@ -45,6 +45,27 @@
       "summary": "Record test coverage.",
       "description": "Record test coverage.",
       "shellCommand": "codecov"
+    },
+    {
+      "commandKind": "global",
+      "name": "dev:client",
+      "summary": "Watch client and run build version of other essential projects.",
+      "description": "Development environment for client",
+      "shellCommand": "concurrently -k -n client,api,banner \"cd projects/client && npm run watch\" \"cd projects/api && npm run start\" \"cd projects/banner && npm run start\""
+    },
+    {
+      "commandKind": "global",
+      "name": "dev:api",
+      "summary": "Watch api and run build version of other essential projects.",
+      "description": "Development environment for api",
+      "shellCommand": "concurrently -k -n client,api,banner \"cd projects/client && npm run start\" \"cd projects/api && npm run watch\" \"cd projects/banner && npm run start\""
+    },
+    {
+      "commandKind": "global",
+      "name": "dev:banner",
+      "summary": "Watch banner and run build version of other essential projects.",
+      "description": "Development environment for banner",
+      "shellCommand": "concurrently -k -n client,api,banner \"cd projects/client && npm run start\" \"cd projects/api && npm run start\" \"cd projects/banner && npm run watch\""
     }
   ],
   "parameters": []
