@@ -1,9 +1,13 @@
 import * as path from 'path'
-import * as webpack from 'webpack'
+import { Configuration as WebpackConfiguration } from 'webpack'
+import { Configuration as WebpackDevServerConfiguration } from 'webpack-dev-server'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import CopyPlugin from 'copy-webpack-plugin'
 
 import * as tsconfig from './tsconfig.json'
+interface Configuration extends WebpackConfiguration {
+    devServer?: WebpackDevServerConfiguration
+}
 
 const tsConfigPathsToAliases = () => {
     if (!tsconfig.compilerOptions.paths) return {}
@@ -22,7 +26,7 @@ const tsConfigPathsToAliases = () => {
     return aliases
 }
 
-const config: webpack.Configuration = {
+const config: Configuration = {
     entry: {
         bundle: './src/index',
         serviceWorker: './src/serviceWorker'
