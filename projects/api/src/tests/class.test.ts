@@ -1,44 +1,98 @@
-import dotenv from 'dotenv'
-import axios from 'axios'
+import axios, { AxiosInstance } from 'axios'
 import axiosCookieJarSupport from 'axios-cookiejar-support'
 import { CookieJar } from 'tough-cookie'
-import app, { mongoose } from '../app'
+import { App } from '../App'
+import mongoose from 'mongoose'
 import { Server } from 'http'
+import { MongoMemoryServer } from 'mongodb-memory-server'
 import mockApp from './mockbanner'
-dotenv.config()
-const port = process.env.API_PORT || 8085
-const basePath = process.env.API_BASE_PATH || '/api'
-const URL = `http://localhost:${port}${basePath}/`
+
+// May require additional time for downloading MongoDB binaries
+jasmine.DEFAULT_TIMEOUT_INTERVAL = 600000
+
+const mongoServer: MongoMemoryServer = new MongoMemoryServer()
 
 describe('Class Tests', () => {
+    const basePath = '/api'
+
+    // * Initialize
+    let port: number
+    let baseURL: string
+    let mongoUri: string
+    let expressApp: App
     let server: Server
+    let client: AxiosInstance
     let bannerServer: Server
-
-    // * Add Axios Cookie Jar
-    const jar = new CookieJar()
-    const client = axios.create({
-        baseURL: URL,
-        withCredentials: true,
-        jar: jar,
-        validateStatus: () => {
-            /* always resolve on any HTTP status */
-            return true
-        }
-    })
-
-    axiosCookieJarSupport(client)
+    let bannerPort: number
 
     beforeAll(async () => {
-        bannerServer = mockApp.listen(4001, () => console.log('MOCK APP LISTENING'))
+        mongoUri = await mongoServer.getUri()
+        // mongoUri = 'mongodb://localhost:27017/testing'
 
-        server = app.listen(port)
-        const response = await client.post('auth/signup', {
+        // * Start listening on available port
+        bannerServer = mockApp.listen(0, () => console.log('MOCK APP LISTENING'))
+        // * Find banner port
+        bannerPort = await new Promise(resolve => {
+            bannerServer.on('listening', () => {
+                const addressInfo = bannerServer.address().valueOf() as {
+                    address: string
+                    family: string
+                    port: number
+                }
+                resolve(addressInfo.port)
+            })
+        })
+
+        // * Wait for app to initialize
+        await new Promise(resolve => {
+            // * Create the app with the configurations
+            expressApp = new App(
+                {
+                    port,
+                    basePath,
+                    mongoUri,
+                    serviceName: 'API',
+                    bannerUrl: `http://localhost:${bannerPort}/banner`,
+                    apiHost: ''
+                },
+                resolve
+            )
+        })
+
+        // * Start listening on available port
+        server = expressApp.listen(0)
+
+        // * Find app port
+        port = await new Promise(resolve => {
+            server.on('listening', () => {
+                const addressInfo = server.address().valueOf() as {
+                    address: string
+                    family: string
+                    port: number
+                }
+                resolve(addressInfo.port)
+            })
+        })
+        baseURL = `http://localhost:${port}${basePath}/`
+
+        // * Create axios client
+        client = axios.create({
+            withCredentials: true,
+            baseURL,
+            jar: new CookieJar(),
+            validateStatus: () => {
+                /* always resolve on any HTTP status */
+                return true
+            }
+        })
+        axiosCookieJarSupport(client)
+
+        const response = await client.post('/auth/signup', {
             firstname: 'John',
             lastname: 'Doe',
             email: 'registrum@example.com',
             password: 'theRealApp1$'
         })
-
         expect(response.status).toBe(200)
     })
 
@@ -62,13 +116,15 @@ describe('Class Tests', () => {
 
         // * Close Server
         server.close()
+        await mongoose.disconnect()
+        mongoServer.stop()
         bannerServer.close()
     })
 
     describe('Sanity tests', () => {
         it('Returns a valid list of terms', async () => {
             // * Grab terms
-            const { data: terms } = await client.get('classes/terms')
+            const { data: terms } = await client.get('/classes/terms')
 
             // * Assure each term is valid by checking it is a number
             terms.forEach((term: string) => {
@@ -78,7 +134,7 @@ describe('Class Tests', () => {
 
         it('Returns a valid list of subjects for a retrieved term', async () => {
             // * Grab subjects for given term
-            const { data: subjects } = await client.get(`classes/subjects`)
+            const { data: subjects } = await client.get(`/classes/subjects`)
 
             // * Make sure each subject is a valid string
             subjects.forEach((subject: string) => {
@@ -88,10 +144,10 @@ describe('Class Tests', () => {
 
         it('Returns a valid list of courses for a given subject', async () => {
             // * Grab subjects for given term
-            const { data: subjects } = await client.get(`classes/subjects`)
+            const { data: subjects } = await client.get(`/classes/subjects`)
             console.log(subjects)
             // * Grab classes for given subject
-            const { data: classes } = await client.get(`classes/list/220208/${subjects[0]}`)
+            const { data: classes } = await client.get(`/classes/list/220208/${subjects[0]}`)
             console.log(classes)
             // * Make sure each class is a valid class object
             classes.forEach((cls: string) => {

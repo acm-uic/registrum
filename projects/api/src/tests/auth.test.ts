@@ -1,22 +1,75 @@
-import dotenv from 'dotenv'
-import axios from 'axios'
+import axios, { AxiosInstance } from 'axios'
 import axiosCookieJarSupport from 'axios-cookiejar-support'
 import { CookieJar } from 'tough-cookie'
-import app, { mongoose } from '../app'
+import { App } from '../App'
+import mongoose from 'mongoose'
+import { MongoMemoryServer } from 'mongodb-memory-server'
 import { Server } from 'http'
 
-dotenv.config()
-const port = process.env.API_PORT || 8085
-const basePath = process.env.API_BASE_PATH || '/api'
-const URL = `http://localhost:${port}${basePath}/auth/`
+// May require additional time for downloading MongoDB binaries
+jasmine.DEFAULT_TIMEOUT_INTERVAL = 600000
+
+const mongoServer: MongoMemoryServer = new MongoMemoryServer()
 
 describe('Authentication Tests', () => {
+    const basePath = '/api'
+
+    // * Initialize
+    let port: number
+    let baseURL: string
+    let mongoUri: string
+    let expressApp: App
     let server: Server
+    let client: AxiosInstance
 
     beforeAll(async () => {
+        mongoUri = await mongoServer.getUri()
+        // mongoUri = 'mongodb://localhost:27017/testing'
+
+        // * Wait for app to initialize
         await new Promise(resolve => {
-            server = app.listen(port, resolve)
+            // * Create the app with the configurations
+            expressApp = new App(
+                {
+                    port,
+                    basePath,
+                    mongoUri,
+                    serviceName: 'API',
+                    bannerUrl: '',
+                    apiHost: ''
+                },
+                resolve
+            )
         })
+
+        // * Start listening on available port
+        server = expressApp.listen(0)
+
+        // * Find app port
+        port = await new Promise(resolve => {
+            server.on('listening', () => {
+                const addressInfo = server.address().valueOf() as {
+                    address: string
+                    family: string
+                    port: number
+                }
+                resolve(addressInfo.port)
+            })
+        })
+        baseURL = `http://localhost:${port}${basePath}/auth`
+        console.log(baseURL)
+
+        // * Create axios client
+        client = axios.create({
+            withCredentials: true,
+            baseURL,
+            jar: new CookieJar(),
+            validateStatus: () => {
+                /* always resolve on any HTTP status */
+                return true
+            }
+        })
+        axiosCookieJarSupport(client)
     })
 
     afterAll(async () => {
@@ -34,11 +87,19 @@ describe('Authentication Tests', () => {
             })
         })
 
+        // * Close Server
+        await new Promise(resolve => {
+            server.close(() => {
+                resolve()
+            })
+        })
+
         // * We wait until all threads have been run once to ensure the connection closes.
         await new Promise(resolve => setImmediate(resolve))
 
-        // * Close Server
-        server.close()
+        // * Close Others
+        await mongoose.disconnect()
+        await mongoServer.stop()
     })
 
     describe('Sanity Tests', () => {
@@ -46,22 +107,9 @@ describe('Authentication Tests', () => {
         let userEmail = 'registrum@example.com'
         let userPassword = 'theRealApp1$'
 
-        // * Add Axios Cookie Jar
-        const jar = new CookieJar()
-        const client = axios.create({
-            baseURL: URL,
-            withCredentials: true,
-            jar: jar,
-            validateStatus: () => {
-                /* always resolve on any HTTP status */
-                return true
-            }
-        })
-        axiosCookieJarSupport(client)
-
-        // *Signup
+        // * Sign up
         it('Register an account', async () => {
-            const response = await client.post('signup', {
+            const response = await client.post('/signup', {
                 firstname: 'John',
                 lastname: 'Smith',
                 email: userEmail,
@@ -76,7 +124,7 @@ describe('Authentication Tests', () => {
 
         // Attempting to register a duplicate account
         it('Register duplicate account', async () => {
-            const response = await client.post('signup', {
+            const response = await client.post('/signup', {
                 firstname: 'John',
                 lastname: 'Smith',
                 email: userEmail,
@@ -87,11 +135,8 @@ describe('Authentication Tests', () => {
             expect(response.data).toBe('Email already exists!')
         })
 
-        // ! xit indicates test case is pending and not written yet, remember to change to it
-        // ! Google login strategy cannot be tested because it requires authentication from
-        // ! google side
         it('Logs user in correctly using email, password', async () => {
-            const response = await client.post('login', {
+            const response = await client.post('/login', {
                 email: userEmail,
                 password: userPassword
             })
@@ -102,7 +147,7 @@ describe('Authentication Tests', () => {
 
         // Test Login status by accessing restricted page
         it('Access restricted resource only available to logged in user', async () => {
-            const response = await client.get('')
+            const response = await client.get('/')
 
             expect(response.status).toBe(200)
         })
@@ -111,7 +156,7 @@ describe('Authentication Tests', () => {
         // Valid input for changing password
         it('Update user info with valid new password', async () => {
             const newUserPassword = 'theRealApp2$'
-            const response = await client.post('update', {
+            const response = await client.post('/update', {
                 password: newUserPassword,
                 userPassword: userPassword
             })
@@ -121,7 +166,7 @@ describe('Authentication Tests', () => {
             expect(response.data.email).toBe(userEmail)
 
             // Login with new password
-            const retryLoginResponse = await client.post('login', {
+            const retryLoginResponse = await client.post('/login', {
                 email: userEmail,
                 password: userPassword
             })
@@ -129,9 +174,9 @@ describe('Authentication Tests', () => {
             expect(retryLoginResponse.data.email).toBe(userEmail)
         })
 
-        // Valid input for changing lastname
+        // Valid input for changing last name
         it('Update user info with valid new lastname', async () => {
-            const response = await client.post('update', {
+            const response = await client.post('/update', {
                 lastname: 'Doe',
                 userPassword: userPassword
             })
@@ -141,9 +186,9 @@ describe('Authentication Tests', () => {
             expect(response.data.lastname).toBe('Doe')
         })
 
-        // Valid input for changing firstname
+        // Valid input for changing first name
         it('Update user info with valid new firstname', async () => {
-            const response = await client.post('update', {
+            const response = await client.post('/update', {
                 firstname: 'Dough',
                 userPassword: userPassword
             })
@@ -155,7 +200,7 @@ describe('Authentication Tests', () => {
         // Valid input for changing email
         it('Update user info with valid new email', async () => {
             const newUserEmail = 'registrum2@example.com'
-            const response = await client.post('update', {
+            const response = await client.post('/update', {
                 email: newUserEmail,
                 userPassword: userPassword
             })
@@ -167,7 +212,7 @@ describe('Authentication Tests', () => {
 
         // Attempting to change password with wrong current password
         it('Update user info with invalid old password', async () => {
-            const response = await client.post('update', {
+            const response = await client.post('/update', {
                 password: 'password_is_fake',
                 userPassword: userPassword + 'fake'
             })
@@ -178,7 +223,7 @@ describe('Authentication Tests', () => {
 
         // Attempting to change password with invalid new password
         it('Update user info with invalid new password', async () => {
-            const response = await client.post('update', {
+            const response = await client.post('/update', {
                 password: 'theRealApp',
                 userPassword: userPassword
             })
@@ -189,7 +234,7 @@ describe('Authentication Tests', () => {
 
         // Attempting to change lastname with invalid new lastname
         it('Update user info with invalid new lastname', async () => {
-            const response = await client.post('update', {
+            const response = await client.post('/update', {
                 lastname: 'Doe?',
                 userPassword: userPassword
             })
@@ -200,7 +245,7 @@ describe('Authentication Tests', () => {
 
         // Attempting to change firstname with invalid new firstname
         it('Update user info with invalid new firstname', async () => {
-            const response = await client.post('update', {
+            const response = await client.post('/update', {
                 firstname: 'John?',
                 userPassword: userPassword
             })
@@ -211,7 +256,7 @@ describe('Authentication Tests', () => {
 
         // Attempting to change email with invalid new email
         it('Update user info with invalid new email', async () => {
-            const response = await client.post('update', {
+            const response = await client.post('/update', {
                 email: 'registrum-example.com',
                 userPassword: userPassword
             })
@@ -222,7 +267,7 @@ describe('Authentication Tests', () => {
 
         // Attempting to change info without old password(userPassword) provided
         it('Update user info with missing userPassword', async () => {
-            const response = await client.post('update', {})
+            const response = await client.post('/update', {})
 
             expect(response.status).toBe(401)
             expect(response.data).toBe('Password not provided')
@@ -230,7 +275,7 @@ describe('Authentication Tests', () => {
 
         // Attempting to change user ID
         it('Update user info id (Security Violation)', async () => {
-            const response = await client.post('update', {
+            const response = await client.post('/update', {
                 _id: '000000000000000000000000',
                 userPassword: userPassword
             })
@@ -241,7 +286,7 @@ describe('Authentication Tests', () => {
 
         // Attempting to change subscriptions
         it('Update subscriptions using user info API', async () => {
-            const response = await client.post('update', {
+            const response = await client.post('/update', {
                 subscriptions: '{}',
                 userPassword: userPassword
             })
@@ -252,7 +297,7 @@ describe('Authentication Tests', () => {
 
         // Check if logout is working
         it('Logs user out correctly', async () => {
-            const response = await client.get('logout')
+            const response = await client.get('/logout')
 
             expect(response.status).toBe(200)
             expect(response.data).toBe('OK')
@@ -260,7 +305,7 @@ describe('Authentication Tests', () => {
 
         // Attempting to login with incorrect email
         it('Cannot login with incorrect email', async () => {
-            const response = await client.post('login', {
+            const response = await client.post('/login', {
                 email: userEmail + '.fake',
                 password: userPassword
             })
@@ -271,7 +316,7 @@ describe('Authentication Tests', () => {
 
         // Attempting to login with incorrect password
         it('Cannot login with incorrect password', async () => {
-            const response = await client.post('login', {
+            const response = await client.post('/login', {
                 email: userEmail,
                 password: 'theFakeApp1$'
             })
@@ -280,17 +325,9 @@ describe('Authentication Tests', () => {
             expect(response.data).toBe('Unauthorized')
         })
 
-        // Test login with Google (TODO)
-        it('Logs user in using Google', async () => {
-            const response = await client.post('loginGoogle', {})
-
-            expect(response.status).toBe(501) // TODO
-            expect(response.data).toBe('TODO')
-        })
-
         // Attempting to register with invalid firstname
         it('Register with invalid firstname', async () => {
-            const response = await client.post('signup', {
+            const response = await client.post('/signup', {
                 firstname: 'John1',
                 lastname: 'Doe',
                 email: 'registrum@example.com',
@@ -303,7 +340,7 @@ describe('Authentication Tests', () => {
 
         // Attempting to register with invalid lastname
         it('Register with invalid lastname', async () => {
-            const response = await client.post('signup', {
+            const response = await client.post('/signup', {
                 firstname: 'John',
                 lastname: 'Doe1',
                 email: 'registrum@example.com',
@@ -316,7 +353,7 @@ describe('Authentication Tests', () => {
 
         // Attempting to register with invalid email
         it('Register with invalid email', async () => {
-            const response = await client.post('signup', {
+            const response = await client.post('/signup', {
                 firstname: 'John',
                 lastname: 'Doe',
                 email: 'registrum-example.com',
@@ -329,7 +366,7 @@ describe('Authentication Tests', () => {
 
         // Attempting to register with invalid password
         it('Register with invalid password', async () => {
-            const response = await client.post('signup', {
+            const response = await client.post('/signup', {
                 firstname: 'John',
                 lastname: 'Doe',
                 email: 'registrum@example.com',
@@ -342,8 +379,8 @@ describe('Authentication Tests', () => {
 
         // Run through a sequence of Change user info process
         it('Can update user correctly', async () => {
-            // * Signup
-            await client.post('signup', {
+            // * Sign up
+            await client.post('/signup', {
                 firstname: 'Jimmy',
                 lastname: 'Falcon',
                 email: 'jimmy@example.com',
@@ -351,7 +388,7 @@ describe('Authentication Tests', () => {
             })
 
             // * Try to post updates
-            await client.post('update', {
+            await client.post('/update', {
                 firstname: 'Tom',
                 lastname: 'Bald',
                 password: 'jimmyPass#2',
@@ -359,7 +396,7 @@ describe('Authentication Tests', () => {
             })
 
             // * Logout
-            await client.post('logout')
+            await client.post('/logout')
 
             // * Log back in with new password
             const response = await client.post('/login', {
@@ -385,7 +422,7 @@ describe('Authentication Tests', () => {
             const response = await axios({
                 method: 'GET',
                 url: `http://localhost:${port}${basePath}/auth/logout`,
-                validateStatus: function (status) {
+                validateStatus: function () {
                     return true
                 }
             })

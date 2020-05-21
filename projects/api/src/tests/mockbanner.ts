@@ -5,20 +5,20 @@ const courses = [
     { courseNumber: '301', courseReferenceNumber: '301' },
     { courseNumber: '401', courseReferenceNumber: '401' }
 ]
-// * Create mock express isntance
-const mockApp = express()
+// * Create mock express instance
+const mockApp: express.Application = express()
 mockApp.use(express.json())
 mockApp.use(express.urlencoded({ extended: true }))
 mockApp.get('/banner/subject', (req: Request, res: Response) => res.send(['CS']))
 mockApp.get('/banner/term', (req: Request, res: Response) => res.send(['12345']))
 mockApp.post('/banner/class', (req: Request, res: Response) => {
-    const { subject, courseNumber } = req.body
-    console.log(courseNumber)
-    if (subject == 'CS' && courseNumber == undefined) {
+    const { subject, courseNumber, term } = req.body
+    console.log(term)
+    if (term === '220208' && subject === 'CS' && courseNumber === undefined) {
         res.send(courses)
         return
-    } else if (subject == 'CS' && courseNumber != undefined) {
-        res.send(courses.filter(course => course.courseNumber == courseNumber))
+    } else if (term === '220208' && subject === 'CS' && courseNumber !== undefined) {
+        res.send(courses.filter(course => course.courseNumber === courseNumber))
         return
     }
 
@@ -32,11 +32,11 @@ mockApp.post('/banner/course', (req: Request, res: Response) => {
     )
 })
 
-mockApp.post('/banner/hook', (req: Request, res: Response) => {
+mockApp.post('/banner/hook/addHook', (req: Request, res: Response) => {
     res.send('OK')
 })
 
-mockApp.post('/banner/deletehook', (req: Request, res: Response) => {
+mockApp.post('/banner/hook/deletehook', (req: Request, res: Response) => {
     res.send('OK')
 })
 

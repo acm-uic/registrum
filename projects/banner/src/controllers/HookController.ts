@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
-import { Controller } from '../interfaces/Controller'
 import { WebHooks } from '@bmiddha/webhooks'
-import * as mongoose from 'mongoose'
+import mongoose from 'mongoose'
+import { Controller } from 'registrum-common/dist/classes/Controller'
 import { CourseSchema } from 'registrum-common/dist/schemas/Banner'
 import { Course } from 'registrum-common/dist/lib/Banner'
 
@@ -27,7 +27,7 @@ export class HookController extends Controller {
     }
 
     #initializeRoutes = () => {
-        this.router.post(this.path, this.#addHook)
+        this.router.post('/addHook', this.#addHook)
         this.router.post('/deletehook', this.#deleteHook)
     }
 

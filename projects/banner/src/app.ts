@@ -1,31 +1,39 @@
+import { ExpressApp } from 'registrum-common/dist/classes/ExpressApp'
+import { HookController } from './controllers/HookController'
+import { BannerController } from './controllers/BannerController'
+import compression from 'compression'
+import mongoose from 'mongoose'
 import * as express from 'express'
-import * as compression from 'compression'
-import * as cors from 'cors'
-import * as morgan from 'morgan'
-import * as mongoose from 'mongoose'
-import { Controller } from './interfaces/Controller'
-export type AppConfig = {
+import cors from 'cors'
+import morgan from 'morgan'
+
+type Config = {
+    mongoUri: string
     port: number
     basePath: string
-    mongoUri: string
+    serviceName: string
 }
 
-export class App {
-    #app: express.Application
-    #config: AppConfig
+export class App extends ExpressApp {
+    config: Config
 
-    constructor(controllers: Controller[], config: AppConfig) {
-        this.#app = express()
-        this.#config = config
-
-        this.#initializeDatabase()
-        this.#initializeMiddlewares()
-        this.#initializeControllers(controllers)
+    constructor(config: Config) {
+        super(config.port, config.basePath, config.serviceName)
+        this.config = config
+        this.initializeDatabase().then(() => {
+            this.initializeMiddlewares()
+            this.initializeControllers()
+            this.configure()
+        })
     }
 
-    #initializeDatabase = async () => {
+    configure = () => {
+        this.app.options('*', cors)
+    }
+
+    initializeDatabase = async () => {
         try {
-            await mongoose.connect(this.#config.mongoUri, {
+            await mongoose.connect(this.config.mongoUri, {
                 useNewUrlParser: true,
                 useCreateIndex: true,
                 useUnifiedTopology: true,
@@ -33,28 +41,21 @@ export class App {
             })
             console.log('✅ MongoDB connection successful.')
         } catch (error) {
-            console.log('❌ MongoDB connection unsuccessful.')
+            console.log(error)
+            throw '❌ MongoDB connection unsuccessful.'
         }
     }
 
-    #initializeMiddlewares = () => {
-        this.#app.set('port', this.#config.port)
-        this.#app.use(morgan('tiny'))
-        this.#app.use(express.urlencoded({ extended: true }))
-        this.#app.use(express.json())
-        this.#app.use(compression())
-        this.#app.options('*', cors)
+    initializeMiddlewares = () => {
+        this.bindMiddlewares([
+            morgan('tiny'),
+            express.urlencoded({ extended: true }),
+            express.json(),
+            compression()
+        ])
     }
 
-    #initializeControllers = (controllers: Controller[]) => {
-        controllers.forEach(controller => {
-            this.#app.use(this.#config.basePath, controller.router)
-        })
-    }
-
-    listen() {
-        this.#app.listen(this.#config.port, () => {
-            console.log(`🚀 Banner service running on port ${this.#config.port}. 🤘`)
-        })
+    initializeControllers = () => {
+        this.bindControllers([new HookController('/hook'), new BannerController('/')])
     }
 }

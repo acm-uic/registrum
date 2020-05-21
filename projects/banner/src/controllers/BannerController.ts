@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { Controller } from '../interfaces/Controller'
+import { Controller } from 'registrum-common/dist/classes/Controller'
 import { TermModel, SubjectModel, CourseModel } from '../interfaces/Models'
 
 export class BannerController extends Controller {

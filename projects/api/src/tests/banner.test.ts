@@ -1,43 +1,96 @@
-import dotenv from 'dotenv'
-import axios from 'axios'
-import axiosCookieJarSupport from 'axios-cookiejar-support'
-import { CookieJar } from 'tough-cookie'
-import app, { mongoose } from '../app'
-
-import { Class } from '../routes/models/interfaces/Class'
+import axios, { AxiosInstance } from 'axios'
+import { App } from '../App'
+import mongoose from 'mongoose'
+import { MongoMemoryServer } from 'mongodb-memory-server'
+import { Class } from '../models/interfaces/Class'
 import { Server } from 'http'
 import mockApp from './mockbanner'
+import { UserObject } from '../models/User'
+import { CookieJar } from 'tough-cookie'
+import axiosCookieJarSupport from 'axios-cookiejar-support'
 
-dotenv.config()
-const port = process.env.API_PORT || 8085
-const basePath = process.env.API_BASE_PATH || '/api'
-const URL = `http://localhost:${port}${basePath}/`
+// May require additional time for downloading MongoDB binaries
+jasmine.DEFAULT_TIMEOUT_INTERVAL = 600000
+
+const mongoServer: MongoMemoryServer = new MongoMemoryServer()
 
 describe('Class Tests', () => {
+    const basePath = '/api'
+
+    // * Initialize
+    let port: number
+    let baseURL: string
+    let mongoUri: string
+    let expressApp: App
     let server: Server
+    let client: AxiosInstance
     let bannerServer: Server
-
-    // * Add Axios Cookie Jar
-    const jar = new CookieJar()
-    const client = axios.create({
-        baseURL: URL,
-        withCredentials: true,
-        jar: jar,
-        validateStatus: () => {
-            /* always resolve on any HTTP status */
-            return true
-        }
-    })
-    axiosCookieJarSupport(client)
-
-    // * Chosen Class for subscription
-    let chosenClass: Class = null
+    let bannerPort: number
+    let chosenClass: Class
 
     beforeAll(async () => {
-        server = app.listen(port)
-        bannerServer = mockApp.listen(4001, () => console.log('MOCK APP LISTENING'))
+        mongoUri = await mongoServer.getUri()
+        // mongoUri = 'mongodb://localhost:27017/testing'
 
-        const response = await client.post('auth/signup', {
+        // * Start listening on available port
+        bannerServer = mockApp.listen(0, () => console.log('MOCK APP LISTENING'))
+        // * Find banner port
+        bannerPort = await new Promise(resolve => {
+            bannerServer.on('listening', () => {
+                const addressInfo = bannerServer.address().valueOf() as {
+                    address: string
+                    family: string
+                    port: number
+                }
+                resolve(addressInfo.port)
+            })
+        })
+
+        // * Wait for app to initialize
+        await new Promise(resolve => {
+            // * Create the app with the configurations
+            expressApp = new App(
+                {
+                    port,
+                    basePath,
+                    mongoUri,
+                    serviceName: 'API',
+                    bannerUrl: `http://localhost:${bannerPort}/banner`,
+                    apiHost: ''
+                },
+                resolve
+            )
+        })
+
+        // * Start listening on available port
+        server = expressApp.listen(0)
+
+        // * Find app port
+        port = await new Promise(resolve => {
+            server.on('listening', () => {
+                const addressInfo = server.address().valueOf() as {
+                    address: string
+                    family: string
+                    port: number
+                }
+                resolve(addressInfo.port)
+            })
+        })
+        baseURL = `http://localhost:${port}${basePath}/`
+
+        // * Create axios client
+        client = axios.create({
+            withCredentials: true,
+            baseURL,
+            jar: new CookieJar(),
+            validateStatus: () => {
+                /* always resolve on any HTTP status */
+                return true
+            }
+        })
+        axiosCookieJarSupport(client)
+
+        const response = await client.post('/auth/signup', {
             firstname: 'John',
             lastname: 'Doe',
             email: 'registrum@example.com',
@@ -71,13 +124,15 @@ describe('Class Tests', () => {
         // * We wait until all threads have been run once to ensure the connection closes.
         await new Promise(resolve => setImmediate(resolve))
 
-        // * Close Server
-        server.close()
+        // * Close Others
+        await mongoose.disconnect()
+        await mongoServer.stop()
         bannerServer.close()
+        server.close()
     })
 
     beforeEach(async () => {
-        await client.post('auth/login', {
+        await client.post('/auth/login', {
             email: 'registrum@example.com',
             password: 'theRealApp1$'
         })
@@ -135,7 +190,7 @@ describe('Class Tests', () => {
         })
 
         // * Make sure CRN is not in subscription list twice
-        const { data: user } = await client.get('/auth')
+        const user: UserObject = (await client.get('/auth')).data
 
         // * Make sure class does not have CRN
         let count = 0
@@ -171,7 +226,7 @@ describe('Class Tests', () => {
                 secondClass.courseReferenceNumber === chosenClass.courseReferenceNumber
             ) {
                 // * Get class list
-                const classes = (await client.get(`/classes/220208/listing/CS/301`)).data
+                const classes = (await client.get(`/classes/listing/220208/CS/301`)).data
 
                 // * Pick random class
                 secondClass = classes[Math.floor(Math.random() * classes.length)]
