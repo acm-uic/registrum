@@ -6,8 +6,12 @@ import mongoose from 'mongoose'
 import { MongoMemoryServer } from 'mongodb-memory-server'
 import { Server } from 'http'
 
+// May require additional time for downloading MongoDB binaries
+jasmine.DEFAULT_TIMEOUT_INTERVAL = 600000
+
+const mongoServer: MongoMemoryServer = new MongoMemoryServer()
+
 describe('Authentication Tests', () => {
-    const mongoServer: MongoMemoryServer = new MongoMemoryServer()
     const basePath = '/api'
 
     // * Initialize
@@ -20,6 +24,8 @@ describe('Authentication Tests', () => {
 
     beforeAll(async () => {
         mongoUri = await mongoServer.getUri()
+        // mongoUri = 'mongodb://localhost:27017/testing'
+
         // * Wait for app to initialize
         await new Promise(resolve => {
             // * Create the app with the configurations

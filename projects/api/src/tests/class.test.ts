@@ -7,8 +7,12 @@ import { Server } from 'http'
 import { MongoMemoryServer } from 'mongodb-memory-server'
 import mockApp from './mockbanner'
 
+// May require additional time for downloading MongoDB binaries
+jasmine.DEFAULT_TIMEOUT_INTERVAL = 600000
+
+const mongoServer: MongoMemoryServer = new MongoMemoryServer()
+
 describe('Class Tests', () => {
-    const mongoServer: MongoMemoryServer = new MongoMemoryServer()
     const basePath = '/api'
 
     // * Initialize
@@ -23,6 +27,7 @@ describe('Class Tests', () => {
 
     beforeAll(async () => {
         mongoUri = await mongoServer.getUri()
+        // mongoUri = 'mongodb://localhost:27017/testing'
 
         // * Start listening on available port
         bannerServer = mockApp.listen(0, () => console.log('MOCK APP LISTENING'))
