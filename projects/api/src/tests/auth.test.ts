@@ -8,10 +8,9 @@ import { Server } from 'http'
 
 describe('Authentication Tests', () => {
     const mongoServer: MongoMemoryServer = new MongoMemoryServer()
-    const jar = new CookieJar()
-
-    // * Config
     const basePath = '/api'
+
+    // * Initialize
     let port: number
     let baseURL: string
     let mongoUri: string
@@ -21,8 +20,9 @@ describe('Authentication Tests', () => {
 
     beforeAll(async () => {
         mongoUri = await mongoServer.getUri()
-        // * Create the app with the configurations
+        // * Wait for app to initialize
         await new Promise(resolve => {
+            // * Create the app with the configurations
             expressApp = new App(
                 {
                     port,
@@ -36,8 +36,10 @@ describe('Authentication Tests', () => {
             )
         })
 
-        // * Start listening
+        // * Start listening on available port
         server = expressApp.listen(0)
+
+        // * Find app port
         port = await new Promise(resolve => {
             server.on('listening', () => {
                 const addressInfo = server.address().valueOf() as {
@@ -50,11 +52,12 @@ describe('Authentication Tests', () => {
         })
         baseURL = `http://localhost:${port}${basePath}/auth`
         console.log(baseURL)
+
         // * Create axios client
         client = axios.create({
             withCredentials: true,
             baseURL,
-            jar,
+            jar: new CookieJar(),
             validateStatus: () => {
                 /* always resolve on any HTTP status */
                 return true

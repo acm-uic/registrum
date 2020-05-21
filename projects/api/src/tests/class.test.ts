@@ -9,10 +9,9 @@ import mockApp from './mockbanner'
 
 describe('Class Tests', () => {
     const mongoServer: MongoMemoryServer = new MongoMemoryServer()
-    const jar = new CookieJar()
-
-    // * Config
     const basePath = '/api'
+
+    // * Initialize
     let port: number
     let baseURL: string
     let mongoUri: string
@@ -24,7 +23,10 @@ describe('Class Tests', () => {
 
     beforeAll(async () => {
         mongoUri = await mongoServer.getUri()
+
+        // * Start listening on available port
         bannerServer = mockApp.listen(0, () => console.log('MOCK APP LISTENING'))
+        // * Find banner port
         bannerPort = await new Promise(resolve => {
             bannerServer.on('listening', () => {
                 const addressInfo = bannerServer.address().valueOf() as {
@@ -35,8 +37,10 @@ describe('Class Tests', () => {
                 resolve(addressInfo.port)
             })
         })
-        // * Create the app with the configurations
+
+        // * Wait for app to initialize
         await new Promise(resolve => {
+            // * Create the app with the configurations
             expressApp = new App(
                 {
                     port,
@@ -50,8 +54,10 @@ describe('Class Tests', () => {
             )
         })
 
-        // * Start listening
+        // * Start listening on available port
         server = expressApp.listen(0)
+
+        // * Find app port
         port = await new Promise(resolve => {
             server.on('listening', () => {
                 const addressInfo = server.address().valueOf() as {
@@ -63,17 +69,19 @@ describe('Class Tests', () => {
             })
         })
         baseURL = `http://localhost:${port}${basePath}/`
+
         // * Create axios client
         client = axios.create({
             withCredentials: true,
             baseURL,
-            jar,
+            jar: new CookieJar(),
             validateStatus: () => {
                 /* always resolve on any HTTP status */
                 return true
             }
         })
         axiosCookieJarSupport(client)
+
         const response = await client.post('/auth/signup', {
             firstname: 'John',
             lastname: 'Doe',

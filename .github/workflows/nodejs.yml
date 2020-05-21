@@ -23,9 +23,6 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('common/config/rush/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-node-
-      - name: Start Docker for Mongodb
-        shell: pwsh
-        run: docker run -d -p 27017:27017 mongo
       - name: rush install
         shell: pwsh
         run: node common/scripts/install-run-rush.js install --no-link
