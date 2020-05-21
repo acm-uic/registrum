@@ -1,56 +1,66 @@
 import axios, { AxiosInstance } from 'axios'
 import axiosCookieJarSupport from 'axios-cookiejar-support'
 import { CookieJar } from 'tough-cookie'
-import { App } from '../app'
+import { App } from '../App'
 import mongoose from 'mongoose'
 import { MongoMemoryServer } from 'mongodb-memory-server'
 import { Server } from 'http'
 
 describe('Authentication Tests', () => {
-    // * ENV variables
-    const basePath = process.env.API_BASE_PATH || '/api'
-
-    const port = 8085
-    const baseURL = `http://localhost:${port}${basePath}/auth`
-
-    // * Mongo Setup
     const mongoServer: MongoMemoryServer = new MongoMemoryServer()
-    const mongoUri = 'mongodb://localhost:27017/testing1'
-    // const mongoUri = mongoServer.getUri()
-
-    // * Create the app with the configurations
-    const expressApp = new App({
-        auto: false,
-        port,
-        basePath,
-        mongoUri: mongoUri,
-        serviceName: 'API'
-    })
-
-    let server: Server
     const jar = new CookieJar()
 
-    // * Create axios client
-    const client: AxiosInstance = axios.create({
-        withCredentials: true,
-        baseURL,
-        jar,
-        validateStatus: () => {
-            /* always resolve on any HTTP status */
-            return true
-        }
-    })
-    axiosCookieJarSupport(client)
+    // * Config
+    const basePath = '/api'
+    let port: number
+    let baseURL: string
+    let mongoUri: string
+    let expressApp: App
+    let server: Server
+    let client: AxiosInstance
 
     beforeAll(async () => {
-        // * Finish app setup
-        await expressApp.initializeDatabase()
-        expressApp.initializeMiddlewares()
-        expressApp.initializeControllers()
-        expressApp.configure()
+        mongoUri = await mongoServer.getUri()
+        // * Create the app with the configurations
+        await new Promise(resolve => {
+            expressApp = new App(
+                {
+                    port,
+                    basePath,
+                    mongoUri,
+                    serviceName: 'API',
+                    bannerUrl: '',
+                    apiHost: ''
+                },
+                resolve
+            )
+        })
 
         // * Start listening
-        server = expressApp.listen()
+        server = expressApp.listen(0)
+        port = await new Promise(resolve => {
+            server.on('listening', () => {
+                const addressInfo = server.address().valueOf() as {
+                    address: string
+                    family: string
+                    port: number
+                }
+                resolve(addressInfo.port)
+            })
+        })
+        baseURL = `http://localhost:${port}${basePath}/auth`
+        console.log(baseURL)
+        // * Create axios client
+        client = axios.create({
+            withCredentials: true,
+            baseURL,
+            jar,
+            validateStatus: () => {
+                /* always resolve on any HTTP status */
+                return true
+            }
+        })
+        axiosCookieJarSupport(client)
     })
 
     afterAll(async () => {

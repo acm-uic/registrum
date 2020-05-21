@@ -2,18 +2,24 @@ import { Request, Response } from 'express'
 import { isAuthenticated } from '../util/passport'
 import User, { UserObject } from '../models/User'
 import { notifyUser } from '../util/notifier'
-import { BannerClient } from '../util/banner'
+import { BannerClient } from '../util/BannerClient'
 import { Controller } from './Controller'
+import { AxiosInstance } from 'axios'
 
 export type BannerControllerConfig = {
     notifyUrl: string
+    bannerUrl: string
 }
 export class BannerController extends Controller {
     #notifyUrl: string
+    #bannerUrl: string
+    #bannerClient: AxiosInstance
     constructor(path: string, config: BannerControllerConfig) {
         super(path)
         this.#notifyUrl = config.notifyUrl
+        this.#bannerUrl = config.bannerUrl
         this.#initializeRoutes()
+        this.#bannerClient = new BannerClient(this.#bannerUrl).client
     }
 
     #initializeRoutes = () => {
@@ -31,7 +37,7 @@ export class BannerController extends Controller {
                 // * Subscribe via Banner API
                 try {
                     // * Waiting for Banner Client to be completely implemented
-                    await BannerClient.post('/hook/addHook', {
+                    await this.#bannerClient.post('/hook/addHook', {
                         url: `${this.#notifyUrl}/notify/${_id}/${crn}`,
                         crn
                     })
@@ -62,7 +68,7 @@ export class BannerController extends Controller {
                 try {
                     console.log('UNSUBSCRIBING WITH ' + `${this.#notifyUrl}/notify/${_id}/${crn}`)
                     // ! Waiting for Banner Client to be completely implemented
-                    await BannerClient.post('/hook/deletehook', {
+                    await this.#bannerClient.post('/hook/deletehook', {
                         url: `${this.#notifyUrl}/notify/${_id}/${crn}`,
                         crn
                     })
@@ -88,7 +94,7 @@ export class BannerController extends Controller {
             const crns: string[] = user.subscriptions
 
             // * Grab class JSONs from banner API
-            const { data: classes } = await BannerClient.post('/course', {
+            const { data: classes } = await this.#bannerClient.post('/course', {
                 courseReferenceNumbers: crns
             })
             // * Send class JSONs

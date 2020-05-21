@@ -4,7 +4,7 @@ import mongoose from 'mongoose'
 import passport from 'passport'
 import connectMongo from 'connect-mongo'
 import helmet from 'helmet'
-import { ExpressApp } from './ExpressApp'
+import { ExpressApp } from 'registrum-common/dist/classes/ExpressApp'
 import { ClassesController } from './controllers/ClassesController'
 import { AuthController } from './controllers/AuthController'
 import { BannerController } from './controllers/BannerController'
@@ -15,25 +15,26 @@ import cors from 'cors'
 import morgan from 'morgan'
 
 type Config = {
-    auto: boolean
     mongoUri: string
     port: number
     basePath: string
     serviceName: string
+    bannerUrl: string
+    apiHost: string
 }
 
 export class App extends ExpressApp {
     config: Config
-    constructor(config: Config) {
+    constructor(config: Config, cb?: (...args: any) => void) {
         super(config.port, config.basePath, config.serviceName)
         this.config = config
 
-        if (config.auto)
-            this.initializeDatabase().then(() => {
-                this.initializeMiddlewares()
-                this.initializeControllers()
-                this.configure()
-            })
+        this.initializeDatabase().then(() => {
+            this.initializeMiddlewares()
+            this.initializeControllers()
+            this.configure()
+            cb()
+        })
     }
 
     configure = () => {
@@ -80,10 +81,11 @@ export class App extends ExpressApp {
     }
     initializeControllers = () => {
         this.bindControllers([
-            new ClassesController(`/classes`),
+            new ClassesController(`/classes`, { bannerUrl: this.config.bannerUrl }),
             new AuthController(`/auth`),
             new BannerController(`/banner`, {
-                notifyUrl: 'http://localhost:4000/api/banner'
+                notifyUrl: `${this.config.apiHost}${this.config.basePath}/banner`,
+                bannerUrl: this.config.bannerUrl
             }),
             new PushServiceController(`/push-service`)
         ])

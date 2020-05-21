@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from 'axios'
-import { App } from '../app'
+import { App } from '../App'
 import mongoose from 'mongoose'
 import { MongoMemoryServer } from 'mongodb-memory-server'
 import { Class } from '../models/interfaces/Class'
@@ -10,54 +10,75 @@ import { CookieJar } from 'tough-cookie'
 import axiosCookieJarSupport from 'axios-cookiejar-support'
 
 describe('Class Tests', () => {
-    // * ENV variables
-    const basePath = process.env.API_BASE_PATH || '/api'
-
-    const port = 8085
-    const baseURL = `http://localhost:${port}${basePath}/`
-
-    // * Mongo Setup
     const mongoServer: MongoMemoryServer = new MongoMemoryServer()
-    const mongoUri = 'mongodb://localhost:27017/testing1'
-    // const mongoUri = mongoServer.getUri()
-
-    // * Create the app with the configurations
-    const expressApp = new App({
-        auto: false,
-        port,
-        basePath,
-        mongoUri: mongoUri,
-        serviceName: 'API'
-    })
-
-    let server: Server
     const jar = new CookieJar()
-    const bannerServer: Server = mockApp.listen(4001, () => console.log('MOCK APP LISTENING'))
 
-    // * Create axios client
-    const client: AxiosInstance = axios.create({
-        withCredentials: true,
-        baseURL,
-        jar,
-        validateStatus: () => {
-            /* always resolve on any HTTP status */
-            return true
-        }
-    })
-    axiosCookieJarSupport(client)
+    // * Config
+    const basePath = '/api'
+    let port: number
+    let baseURL: string
+    let mongoUri: string
+    let expressApp: App
+    let server: Server
+    let client: AxiosInstance
+    let bannerServer: Server
+    let bannerPort: number
 
     // * Chosen Class for subscription
     let chosenClass: Class
 
     beforeAll(async () => {
-        // * Finish app setup
-        await expressApp.initializeDatabase()
-        expressApp.initializeMiddlewares()
-        expressApp.initializeControllers()
-        expressApp.configure()
+        mongoUri = await mongoServer.getUri()
+        bannerServer = mockApp.listen(0, () => console.log('MOCK APP LISTENING'))
+        bannerPort = await new Promise(resolve => {
+            bannerServer.on('listening', () => {
+                const addressInfo = bannerServer.address().valueOf() as {
+                    address: string
+                    family: string
+                    port: number
+                }
+                resolve(addressInfo.port)
+            })
+        })
+        // * Create the app with the configurations
+        await new Promise(resolve => {
+            expressApp = new App(
+                {
+                    port,
+                    basePath,
+                    mongoUri,
+                    serviceName: 'API',
+                    bannerUrl: `http://localhost:${bannerPort}/banner`,
+                    apiHost: ''
+                },
+                resolve
+            )
+        })
 
         // * Start listening
-        server = expressApp.listen()
+        server = expressApp.listen(0)
+        port = await new Promise(resolve => {
+            server.on('listening', () => {
+                const addressInfo = server.address().valueOf() as {
+                    address: string
+                    family: string
+                    port: number
+                }
+                resolve(addressInfo.port)
+            })
+        })
+        baseURL = `http://localhost:${port}${basePath}/`
+        // * Create axios client
+        client = axios.create({
+            withCredentials: true,
+            baseURL,
+            jar,
+            validateStatus: () => {
+                /* always resolve on any HTTP status */
+                return true
+            }
+        })
+        axiosCookieJarSupport(client)
 
         const response = await client.post('/auth/signup', {
             firstname: 'John',
