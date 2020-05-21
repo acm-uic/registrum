@@ -11,11 +11,11 @@ import Listing from '@interfaces/Listing'
 
 // * Setting the path for the api calls
 const basePath = process.env.API_BASE_PATH || '/api'
-const URL = `${basePath}/`
+const baseURL = `${basePath}/`
 
 // * Single axios client for configurations
 export const client = axios.create({
-    baseURL: URL,
+    baseURL,
     validateStatus: () => true
 })
 
@@ -26,7 +26,7 @@ export const getTerms = (): AppThunk => async (dispatch, getState) => {
     if (terms.length > 0) return
 
     try {
-        const response = await axios.get('/classes/terms')
+        const response = await client.get('classes/terms')
 
         if (response.status === 200) {
             // * Destructure response from API
@@ -50,7 +50,7 @@ export const getSubjects = (): AppThunk => async (dispatch, getState) => {
     if (subjects.length > 0) return
 
     try {
-        const response = await axios.get('/classes/subjects')
+        const response = await client.get('classes/subjects')
 
         if (response.status === 200) {
             // * Destructure response from API
@@ -82,7 +82,7 @@ export const getCourses = (data: GetCoursesProps): AppThunk => async (dispatch, 
     if (coursesExist) return
 
     try {
-        const response = await client.get(`/classes/list/${term}/${subject}`)
+        const response = await client.get(`classes/list/${term}/${subject}`)
 
         if (response.status === 200) {
             // * Parse the response into objects
@@ -124,7 +124,7 @@ export const getListings = (data: GetListingsProps): AppThunk => async (dispatch
     if (listingsExist) return
 
     try {
-        const response = await client.get(`/classes/listing/${term}/${subject}/${course}`)
+        const response = await client.get(`classes/listing/${term}/${subject}/${course}`)
 
         if (response.status === 200) {
             const parsed = response.data as Listing[]

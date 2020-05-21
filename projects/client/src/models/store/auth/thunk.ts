@@ -19,13 +19,11 @@ export const client = axios.create({
 })
 
 export const updateUser = (): AppThunk => async (dispatch, getState) => {
-    console.log('Called updateUser')
-
     const { auth } = getState()
 
     try {
         // * Retrieve updated user object
-        const response = await client.get('/api/auth/')
+        const response = await client.get('auth/')
         const user = response.data as User
 
         // * If cookie has expired and a user is present
@@ -59,7 +57,7 @@ export const signUpUser = (data: SignUpProps): AppThunk => async (dispatch, getS
 
     try {
         // * Try to register the user
-        const response = await client.post('/auth/signup', data)
+        const response = await client.post('auth/signup', data)
 
         if (response.status === 200) {
             // * Get user data
@@ -100,7 +98,7 @@ export const signInUser = (data: SignInProps): AppThunk => async (dispatch, getS
 
     try {
         // * Logging in user --> they must be logged in before sending over browser subscription object
-        const response = await client.post('/auth/login', data)
+        const response = await client.post('auth/login', data)
 
         if (response.status === 200) {
             // * Get user data
@@ -154,7 +152,7 @@ export const signOutUser = (): AppThunk => async (dispatch, getState) => {
             }
         }
 
-        const response = await client.get('/auth/logout')
+        const response = await client.get('auth/logout')
 
         // * Checking if server successfully signed out
         if (response.status === 200 || response.status === 401) {
