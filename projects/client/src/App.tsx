@@ -33,11 +33,10 @@ export const App: React.FC = () => {
 
     useEffect(() => {
         // * Update user on app load / auth state change
-        console.log('Hello')
         dispatch(updateUser())
         dispatch(getTerms())
         dispatch(getSubjects())
-    })
+    }, [])
 
     return (
         <>
