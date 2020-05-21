@@ -1,6 +1,6 @@
 import * as dotenv from 'dotenv'
 import * as cron from 'node-cron'
-import * as mongoose from 'mongoose'
+import mongoose from 'mongoose'
 import { BannerData, BannerDataConfig } from './BannerData'
 import { ArgumentParser } from 'argparse'
 
@@ -134,7 +134,7 @@ const boot = async () => {
         console.log(`⏲ Scheduling DB Update Task to run ${config.cronDb}`)
         cron.schedule(config.cronDb, bannerData.updateDb)
     }
-    mongoose.connection.close()
+    await mongoose.connection?.close()
 }
 
 boot()
