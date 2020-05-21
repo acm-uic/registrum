@@ -32,7 +32,7 @@ export const updateUser = (): AppThunk => async (dispatch, getState) => {
         }
 
         // * Check if any property changed for a rerender
-        const shouldUpdate = JSON.stringify(user) === JSON.stringify(auth.user)
+        const shouldUpdate = JSON.stringify(user) !== JSON.stringify(auth.user)
 
         // * User has update or
         if (response.status === 200 && shouldUpdate) {
