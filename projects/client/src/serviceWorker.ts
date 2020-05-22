@@ -97,16 +97,29 @@ self.addEventListener('push', event => {
 })
 
 self.addEventListener('install', event => {
-    console.log('👷', 'install', event)
     self.skipWaiting()
+
+    event.waitUntil(
+        caches.open('registrum').then(cache => {
+            return cache.addAll([
+                './index.html',
+                './bundle.js',
+                './manifest.json',
+                './images/icon-72x72.png',
+                './images/icon-144x144.png'
+            ])
+        })
+    )
 })
 
-self.addEventListener('activate', event => {
-    console.log('👷', 'activate', event)
-    return self.clients.claim()
+self.addEventListener('activate', async () => {
+    await self.clients.claim()
 })
 
 self.addEventListener('fetch', function (event) {
-    // console.log('👷', 'fetch', event);
-    event.respondWith(fetch(event.request))
+    event.respondWith(
+        caches.match(event.request).then(response => {
+            return response || fetch(event.request)
+        })
+    )
 })
