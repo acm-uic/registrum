@@ -160,17 +160,16 @@ const AddClass = () => {
                         {listings.filter(
                             l =>
                                 l.subject === subject &&
-                                l.term === terms.find(t => t.code === term)?.description &&
+                                l.term === term?.toString() &&
                                 l.courseNumber === course?.toString()
                         ).length > 0 && (
                             <div className="classListView">
                                 <ListGroup>
                                     {listings
                                         .filter(l => {
-                                            !user?.classes.includes(l.courseReferenceNumber) &&
+                                            !user?.classes?.includes(l.courseReferenceNumber) &&
                                                 l.subject === subject &&
-                                                l.term ===
-                                                    terms.find(t => t.code === term)?.description &&
+                                                l.term === term?.toString() &&
                                                 l.courseNumber === course?.toString()
                                         })
                                         .map((l: Listing, index) => (
