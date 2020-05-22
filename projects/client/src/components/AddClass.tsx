@@ -167,7 +167,9 @@ const AddClass = () => {
                                 <ListGroup>
                                     {listings
                                         .filter(l => {
-                                            !user?.classes?.includes(l.courseReferenceNumber) &&
+                                            !user?.subscriptions?.includes(
+                                                l.courseReferenceNumber
+                                            ) &&
                                                 l.subject === subject &&
                                                 l.term === term?.toString() &&
                                                 l.courseNumber === course?.toString()

@@ -3,7 +3,7 @@ export default interface User {
     firstname: string
     lastname: string
     email: string
-    classes: string[]
+    subscriptions: string[]
     emailNotificationsEnabled: boolean
     boolEmail: boolean
 }
