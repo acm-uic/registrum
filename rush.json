@@ -6,6 +6,7 @@
   // "yarnVersion": "1.9.4",
   "pnpmOptions": {},
   "gitPolicy": {},
+  "ensureConsistentVersions": true,
   "repository": {},
   "eventHooks": {
     "preRushInstall": [],
@@ -17,19 +18,23 @@
   "projects": [
     {
       "packageName": "registrum-banner-data",
-      "projectFolder": "banner-data"
+      "projectFolder": "projects/banner-data"
     },
     {
       "packageName": "registrum-banner",
-      "projectFolder": "banner"
+      "projectFolder": "projects/banner"
     },
     {
       "packageName": "registrum-client",
-      "projectFolder": "client"
+      "projectFolder": "projects/client"
     },
     {
       "packageName": "registrum-api",
-      "projectFolder": "api"
+      "projectFolder": "projects/api"
+    },
+    {
+      "packageName": "registrum-common",
+      "projectFolder": "projects/common"
     }
   ]
 }

@@ -18,10 +18,11 @@ RUN npm i -g @microsoft/rush
 
 WORKDIR /usr/src/app
 
-COPY banner/package.json banner/
-COPY banner-data/package.json banner-data/
-COPY api/package.json api/
-COPY client/package.json client/
+COPY projects/banner/package.json projects/banner/
+COPY projects/banner-data/package.json projects/banner-data/
+COPY projects/api/package.json projects/api/
+COPY projects/client/package.json projects/client/
+COPY projects/common/package.json projects/common/
 COPY common/ common
 COPY rush.json .
 
