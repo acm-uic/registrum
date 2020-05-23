@@ -20,7 +20,7 @@ jobs:
           branch="${{ github.ref }}".Split("refs/heads/")[1]
           tag="${{ github.ref }}".Split("refs/tags/")[1]
         }
-        $VersionInfo | ConvertTo-Json > ./client/src/version.json
+        $VersionInfo | ConvertTo-Json > ./projects/client/src/version.json
     - name: docker build, push
       shell: pwsh
       run: |
