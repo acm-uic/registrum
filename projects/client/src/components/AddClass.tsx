@@ -49,9 +49,6 @@ const AddClass = () => {
             crn
         })
 
-        // * Reset Selections
-        setCourse(undefined)
-
         // * Update User
         dispatch(updateUser())
     }
