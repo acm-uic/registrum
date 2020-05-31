@@ -5,7 +5,7 @@ import Listing from '@interfaces/Listing'
 import Course from '@interfaces/Course'
 
 export const ADD_TERMS = 'SET_TERMS'
-export const ADD_SUBJECTS = 'SSET_SUBJECTS'
+export const ADD_SUBJECTS = 'SET_SUBJECTS'
 export const ADD_COURSES = 'ADD_COURSES'
 export const ADD_LISTINGS = 'ADD_LISTINGS'
 
