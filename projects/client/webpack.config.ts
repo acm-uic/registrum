@@ -1,10 +1,11 @@
 import * as path from 'path'
-import { Configuration as WebpackConfiguration } from 'webpack'
+import { Configuration as WebpackConfiguration, EnvironmentPlugin } from 'webpack'
 import { Configuration as WebpackDevServerConfiguration } from 'webpack-dev-server'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import CopyPlugin from 'copy-webpack-plugin'
-
 import * as tsconfig from './tsconfig.json'
+import 'dotenv/config'
+
 interface Configuration extends WebpackConfiguration {
     devServer?: WebpackDevServerConfiguration
 }
@@ -87,6 +88,11 @@ const config: Configuration = {
         ]),
         new HtmlWebpackPlugin({
             template: path.resolve(__dirname, 'public/index.html')
+        }),
+        new EnvironmentPlugin({
+            NODE_ENV: 'development',
+            API_BASE_PATH: '/api',
+            WEBPUSHPUBLIC: ''
         })
     ]
 }
