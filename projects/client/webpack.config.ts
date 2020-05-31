@@ -3,7 +3,7 @@ import { Configuration as WebpackConfiguration } from 'webpack'
 import { Configuration as WebpackDevServerConfiguration } from 'webpack-dev-server'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import CopyPlugin from 'copy-webpack-plugin'
-
+import Dotenv from 'dotenv-webpack'
 import * as tsconfig from './tsconfig.json'
 interface Configuration extends WebpackConfiguration {
     devServer?: WebpackDevServerConfiguration
@@ -87,7 +87,8 @@ const config: Configuration = {
         ]),
         new HtmlWebpackPlugin({
             template: path.resolve(__dirname, 'public/index.html')
-        })
+        }),
+        new Dotenv()
     ]
 }
 

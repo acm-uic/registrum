@@ -28,6 +28,7 @@ dependencies:
   '@types/compression': 1.7.0
   '@types/copy-webpack-plugin': 5.0.1
   '@types/cors': 2.8.6
+  '@types/dotenv-webpack': 1.7.0
   '@types/enzyme': 3.10.5
   '@types/enzyme-adapter-react-16': 1.0.6
   '@types/eslint': 6.8.1
@@ -75,6 +76,7 @@ dependencies:
   cors: 2.8.5
   css-loader: 3.5.3_webpack@4.43.0
   dotenv: 8.2.0
+  dotenv-webpack: 1.8.0_webpack@4.43.0
   emotion-theming: 10.0.27_c989b1aa057905c7a8b69bf973f55a19
   enzyme: 3.11.0
   enzyme-adapter-react-16: 1.15.2_df2dc313d8031f8c2dbd009d86ca7fc7
@@ -1931,6 +1933,12 @@ packages:
     dev: false
     resolution:
       integrity: sha512-EGlKlgMhnLt/cM4DbUSafFdrkeJoC9Mvnj0PUCU7tFmTjMjNRT957kXCx0wYm3JuEq4o4ZsS5vG+NlkM2DMd2A==
+  /@types/dotenv-webpack/1.7.0:
+    dependencies:
+      '@types/webpack': 4.41.13
+    dev: false
+    resolution:
+      integrity: sha512-/dXQdLSma6nYkeTiO571+IUEPY0hs3uwJfsLVvj4v/6/CqBUm/4TNiGHpqveIllQ0M0YVB67sdl9Fmgr2riBRQ==
   /@types/dotenv/8.2.0:
     dependencies:
       dotenv: 8.2.0
@@ -4826,6 +4834,27 @@ packages:
       node: '>=8'
     resolution:
       integrity: sha512-uEUyaDKoSQ1M4Oq8l45hSE26SnTxL6snNnqvK/VWx5wJhmff5z0FUVJDKDanor/6w3kzE3i7XZOk+7wC0EXr1A==
+  /dotenv-defaults/1.1.1:
+    dependencies:
+      dotenv: 6.2.0
+    dev: false
+    resolution:
+      integrity: sha512-6fPRo9o/3MxKvmRZBD3oNFdxODdhJtIy1zcJeUSCs6HCy4tarUpd+G67UTU9tF6OWXeSPqsm4fPAB+2eY9Rt9Q==
+  /dotenv-webpack/1.8.0_webpack@4.43.0:
+    dependencies:
+      dotenv-defaults: 1.1.1
+      webpack: 4.43.0_webpack@4.43.0
+    dev: false
+    peerDependencies:
+      webpack: ^1 || ^2 || ^3 || ^4
+    resolution:
+      integrity: sha512-o8pq6NLBehtrqA8Jv8jFQNtG9nhRtVqmoD4yWbgUyoU3+9WBlPe+c2EAiaJok9RB28QvrWvdWLZGeTT5aATDMg==
+  /dotenv/6.2.0:
+    dev: false
+    engines:
+      node: '>=6'
+    resolution:
+      integrity: sha512-HygQCKUBSFl8wKQZBSemMywRWcEDNidvNbjGVyZu3nbZ8qq9ubiPoGLMdRDpfSrpkkm9BXYFkpKxxFX38o/76w==
   /dotenv/8.2.0:
     dev: false
     engines:
@@ -13134,6 +13163,7 @@ packages:
       '@testing-library/react': 10.0.4_react-dom@16.13.1+react@16.13.1
       '@testing-library/user-event': 10.3.1
       '@types/copy-webpack-plugin': 5.0.1
+      '@types/dotenv-webpack': 1.7.0
       '@types/enzyme': 3.10.5
       '@types/enzyme-adapter-react-16': 1.0.6
       '@types/html-webpack-plugin': 3.2.3
@@ -13159,6 +13189,8 @@ packages:
       copy-webpack-plugin: 5.1.1_webpack@4.43.0
       core-js: 3.6.5
       css-loader: 3.5.3_webpack@4.43.0
+      dotenv: 8.2.0
+      dotenv-webpack: 1.8.0_webpack@4.43.0
       emotion-theming: 10.0.27_c989b1aa057905c7a8b69bf973f55a19
       enzyme: 3.11.0
       enzyme-adapter-react-16: 1.15.2_df2dc313d8031f8c2dbd009d86ca7fc7
@@ -13200,7 +13232,7 @@ packages:
     peerDependencies:
       prettier: '*'
     resolution:
-      integrity: sha512-mlP3l8b6ezMeiun5u/OOill+aiWjmTQ4XoqCRwkAvCA/k7VC8x1ZUUF2yxOXsDsooB2AorTHRBJG6B7SU8XiQw==
+      integrity: sha512-WEf+CakmZK31TX/EIcwEb8GgZHQgTFEFSew270y2GXkQvNULeAJeflwVtAEdSHFbjfIWE1nlDOp1dJliFCfG0w==
       tarball: 'file:projects/registrum-client.tgz'
     version: 0.0.0
   'file:projects/registrum-common.tgz':
@@ -13273,6 +13305,7 @@ specifiers:
   '@types/compression': ^1.7.0
   '@types/copy-webpack-plugin': ^5.0.1
   '@types/cors': ^2.8.6
+  '@types/dotenv-webpack': ^1.7.0
   '@types/enzyme': ^3.10.5
   '@types/enzyme-adapter-react-16': ^1.0.6
   '@types/eslint': ^6.8.1
@@ -13320,6 +13353,7 @@ specifiers:
   cors: ^2.8.5
   css-loader: ^3.5.3
   dotenv: ^8.2.0
+  dotenv-webpack: ^1.8.0
   emotion-theming: ^10.0.27
   enzyme: ^3.11.0
   enzyme-adapter-react-16: ^1.15.2
