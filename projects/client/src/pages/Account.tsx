@@ -3,9 +3,9 @@ import { Button, Form, Card, Container } from 'react-bootstrap'
 import { toast } from 'react-toastify'
 import axios from 'axios'
 
-import { useDispatch, useStore } from 'react-redux'
 import { updateUser } from '../models/store/auth/thunk'
-import User from '../models/interfaces/User'
+import { useSelector, useDispatch } from '@redux/.'
+
 interface UserUpdate {
     // * Update Interface
     firstname?: string
@@ -16,9 +16,7 @@ interface UserUpdate {
 
 const Account: FC = () => {
     // * Grab needed state
-    const store = useStore()
-    const { Auth } = store.getState()
-    const user = Auth.user as User
+    const { user } = useSelector(state => state.auth)
 
     // * Grab dispatcher for redux
     const dispatch = useDispatch()
@@ -31,7 +29,7 @@ const Account: FC = () => {
     const [fName, setFName] = useState('')
     const [lName, setLName] = useState('')
     const [emailNotificationsEnabled, setEmailNotificationsEnabled] = useState(
-        user.emailNotificationsEnabled
+        user?.emailNotificationsEnabled
     )
 
     //* event handler to update password that will be trigger when user clicks submit
