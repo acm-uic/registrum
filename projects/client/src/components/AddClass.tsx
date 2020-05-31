@@ -154,33 +154,38 @@ const AddClass = () => {
                         )}
 
                         {/* //* Class Listing Group */}
-                        {listings.filter(
-                            l =>
-                                l.subject === subject &&
-                                l.term === term?.toString() &&
-                                l.courseNumber === course?.toString()
-                        ).length > 0 && (
-                            <div className="classListView">
-                                <ListGroup>
-                                    {listings
-                                        .filter(l => {
-                                            !user?.subscriptions?.includes(
-                                                l.courseReferenceNumber
-                                            ) &&
-                                                l.subject === subject &&
-                                                l.term === term?.toString() &&
-                                                l.courseNumber === course?.toString()
-                                        })
-                                        .map((l: Listing, index) => (
-                                            <ClassListing
-                                                key={index}
-                                                listing={l}
-                                                onTrack={subscribeToClass}
-                                            />
-                                        ))}
-                                </ListGroup>
-                            </div>
-                        )}
+                        {user &&
+                            term &&
+                            subject &&
+                            course &&
+                            listings.filter(
+                                l =>
+                                    l.subject === subject &&
+                                    l.term === term.toString() &&
+                                    l.courseNumber == course.toString()
+                            ).length > 0 && (
+                                <div className="classListView">
+                                    <ListGroup>
+                                        {listings
+                                            .filter(
+                                                l =>
+                                                    !user.subscriptions.includes(
+                                                        l.courseReferenceNumber
+                                                    ) &&
+                                                    l.subject === subject &&
+                                                    l.term === term.toString() &&
+                                                    l.courseNumber == course.toString()
+                                            )
+                                            .map((l: Listing, index) => (
+                                                <ClassListing
+                                                    key={index}
+                                                    listing={l}
+                                                    onTrack={subscribeToClass}
+                                                />
+                                            ))}
+                                    </ListGroup>
+                                </div>
+                            )}
                     </Form>
                 </Modal.Body>
             </Modal>
