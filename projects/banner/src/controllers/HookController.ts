@@ -32,15 +32,15 @@ export class HookController extends Controller {
     }
 
     #addHook = async (request: Request, response: Response) => {
-        const { key, url } = request.body
-        console.log(key)
-        await this.#webHooks.add(key, url)
+        const { crn, url } = request.body
+        console.log(crn)
+        await this.#webHooks.add(crn, url)
         this.created(response)
     }
 
     #deleteHook = async (request: Request, response: Response) => {
-        const { key, url } = request.body
-        await this.#webHooks.remove(key, url)
+        const { crn, url } = request.body
+        await this.#webHooks.remove(crn, url)
         this.ok(response)
     }
 }
