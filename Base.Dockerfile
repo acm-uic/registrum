@@ -1,7 +1,10 @@
 FROM node:12-alpine AS base
 
+ARG CLIENT_WEBPUSHPUBLIC
+
 ENV NODE_ENV=development \
-    CI=true
+    CI=true \
+    WEBPUSHPUBLIC=$CLIENT_WEBPUSHPUBLIC
 
 RUN apk add --no-cache \
     autoconf \
