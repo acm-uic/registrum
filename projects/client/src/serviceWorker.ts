@@ -24,14 +24,12 @@ function toByteArray(base64String: string) {
 }
 
 // * Finish SW Setup (Subscribe to Notifications)
-export const initializeSW = (registration: ServiceWorkerRegistration) => {
+export const initializeSW = async (registration: ServiceWorkerRegistration) => {
     if (!process.env.WEBPUSHPUBLIC) return
 
     // * Ask for permission
     if (Notification.permission === 'default') {
-        Notification.requestPermission().then(() => {
-            // * Permission has been set
-        })
+        await Notification.requestPermission()
     }
 
     // * Permission granted -> Subscribe
