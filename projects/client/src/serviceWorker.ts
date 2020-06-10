@@ -29,9 +29,7 @@ export const initializeSW = (registration: ServiceWorkerRegistration) => {
 
     // * Ask for permission
     if (Notification.permission === 'default') {
-        Notification.requestPermission().then(() => {
-            // * Permission has been set
-        })
+        await Notification.requestPermission()
     }
 
     // * Permission granted -> Subscribe
