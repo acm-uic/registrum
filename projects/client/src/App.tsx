@@ -1,67 +1,58 @@
-/*
- * File: /src/App.tsx
- * File Created: Wednesday, 11th December 2019 11:29:00 pm
- * Author: Alex Chomiak
- *
- * Last Modified: Sunday, 5th January 2020 4:29:11 pm
- * Modified By: Alex Chomiak
- *
- * Author Github: https://github.com/alexchomiak
- */
+import React from 'react'
+import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
+import Welcome from './components/Welcome'
+import SignInForm from './components/SignInForm'
+import SignUpForm from './components/SignUpForm'
+import Settings from './components/Settings'
+import Courses from './components/Courses'
+import NavBar from './components/NavBar'
+import UserContext from './UserContext'
+import IUser from './interfaces/IUser'
 
-import React, { useEffect } from 'react'
-import { BrowserRouter as Router, Route } from 'react-router-dom'
-import { ToastContainer } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
-import Home from '@pages/Home'
-import SplashPage from '@pages/SplashPage'
-import Classes from '@pages/Classes'
-import Account from '@pages/Account'
-import NavBar from '@components/NavBar'
+const demoUser = null
 
-import { useSelector, useDispatch } from '@redux/.'
-
-import { updateUser } from '@redux/auth/thunk'
-import { getTerms, getSubjects } from '@redux/banner/thunk'
-
-export const App: React.FC = () => {
-    // * Grab current user
-    const { user } = useSelector(state => state.auth)
-
-    // * Dispatch hook
-    const dispatch = useDispatch()
-
-    useEffect(() => {
-        // * Update user on app load / auth state change
-        dispatch(updateUser())
-        dispatch(getTerms())
-        dispatch(getSubjects())
-    }, [])
+function App() {
+    const [user, setUser] = React.useState<IUser | null>(null)
+    const logout = () => setUser(null)
 
     return (
-        <>
-            <ToastContainer
-                position="bottom-left"
-                autoClose={4000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                draggable
-                pauseOnHover
-            />
-            <Router>
-                <NavBar />
-                {user !== null ? (
-                    <>
-                        <Route exact path="/classes" component={Classes} />
-                        <Route exact path="/account" component={Account} />
-                        <Route exact path="/" component={Home} />
-                    </>
-                ) : (
-                    <SplashPage />
-                )}
-            </Router>
-        </>
+        <UserContext.Provider value={{ user, logout }}>
+            <div className="App">
+                <Router>
+                    <UserContext.Consumer>
+                        {({ user }) =>
+                            user ? (
+                                <>
+                                    <NavBar user={user} />
+                                    <Switch>
+                                        <Route path="/settings">
+                                            <Settings user={user} />
+                                        </Route>
+                                        <Route path="/" exact>
+                                            <Courses />
+                                        </Route>
+                                        <Route>
+                                            <Redirect to="/" />
+                                        </Route>
+                                    </Switch>
+                                </>
+                            ) : (
+                                <>
+                                    <NavBar />
+                                    <Switch>
+                                        <Route path="/" exact component={Welcome} />
+                                        <Route>
+                                            <Redirect to="/" />
+                                        </Route>
+                                    </Switch>
+                                </>
+                            )
+                        }
+                    </UserContext.Consumer>
+                </Router>
+            </div>
+        </UserContext.Provider>
     )
 }
+
+export default App
