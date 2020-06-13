@@ -2,13 +2,11 @@ import { IUser } from '../interfaces/IUser'
 import CourseData from './FakeCourseData.json'
 
 let users: IUser[] = JSON.parse(localStorage.getItem('users') || '[]') || []
-console.log(CourseData)
+
 export function configureFakeAPI() {
     const realFetch = window.fetch
     window.fetch = function (url: string, opts?: RequestInit): PromiseLike<Response> {
         const { method, headers } = opts || { method: 'GET', headers: undefined }
-        console.log(url, method, headers)
-        console.log(url.endsWith('/users'))
 
         const body = JSON.parse((opts && opts.body?.toString()) || '{}')
 
