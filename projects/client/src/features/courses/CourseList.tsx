@@ -141,7 +141,7 @@ export class CourseList extends React.Component<ICourseListProps, ICourseListSta
                 onRender: (item: ICourse) => {
                     return (
                         <HoverCard
-                            expandedCardOpenDelay={500}
+                            expandedCardOpenDelay={300}
                             expandingCardProps={{
                                 onRenderCompactCard: onRenderCompactCard,
                                 onRenderExpandedCard: onRenderExpandedCard,
@@ -151,7 +151,7 @@ export class CourseList extends React.Component<ICourseListProps, ICourseListSta
                             }}
                             instantOpenOnClick={true}
                         >
-                            <Text>{item.courseReferenceNumber}</Text>
+                            <Text styles={{root: {fontWeight: FontWeights.bold}}}>{item.courseReferenceNumber}</Text>
                         </HoverCard>
                     )
                 },

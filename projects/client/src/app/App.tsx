@@ -8,7 +8,10 @@ import Settings from '../views/Settings'
 import Courses from '../views/Courses'
 import NavBar from '../components/NavBar'
 import IUser from '../interfaces/IUser'
+
+// TODO: remove dummy data
 import courses from '../helpers/FakeCourseData.json'
+
 const demoUser: IUser = {
     email: 'bm@a.com',
     firstName: 'b',
