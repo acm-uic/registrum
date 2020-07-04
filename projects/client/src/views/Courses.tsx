@@ -5,8 +5,9 @@ import {
     ICommandBarItemProps
 } from '@fluentui/react'
 import { useConstCallback } from '@uifabric/react-hooks'
-import { ICourse, CourseList } from '../components/CourseList'
-import AddCourse from '../components/AddCourse'
+import { ICourse, CourseList } from '../features/courses/CourseList'
+import AddCourse from '../features/courses/AddCourse'
+import CourseDetails from '../features/courses/CourseDetails'
 
 interface ICoursesProps {
     courses: ICourse[] | undefined
@@ -16,18 +17,20 @@ interface ICoursesProps {
 export const Courses: React.FunctionComponent<ICoursesProps> = ({
     courses
 }: ICoursesProps) => {
-    const [isOpen, setIsOpen] = React.useState(false)
+    const [isAddCoursesPanelOpen, setIsAddCoursesPanelOpen] = React.useState(false)
+    const openAddCoursesPanel = useConstCallback(() => setIsAddCoursesPanelOpen(true))
+    const dismissAddCoursesPanel = useConstCallback(() => setIsAddCoursesPanelOpen(false))
 
-    const openPanel = useConstCallback(() => setIsOpen(true))
-    const dismissPanel = useConstCallback(() => setIsOpen(false))
-
+    const [isCourseDetailsPanelOpen, setIsCourseDetailsPanelOpen] = React.useState(false)
+    const openCourseDetailsPanel = useConstCallback(() => setIsCourseDetailsPanelOpen(true))
+    const dismissCourseDetailsPanel = useConstCallback(() => setIsCourseDetailsPanelOpen(false))
 
     const items: ICommandBarItemProps[] = [
         {
             key: 'add',
             text: 'Add',
             iconProps: { iconName: 'Add' },
-            onClick: openPanel
+            onClick: openAddCoursesPanel
         },
         {
             key: 'delete',
@@ -35,15 +38,33 @@ export const Courses: React.FunctionComponent<ICoursesProps> = ({
             iconProps: { iconName: 'Delete' },
             onClick: () => console.log('Delete'),
             disabled: true
+        },
+        {
+            key: 'refresh',
+            text: 'Refresh',
+            iconProps: { iconName: 'Refresh' },
+            onClick: () => console.log('Refresh')
         }
     ]
+
+    const farItems: ICommandBarItemProps[] = [
+        {
+            key: 'info',
+            text: 'Info',
+            iconProps: { iconName: 'Info' },
+            onClick: openCourseDetailsPanel
+        }
+    ]
+
     return (
-        <Stack tokens={{childrenGap: 15}}>
+        <Stack tokens={{ childrenGap: 15 }}>
             <CommandBar
                 items={items}
+                farItems={farItems}
                 ariaLabel="Use left and right arrow keys to navigate between commands"
-            /> 
-            <AddCourse onAddCourse={null} isOpen={isOpen} dismissPanel={dismissPanel} />
+            />
+            <AddCourse onAddCourse={null} isOpen={isAddCoursesPanelOpen} dismissPanel={dismissAddCoursesPanel} />
+            {/* <CourseDetails isOpen={isCourseDetailsPanelOpen} dismissPanel={dismissCourseDetailsPanel} /> */}
             {courses && courses.length > 0 ? <CourseList items={courses} /> : <></>}
         </Stack>
     )

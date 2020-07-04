@@ -7,13 +7,12 @@ import {
     IComboBoxOption
 } from '@fluentui/react'
 
-export interface IAddCourse {
-    onAddCourse: any
+export interface ICourseDetails {
     isOpen: boolean
     dismissPanel: () => void
 }
 
-export const AddCourse: React.FunctionComponent<IAddCourse> = ({isOpen, dismissPanel}) => {
+export const CourseDetails: React.FunctionComponent<ICourseDetails> = ({isOpen, dismissPanel}) => {
     const INITIAL_OPTIONS: IComboBoxOption[] = [
         { key: 'A', text: 'Option A' },
         { key: 'B', text: 'Option B' },
@@ -23,14 +22,14 @@ export const AddCourse: React.FunctionComponent<IAddCourse> = ({isOpen, dismissP
 
     return (
         <Panel
-            isLightDismiss
+            isBlocking={false}
             isOpen={isOpen}
             closeButtonAriaLabel="Close"
             isHiddenOnDismiss={true}
             headerText="Add Course"
             onDismiss={dismissPanel}
         >
-            <Text variant={'large'}>Search</Text>
+            <Text variant={'large'}>COURSE DETAILS</Text>
             <Stack tokens={{childrenGap: 15}}>
                 <ComboBox
                     label="Term"
@@ -55,4 +54,4 @@ export const AddCourse: React.FunctionComponent<IAddCourse> = ({isOpen, dismissP
     )
 }
 
-export default AddCourse;
+export default CourseDetails;

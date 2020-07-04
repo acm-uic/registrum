@@ -4,25 +4,38 @@ import {
     Text,
     FontWeights,
     DetailsList,
+    HoverCard,
+    IExpandingCardProps,
     DetailsListLayoutMode,
     Selection,
     SelectionMode,
     IColumn,
     MarqueeSelection,
-    initializeIcons
+    Icon,
+    initializeIcons,
+    mergeStyleSets,
+    FontSizes,
+    getTheme
 } from '@fluentui/react'
 
 initializeIcons()
-
-const boldStyle = {
-    root: { fontWeight: FontWeights.semibold }
-}
 
 interface ICourseListState {
     columns: IColumn[]
     items: ICourse[]
     isModalSelection: boolean
     isCompactMode: boolean
+}
+
+export interface IFaculty {
+    bannerId: number
+    category: string
+    class: string
+    courseReferenceNumber: number
+    displayName: string
+    emailAddress: string
+    primaryIndicator: boolean
+    term: number
 }
 
 export interface ICourse {
@@ -34,6 +47,7 @@ export interface ICourse {
     seatsAvailable: number
     maximumEnrollment: number
     enrollment: number
+    faculty: IFaculty[]
 }
 
 interface ICourseListProps {
@@ -49,6 +63,71 @@ export class CourseList extends React.Component<ICourseListProps, ICourseListSta
 
         this._allItems = props.items
 
+        const theme = getTheme()
+
+        const classNames = mergeStyleSets({
+            compactCard: {
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexWrap: 'wrap',
+                height: '100%',
+            },
+            expandedCard: {
+                padding: '16px 24px'
+            },
+            item: {
+                selectors: {
+                    '&:hover': {
+                        textDecoration: 'underline',
+                        cursor: 'pointer',
+                    },
+                },
+            },
+            expandingCardRow: {},
+            icon: {},
+            compactCardCrn: {},
+            compactCardSubject: {},
+            compactCardCourseTitle: {
+                fontWeight: FontWeights.semibold,
+                fontSize: FontSizes.medium,
+            },
+            compactCardCourseNumber: {
+                fontSize: FontSizes.xxLarge,
+                fontWeight: FontWeights.bold,
+                color: theme.palette.themePrimary,
+                width: '100%',
+                textAlign: 'center'
+            },
+        });
+
+        const onRenderCompactCard = (item: ICourse): JSX.Element => {
+            return (
+                <div className={classNames.compactCard}>
+                    <div className={classNames.compactCardCourseNumber}>
+                        {item.subject} {item.courseNumber}
+                    </div>
+                    <div className={classNames.compactCardCourseTitle}>{item.courseTitle}</div>
+                </div>
+            );
+        };
+
+        const onRenderExpandedCard = (item: ICourse): JSX.Element => {
+            return (
+                <div className={classNames.expandedCard}>
+                    <Text block>
+                        <Icon iconName='Edit' /> {item.courseReferenceNumber}
+                    </Text>
+                    <Text block>
+                        <Icon iconName='Contact' /> {item.faculty[0]?.displayName || 'Unknown'}
+                    </Text>
+                    <Text block>
+                        <Icon iconName='ProgressLoopOuter' /> {item.seatsAvailable} / {item.maximumEnrollment}
+                    </Text>
+                </div>
+            );
+        };
+
         const columns: IColumn[] = [
             {
                 key: 'courseReferenceNumber',
@@ -60,7 +139,21 @@ export class CourseList extends React.Component<ICourseListProps, ICourseListSta
                 onColumnClick: this._onColumnClick,
                 data: 'number',
                 onRender: (item: ICourse) => {
-                    return <Text styles={boldStyle}>{item.courseReferenceNumber}</Text>
+                    return (
+                        <HoverCard
+                            expandedCardOpenDelay={500}
+                            expandingCardProps={{
+                                onRenderCompactCard: onRenderCompactCard,
+                                onRenderExpandedCard: onRenderExpandedCard,
+                                renderData: item,
+                                compactCardHeight: 120,
+                                expandedCardHeight: 200
+                            }}
+                            instantOpenOnClick={true}
+                        >
+                            <Text>{item.courseReferenceNumber}</Text>
+                        </HoverCard>
+                    )
                 },
                 isPadded: true
             },

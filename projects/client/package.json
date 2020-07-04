@@ -5,21 +5,19 @@
   "dependencies": {
     "@babel/plugin-proposal-class-properties": "^7.10.1",
     "@fluentui/react": "^7.117.3",
+    "@reduxjs/toolkit": "^1.4.0",
     "@types/jest": "^25.2.3",
     "@types/node": "^14.0.3",
     "@types/react": "^16.9.35",
     "@types/react-dom": "^16.9.8",
     "@uifabric/azure-themes": "^7.1.22",
     "@uifabric/fluent-theme": "^7.1.91",
+    "@uifabric/react-cards": "^0.109.109",
     "@uifabric/react-hooks": "^7.4.5",
-    "connected-react-router": "^6.8.0",
-    "history": "^5.0.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-redux": "^7.2.0",
     "react-router-dom": "^5.2.0",
-    "redux-logger": "^3.0.6",
-    "redux-thunk": "^2.3.0",
     "typescript": "^3.9.2"
   },
   "scripts": {
@@ -34,11 +32,7 @@
     "@babel/preset-env": "^7.10.2",
     "@babel/preset-react": "^7.10.1",
     "@babel/preset-typescript": "^7.10.1",
-    "@types/history": "^4.7.6",
-    "@types/react-redux": "^7.1.9",
     "@types/react-router-dom": "^5.1.5",
-    "@types/redux-logger": "^3.0.8",
-    "@types/redux-thunk": "^2.1.0",
     "@typescript-eslint/eslint-plugin": "^2.34.0",
     "@typescript-eslint/parser": "^2.34.0",
     "babel-loader": "^8.1.0",
@@ -53,6 +47,8 @@
     "svg-inline-loader": "^0.8.2",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.11",
-    "webpack-dev-server": "^3.11.0"
+    "webpack-dev-server": "^3.11.0",
+    "@types/react-redux": "^7.1.9",
+    "@types/webpack-env": "^1.15.2"
   }
 }

@@ -1,14 +1,14 @@
 import * as React from 'react'
 import { hot } from 'react-hot-loader'
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
-import Welcome from './views/Welcome'
-import SignInForm from './views/SignInForm'
-import SignUpForm from './views/SignUpForm'
-import Settings from './views/Settings'
-import Courses from './views/Courses'
-import NavBar from './components/NavBar'
-import IUser from './interfaces/IUser'
-
+import Welcome from '../views/Welcome'
+import SignInForm from '../views/SignInForm'
+import SignUpForm from '../views/SignUpForm'
+import Settings from '../views/Settings'
+import Courses from '../views/Courses'
+import NavBar from '../components/NavBar'
+import IUser from '../interfaces/IUser'
+import courses from '../helpers/FakeCourseData.json'
 const demoUser: IUser = {
     email: 'bm@a.com',
     firstName: 'b',
@@ -33,7 +33,7 @@ function App() {
                             : <></>}
                     </Route>
                     <Route path="/" exact>
-                        <Courses />
+                        <Courses onAddCourse={console.log} courses={courses}/>
                     </Route>
                     {/* <Route path="/" exact component={Welcome} /> */}
                     <Route path="/signin" exact component={SignInForm} />
