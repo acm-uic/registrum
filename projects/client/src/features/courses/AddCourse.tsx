@@ -7,7 +7,6 @@ import {
     IBasePicker,
     ITag,
     PrimaryButton,
-    mergeStyleSets,
     FontSizes,
     FontWeights,
     IStackStyles,
@@ -50,19 +49,7 @@ export const AddCourse: React.FunctionComponent<IAddCourse> = ({ isOpen, dismiss
         { key: '411', name: '411' },
         { key: '412', name: '412' }
     ]
-
     const searchResults = require('../../helpers/FakeCourseData.json')
-
-    const searchResultsStyles = mergeStyleSets({
-        card: {},
-        cardTitle: {
-            fontSize: FontSizes.medium,
-            fontWight: FontWeights.semibold
-        },
-        cardBody: {
-            fontSize: FontSizes.small
-        },
-    })
 
     const getTextFromItem = (item: ITag): string => item.name
 

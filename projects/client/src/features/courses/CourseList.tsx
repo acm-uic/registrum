@@ -5,7 +5,6 @@ import {
     FontWeights,
     DetailsList,
     HoverCard,
-    IExpandingCardProps,
     DetailsListLayoutMode,
     Selection,
     SelectionMode,
@@ -54,6 +53,44 @@ interface ICourseListProps {
     items: ICourse[]
 }
 
+const theme = getTheme()
+
+const classNames = mergeStyleSets({
+    compactCard: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexWrap: 'wrap',
+        height: '100%',
+    },
+    expandedCard: {
+        padding: '16px 24px'
+    },
+    item: {
+        selectors: {
+            '&:hover': {
+                textDecoration: 'underline',
+                cursor: 'pointer',
+            },
+        },
+    },
+    expandingCardRow: {},
+    icon: {},
+    compactCardCrn: {},
+    compactCardSubject: {},
+    compactCardCourseTitle: {
+        fontWeight: FontWeights.semibold,
+        fontSize: FontSizes.medium,
+    },
+    compactCardCourseNumber: {
+        fontSize: FontSizes.xxLarge,
+        fontWeight: FontWeights.bold,
+        color: theme.palette.themePrimary,
+        width: '100%',
+        textAlign: 'center'
+    },
+})
+
 export class CourseList extends React.Component<ICourseListProps, ICourseListState> {
     private _selection: Selection
     private _allItems: ICourse[]
@@ -63,169 +100,12 @@ export class CourseList extends React.Component<ICourseListProps, ICourseListSta
 
         this._allItems = props.items
 
-        const theme = getTheme()
-
-        const classNames = mergeStyleSets({
-            compactCard: {
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                flexWrap: 'wrap',
-                height: '100%',
-            },
-            expandedCard: {
-                padding: '16px 24px'
-            },
-            item: {
-                selectors: {
-                    '&:hover': {
-                        textDecoration: 'underline',
-                        cursor: 'pointer',
-                    },
-                },
-            },
-            expandingCardRow: {},
-            icon: {},
-            compactCardCrn: {},
-            compactCardSubject: {},
-            compactCardCourseTitle: {
-                fontWeight: FontWeights.semibold,
-                fontSize: FontSizes.medium,
-            },
-            compactCardCourseNumber: {
-                fontSize: FontSizes.xxLarge,
-                fontWeight: FontWeights.bold,
-                color: theme.palette.themePrimary,
-                width: '100%',
-                textAlign: 'center'
-            },
-        });
-
-        const onRenderCompactCard = (item: ICourse): JSX.Element => {
-            return (
-                <div className={classNames.compactCard}>
-                    <div className={classNames.compactCardCourseNumber}>
-                        {item.subject} {item.courseNumber}
-                    </div>
-                    <div className={classNames.compactCardCourseTitle}>{item.courseTitle}</div>
-                </div>
-            );
-        };
-
-        const onRenderExpandedCard = (item: ICourse): JSX.Element => {
-            return (
-                <div className={classNames.expandedCard}>
-                    <Text block>
-                        <Icon iconName='Edit' /> {item.courseReferenceNumber}
-                    </Text>
-                    <Text block>
-                        <Icon iconName='Contact' /> {item.faculty[0]?.displayName || 'Unknown'}
-                    </Text>
-                    <Text block>
-                        <Icon iconName='ProgressLoopOuter' /> {item.seatsAvailable} / {item.maximumEnrollment}
-                    </Text>
-                </div>
-            );
-        };
-
-        const columns: IColumn[] = [
-            {
-                key: 'courseReferenceNumber',
-                name: 'CRN',
-                fieldName: 'courseReferenceNumber',
-                minWidth: 50,
-                maxWidth: 60,
-                isResizable: true,
-                onColumnClick: this._onColumnClick,
-                data: 'number',
-                onRender: (item: ICourse) => {
-                    return (
-                        <HoverCard
-                            expandedCardOpenDelay={300}
-                            expandingCardProps={{
-                                onRenderCompactCard: onRenderCompactCard,
-                                onRenderExpandedCard: onRenderExpandedCard,
-                                renderData: item,
-                                compactCardHeight: 120,
-                                expandedCardHeight: 200
-                            }}
-                            instantOpenOnClick={true}
-                        >
-                            <Text styles={{root: {fontWeight: FontWeights.bold}}}>{item.courseReferenceNumber}</Text>
-                        </HoverCard>
-                    )
-                },
-                isPadded: true
-            },
-            {
-                key: 'subject',
-                name: 'Subject',
-                fieldName: 'subject',
-                minWidth: 50,
-                maxWidth: 60,
-                isResizable: true,
-                onColumnClick: this._onColumnClick,
-                data: 'string',
-                onRender: (item: ICourse) => {
-                    return <Text>{item.subject}</Text>
-                },
-                isPadded: true
-            },
-            {
-                key: 'courseNumber',
-                name: 'Number',
-                fieldName: 'courseNumber',
-                minWidth: 40,
-                maxWidth: 50,
-                isResizable: true,
-                onColumnClick: this._onColumnClick,
-                data: 'number',
-                onRender: (item: ICourse) => {
-                    return <Text>{item.courseNumber}</Text>
-                },
-                isPadded: true
-            },
-            {
-                key: 'seatsAvailable',
-                name: 'Availability',
-                fieldName: 'seatsAvailable',
-                minWidth: 70,
-                maxWidth: 90,
-                isResizable: true,
-                isSorted: true,
-                isSortedDescending: false,
-                onColumnClick: this._onColumnClick,
-                data: 'number',
-                onRender: (item: ICourse) => {
-                    return (
-                        <Text>
-                            {item.seatsAvailable} / {item.maximumEnrollment}
-                        </Text>
-                    )
-                },
-                isPadded: true
-            },
-            {
-                key: 'name',
-                name: 'Name',
-                fieldName: 'name',
-                minWidth: 210,
-                maxWidth: 350,
-                isResizable: true,
-                onColumnClick: this._onColumnClick,
-                data: 'string',
-                onRender: (item: ICourse) => {
-                    return <Text>{item.courseTitle}</Text>
-                },
-                isPadded: true
-            }
-        ]
 
         this._selection = new Selection()
 
         this.state = {
             items: this._allItems,
-            columns: columns,
+            columns: this._columns,
             isModalSelection: false,
             isCompactMode: false
         }
@@ -259,6 +139,126 @@ export class CourseList extends React.Component<ICourseListProps, ICourseListSta
         )
     }
 
+    private _onRenderCompactCard (item: ICourse): JSX.Element {
+        return (
+            <div className={classNames.compactCard}>
+                <div className={classNames.compactCardCourseNumber}>
+                    {item.subject} {item.courseNumber}
+                </div>
+                <div className={classNames.compactCardCourseTitle}>{item.courseTitle}</div>
+            </div>
+        );
+    };
+
+    private _onRenderExpandedCard (item: ICourse): JSX.Element {
+        return (
+            <div className={classNames.expandedCard}>
+                <Text block>
+                    <Icon iconName='Edit' /> {item.courseReferenceNumber}
+                </Text>
+                <Text block>
+                    <Icon iconName='Contact' /> {item.faculty[0]?.displayName || 'Unknown'}
+                </Text>
+                <Text block>
+                    <Icon iconName='ProgressLoopOuter' /> {item.seatsAvailable} / {item.maximumEnrollment}
+                </Text>
+            </div>
+        );
+    };
+
+    private _columns: IColumn[] = [
+        {
+            key: 'courseReferenceNumber',
+            name: 'CRN',
+            fieldName: 'courseReferenceNumber',
+            minWidth: 50,
+            maxWidth: 60,
+            isResizable: true,
+            onColumnClick: this._onColumnClick,
+            data: 'number',
+            onRender: (item: ICourse) => {
+                return (
+                    <HoverCard
+                        expandedCardOpenDelay={300}
+                        expandingCardProps={{
+                            onRenderCompactCard: this._onRenderCompactCard,
+                            onRenderExpandedCard: this._onRenderExpandedCard,
+                            renderData: item,
+                            compactCardHeight: 120,
+                            expandedCardHeight: 200
+                        }}
+                        instantOpenOnClick={true}
+                    >
+                        <Text styles={{root: {fontWeight: FontWeights.bold}}}>{item.courseReferenceNumber}</Text>
+                    </HoverCard>
+                )
+            },
+            isPadded: true
+        },
+        {
+            key: 'subject',
+            name: 'Subject',
+            fieldName: 'subject',
+            minWidth: 50,
+            maxWidth: 60,
+            isResizable: true,
+            onColumnClick: this._onColumnClick,
+            data: 'string',
+            onRender: (item: ICourse) => {
+                return <Text>{item.subject}</Text>
+            },
+            isPadded: true
+        },
+        {
+            key: 'courseNumber',
+            name: 'Number',
+            fieldName: 'courseNumber',
+            minWidth: 40,
+            maxWidth: 50,
+            isResizable: true,
+            onColumnClick: this._onColumnClick,
+            data: 'number',
+            onRender: (item: ICourse) => {
+                return <Text>{item.courseNumber}</Text>
+            },
+            isPadded: true
+        },
+        {
+            key: 'seatsAvailable',
+            name: 'Availability',
+            fieldName: 'seatsAvailable',
+            minWidth: 70,
+            maxWidth: 90,
+            isResizable: true,
+            isSorted: true,
+            isSortedDescending: false,
+            onColumnClick: this._onColumnClick,
+            data: 'number',
+            onRender: (item: ICourse) => {
+                return (
+                    <Text>
+                        {item.seatsAvailable} / {item.maximumEnrollment}
+                    </Text>
+                )
+            },
+            isPadded: true
+        },
+        {
+            key: 'name',
+            name: 'Name',
+            fieldName: 'name',
+            minWidth: 210,
+            maxWidth: 350,
+            isResizable: true,
+            onColumnClick: this._onColumnClick,
+            data: 'string',
+            onRender: (item: ICourse) => {
+                return <Text>{item.courseTitle}</Text>
+            },
+            isPadded: true
+        }
+    ]
+
     private _getKey(item: any, index?: number): string {
         return item.key
     }
@@ -267,7 +267,7 @@ export class CourseList extends React.Component<ICourseListProps, ICourseListSta
         alert(`Item invoked: ${item.name}`)
     }
 
-    private _onColumnClick = (ev: React.MouseEvent<HTMLElement>, column: IColumn): void => {
+    private _onColumnClick (ev: React.MouseEvent<HTMLElement>, column: IColumn): void {
         const { columns, items } = this.state
         const newColumns: IColumn[] = columns.slice()
         const currColumn: IColumn = newColumns.filter(currCol => column.key === currCol.key)[0]
@@ -280,19 +280,20 @@ export class CourseList extends React.Component<ICourseListProps, ICourseListSta
                 newCol.isSortedDescending = true
             }
         })
-        const newItems = _copyAndSort(items, currColumn.fieldName!, currColumn.isSortedDescending)
+        const newItems = CourseList._copyAndSort<ICourse>(items, currColumn.fieldName!, currColumn.isSortedDescending)
         this.setState({
             columns: newColumns,
             items: newItems
         })
     }
+
+    private static _copyAndSort<T>(items: T[], columnKey: string, isSortedDescending?: boolean): T[] {
+        const key = columnKey as keyof T
+        return items
+            .slice(0)
+            .sort((a: T, b: T) => ((isSortedDescending ? a[key] < b[key] : a[key] > b[key]) ? 1 : -1))
+    }
 }
 
-function _copyAndSort<T>(items: T[], columnKey: string, isSortedDescending?: boolean): T[] {
-    const key = columnKey as keyof T
-    return items
-        .slice(0)
-        .sort((a: T, b: T) => ((isSortedDescending ? a[key] < b[key] : a[key] > b[key]) ? 1 : -1))
-}
 
 export default CourseList

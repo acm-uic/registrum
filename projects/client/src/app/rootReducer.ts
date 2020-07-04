@@ -1,9 +1,9 @@
 import { combineReducers } from '@reduxjs/toolkit'
 
-import coursesReducer from '../features/courses/coursesSlice'
+// import coursesReducer from '../features/courses/coursesSlice'
 
 const rootReducer = combineReducers({
-    courses: coursesReducer
+    // courses: coursesReducer
 })
 
 export type RootState = ReturnType<typeof rootReducer>
