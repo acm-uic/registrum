@@ -24,7 +24,8 @@
     "lint": "eslint \"src/**/*.{js,ts}\"",
     "lint:fix": "npm run lint -- --fix",
     "watch": "npx webpack-dev-server --mode development",
-    "build": "npx webpack --mode development"
+    "build": "npx webpack --mode development",
+    "test": "echo 'No Tests' && exit 0"
   },
   "devDependencies": {
     "@babel/cli": "^7.10.1",
