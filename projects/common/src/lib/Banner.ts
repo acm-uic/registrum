@@ -1,3 +1,6 @@
+// TODO: temp hack.. remove
+/* eslint @typescript-eslint/explicit-module-boundary-types: 0 */
+
 import axios, { AxiosInstance } from 'axios'
 import axiosCookieJarSupport from 'axios-cookiejar-support'
 import { CookieJar } from 'tough-cookie'
@@ -152,9 +155,11 @@ export class Banner {
     #term: string
     #subject: string
 
-    #clearCookie = () => (this.#cookieJar = new CookieJar())
+    #clearCookie = (): void => {
+        this.#cookieJar = new CookieJar()
+    }
 
-    #getNewCookie = async () => {
+    #getNewCookie = async (): Promise<void> => {
         const params = new URLSearchParams({
             mode: 'search',
             term: this.#term,
@@ -193,11 +198,9 @@ export class Banner {
             await this.#getNewCookie()
         }
         const params = new URLSearchParams({
-            /* eslint-disable @typescript-eslint/camelcase */
             txt_subject: subject || this.#subject,
             txt_courseNumber: courseNumber,
             txt_term: this.#term,
-            /* eslint-enable @typescript-eslint/camelcase */
             startDatepicker: startDate,
             endDatepicker: endDate,
             pageOffset,
