@@ -5,6 +5,7 @@ export interface IUser {
     firstName: string
     lastName: string
     password: string
+    emailNotificationsEnabled: boolean
 }
 
 export default IUser
