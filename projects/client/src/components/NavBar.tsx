@@ -1,67 +1,65 @@
-import React, { MouseEvent } from 'react'
+import * as React from 'react'
+import {
+    Stack,
+    Persona,
+    Image,
+    Link,
+    IconButton,
+    IContextualMenuProps,
+    IContextualMenuItem,
+    getTheme,
+    mergeStyleSets
+} from '@fluentui/react'
+import Logo from '../logo.svg'
+import { getGravatarImageUrl } from '../helpers/Gravatar'
+import { IUser } from '../interfaces/IUser'
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSignOutAlt, faUser } from '@fortawesome/free-solid-svg-icons'
-import { Link } from 'react-router-dom'
+interface INavBarProps {
+    user?: IUser
+}
 
-import { Navbar, Nav } from 'react-bootstrap'
+const menuItems: IContextualMenuItem[] = [
+    {
+        key: 'signOut',
+        text: 'Sign Out',
+        onClick: () => console.log('Sign Out')
+    },
+    {
+        key: 'settings',
+        text: 'Settings',
+        href: '/settings'
+    }
+]
 
-import SignIn from './SignIn'
-import SignUp from './SignUp'
-import { signOut } from '../utils/functions/authentication'
-import { useSelector } from '@redux/.'
-
-const NavBar = () => {
-    const { user } = useSelector(state => state.auth)
-
+export const NavBar: React.FunctionComponent<INavBarProps> = ({ user }: INavBarProps) => {
+    const menuProps: IContextualMenuProps = {
+        shouldFocusOnMount: true,
+        items: menuItems
+    }
+    const theme = getTheme();
+    const classNames = mergeStyleSets({
+        logo: {
+            fill: theme.palette.themePrimary
+        }
+    })
     return (
-        <Navbar expand="md" bg="light" className="align-middle">
-            <Navbar.Brand as={Link} to="/">
-                <img src="/images/icon-72x72.png" height={30} /> <b>Registrum</b>
-            </Navbar.Brand>
-            <Navbar.Toggle aria-controls="basic-navbar-nav" />
-            <Navbar.Collapse id="basic-navbar-nav">
-                <Nav className="mr-auto">
-                    {user != null && (
-                        <Nav.Link as={Link} to="/classes">
-                            Classes
-                        </Nav.Link>
-                    )}
-                </Nav>
-
-                <Nav>
-                    {user == null && (
-                        <>
-                            <Nav.Link>
-                                <SignIn />
-                            </Nav.Link>
-                            <Nav.Link>
-                                <SignUp />
-                            </Nav.Link>
-                        </>
-                    )}
-
-                    {user != null && (
-                        <>
-                            <Nav.Link as={Link} to="/account">
-                                <FontAwesomeIcon icon={faUser} />
-                                {'  '}
-                                {user.firstname}
-                            </Nav.Link>
-                            <Nav
-                                onClick={async (e: React.MouseEvent<HTMLElement>) => {
-                                    e.preventDefault()
-                                    await signOut()
-                                }}
-                            >
-                                <FontAwesomeIcon icon={faSignOutAlt} />
-                                Sign Out
-                            </Nav>
-                        </>
-                    )}
-                </Nav>
-            </Navbar.Collapse>
-        </Navbar>
+        <nav style={{ padding: 15, marginBottom: 10, borderBottom: '1px solid' }}>
+            <Stack horizontal horizontalAlign="space-between" verticalAlign="center" tokens={{childrenGap: 30}}>
+                <Link href="/">
+                    <Logo height={50} className={classNames.logo} />
+                </Link>
+                {user ? (
+                    <IconButton style={{ padding: 10, height: 50 }} menuProps={menuProps}>
+                        <Persona
+                            hidePersonaDetails={true}
+                            imageUrl={getGravatarImageUrl(user.gravatarId)}
+                        />
+                    </IconButton>
+                ) : (
+                    <></>
+                )}
+            </Stack>
+        </nav>
     )
 }
 

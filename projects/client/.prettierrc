@@ -7,6 +7,5 @@
     "jsxBracketSameLine": false,
     "semi": false,
     "useTabs": false,
-    "arrowParens": "avoid",
-    "jsxIgnoreLineBreak": true
+    "arrowParens": "avoid"
 }

@@ -1,25 +1,24 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
+import * as React from 'react'
+import * as ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
-import { App } from './App'
+import store from './app/store'
+import { configureFakeAPI } from './helpers/FakeAPI'
+import './index.css'
 
-import 'react-app-polyfill/ie11'
-import 'bootstrap/dist/css/bootstrap.css'
-import { register } from './serviceWorker'
+if (process.env.NODE_ENV === 'development') configureFakeAPI()
 
-// ! Configure Redux Store
-import { store } from '@redux/.'
+const render = () => {
+    const App = require('./app/App').default
 
-// * Import styles
-import './styles/index.scss'
+    ReactDOM.render(
+        <Provider store={store}>
+            <App />
+        </Provider>,
+        document.getElementById('root')
+    )
+}
+render()
 
-// * Attempt to fetch current user, and set user
-
-ReactDOM.render(
-    <Provider store={store}>
-        <App />
-    </Provider>,
-    document.getElementById('root')
-)
-console.log(process.env.WEBPUSHPUBLIC)
-register()
+if (process.env.NODE_ENV === 'development' && module.hot) {
+    module.hot.accept('./app/App', render)
+}
