@@ -22,7 +22,9 @@
     "redux": "^4.0.5",
     "redux-devtools-extension": "^2.13.8",
     "axios": "^0.19.2",
-    "registrum-common": "^0.1.0"
+    "registrum-common": "^0.1.0",
+    "@babel/plugin-transform-runtime": "^7.10.4",
+    "regenerator-runtime": "^0.13.5"
   },
   "devDependencies": {
     "@babel/cli": "^7.10.4",
@@ -56,6 +58,6 @@
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.12",
     "webpack-dev-server": "^3.11.0",
-    "@types/axios": "^0.14.0"
+    "@babel/runtime": "^7.10.4"
   }
 }

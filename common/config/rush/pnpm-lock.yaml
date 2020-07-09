@@ -2,9 +2,11 @@ dependencies:
   '@babel/cli': 7.10.4_@babel+core@7.10.4
   '@babel/core': 7.10.4
   '@babel/plugin-proposal-class-properties': 7.10.4_@babel+core@7.10.4
+  '@babel/plugin-transform-runtime': 7.10.4_@babel+core@7.10.4
   '@babel/preset-env': 7.10.4_@babel+core@7.10.4
   '@babel/preset-react': 7.10.4_@babel+core@7.10.4
   '@babel/preset-typescript': 7.10.4_@babel+core@7.10.4
+  '@babel/runtime': 7.10.4
   '@bmiddha/webhooks': 1.1.6_ioredis@4.17.3+mongoose@5.9.22
   '@fluentui/react': 7.121.11_c8cfd8d2632af57a582ce3bb7e56b488
   '@reduxjs/toolkit': 1.4.0
@@ -15,7 +17,6 @@ dependencies:
   '@rush-temp/registrum-common': 'file:projects/registrum-common.tgz'
   '@sendgrid/mail': 7.2.1
   '@types/argparse': 1.0.38
-  '@types/axios': 0.14.0
   '@types/bcrypt': 3.0.0
   '@types/chai': 4.2.11
   '@types/compression': 1.7.0
@@ -87,6 +88,7 @@ dependencies:
   redux: 4.0.5
   redux-devtools-extension: 2.13.8_redux@4.0.5
   redux-thunk: 2.3.0
+  regenerator-runtime: 0.13.5
   style-loader: 1.2.1_webpack@4.43.0
   supertest: 4.0.2
   svg-inline-loader: 0.8.2
@@ -935,6 +937,18 @@ packages:
       '@babel/core': ^7.0.0-0
     resolution:
       integrity: sha512-hGsw1O6Rew1fkFbDImZIEqA8GoidwTAilwCyWqLBM9f+e/u/sQMQu7uX6dyokfOayRuuVfKOW4O7HvaBWM+JlQ==
+  /@babel/plugin-transform-runtime/7.10.4_@babel+core@7.10.4:
+    dependencies:
+      '@babel/core': 7.10.4
+      '@babel/helper-module-imports': 7.10.4
+      '@babel/helper-plugin-utils': 7.10.4
+      resolve: 1.17.0
+      semver: 5.7.1
+    dev: false
+    peerDependencies:
+      '@babel/core': ^7.0.0-0
+    resolution:
+      integrity: sha512-8ULlGv8p+Vuxu+kz2Y1dk6MYS2b/Dki+NO6/0ZlfSj5tMalfDL7jI/o/2a+rrWLqSXvnadEqc2WguB4gdQIxZw==
   /@babel/plugin-transform-shorthand-properties/7.10.4_@babel+core@7.10.4:
     dependencies:
       '@babel/core': 7.10.4
@@ -11320,9 +11334,11 @@ packages:
       '@babel/cli': 7.10.4_@babel+core@7.10.4
       '@babel/core': 7.10.4
       '@babel/plugin-proposal-class-properties': 7.10.4_@babel+core@7.10.4
+      '@babel/plugin-transform-runtime': 7.10.4_@babel+core@7.10.4
       '@babel/preset-env': 7.10.4_@babel+core@7.10.4
       '@babel/preset-react': 7.10.4_@babel+core@7.10.4
       '@babel/preset-typescript': 7.10.4_@babel+core@7.10.4
+      '@babel/runtime': 7.10.4
       '@fluentui/react': 7.121.11_c8cfd8d2632af57a582ce3bb7e56b488
       '@reduxjs/toolkit': 1.4.0
       '@types/axios': 0.14.0
@@ -11355,6 +11371,7 @@ packages:
       redux: 4.0.5
       redux-devtools-extension: 2.13.8_redux@4.0.5
       redux-thunk: 2.3.0
+      regenerator-runtime: 0.13.5
       style-loader: 1.2.1_webpack@4.43.0
       svg-inline-loader: 0.8.2
       typescript: 3.9.6
@@ -11367,7 +11384,7 @@ packages:
     peerDependencies:
       eslint: '*'
     resolution:
-      integrity: sha512-tiWTNi2BRqUAc6cMV72nAFpLD2bX8d/+dA+OaNdjcDj1jii6zBw7at6lk8Lc+o9lMHt3FlZR+AbD1BlPDXEuVA==
+      integrity: sha512-b/29jPYNUZL3+hIGLNt/FKJO8Eo0r/pRpGHZH1XHm8jlF0fLwWbttIQjL3A2yOsBJRKyLp/2MfuBaLJz1hZHSg==
       tarball: 'file:projects/registrum-client.tgz'
     version: 0.0.0
   'file:projects/registrum-common.tgz':
@@ -11408,9 +11425,11 @@ specifiers:
   '@babel/cli': ^7.10.4
   '@babel/core': ^7.10.4
   '@babel/plugin-proposal-class-properties': ^7.10.4
+  '@babel/plugin-transform-runtime': ^7.10.4
   '@babel/preset-env': ^7.10.4
   '@babel/preset-react': ^7.10.4
   '@babel/preset-typescript': ^7.10.4
+  '@babel/runtime': ^7.10.4
   '@bmiddha/webhooks': ^1.1.6
   '@fluentui/react': ^7.121.9
   '@reduxjs/toolkit': ^1.4.0
@@ -11421,7 +11440,6 @@ specifiers:
   '@rush-temp/registrum-common': 'file:./projects/registrum-common.tgz'
   '@sendgrid/mail': ^7.1.1
   '@types/argparse': ^1.0.38
-  '@types/axios': ^0.14.0
   '@types/bcrypt': ^3.0.0
   '@types/chai': ^4.2.11
   '@types/compression': ^1.7.0
@@ -11493,6 +11511,7 @@ specifiers:
   redux: ^4.0.5
   redux-devtools-extension: ^2.13.8
   redux-thunk: ^2.3.0
+  regenerator-runtime: ^0.13.5
   style-loader: ^1.2.1
   supertest: ^4.0.2
   svg-inline-loader: ^0.8.2

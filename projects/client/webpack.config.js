@@ -1,7 +1,7 @@
-const path = require('path');
-const webpack = require('webpack');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const path = require('path')
+const webpack = require('webpack')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
 module.exports = {
     entry: './src/index.tsx',
@@ -11,16 +11,15 @@ module.exports = {
             {
                 test: /\.(ts|js)x?$/i,
                 exclude: /(node_modules)/,
-                loader: "babel-loader",
-                options: { presets: ["@babel/preset-env"] }
+                loader: 'babel-loader'
             },
             {
                 test: /\.css$/,
-                use: ["style-loader", "css-loader"]
+                use: ['style-loader', 'css-loader']
             },
             {
                 test: /\.(png|jpe?g|gif)$/i,
-                use: ['file-loader'],
+                use: ['file-loader']
             },
             {
                 test: /\.svg$/,
@@ -28,7 +27,7 @@ module.exports = {
             }
         ]
     },
-    resolve: { extensions: ["*", ".js", ".jsx", ".ts", ".tsx"] },
+    resolve: { extensions: ['*', '.js', '.jsx', '.ts', '.tsx'] },
     output: {
         path: path.resolve(__dirname, 'dist/'),
         filename: 'bundle.js'
@@ -41,7 +40,7 @@ module.exports = {
     plugins: [
         new CleanWebpackPlugin(),
         new HtmlWebpackPlugin({
-            title: 'Registrum',
+            title: 'Registrum'
         }),
         new webpack.HotModuleReplacementPlugin()
     ]
