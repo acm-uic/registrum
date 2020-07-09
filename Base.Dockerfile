@@ -2,7 +2,7 @@ FROM node:12-alpine AS base
 
 ARG CLIENT_WEBPUSHPUBLIC
 
-ENV NODE_ENV=development \
+ENV NODE_ENV=production \
     CI=true \
     WEBPUSHPUBLIC=$CLIENT_WEBPUSHPUBLIC
 
