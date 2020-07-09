@@ -1,12 +1,12 @@
 import { IUser } from '../../interfaces/IUser'
-import { Course } from 'registrum-common/dist/lib/Banner'
 import { Action } from 'redux'
+import { CourseNumber } from '../../interfaces/CourseNumber'
 
 export const SET_USER = 'SET_USER'
 export const UNSET_USER = 'UNSET_USER'
 
-export const ADD_CLASS = 'ADD_CLASS'
-export const REMOVE_CLASS = 'REMOVE_CLASS'
+export const ADD_COURSE_NUMBER = 'ADD_COURSE_NUMBER'
+export const REMOVE_COURSE_NUMBER = 'REMOVE_COURSE_NUMBER'
 
 // * Set the user
 interface SetUserAction extends Action {
@@ -19,20 +19,8 @@ interface UnsetUserAction extends Action {
     type: typeof UNSET_USER
 }
 
-// * Add a class to the user
-interface AddClassAction extends Action {
-    type: typeof ADD_CLASS
-    payload: Course
-}
-
-// * Add a class to the user
-interface RemoveClassAction extends Action {
-    type: typeof REMOVE_CLASS
-    payload: string
-}
-
 // * Cumulative Type
-export type UserActionTypes = SetUserAction | UnsetUserAction | AddClassAction | RemoveClassAction
+export type UserActionTypes = SetUserAction | UnsetUserAction
 
 // * Data needed to register a new user
 export interface SignUpProps {
