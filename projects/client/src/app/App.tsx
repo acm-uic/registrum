@@ -22,7 +22,7 @@ const demoUser: IUser = {
 }
 
 function App() {
-    const [user, setUser] = React.useState<IUser | undefined>(undefined)
+    const [user, setUser] = React.useState<IUser | undefined>(demoUser)
     const logout = () => setUser(undefined)
 
     return (

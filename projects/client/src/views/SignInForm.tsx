@@ -1,6 +1,5 @@
 import * as React from 'react'
 import { Text, Stack, FontWeights, PrimaryButton, TextField } from '@fluentui/react'
-import UserContext from '../UserContext'
 
 const boldStyle = {
     root: { fontWeight: FontWeights.semibold }
@@ -12,35 +11,52 @@ export const SignInForm: React.FunctionComponent = () => {
 
     const onClickHandler = (event: React.MouseEvent<HTMLButtonElement>) => {}
 
+    const validateEmail = (email: string): string | undefined => {
+        const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return !re.test(String(email).toLowerCase()) ? 'Invalid Email Address' : undefined;
+    }
+
+    const validatePassword = (value: string): string => {
+        return value.length < 3 ? '' : `Input value length must be less than 3. Actual length is ${value.length}.`;
+    };
+
     return (
         <Stack horizontalAlign="center" verticalAlign="center" verticalFill tokens={{childrenGap: 15}}>
             <Text variant="xxLarge" styles={boldStyle}>
                 Sign In
             </Text>
-            <Stack tokens={{childrenGap: 10}}>
+            <Stack tokens={{childrenGap: 10}} styles={{root:{width: '90%', maxWidth: 300}}}>
                 <TextField
                     name="email"
                     label="Email Address"
                     type="email"
                     value={email}
+                    onGetErrorMessage={validateEmail}
                     onChange={(
                         _: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
                         newValue?: string
                     ) => {
                         setEmail(newValue || '')
                     }}
+                    validateOnFocusIn
+                    validateOnFocusOut
+                    validateOnLoad={false}
                 />
                 <TextField
                     name="password"
                     label="Password"
                     type="password"
                     value={password}
+                    onGetErrorMessage={validatePassword}
                     onChange={(
                         _: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
                         newValue?: string
                     ) => {
                         setPassword(newValue || '')
                     }}
+                    validateOnFocusIn
+                    validateOnFocusOut
+                    validateOnLoad={false}
                 />
                 <PrimaryButton type="submit" onClick={onClickHandler}>
                     Sign In

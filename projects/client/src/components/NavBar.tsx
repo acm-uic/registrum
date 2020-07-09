@@ -6,7 +6,9 @@ import {
     Link,
     IconButton,
     IContextualMenuProps,
-    IContextualMenuItem
+    IContextualMenuItem,
+    getTheme,
+    mergeStyleSets
 } from '@fluentui/react'
 import Logo from '../logo.svg'
 import { getGravatarImageUrl } from '../helpers/Gravatar'
@@ -34,19 +36,24 @@ export const NavBar: React.FunctionComponent<INavBarProps> = ({ user }: INavBarP
         shouldFocusOnMount: true,
         items: menuItems
     }
+    const theme = getTheme();
+    const classNames = mergeStyleSets({
+        logo: {
+            fill: theme.palette.themePrimary
+        }
+    })
     return (
         <nav style={{ padding: 15, marginBottom: 10, borderBottom: '1px solid' }}>
             <Stack horizontal horizontalAlign="space-between" verticalAlign="center" tokens={{childrenGap: 30}}>
                 <Link href="/">
-                    <Logo height={50} />
+                    <Logo height={50} className={classNames.logo} />
                 </Link>
                 {user ? (
-                    <IconButton style={{ padding: 15 }} menuProps={menuProps}>
-                        {' '}
+                    <IconButton style={{ padding: 10, height: 50 }} menuProps={menuProps}>
                         <Persona
                             hidePersonaDetails={true}
                             imageUrl={getGravatarImageUrl(user.gravatarId)}
-                        />{' '}
+                        />
                     </IconButton>
                 ) : (
                     <></>
