@@ -1,6 +1,5 @@
 import { IUser } from '../../interfaces/IUser'
 import { Action } from 'redux'
-import { CourseNumber } from '../../interfaces/CourseNumber'
 
 export const SET_USER = 'SET_USER'
 export const UNSET_USER = 'UNSET_USER'
@@ -29,7 +28,6 @@ export interface SignUpProps {
     email: string
     password: string
     emailNotificationsEnabled: boolean
-    boolEmail: boolean
 }
 
 // * Data needed to login using email / password
