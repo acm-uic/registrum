@@ -12,16 +12,16 @@ import { CourseNumber } from '../../interfaces/CourseNumber'
 export interface BannerState {
     terms: Term[]
     subjects: Subject[]
-    courses: Course[]
     courseNumbers: CourseNumber[]
+    courses: Course[]
 }
 
 // * Default values for the Banner reducer
 const initialState: BannerState = {
     terms: [],
     subjects: [],
-    courses: [],
-    courseNumbers: []
+    courseNumbers: [],
+    courses: []
 }
 
 // * Changes state based on action type

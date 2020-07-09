@@ -20,6 +20,11 @@ export const setSubjects = (subjects: Subject[]): BannerActionTypes => ({
     payload: subjects
 })
 
+export const addCourseNumbers = (course_numbers: CourseNumber[]): BannerActionTypes => ({
+    type: ADD_COURSE_NUMBERS,
+    payload: course_numbers
+})
+
 // * Populates the courses with the payload
 export const addCourses = (courses: Course[]): BannerActionTypes => ({
     type: ADD_COURSES,
@@ -27,7 +32,3 @@ export const addCourses = (courses: Course[]): BannerActionTypes => ({
 })
 
 // * Populates the listing with the payload
-export const addCourseNumbers = (course_numbers: CourseNumber[]): BannerActionTypes => ({
-    type: ADD_COURSE_NUMBERS,
-    payload: course_numbers
-})

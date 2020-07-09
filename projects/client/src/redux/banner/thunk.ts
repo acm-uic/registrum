@@ -3,7 +3,7 @@ import axios from 'axios'
 import { AppThunk } from '../store'
 import { setTerms, setSubjects, addCourses, addCourseNumbers } from './actions'
 import { Subject, Term, Course } from 'registrum-common/dist/lib/Banner'
-import { GetListingsProps, GetCoursesProps } from './types'
+import { GetCoursesProps, GetCourseNumbersProps } from './types'
 import { CourseNumber } from '../../interfaces/CourseNumber'
 
 // * Setting the path for the api calls
@@ -64,7 +64,10 @@ export const getSubjects = (): AppThunk => async (dispatch, getState) => {
     }
 }
 
-export const getCourseNumbers = (data: GetCoursesProps): AppThunk => async (dispatch, getState) => {
+export const getCourseNumbers = (data: GetCourseNumbersProps): AppThunk => async (
+    dispatch,
+    getState
+) => {
     // * Destructure data to get relevant info
     const { term, subject } = data
     const { terms, subjects, courseNumbers } = getState().banner
@@ -75,9 +78,9 @@ export const getCourseNumbers = (data: GetCoursesProps): AppThunk => async (disp
     if (!isSubjectValid || !isTermValid) return
 
     // * Check if the query has been already made and return if yes
-    const coursesExist =
+    const courseNumbersExist =
         courseNumbers.filter(c => c.subject === subject && c.term === term).length > 0
-    if (coursesExist) return
+    if (courseNumbersExist) return
 
     try {
         const response = await client.get(`classes/list/${term}/${subject}`)
@@ -98,7 +101,7 @@ export const getCourseNumbers = (data: GetCoursesProps): AppThunk => async (disp
     }
 }
 
-export const getCourses = (data: GetListingsProps): AppThunk => async (dispatch, getState) => {
+export const getCourses = (data: GetCoursesProps): AppThunk => async (dispatch, getState) => {
     // * Destructure data to get relevant info
     const { term, subject, course } = data
     const { terms, subjects, courses, courseNumbers } = getState().banner
@@ -106,20 +109,20 @@ export const getCourses = (data: GetListingsProps): AppThunk => async (dispatch,
     // * Check for bad terms or subjects
     const isTermValid = terms.find(t => t.code === term.toString())
     const isSubjectValid = subjects.find(s => s.code === subject)
-    const isCourseValid = courseNumbers.find(
+    const isCourseNumberValid = courseNumbers.find(
         c => c.number === course && c.subject === subject && c.term === term
     )
-    if (!isSubjectValid || !isTermValid || !isCourseValid) return
+    if (!isSubjectValid || !isTermValid || !isCourseNumberValid) return
 
     // * Check if the query has been already made and return if yes
-    const listingsExist =
+    const coursesExist =
         courses.filter(
             l =>
                 l.subject === subject &&
                 l.term === isTermValid.description &&
                 l.courseNumber === course.toString()
         ).length > 0
-    if (listingsExist) return
+    if (coursesExist) return
 
     try {
         const response = await client.get(`classes/listing/${term}/${subject}/${course}`)

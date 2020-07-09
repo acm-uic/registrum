@@ -18,16 +18,16 @@ interface SetSubjectsAction extends Action {
     payload: Subject[]
 }
 
+// * Add course numbers to redux
+interface AddCourseNumbersAction extends Action {
+    type: typeof ADD_COURSE_NUMBERS
+    payload: CourseNumber[]
+}
+
 // * Add courses to redux
 interface AddCoursesAction extends Action {
     type: typeof ADD_COURSES
     payload: Course[]
-}
-
-// * Add listings to redux
-interface AddListingsAction extends Action {
-    type: typeof ADD_COURSE_NUMBERS
-    payload: CourseNumber[]
 }
 
 // * Cumulative Type
@@ -35,16 +35,16 @@ export type BannerActionTypes =
     | SetTermsAction
     | SetSubjectsAction
     | AddCoursesAction
-    | AddListingsAction
+    | AddCourseNumbersAction
 
 // * Data needed to get current courses
-export interface GetCoursesProps {
+export interface GetCourseNumbersProps {
     term: number
     subject: string
 }
 
 // * Data needed for get relevant classes
-export interface GetListingsProps {
+export interface GetCoursesProps {
     term: number
     subject: string
     course: number
