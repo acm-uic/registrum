@@ -16,41 +16,19 @@ import {
     FontSizes,
     getTheme
 } from '@fluentui/react'
+import { Course, Faculty } from 'registrum-common/dist/lib/Banner'
 
 initializeIcons()
 
 interface ICourseListState {
     columns: IColumn[]
-    items: ICourse[]
+    items: Course[]
     isModalSelection: boolean
     isCompactMode: boolean
 }
 
-export interface IFaculty {
-    bannerId: number
-    category: string
-    class: string
-    courseReferenceNumber: number
-    displayName: string
-    emailAddress: string
-    primaryIndicator: boolean
-    term: number
-}
-
-export interface ICourse {
-    courseReferenceNumber: string
-    subject: string
-    courseNumber: string
-    courseTitle: string
-    term: string
-    seatsAvailable: number
-    maximumEnrollment: number
-    enrollment: number
-    faculty: IFaculty[]
-}
-
 interface ICourseListProps {
-    items: ICourse[]
+    items: Course[]
 }
 
 const theme = getTheme()
@@ -61,7 +39,7 @@ const classNames = mergeStyleSets({
         alignItems: 'center',
         justifyContent: 'center',
         flexWrap: 'wrap',
-        height: '100%',
+        height: '100%'
     },
     expandedCard: {
         padding: '16px 24px'
@@ -70,9 +48,9 @@ const classNames = mergeStyleSets({
         selectors: {
             '&:hover': {
                 textDecoration: 'underline',
-                cursor: 'pointer',
-            },
-        },
+                cursor: 'pointer'
+            }
+        }
     },
     expandingCardRow: {},
     icon: {},
@@ -80,7 +58,7 @@ const classNames = mergeStyleSets({
     compactCardSubject: {},
     compactCardCourseTitle: {
         fontWeight: FontWeights.semibold,
-        fontSize: FontSizes.medium,
+        fontSize: FontSizes.medium
     },
     compactCardCourseNumber: {
         fontSize: FontSizes.xxLarge,
@@ -88,18 +66,17 @@ const classNames = mergeStyleSets({
         color: theme.palette.themePrimary,
         width: '100%',
         textAlign: 'center'
-    },
+    }
 })
 
 export class CourseList extends React.Component<ICourseListProps, ICourseListState> {
     private _selection: Selection
-    private _allItems: ICourse[]
+    private _allItems: Course[]
 
     constructor(props: ICourseListProps) {
         super(props)
 
         this._allItems = props.items
-
 
         this._selection = new Selection()
 
@@ -139,7 +116,7 @@ export class CourseList extends React.Component<ICourseListProps, ICourseListSta
         )
     }
 
-    private _onRenderCompactCard (item: ICourse): JSX.Element {
+    private _onRenderCompactCard(item: Course): JSX.Element {
         return (
             <div className={classNames.compactCard}>
                 <div className={classNames.compactCardCourseNumber}>
@@ -147,24 +124,25 @@ export class CourseList extends React.Component<ICourseListProps, ICourseListSta
                 </div>
                 <div className={classNames.compactCardCourseTitle}>{item.courseTitle}</div>
             </div>
-        );
-    };
+        )
+    }
 
-    private _onRenderExpandedCard (item: ICourse): JSX.Element {
+    private _onRenderExpandedCard(item: Course): JSX.Element {
         return (
             <div className={classNames.expandedCard}>
                 <Text block>
-                    <Icon iconName='Edit' /> {item.courseReferenceNumber}
+                    <Icon iconName="Edit" /> {item.courseReferenceNumber}
                 </Text>
                 <Text block>
-                    <Icon iconName='Contact' /> {item.faculty[0]?.displayName || 'Unknown'}
+                    <Icon iconName="Contact" /> {item.faculty[0]?.displayName || 'Unknown'}
                 </Text>
                 <Text block>
-                    <Icon iconName='ProgressLoopOuter' /> {item.seatsAvailable} / {item.maximumEnrollment}
+                    <Icon iconName="ProgressLoopOuter" /> {item.seatsAvailable} /{' '}
+                    {item.maximumEnrollment}
                 </Text>
             </div>
-        );
-    };
+        )
+    }
 
     private _columns: IColumn[] = [
         {
@@ -176,7 +154,7 @@ export class CourseList extends React.Component<ICourseListProps, ICourseListSta
             isResizable: true,
             onColumnClick: this._onColumnClick,
             data: 'number',
-            onRender: (item: ICourse) => {
+            onRender: (item: Course) => {
                 return (
                     <HoverCard
                         expandedCardOpenDelay={300}
@@ -189,7 +167,9 @@ export class CourseList extends React.Component<ICourseListProps, ICourseListSta
                         }}
                         instantOpenOnClick={true}
                     >
-                        <Text styles={{root: {fontWeight: FontWeights.bold}}}>{item.courseReferenceNumber}</Text>
+                        <Text styles={{ root: { fontWeight: FontWeights.bold } }}>
+                            {item.courseReferenceNumber}
+                        </Text>
                     </HoverCard>
                 )
             },
@@ -204,7 +184,7 @@ export class CourseList extends React.Component<ICourseListProps, ICourseListSta
             isResizable: true,
             onColumnClick: this._onColumnClick,
             data: 'string',
-            onRender: (item: ICourse) => {
+            onRender: (item: Course) => {
                 return <Text>{item.subject}</Text>
             },
             isPadded: true
@@ -218,7 +198,7 @@ export class CourseList extends React.Component<ICourseListProps, ICourseListSta
             isResizable: true,
             onColumnClick: this._onColumnClick,
             data: 'number',
-            onRender: (item: ICourse) => {
+            onRender: (item: Course) => {
                 return <Text>{item.courseNumber}</Text>
             },
             isPadded: true
@@ -234,7 +214,7 @@ export class CourseList extends React.Component<ICourseListProps, ICourseListSta
             isSortedDescending: false,
             onColumnClick: this._onColumnClick,
             data: 'number',
-            onRender: (item: ICourse) => {
+            onRender: (item: Course) => {
                 return (
                     <Text>
                         {item.seatsAvailable} / {item.maximumEnrollment}
@@ -252,7 +232,7 @@ export class CourseList extends React.Component<ICourseListProps, ICourseListSta
             isResizable: true,
             onColumnClick: this._onColumnClick,
             data: 'string',
-            onRender: (item: ICourse) => {
+            onRender: (item: Course) => {
                 return <Text>{item.courseTitle}</Text>
             },
             isPadded: true
@@ -267,7 +247,7 @@ export class CourseList extends React.Component<ICourseListProps, ICourseListSta
         alert(`Item invoked: ${item.name}`)
     }
 
-    private _onColumnClick (ev: React.MouseEvent<HTMLElement>, column: IColumn): void {
+    private _onColumnClick(ev: React.MouseEvent<HTMLElement>, column: IColumn): void {
         const { columns, items } = this.state
         const newColumns: IColumn[] = columns.slice()
         const currColumn: IColumn = newColumns.filter(currCol => column.key === currCol.key)[0]
@@ -280,20 +260,29 @@ export class CourseList extends React.Component<ICourseListProps, ICourseListSta
                 newCol.isSortedDescending = true
             }
         })
-        const newItems = CourseList._copyAndSort<ICourse>(items, currColumn.fieldName!, currColumn.isSortedDescending)
+        const newItems = CourseList._copyAndSort<Course>(
+            items,
+            currColumn.fieldName!,
+            currColumn.isSortedDescending
+        )
         this.setState({
             columns: newColumns,
             items: newItems
         })
     }
 
-    private static _copyAndSort<T>(items: T[], columnKey: string, isSortedDescending?: boolean): T[] {
+    private static _copyAndSort<T>(
+        items: T[],
+        columnKey: string,
+        isSortedDescending?: boolean
+    ): T[] {
         const key = columnKey as keyof T
         return items
             .slice(0)
-            .sort((a: T, b: T) => ((isSortedDescending ? a[key] < b[key] : a[key] > b[key]) ? 1 : -1))
+            .sort((a: T, b: T) =>
+                (isSortedDescending ? a[key] < b[key] : a[key] > b[key]) ? 1 : -1
+            )
     }
 }
-
 
 export default CourseList

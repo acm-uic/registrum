@@ -15,7 +15,7 @@ import { getGravatarImageUrl } from '../helpers/Gravatar'
 import { IUser } from '../interfaces/IUser'
 
 interface INavBarProps {
-    user?: IUser
+    user?: IUser | null
 }
 
 const menuItems: IContextualMenuItem[] = [
@@ -36,7 +36,7 @@ export const NavBar: React.FunctionComponent<INavBarProps> = ({ user }: INavBarP
         shouldFocusOnMount: true,
         items: menuItems
     }
-    const theme = getTheme();
+    const theme = getTheme()
     const classNames = mergeStyleSets({
         logo: {
             fill: theme.palette.themePrimary
@@ -44,7 +44,12 @@ export const NavBar: React.FunctionComponent<INavBarProps> = ({ user }: INavBarP
     })
     return (
         <nav style={{ padding: 15, marginBottom: 10, borderBottom: '1px solid' }}>
-            <Stack horizontal horizontalAlign="space-between" verticalAlign="center" tokens={{childrenGap: 30}}>
+            <Stack
+                horizontal
+                horizontalAlign="space-between"
+                verticalAlign="center"
+                tokens={{ childrenGap: 30 }}
+            >
                 <Link href="/">
                     <Logo height={50} className={classNames.logo} />
                 </Link>

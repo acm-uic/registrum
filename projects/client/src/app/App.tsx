@@ -7,42 +7,27 @@ import SignUpForm from '../views/SignUpForm'
 import Settings from '../views/Settings'
 import Courses from '../views/Courses'
 import NavBar from '../components/NavBar'
-import IUser from '../interfaces/IUser'
 
-// TODO: remove dummy data
-import courses from '../helpers/FakeCourseData.json'
+import { useSelector } from '../redux/store'
 
-const demoUser: IUser = {
-    email: 'bm@a.com',
-    firstName: 'b',
-    lastName: 'b',
-    gravatarId: 'asdasd',
-    password: 'asdasd',
-    id: 3
-}
-
-function App() {
-    const [user, setUser] = React.useState<IUser | undefined>(demoUser)
-    const logout = () => setUser(undefined)
+const App = () => {
+    const { user } = useSelector(state => state.auth)
+    const { courses } = useSelector(state => state.banner)
 
     return (
         <div className="App">
             <Router>
                 <NavBar user={user} />
                 <Switch>
-                    <Route path="/settings" exact>
-                        {user ?
-                            <Settings user={user} />
-                            : <></>}
-                    </Route>
+                    <Route path="/settings">{user ? <Settings user={user} /> : <></>}</Route>
+                    <Route path="/signin" component={SignInForm} />
+                    <Route path="/signup" component={SignUpForm} />
                     <Route path="/" exact>
-                        <Courses onAddCourse={console.log} courses={courses}/>
-                    </Route>
-                    {/* <Route path="/" exact component={Welcome} /> */}
-                    <Route path="/signin" exact component={SignInForm} />
-                    <Route path="/signup" exact component={SignUpForm} />
-                    <Route>
-                        <Redirect to="/" />
+                        {user ? (
+                            <Courses onAddCourse={console.log} courses={courses} />
+                        ) : (
+                            <Welcome />
+                        )}
                     </Route>
                 </Switch>
             </Router>
