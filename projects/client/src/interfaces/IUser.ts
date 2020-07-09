@@ -1,10 +1,10 @@
 export interface IUser {
-    id: number
+    _id: number
     email: string
     gravatarId: string
     firstName: string
     lastName: string
-    password: string
+    subscription: string[]
     emailNotificationsEnabled: boolean
 }
 
