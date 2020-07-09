@@ -7,6 +7,10 @@ import './index.css'
 
 if (process.env.NODE_ENV === 'development') configureFakeAPI()
 
+const root = document.createElement('div');
+root.id = 'root';
+document.body.appendChild(root);
+
 const render = () => {
     const App = require('./app/App').default
 
