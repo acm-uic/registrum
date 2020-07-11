@@ -8,11 +8,23 @@ import Settings from '../views/Settings'
 import Courses from '../views/Courses'
 import NavBar from '../components/NavBar'
 
-import { useSelector } from '../redux/store'
+import { useSelector, useDispatch } from '../redux/store'
+import { updateUser } from '../redux/auth/thunk'
+import { getTerms, getSubjects } from '../redux/banner/thunk'
 
 const App = () => {
     const { user } = useSelector(state => state.auth)
     const { courses } = useSelector(state => state.banner)
+    const dispatch = useDispatch()
+
+    React.useEffect(() => {
+        dispatch(updateUser())
+
+        if (user) {
+            dispatch(getTerms())
+            dispatch(getSubjects())
+        }
+    }, [user])
 
     return (
         <div className="App">
@@ -23,11 +35,7 @@ const App = () => {
                     <Route path="/signin" component={SignInForm} />
                     <Route path="/signup" component={SignUpForm} />
                     <Route path="/" exact>
-                        {user ? (
-                            <Courses onAddCourse={console.log} courses={courses} />
-                        ) : (
-                            <Welcome />
-                        )}
+                        {user ? <Courses courses={courses} /> : <Welcome />}
                     </Route>
                 </Switch>
             </Router>

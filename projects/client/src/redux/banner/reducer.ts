@@ -28,9 +28,9 @@ const initialState: BannerState = {
 export const BannerReducer = (state = initialState, action: BannerActionTypes): BannerState => {
     switch (action.type) {
         case ADD_TERMS:
-            return { ...state, terms: [...state.terms, ...action.payload] }
+            return { ...state, terms: action.payload }
         case ADD_SUBJECTS:
-            return { ...state, subjects: [...state.subjects, ...action.payload] }
+            return { ...state, subjects: action.payload }
         case ADD_COURSE_NUMBERS:
             return { ...state, courseNumbers: [...state.courseNumbers, ...action.payload] }
         case ADD_COURSES:
