@@ -47,5 +47,5 @@ export interface GetCourseNumbersProps {
 export interface GetCoursesProps {
     term: number
     subject: string
-    course: number
+    courseNumber: number
 }

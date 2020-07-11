@@ -88,6 +88,10 @@ export class CourseList extends React.Component<ICourseListProps, ICourseListSta
         }
     }
 
+    componentWillReceiveProps(nextProps: ICourseListProps): void {
+        this.setState({ items: nextProps.items })
+    }
+
     public render() {
         const { columns, isCompactMode, items } = this.state
 

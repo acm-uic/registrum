@@ -74,12 +74,12 @@ export const getCourseNumbers = (data: GetCourseNumbersProps): AppThunk => async
 
     // * Check for bad terms or subjects
     const isTermValid = terms.find(t => t.code == term.toString()) !== undefined
-    const isSubjectValid = subjects.find(s => s.code === subject) !== undefined
+    const isSubjectValid = subjects.find(s => s.code == subject) !== undefined
     if (!isSubjectValid || !isTermValid) return
 
     // * Check if the query has been already made and return if yes
     const courseNumbersExist =
-        courseNumbers.filter(c => c.subject === subject && c.term === term).length > 0
+        courseNumbers.filter(c => c.subject == subject && c.term === term).length > 0
     if (courseNumbersExist) return
 
     try {
@@ -103,29 +103,29 @@ export const getCourseNumbers = (data: GetCourseNumbersProps): AppThunk => async
 
 export const getCourses = (data: GetCoursesProps): AppThunk => async (dispatch, getState) => {
     // * Destructure data to get relevant info
-    const { term, subject, course } = data
+    const { term, subject, courseNumber } = data
     const { terms, subjects, courses, courseNumbers } = getState().banner
 
-    // * Check for bad terms or subjects
-    const isTermValid = terms.find(t => t.code === term.toString())
-    const isSubjectValid = subjects.find(s => s.code === subject)
-    const isCourseNumberValid = courseNumbers.find(
-        c => c.number === course && c.subject === subject && c.term === term
-    )
-    if (!isSubjectValid || !isTermValid || !isCourseNumberValid) return
+    // // * Check for bad terms or subjects
+    // const isTermValid = terms.find(t => t.code == term.toString())
+    // const isSubjectValid = subjects.find(s => s.code == subject)
+    // const isCourseNumberValid = courseNumbers.find(
+    //     c => c.number === courseNumber && c.subject == subject && c.term === term
+    // )
+    // if (!isSubjectValid || !isTermValid || !isCourseNumberValid) return
 
-    // * Check if the query has been already made and return if yes
-    const coursesExist =
-        courses.filter(
-            l =>
-                l.subject === subject &&
-                l.term === isTermValid.description &&
-                l.courseNumber === course.toString()
-        ).length > 0
-    if (coursesExist) return
+    // // * Check if the query has been already made and return if yes
+    // const coursesExist =
+    //     courses.filter(
+    //         l =>
+    //             l.subject === subject &&
+    //             l.term === isTermValid.description &&
+    //             l.courseNumber === courseNumber.toString()
+    //     ).length > 0
+    // if (coursesExist) return
 
     try {
-        const response = await client.get(`classes/listing/${term}/${subject}/${course}`)
+        const response = await client.get(`classes/listing/${term}/${subject}/${courseNumber}`)
 
         if (response.status === 200) {
             const parsed = response.data as Course[]

@@ -7,14 +7,14 @@ import SignUpForm from '../views/SignUpForm'
 import Settings from '../views/Settings'
 import Courses from '../views/Courses'
 import NavBar from '../components/NavBar'
-
+import axios from 'axios'
 import { useSelector, useDispatch } from '../redux/store'
-import { updateUser } from '../redux/auth/thunk'
+import { updateUser, getUserCourses } from '../redux/auth/thunk'
 import { getTerms, getSubjects } from '../redux/banner/thunk'
+import { Course } from 'registrum-common/dist/lib/Banner'
 
 const App = () => {
-    const { user } = useSelector(state => state.auth)
-    const { courses } = useSelector(state => state.banner)
+    const { user, courses } = useSelector(state => state.auth)
     const dispatch = useDispatch()
 
     React.useEffect(() => {
@@ -23,6 +23,7 @@ const App = () => {
         if (user) {
             dispatch(getTerms())
             dispatch(getSubjects())
+            dispatch(getUserCourses())
         }
     }, [user])
 

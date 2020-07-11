@@ -20,7 +20,8 @@ import {
 import { Card, ICardTokens, ICardSectionStyles, ICardSectionTokens } from '@uifabric/react-cards'
 import { useSelector, useDispatch } from '../../redux/store'
 import { Course } from 'registrum-common/dist/lib/Banner'
-import { getCourseNumbers } from '../../redux/banner/thunk'
+import { getCourseNumbers, getCourses } from '../../redux/banner/thunk'
+import { courseSubscribe } from '../../redux/auth/thunk'
 
 export interface IAddCourse {
     isOpen: boolean
@@ -31,6 +32,7 @@ export const AddCourse: React.FunctionComponent<IAddCourse> = ({ isOpen, dismiss
     const { terms, subjects, courseNumbers, courses } = useSelector(state => state.banner)
     const [selectedTerms, setSelectedTerms] = React.useState<ITag[]>([])
     const [selectedSubjects, setSelectedSubjects] = React.useState<ITag[]>([])
+    const [selectedCourseNumbers, setSelectedCourseNumbers] = React.useState<ITag[]>([])
     const dispatch = useDispatch()
 
     const handleChangeSubjects = (items?: ITag[]) => {
@@ -41,6 +43,21 @@ export const AddCourse: React.FunctionComponent<IAddCourse> = ({ isOpen, dismiss
                 items.forEach(({ key: subject }) => {
                     dispatch(getCourseNumbers({ term: Number(term), subject: subject.toString() }))
                 })
+            })
+        }
+    }
+
+    const handleChangeCourseNumbers = (items?: ITag[]) => {
+        if (items) {
+            setSelectedCourseNumbers(items)
+
+            items.forEach(({ key }) => {
+                // console.log(key)
+                const [term, subject, courseNumber] = (key as string).split(' ')
+
+                dispatch(
+                    getCourses({ term: Number(term), subject, courseNumber: Number(courseNumber) })
+                )
             })
         }
     }
@@ -61,7 +78,7 @@ export const AddCourse: React.FunctionComponent<IAddCourse> = ({ isOpen, dismiss
             )
         })
         .map(cn => ({
-            key: cn.term + cn.subject + cn.number,
+            key: cn.term + ' ' + cn.subject + ' ' + cn.number,
             name: cn.subject + ' ' + cn.number.toString()
         }))
 
@@ -210,7 +227,7 @@ export const AddCourse: React.FunctionComponent<IAddCourse> = ({ isOpen, dismiss
                     removeButtonAriaLabel="Remove"
                     onResolveSuggestions={onCourseNumberFilterChanged}
                     getTextFromItem={getTextFromItem}
-                    onChange={console.log}
+                    onChange={handleChangeCourseNumbers}
                 />
                 <PrimaryButton text="Search" />
             </Stack>
@@ -245,7 +262,13 @@ export const AddCourse: React.FunctionComponent<IAddCourse> = ({ isOpen, dismiss
                             styles={footerCardSectionStyles}
                             tokens={footerCardSectionTokens}
                         >
-                            <Icon iconName="Add" styles={iconStyles} onClick={console.log} />
+                            <Icon
+                                iconName="Add"
+                                styles={iconStyles}
+                                onClick={() => {
+                                    dispatch(courseSubscribe({ crn: result.courseReferenceNumber }))
+                                }}
+                            />
                         </Card.Section>
                     </Card>
                 ))}
