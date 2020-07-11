@@ -9,7 +9,12 @@ interface Configuration extends WebpackConfiguration {
 
 const config: Configuration = {
     entry: { bundle: './src/index.tsx', serviceWorker: './src/serviceWorker.ts' },
-    mode: 'development',
+    mode:
+        process.env.NODE_ENV === 'production'
+            ? 'production'
+            : process.env.NODE_ENV === 'none'
+            ? 'none'
+            : 'development',
     module: {
         rules: [
             {
