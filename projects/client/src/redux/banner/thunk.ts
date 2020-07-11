@@ -73,7 +73,7 @@ export const getCourseNumbers = (data: GetCourseNumbersProps): AppThunk => async
     const { terms, subjects, courseNumbers } = getState().banner
 
     // * Check for bad terms or subjects
-    const isTermValid = terms.find(t => t.code === term.toString()) !== undefined
+    const isTermValid = terms.find(t => t.code == term.toString()) !== undefined
     const isSubjectValid = subjects.find(s => s.code === subject) !== undefined
     if (!isSubjectValid || !isTermValid) return
 
