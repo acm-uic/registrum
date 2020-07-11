@@ -7,11 +7,9 @@ import SignUpForm from '../views/SignUpForm'
 import Settings from '../views/Settings'
 import Courses from '../views/Courses'
 import NavBar from '../components/NavBar'
-import axios from 'axios'
 import { useSelector, useDispatch } from '../redux/store'
 import { updateUser, getUserCourses } from '../redux/auth/thunk'
 import { getTerms, getSubjects } from '../redux/banner/thunk'
-import { Course } from 'registrum-common/dist/lib/Banner'
 
 const App = () => {
     const { user, courses } = useSelector(state => state.auth)
@@ -44,4 +42,4 @@ const App = () => {
     )
 }
 
-export default hot(module)(App)
+export default App
