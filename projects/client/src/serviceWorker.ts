@@ -24,7 +24,7 @@ function toByteArray(base64String: string) {
 }
 
 // * Finish SW Setup (Subscribe to Notifications)
-export const initializeSW = async (registration: ServiceWorkerRegistration) => {
+export const initializeSW = async (registration: ServiceWorkerRegistration): Promise<void> => {
     if (!process.env.WEBPUSHPUBLIC) return
 
     // * Ask for permission
@@ -51,7 +51,7 @@ export const initializeSW = async (registration: ServiceWorkerRegistration) => {
     }
 }
 
-export function register() {
+export const register = (): void => {
     if ('serviceWorker' in navigator && (process.env.NODE_ENV === 'production' || isLocalhost)) {
         const swUrl = `./serviceWorker.js`
 
@@ -69,7 +69,7 @@ export function register() {
     }
 }
 
-export function unregister() {
+export const unregister = (): void => {
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.ready
             .then(registration => {
@@ -99,13 +99,7 @@ self.addEventListener('install', event => {
 
     event.waitUntil(
         caches.open('registrum').then(cache => {
-            return cache.addAll([
-                './index.html',
-                './bundle.js',
-                './manifest.json',
-                './images/icon-72x72.png',
-                './images/icon-144x144.png'
-            ])
+            return cache.addAll(['./index.html', './bundle.js', './manifest.json'])
         })
     )
 })

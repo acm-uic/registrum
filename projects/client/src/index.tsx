@@ -1,28 +1,16 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
+import App from './app/App'
 import { store } from './redux/store'
-import { configureFakeAPI } from './helpers/FakeAPI'
 import './index.css'
+import * as serviceWorker from './serviceWorker'
 
-if (process.env.NODE_ENV === 'development') configureFakeAPI()
+ReactDOM.render(
+    <Provider store={store}>
+        <App />
+    </Provider>,
+    document.getElementById('root')
+)
 
-const root = document.createElement('div');
-root.id = 'root';
-document.body.appendChild(root);
-
-const render = () => {
-    const App = require('./app/App').default
-
-    ReactDOM.render(
-        <Provider store={store}>
-            <App />
-        </Provider>,
-        document.getElementById('root')
-    )
-}
-render()
-
-if (process.env.NODE_ENV === 'development' && module.hot) {
-    module.hot.accept('./app/App', render)
-}
+serviceWorker.register()
