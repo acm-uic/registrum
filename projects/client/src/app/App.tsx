@@ -7,42 +7,34 @@ import SignUpForm from '../views/SignUpForm'
 import Settings from '../views/Settings'
 import Courses from '../views/Courses'
 import NavBar from '../components/NavBar'
-import IUser from '../interfaces/IUser'
+import { useSelector, useDispatch } from '../redux/store'
+import { updateUser, getUserCourses } from '../redux/auth/thunk'
+import { getTerms, getSubjects } from '../redux/banner/thunk'
 
-// TODO: remove dummy data
-import courses from '../helpers/FakeCourseData.json'
+const App = () => {
+    const { user, courses } = useSelector(state => state.auth)
+    const dispatch = useDispatch()
 
-const demoUser: IUser = {
-    email: 'bm@a.com',
-    firstName: 'b',
-    lastName: 'b',
-    gravatarId: 'asdasd',
-    password: 'asdasd',
-    id: 3
-}
+    React.useEffect(() => {
+        dispatch(updateUser())
 
-function App() {
-    const [user, setUser] = React.useState<IUser | undefined>(demoUser)
-    const logout = () => setUser(undefined)
+        if (user) {
+            dispatch(getTerms())
+            dispatch(getSubjects())
+            dispatch(getUserCourses())
+        }
+    }, [user])
 
     return (
         <div className="App">
             <Router>
                 <NavBar user={user} />
                 <Switch>
-                    <Route path="/settings" exact>
-                        {user ?
-                            <Settings user={user} />
-                            : <></>}
-                    </Route>
+                    <Route path="/settings">{user ? <Settings user={user} /> : <></>}</Route>
+                    <Route path="/signin" component={SignInForm} />
+                    <Route path="/signup" component={SignUpForm} />
                     <Route path="/" exact>
-                        <Courses onAddCourse={console.log} courses={courses}/>
-                    </Route>
-                    {/* <Route path="/" exact component={Welcome} /> */}
-                    <Route path="/signin" exact component={SignInForm} />
-                    <Route path="/signup" exact component={SignUpForm} />
-                    <Route>
-                        <Redirect to="/" />
+                        {user ? <Courses courses={courses} /> : <Welcome />}
                     </Route>
                 </Switch>
             </Router>
@@ -50,4 +42,4 @@ function App() {
     )
 }
 
-export default hot(module)(App)
+export default App

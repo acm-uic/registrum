@@ -18,7 +18,13 @@
     "react-dom": "^16.13.1",
     "react-redux": "^7.2.0",
     "react-router-dom": "^5.2.0",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "redux": "^4.0.5",
+    "redux-devtools-extension": "^2.13.8",
+    "axios": "^0.19.2",
+    "registrum-common": "^0.1.0",
+    "@babel/plugin-transform-runtime": "^7.10.4",
+    "regenerator-runtime": "^0.13.5"
   },
   "devDependencies": {
     "@babel/cli": "^7.10.4",
@@ -44,13 +50,18 @@
     "file-loader": "^6.0.0",
     "html-webpack-plugin": "^4.3.0",
     "prettier": "^2.0.5",
-    "react-hot-loader": "^4.12.21",
     "react-svg-loader": "^3.0.3",
     "style-loader": "^1.2.1",
     "svg-inline-loader": "^0.8.2",
     "typescript": "^3.9.6",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.12",
-    "webpack-dev-server": "^3.11.0"
+    "webpack-dev-server": "^3.11.0",
+    "@babel/runtime": "^7.10.4",
+    "copy-webpack-plugin": "^6.0.3",
+    "@types/copy-webpack-plugin": "^6.0.0",
+    "@types/webpack": "^4.41.21",
+    "ts-node": "^8.10.1",
+    "@types/webpack-dev-server": "^3.11.0"
   }
 }

@@ -8,14 +8,19 @@ const boldStyle = {
 
 export const HomePage: React.FunctionComponent = () => {
     return (
-        <Stack horizontalAlign="center" verticalAlign="center" verticalFill tokens={{childrenGap: 15}}>
+        <Stack
+            horizontalAlign="center"
+            verticalAlign="center"
+            verticalFill
+            tokens={{ childrenGap: 15 }}
+        >
             <Text variant="xxLarge" styles={boldStyle}>
                 Welcome to Registrum
             </Text>
             <Text variant="large">
                 To continue, sign in. If you're a new user, register an account.
             </Text>
-            <Stack horizontal tokens={{childrenGap: 15}}>
+            <Stack horizontal tokens={{ childrenGap: 15 }}>
                 <RouterLink to="/signin" component={PrimaryButton}>
                     Sign In
                 </RouterLink>

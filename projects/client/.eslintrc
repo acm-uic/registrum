@@ -10,6 +10,7 @@
         "plugin:prettier/recommended"
     ],
     "rules": {
+        "no-unused-vars": "off",
         "no-trailing-spaces": "warn",
         "@typescript-eslint/explicit-function-return-type": "off",
         "@typescript-eslint/no-explicit-any": 1,
