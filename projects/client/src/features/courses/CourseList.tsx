@@ -21,10 +21,11 @@ import { Course, Faculty } from 'registrum-common/dist/lib/Banner'
 initializeIcons()
 
 interface ICourseListState {
-    columns: IColumn[]
-    items: Course[]
-    isModalSelection: boolean
-    isCompactMode: boolean
+    selections?: Selection
+    columns?: IColumn[]
+    items?: Course[]
+    isModalSelection?: boolean
+    isCompactMode?: boolean
 }
 
 interface ICourseListProps {
@@ -70,52 +71,48 @@ const classNames = mergeStyleSets({
 })
 
 export class CourseList extends React.Component<ICourseListProps, ICourseListState> {
-    private _selection: Selection
-    private _allItems: Course[]
-
     constructor(props: ICourseListProps) {
         super(props)
 
-        this._allItems = props.items
-
-        this._selection = new Selection()
-
         this.state = {
-            items: this._allItems,
+            selections: new Selection(),
+            items: props.items,
             columns: this._columns,
             isModalSelection: false,
             isCompactMode: false
         }
     }
 
-    componentWillReceiveProps(nextProps: ICourseListProps): void {
-        this.setState({ items: nextProps.items })
+    static getDerivedStateFromProps(nextProps: ICourseListProps): ICourseListState {
+        return { items: nextProps.items }
     }
 
-    public render() {
-        const { columns, isCompactMode, items } = this.state
+    render = (): JSX.Element => {
+        const { columns, isCompactMode, items, selections } = this.state
 
         return (
             <>
-                <MarqueeSelection selection={this._selection}>
-                    <DetailsList
-                        items={items}
-                        compact={isCompactMode}
-                        columns={columns}
-                        selectionMode={SelectionMode.multiple}
-                        getKey={this._getKey}
-                        setKey="multiple"
-                        layoutMode={DetailsListLayoutMode.justified}
-                        isHeaderVisible={true}
-                        selection={this._selection}
-                        selectionPreservedOnEmptyClick={true}
-                        onItemInvoked={this._onItemInvoked}
-                        enterModalSelectionOnTouch={true}
-                        ariaLabelForSelectionColumn="Toggle selection"
-                        ariaLabelForSelectAllCheckbox="Toggle selection for all items"
-                        checkButtonAriaLabel="Row checkbox"
-                    />
-                </MarqueeSelection>
+                {selections && items && (
+                    <MarqueeSelection selection={selections}>
+                        <DetailsList
+                            items={items}
+                            compact={isCompactMode}
+                            columns={columns}
+                            selectionMode={SelectionMode.multiple}
+                            getKey={this._getKey}
+                            setKey="multiple"
+                            layoutMode={DetailsListLayoutMode.justified}
+                            isHeaderVisible={true}
+                            selection={selections}
+                            selectionPreservedOnEmptyClick={true}
+                            onItemInvoked={this._onItemInvoked}
+                            enterModalSelectionOnTouch={true}
+                            ariaLabelForSelectionColumn="Toggle selection"
+                            ariaLabelForSelectAllCheckbox="Toggle selection for all items"
+                            checkButtonAriaLabel="Row checkbox"
+                        />
+                    </MarqueeSelection>
+                )}
             </>
         )
     }
@@ -243,7 +240,7 @@ export class CourseList extends React.Component<ICourseListProps, ICourseListSta
         }
     ]
 
-    private _getKey(item: any, index?: number): string {
+    private _getKey(item: any): string {
         return item.key
     }
 
@@ -253,6 +250,9 @@ export class CourseList extends React.Component<ICourseListProps, ICourseListSta
 
     private _onColumnClick(ev: React.MouseEvent<HTMLElement>, column: IColumn): void {
         const { columns, items } = this.state
+
+        if (!columns || !items) return
+
         const newColumns: IColumn[] = columns.slice()
         const currColumn: IColumn = newColumns.filter(currCol => column.key === currCol.key)[0]
         newColumns.forEach((newCol: IColumn) => {
