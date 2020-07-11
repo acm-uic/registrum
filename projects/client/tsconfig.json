@@ -1,23 +1,26 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "esnext",
     "lib": [
+      "WebWorker",
       "dom",
       "dom.iterable",
-      "esnext"
+      "esnext",
     ],
+    "module": "CommonJS",
     "allowJs": true,
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
-    "module": "esnext",
     "moduleResolution": "node",
+    "esModuleInterop": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react"
   },
+  "baseUrl": "src",
   "include": [
     "src"
   ]
