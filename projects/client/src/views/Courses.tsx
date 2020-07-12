@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Stack, CommandBar, Selection, ICommandBarItemProps, Spinner, SpinnerSize } from '@fluentui/react'
+import { Stack, CommandBar, Selection, ICommandBarItemProps } from '@fluentui/react'
 import { useConstCallback } from '@uifabric/react-hooks'
 import { CourseList } from '../features/courses/CourseList'
 import AddCourse from '../features/courses/AddCourse'
@@ -8,7 +8,7 @@ import { useDispatch } from '../redux/store'
 import { updateUser } from '../redux/auth/thunk'
 
 interface ICoursesProps {
-    courses: Course[] | undefined
+    courses: Course[]
 }
 
 export const Courses: React.FunctionComponent<ICoursesProps> = ({ courses }: ICoursesProps) => {
@@ -42,14 +42,14 @@ export const Courses: React.FunctionComponent<ICoursesProps> = ({ courses }: ICo
 
     const farItems: ICommandBarItemProps[] = [
         {
-          key: 'info',
-          text: 'Details',
-          ariaLabel: 'Details',
-          iconOnly: true,
-          iconProps: { iconName: 'Info' },
-          onClick: () => console.log(selection.count),
-        },
-      ]
+            key: 'info',
+            text: 'Details',
+            ariaLabel: 'Details',
+            iconOnly: true,
+            iconProps: { iconName: 'Info' },
+            onClick: () => console.log(selection.count)
+        }
+    ]
 
     return (
         <Stack tokens={{ childrenGap: 15 }}>
@@ -59,11 +59,8 @@ export const Courses: React.FunctionComponent<ICoursesProps> = ({ courses }: ICo
                 ariaLabel="Use left and right arrow keys to navigate between commands"
             />
             <AddCourse isOpen={isAddCoursesPanelOpen} dismissPanel={dismissAddCoursesPanel} />
-            {courses && courses.length > 0 ? (
-                <CourseList selection={selection} items={courses} />
-            ) : (
-                <Spinner size={SpinnerSize.large} />
-            )}
+
+            <CourseList selection={selection} items={courses} />
         </Stack>
     )
 }
