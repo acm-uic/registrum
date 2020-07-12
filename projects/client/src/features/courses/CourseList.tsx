@@ -1,6 +1,5 @@
 import * as React from 'react'
 import {
-    TextField,
     Text,
     FontWeights,
     DetailsList,
@@ -9,27 +8,31 @@ import {
     Selection,
     SelectionMode,
     IColumn,
-    MarqueeSelection,
+    Stack,
     Icon,
     initializeIcons,
     mergeStyleSets,
     FontSizes,
-    getTheme
+    IButton,
+    getTheme,
+    IDetailsList,
+    IconButton,
+    ContextualMenu, ContextualMenuItemType, IContextualMenuItem
 } from '@fluentui/react'
 import { Course, Faculty } from 'registrum-common/dist/lib/Banner'
 
 initializeIcons()
 
 interface ICourseListState {
-    selections?: Selection
-    columns?: IColumn[]
-    items?: Course[]
-    isModalSelection?: boolean
-    isCompactMode?: boolean
+    columns: IColumn[]
+    items: Course[]
+    showContextualMenu: boolean
+    contextMenuTarget: MouseEvent | undefined
 }
 
 interface ICourseListProps {
     items: Course[]
+    selection: Selection
 }
 
 const theme = getTheme()
@@ -71,48 +74,55 @@ const classNames = mergeStyleSets({
 })
 
 export class CourseList extends React.Component<ICourseListProps, ICourseListState> {
+
+    private _selection: Selection
+
     constructor(props: ICourseListProps) {
         super(props)
 
+        this._selection = new Selection()
+
         this.state = {
-            selections: new Selection(),
             items: props.items,
             columns: this._columns,
-            isModalSelection: false,
-            isCompactMode: false
+            showContextualMenu: false,
+            contextMenuTarget: undefined
         }
     }
 
-    static getDerivedStateFromProps(nextProps: ICourseListProps): ICourseListState {
-        return { items: nextProps.items }
+    public componentDidUpdate(prevProps: ICourseListProps) {
+        if (this.props.items !== prevProps.items) {
+            this.setState({items: this.props.items})
+        }
     }
 
-    render = (): JSX.Element => {
-        const { columns, isCompactMode, items, selections } = this.state
+    public render() {
+        const { columns, items, showContextualMenu, contextMenuTarget } = this.state
 
         return (
             <>
-                {selections && items && (
-                    <MarqueeSelection selection={selections}>
-                        <DetailsList
-                            items={items}
-                            compact={isCompactMode}
-                            columns={columns}
-                            selectionMode={SelectionMode.multiple}
-                            getKey={this._getKey}
-                            setKey="multiple"
-                            layoutMode={DetailsListLayoutMode.justified}
-                            isHeaderVisible={true}
-                            selection={selections}
-                            selectionPreservedOnEmptyClick={true}
-                            onItemInvoked={this._onItemInvoked}
-                            enterModalSelectionOnTouch={true}
-                            ariaLabelForSelectionColumn="Toggle selection"
-                            ariaLabelForSelectAllCheckbox="Toggle selection for all items"
-                            checkButtonAriaLabel="Row checkbox"
-                        />
-                    </MarqueeSelection>
-                )}
+                <ContextualMenu
+                    items={this._menuItems}
+                    hidden={!showContextualMenu}
+                    target={contextMenuTarget}
+                    onItemClick={this._onHideContextualMenu}
+                    onDismiss={this._onHideContextualMenu}
+                />
+                <DetailsList
+                    items={items}
+                    columns={columns}
+                    selectionMode={SelectionMode.single}
+                    getKey={this._getKey}
+                    setKey="none"
+                    selection={this._selection}
+                    layoutMode={DetailsListLayoutMode.justified}
+                    isHeaderVisible={true}
+                    onItemContextMenu={this._onItemContextMenu}
+                    compact={false}
+                    ariaLabelForSelectionColumn="Toggle selection"
+                    ariaLabelForSelectAllCheckbox="Toggle selection for all items"
+                    checkButtonAriaLabel="Row checkbox"
+                />
             </>
         )
     }
@@ -145,33 +155,72 @@ export class CourseList extends React.Component<ICourseListProps, ICourseListSta
         )
     }
 
+    private _onHideContextualMenu = () => this.setState({ showContextualMenu: false });
+    private _onShowContextualMenu = (ev?: MouseEvent) => {
+        this.setState({ showContextualMenu: true, contextMenuTarget: ev });
+    }
+
+    private static _copyAndSort<T>(items: T[], columnKey: string, isSortedDescending?: boolean): T[] {
+        const key = columnKey as keyof T;
+        return items.slice(0).sort((a: T, b: T) => ((isSortedDescending ? a[key] < b[key] : a[key] > b[key]) ? 1 : -1));
+    }
+
+    private _onColumnClick = (_: React.MouseEvent<HTMLElement>, column: IColumn): void => {
+        const { columns, items } = this.state;
+        const newColumns: IColumn[] = columns.slice();
+        const currColumn: IColumn = newColumns.filter(currCol => column.key === currCol.key)[0];
+        newColumns.forEach((newCol: IColumn) => {
+            if (newCol === currColumn) {
+                currColumn.isSortedDescending = !currColumn.isSortedDescending;
+                currColumn.isSorted = true;
+            } else {
+                newCol.isSorted = false;
+                newCol.isSortedDescending = true;
+            }
+        });
+        const newItems = CourseList._copyAndSort<Course>(items, currColumn.fieldName!, currColumn.isSortedDescending);
+        this.setState({
+            columns: newColumns,
+            items: newItems,
+        });
+    };
+
     private _columns: IColumn[] = [
         {
             key: 'courseReferenceNumber',
             name: 'CRN',
             fieldName: 'courseReferenceNumber',
-            minWidth: 50,
+            minWidth: 60,
             maxWidth: 60,
             isResizable: true,
             onColumnClick: this._onColumnClick,
-            data: 'number',
             onRender: (item: Course) => {
                 return (
-                    <HoverCard
-                        expandedCardOpenDelay={300}
-                        expandingCardProps={{
-                            onRenderCompactCard: this._onRenderCompactCard,
-                            onRenderExpandedCard: this._onRenderExpandedCard,
-                            renderData: item,
-                            compactCardHeight: 120,
-                            expandedCardHeight: 200
-                        }}
-                        instantOpenOnClick={true}
-                    >
-                        <Text styles={{ root: { fontWeight: FontWeights.bold } }}>
-                            {item.courseReferenceNumber}
-                        </Text>
-                    </HoverCard>
+                    <>
+                        <Stack horizontal horizontalAlign='space-between'>
+                            <HoverCard
+                                expandedCardOpenDelay={300}
+                                expandingCardProps={{
+                                    onRenderCompactCard: this._onRenderCompactCard,
+                                    onRenderExpandedCard: this._onRenderExpandedCard,
+                                    renderData: item,
+                                    compactCardHeight: 120,
+                                    expandedCardHeight: 200
+                                }}
+                                instantOpenOnClick={true}
+                            >
+                                <Text styles={{ root: { fontWeight: FontWeights.bold } }}>{item.courseReferenceNumber}</Text>
+                            </HoverCard>
+                            <IconButton
+                                iconProps={{ iconName: 'MoreVertical' }}
+                                styles={{ root: { height: '100%', marginTop: 2 } }}
+                                onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
+                                    event.persist()
+                                    this._onShowContextualMenu(event as unknown as MouseEvent)
+                                }}
+                            />
+                        </Stack>
+                    </>
                 )
             },
             isPadded: true
@@ -184,7 +233,6 @@ export class CourseList extends React.Component<ICourseListProps, ICourseListSta
             maxWidth: 60,
             isResizable: true,
             onColumnClick: this._onColumnClick,
-            data: 'string',
             onRender: (item: Course) => {
                 return <Text>{item.subject}</Text>
             },
@@ -198,7 +246,6 @@ export class CourseList extends React.Component<ICourseListProps, ICourseListSta
             maxWidth: 50,
             isResizable: true,
             onColumnClick: this._onColumnClick,
-            data: 'number',
             onRender: (item: Course) => {
                 return <Text>{item.courseNumber}</Text>
             },
@@ -214,7 +261,6 @@ export class CourseList extends React.Component<ICourseListProps, ICourseListSta
             isSorted: true,
             isSortedDescending: false,
             onColumnClick: this._onColumnClick,
-            data: 'number',
             onRender: (item: Course) => {
                 return (
                     <Text>
@@ -232,7 +278,6 @@ export class CourseList extends React.Component<ICourseListProps, ICourseListSta
             maxWidth: 350,
             isResizable: true,
             onColumnClick: this._onColumnClick,
-            data: 'string',
             onRender: (item: Course) => {
                 return <Text>{item.courseTitle}</Text>
             },
@@ -244,49 +289,52 @@ export class CourseList extends React.Component<ICourseListProps, ICourseListSta
         return item.key
     }
 
-    private _onItemInvoked(item: any): void {
-        alert(`Item invoked: ${item.name}`)
+    private _menuItems: IContextualMenuItem[] = [
+        {
+            key: 'delete',
+            text: 'Delete',
+            iconProps: {
+                iconName: 'Delete'
+            },
+            onClick: () => console.log('Delete clicked'),
+        },
+        {
+            key: 'details',
+            text: 'Details',
+            iconProps: {
+                iconName: 'Info'
+            },
+            onClick: () => console.log('Details clicked'),
+        },
+        {
+            key: 'divider_1',
+            itemType: ContextualMenuItemType.Divider,
+        },
+        {
+            key: 'add',
+            text: 'Add',
+            iconProps: {
+                iconName: 'Add'
+            },
+            onClick: () => console.log('Add clicked'),
+        },
+        {
+            key: 'refresh',
+            text: 'Refresh',
+            iconProps: {
+                iconName: 'Refresh'
+            },
+            onClick: () => console.log('Refresh clicked'),
+        },
+    ];
+    private _onItemContextMenu = (item?: any, index?: number, ev?: Event) => {
+        this._onHideContextualMenu()
+        if (ev) {
+            this._onShowContextualMenu(ev as unknown as MouseEvent)
+        }
     }
 
-    private _onColumnClick(ev: React.MouseEvent<HTMLElement>, column: IColumn): void {
-        const { columns, items } = this.state
 
-        if (!columns || !items) return
-
-        const newColumns: IColumn[] = columns.slice()
-        const currColumn: IColumn = newColumns.filter(currCol => column.key === currCol.key)[0]
-        newColumns.forEach((newCol: IColumn) => {
-            if (newCol === currColumn) {
-                currColumn.isSortedDescending = !currColumn.isSortedDescending
-                currColumn.isSorted = true
-            } else {
-                newCol.isSorted = false
-                newCol.isSortedDescending = true
-            }
-        })
-        const newItems = CourseList._copyAndSort<Course>(
-            items,
-            currColumn.fieldName!,
-            currColumn.isSortedDescending
-        )
-        this.setState({
-            columns: newColumns,
-            items: newItems
-        })
-    }
-
-    private static _copyAndSort<T>(
-        items: T[],
-        columnKey: string,
-        isSortedDescending?: boolean
-    ): T[] {
-        const key = columnKey as keyof T
-        return items
-            .slice(0)
-            .sort((a: T, b: T) =>
-                (isSortedDescending ? a[key] < b[key] : a[key] > b[key]) ? 1 : -1
-            )
-    }
 }
 
 export default CourseList

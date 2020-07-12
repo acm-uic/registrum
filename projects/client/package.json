@@ -10,7 +10,7 @@
     "watch": "npx webpack-dev-server --mode development"
   },
   "dependencies": {
-    "@fluentui/react": "^7.121.9",
+    "@fluentui/react": "^7.121.12",
     "@reduxjs/toolkit": "^1.4.0",
     "@uifabric/react-cards": "^0.109.109",
     "@uifabric/react-hooks": "^7.4.12",

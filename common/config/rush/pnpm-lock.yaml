@@ -8,7 +8,7 @@ dependencies:
   '@babel/preset-typescript': 7.10.4_@babel+core@7.10.4
   '@babel/runtime': 7.10.4
   '@bmiddha/webhooks': 1.1.6_ioredis@4.17.3+mongoose@5.9.22
-  '@fluentui/react': 7.121.11_c8cfd8d2632af57a582ce3bb7e56b488
+  '@fluentui/react': 7.121.12_c8cfd8d2632af57a582ce3bb7e56b488
   '@reduxjs/toolkit': 1.4.0
   '@rush-temp/registrum-api': 'file:projects/registrum-api.tgz'
   '@rush-temp/registrum-banner': 'file:projects/registrum-banner.tgz'
@@ -1240,9 +1240,30 @@ packages:
       react-dom: '>=16.8.0 <17.0.0'
     resolution:
       integrity: sha512-58cL/vyKepUSXAv1Vnzymur8Y+ld17O97pi7+phVj78rM93zqSr+XAnGWy9DmxG4HcSIGUtUNBxIkqqP+WoxuA==
+  /@fluentui/react-focus/7.12.18_c8cfd8d2632af57a582ce3bb7e56b488:
+    dependencies:
+      '@fluentui/keyboard-key': 0.2.4
+      '@types/react': 16.9.41
+      '@types/react-dom': 16.9.8
+      '@uifabric/merge-styles': 7.16.0
+      '@uifabric/set-version': 7.0.15
+      '@uifabric/styling': 7.14.0_c8cfd8d2632af57a582ce3bb7e56b488
+      '@uifabric/utilities': 7.24.0_c8cfd8d2632af57a582ce3bb7e56b488
+      react: 16.13.1
+      react-dom: 16.13.1_react@16.13.1
+      tslib: 1.13.0
+    dev: false
+    peerDependencies:
+      '@types/react': '>=16.8.0 <17.0.0'
+      '@types/react-dom': '>=16.8.0 <17.0.0'
+      react: '>=16.8.0 <17.0.0'
+      react-dom: '>=16.8.0 <17.0.0'
+    resolution:
+      integrity: sha512-ls2mNKtdOf78H8z+i8JOJnO0Avk7yg4Hd3+djsG0piggOFOieNday5exdC/qutrTHNid79shIj370sELZEK27A==
   /@fluentui/react-icons/0.1.34_c8cfd8d2632af57a582ce3bb7e56b488:
     dependencies:
       '@microsoft/load-themed-styles': 1.10.65
+      '@types/react': 16.9.41
       '@types/react-dom': 16.9.8
       '@uifabric/set-version': 7.0.15
       '@uifabric/utilities': 7.23.0_c8cfd8d2632af57a582ce3bb7e56b488
@@ -1257,12 +1278,29 @@ packages:
       react-dom: '>=16.8.0 <17.0.0'
     resolution:
       integrity: sha512-ff67rO+X8EgTSOhbqgPANJxgF3KAYRaGv7u5jhrYj5gTehBWLh2bogD1/soO8Gm74L2M5YVHvnpguUYzG0q8+g==
-  /@fluentui/react/7.121.11_c8cfd8d2632af57a582ce3bb7e56b488:
+  /@fluentui/react-icons/0.1.35_c8cfd8d2632af57a582ce3bb7e56b488:
+    dependencies:
+      '@microsoft/load-themed-styles': 1.10.65
+      '@types/react-dom': 16.9.8
+      '@uifabric/set-version': 7.0.15
+      '@uifabric/utilities': 7.24.0_c8cfd8d2632af57a582ce3bb7e56b488
+      react: 16.13.1
+      react-dom: 16.13.1_react@16.13.1
+      tslib: 1.13.0
+    dev: false
+    peerDependencies:
+      '@types/react': '*'
+      '@types/react-dom': '>=16.8.0 <17.0.0'
+      react: '>=16.8.0 <17.0.0'
+      react-dom: '>=16.8.0 <17.0.0'
+    resolution:
+      integrity: sha512-ZFn+KnCk8fPrO+i5ARimI+kPy84TTz+uUYMq3dFGrxQsvusoH3UZHch18JvvPcjrG5R6xeghZTRf+DYBBmahBA==
+  /@fluentui/react/7.121.12_c8cfd8d2632af57a582ce3bb7e56b488:
     dependencies:
       '@types/react': 16.9.41
       '@types/react-dom': 16.9.8
       '@uifabric/set-version': 7.0.15
-      office-ui-fabric-react: 7.121.11_c8cfd8d2632af57a582ce3bb7e56b488
+      office-ui-fabric-react: 7.121.12_c8cfd8d2632af57a582ce3bb7e56b488
       react: 16.13.1
       react-dom: 16.13.1_react@16.13.1
       tslib: 1.13.0
@@ -1273,7 +1311,7 @@ packages:
       react: '>=16.8.0 <17.0.0'
       react-dom: '>=16.8.0 <17.0.0'
     resolution:
-      integrity: sha512-6y7z7H+KpHx+GvpmxU378heGsf188x6Qubak6kf2pXvzJzmjCG5klIWQ0wgEZlypY0+ASGGw4AtHjdrOosLx8A==
+      integrity: sha512-FKufnDCJ4D5rIaqHJCJQ3REeNWlna43yJWvV0QbfpgK1FVLjPCkaofolnIxGVJ+eudYL93R4JKt0Pafi4A5w1Q==
   /@istanbuljs/load-nyc-config/1.1.0:
     dependencies:
       camelcase: 5.3.1
@@ -2229,6 +2267,25 @@ packages:
       react-dom: '>=16.8.0 <17.0.0'
     resolution:
       integrity: sha512-P22Hsl9idy0o99haASJXmlw5e5Zv5glKmUVYl32pzCGd1XowwiipqNfFW7drLIUyj25acOIajqQJwEIpdS+SIA==
+  /@uifabric/foundation/7.7.34_c8cfd8d2632af57a582ce3bb7e56b488:
+    dependencies:
+      '@types/react': 16.9.41
+      '@types/react-dom': 16.9.8
+      '@uifabric/merge-styles': 7.16.0
+      '@uifabric/set-version': 7.0.15
+      '@uifabric/styling': 7.14.0_c8cfd8d2632af57a582ce3bb7e56b488
+      '@uifabric/utilities': 7.24.0_c8cfd8d2632af57a582ce3bb7e56b488
+      react: 16.13.1
+      react-dom: 16.13.1_react@16.13.1
+      tslib: 1.13.0
+    dev: false
+    peerDependencies:
+      '@types/react': '>=16.8.0 <17.0.0'
+      '@types/react-dom': '>=16.8.0 <17.0.0'
+      react: '>=16.8.0 <17.0.0'
+      react-dom: '>=16.8.0 <17.0.0'
+    resolution:
+      integrity: sha512-9hZ+myyWcjGpfi7B1OPvt+yjVnOpm67vOhR/xm4y9w2PB8NBXNvuE5I2NQlCOu1NszwHCriNCAFTvxm76fj2Hg==
   /@uifabric/icons/7.3.59_c8cfd8d2632af57a582ce3bb7e56b488:
     dependencies:
       '@uifabric/set-version': 7.0.15
@@ -2242,6 +2299,19 @@ packages:
       react-dom: '*'
     resolution:
       integrity: sha512-g9dICazdYTs6ljmm/04T+vG07av/HTcd/p80XDI6aDhHVIWrNwlPS55clkfd1PSgoyGllRqJdSJvzNyZa1zYFw==
+  /@uifabric/icons/7.3.60_c8cfd8d2632af57a582ce3bb7e56b488:
+    dependencies:
+      '@uifabric/set-version': 7.0.15
+      '@uifabric/styling': 7.14.0_c8cfd8d2632af57a582ce3bb7e56b488
+      tslib: 1.13.0
+    dev: false
+    peerDependencies:
+      '@types/react': '*'
+      '@types/react-dom': '*'
+      react: '*'
+      react-dom: '*'
+    resolution:
+      integrity: sha512-OnhZT5pwE85RaNPBiApNpQfEQGym0ilFC+yFXHi/dkLvDN7Q9Tocbh8nrdSO+w0TZFl8wt9rIVlE0MCKOLL9UA==
   /@uifabric/merge-styles/7.16.0:
     dependencies:
       '@uifabric/set-version': 7.0.15
@@ -2290,6 +2360,23 @@ packages:
       react-dom: '>=16.8.0 <17.0.0'
     resolution:
       integrity: sha512-9xWsMNdXeqNqDwWZSAFNUh64sl/Q1Fu7pS4GVcLQeNMY17KSbjABkKAjjgUV2Mf58OvaPZJ2s2or7JoWa45CZg==
+  /@uifabric/react-hooks/7.4.13_c8cfd8d2632af57a582ce3bb7e56b488:
+    dependencies:
+      '@types/react': 16.9.41
+      '@types/react-dom': 16.9.8
+      '@uifabric/set-version': 7.0.15
+      '@uifabric/utilities': 7.24.0_c8cfd8d2632af57a582ce3bb7e56b488
+      react: 16.13.1
+      react-dom: 16.13.1_react@16.13.1
+      tslib: 1.13.0
+    dev: false
+    peerDependencies:
+      '@types/react': '>=16.8.0 <17.0.0'
+      '@types/react-dom': '>=16.8.0 <17.0.0'
+      react: '>=16.8.0 <17.0.0'
+      react-dom: '>=16.8.0 <17.0.0'
+    resolution:
+      integrity: sha512-bJNUfI6NYBcNW/GsRqxade5U4XVoT34eSONYvl6M+uRvdJAbnGlu5n/7dLowTNw76sQor+yFY1JnW36mGXDHdg==
   /@uifabric/set-version/7.0.15:
     dependencies:
       tslib: 1.13.0
@@ -2311,6 +2398,21 @@ packages:
       react-dom: '*'
     resolution:
       integrity: sha512-XFaDkvQqhhHwlW9+Yd9LQogPq0a5TC4on2csRnJUwmlTJ4IQtgvbPdAxmxz+18HZMJezUXYn7/ubcQvNRMFSJQ==
+  /@uifabric/styling/7.14.0_c8cfd8d2632af57a582ce3bb7e56b488:
+    dependencies:
+      '@microsoft/load-themed-styles': 1.10.65
+      '@uifabric/merge-styles': 7.16.0
+      '@uifabric/set-version': 7.0.15
+      '@uifabric/utilities': 7.24.0_c8cfd8d2632af57a582ce3bb7e56b488
+      tslib: 1.13.0
+    dev: false
+    peerDependencies:
+      '@types/react': '*'
+      '@types/react-dom': '*'
+      react: '*'
+      react-dom: '*'
+    resolution:
+      integrity: sha512-V5XH8XejkMxIcbUSINp3FlFF8fxjTEbAMERUpA5mMnr/Xy4UB/VSab52aLr/U1pERlwlD8Ld2+hWaKUysgi00Q==
   /@uifabric/theme-samples/7.0.103_c8cfd8d2632af57a582ce3bb7e56b488:
     dependencies:
       '@uifabric/set-version': 7.0.15
@@ -2343,6 +2445,24 @@ packages:
       react-dom: '>=16.8.0 <17.0.0'
     resolution:
       integrity: sha512-BtPFIoCEyu6lKDLigHvo6AI96sZPdYdaX06RGS0iFiXddk2h8DK/5YqCuCXpnA4+HeDtfaJcDQZ0z23aQDTTkA==
+  /@uifabric/utilities/7.24.0_c8cfd8d2632af57a582ce3bb7e56b488:
+    dependencies:
+      '@types/react': 16.9.41
+      '@types/react-dom': 16.9.8
+      '@uifabric/merge-styles': 7.16.0
+      '@uifabric/set-version': 7.0.15
+      prop-types: 15.7.2
+      react: 16.13.1
+      react-dom: 16.13.1_react@16.13.1
+      tslib: 1.13.0
+    dev: false
+    peerDependencies:
+      '@types/react': '>=16.8.0 <17.0.0'
+      '@types/react-dom': '>=16.8.0 <17.0.0'
+      react: '>=16.8.0 <17.0.0'
+      react-dom: '>=16.8.0 <17.0.0'
+    resolution:
+      integrity: sha512-emPL9mU0ct4qedsVOZ1lkLSWN7L3uzcHd7EqGQ4g1sqZK/QBduy+78HloztroNOPm5pcMfhgK43SdZaVw1y9UA==
   /@uifabric/variants/7.1.93_c8cfd8d2632af57a582ce3bb7e56b488:
     dependencies:
       '@uifabric/set-version': 7.0.15
@@ -8187,6 +8307,33 @@ packages:
       react-dom: '>=16.8.0 <17.0.0'
     resolution:
       integrity: sha512-WNyJY2ImqEgKv8dx2/MOjBLpV/Ta5xjeLQQYhj+ioOsP0b2UCn/W70VKc8eIRRv+ONGOI0QVNGS2XjWXRiwfBg==
+  /office-ui-fabric-react/7.121.12_c8cfd8d2632af57a582ce3bb7e56b488:
+    dependencies:
+      '@fluentui/date-time-utilities': 7.1.2
+      '@fluentui/react-focus': 7.12.18_c8cfd8d2632af57a582ce3bb7e56b488
+      '@fluentui/react-icons': 0.1.35_c8cfd8d2632af57a582ce3bb7e56b488
+      '@microsoft/load-themed-styles': 1.10.65
+      '@types/react': 16.9.41
+      '@types/react-dom': 16.9.8
+      '@uifabric/foundation': 7.7.34_c8cfd8d2632af57a582ce3bb7e56b488
+      '@uifabric/icons': 7.3.60_c8cfd8d2632af57a582ce3bb7e56b488
+      '@uifabric/merge-styles': 7.16.0
+      '@uifabric/react-hooks': 7.4.13_c8cfd8d2632af57a582ce3bb7e56b488
+      '@uifabric/set-version': 7.0.15
+      '@uifabric/styling': 7.14.0_c8cfd8d2632af57a582ce3bb7e56b488
+      '@uifabric/utilities': 7.24.0_c8cfd8d2632af57a582ce3bb7e56b488
+      prop-types: 15.7.2
+      react: 16.13.1
+      react-dom: 16.13.1_react@16.13.1
+      tslib: 1.13.0
+    dev: false
+    peerDependencies:
+      '@types/react': '>=16.8.0 <17.0.0'
+      '@types/react-dom': '>=16.8.0 <17.0.0'
+      react: '>=16.8.0 <17.0.0'
+      react-dom: '>=16.8.0 <17.0.0'
+    resolution:
+      integrity: sha512-aI99eq7KFFj3eATT8MO3salOYnFvfhL3sq2nHFFL7btXqimVHd772jTMCIrUtAI4YHCbBeiBgh5pgIJZTXdGuQ==
   /on-finished/2.3.0:
     dependencies:
       ee-first: 1.1.1
@@ -11663,7 +11810,7 @@ packages:
       '@babel/preset-react': 7.10.4_@babel+core@7.10.4
       '@babel/preset-typescript': 7.10.4_@babel+core@7.10.4
       '@babel/runtime': 7.10.4
-      '@fluentui/react': 7.121.11_c8cfd8d2632af57a582ce3bb7e56b488
+      '@fluentui/react': 7.121.12_c8cfd8d2632af57a582ce3bb7e56b488
       '@reduxjs/toolkit': 1.4.0
       '@types/axios': 0.14.0
       '@types/copy-webpack-plugin': 6.0.0
@@ -11713,7 +11860,7 @@ packages:
     peerDependencies:
       eslint: '*'
     resolution:
-      integrity: sha512-MeHNWeO3O4rj09G5TuhtrCeP9n4JgPJ/ZIcsuRMUsWOJNYLewngdkFF0QQVVXPdd4akh0oV4yKHTtevrd8waOw==
+      integrity: sha512-daaLmaPtVkp1gNczR8iX86rMXAkAu3VaWJDq/FPfaOJXOs1ACFT83eeO0IN6OMbRccudFFrZ4MVSsOh6ZGpp+g==
       tarball: 'file:projects/registrum-client.tgz'
     version: 0.0.0
   'file:projects/registrum-common.tgz':
@@ -11760,7 +11907,7 @@ specifiers:
   '@babel/preset-typescript': ^7.10.4
   '@babel/runtime': ^7.10.4
   '@bmiddha/webhooks': ^1.1.6
-  '@fluentui/react': ^7.121.9
+  '@fluentui/react': ^7.121.12
   '@reduxjs/toolkit': ^1.4.0
   '@rush-temp/registrum-api': 'file:./projects/registrum-api.tgz'
   '@rush-temp/registrum-banner': 'file:./projects/registrum-banner.tgz'
