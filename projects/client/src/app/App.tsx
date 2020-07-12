@@ -1,5 +1,4 @@
 import * as React from 'react'
-import { hot } from 'react-hot-loader'
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
 import Welcome from '../views/Welcome'
 import SignInForm from '../views/SignInForm'
@@ -11,13 +10,15 @@ import { useSelector, useDispatch } from '../redux/store'
 import { updateUser, getUserCourses } from '../redux/auth/thunk'
 import { getTerms, getSubjects } from '../redux/banner/thunk'
 
-const App = () => {
+const App = (): JSX.Element => {
     const { user, courses } = useSelector(state => state.auth)
     const dispatch = useDispatch()
 
     React.useEffect(() => {
+        // * Verify user credentials (session cookie)
         dispatch(updateUser())
 
+        // * Once logged in, get updated banner info and user's courses
         if (user) {
             dispatch(getTerms())
             dispatch(getSubjects())
@@ -31,10 +32,14 @@ const App = () => {
                 <NavBar user={user} />
                 <Switch>
                     <Route path="/settings">{user ? <Settings user={user} /> : <></>}</Route>
-                    <Route path="/signin" component={SignInForm} />
-                    <Route path="/signup" component={SignUpForm} />
+                    {!user && <Route path="/signin" component={SignInForm} />}
+                    {!user && <Route path="/signup" component={SignUpForm} />}
                     <Route path="/" exact>
                         {user ? <Courses courses={courses} /> : <Welcome />}
+                    </Route>
+                    <Route>
+                        {/* If user is logged in then redirect to dashboard */}
+                        <Redirect to="/" />
                     </Route>
                 </Switch>
             </Router>
