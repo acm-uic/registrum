@@ -27,7 +27,8 @@ interface ICourseListState {
     columns: IColumn[]
     items: Course[]
     showContextualMenu: boolean
-    contextMenuTarget: MouseEvent | undefined
+    contextMenuTarget: MouseEvent | undefined,
+    contextMenuItems: IContextualMenuItem[]
 }
 
 interface ICourseListProps {
@@ -86,23 +87,24 @@ export class CourseList extends React.Component<ICourseListProps, ICourseListSta
             items: props.items,
             columns: this._columns,
             showContextualMenu: false,
-            contextMenuTarget: undefined
+            contextMenuTarget: undefined,
+            contextMenuItems: []
         }
     }
 
     public componentDidUpdate(prevProps: ICourseListProps) {
         if (this.props.items !== prevProps.items) {
-            this.setState({items: this.props.items})
+            this.setState({ items: this.props.items })
         }
     }
 
     public render() {
-        const { columns, items, showContextualMenu, contextMenuTarget } = this.state
+        const { columns, items, showContextualMenu, contextMenuTarget, contextMenuItems } = this.state
 
         return (
             <>
                 <ContextualMenu
-                    items={this._menuItems}
+                    items={contextMenuItems}
                     hidden={!showContextualMenu}
                     target={contextMenuTarget}
                     onItemClick={this._onHideContextualMenu}
@@ -155,9 +157,55 @@ export class CourseList extends React.Component<ICourseListProps, ICourseListSta
         )
     }
 
+    private _getContextMenuItems = (item: Course): IContextualMenuItem[] => {
+        return [
+            {
+                key: 'delete',
+                text: 'Delete',
+                iconProps: {
+                    iconName: 'Delete'
+                },
+                onClick: () => console.log('Delete clicked', item),
+            },
+            {
+                key: 'details',
+                text: 'Details',
+                iconProps: {
+                    iconName: 'Info'
+                },
+                onClick: () => console.log('Details clicked', item),
+            },
+            {
+                key: 'divider_1',
+                itemType: ContextualMenuItemType.Divider,
+            },
+            {
+                key: 'add',
+                text: 'Add',
+                iconProps: {
+                    iconName: 'Add'
+                },
+                onClick: () => console.log('Add clicked', item),
+            },
+            {
+                key: 'refresh',
+                text: 'Refresh',
+                iconProps: {
+                    iconName: 'Refresh'
+                },
+                onClick: () => console.log('Refresh clicked', item),
+            },
+        ]
+
+    }
+
     private _onHideContextualMenu = () => this.setState({ showContextualMenu: false });
-    private _onShowContextualMenu = (ev?: MouseEvent) => {
-        this.setState({ showContextualMenu: true, contextMenuTarget: ev });
+    private _onShowContextualMenu = (ev: MouseEvent, item: Course) => {
+        this.setState({
+            showContextualMenu: true,
+            contextMenuTarget: ev,
+            contextMenuItems: this._getContextMenuItems(item)
+        });
     }
 
     private static _copyAndSort<T>(items: T[], columnKey: string, isSortedDescending?: boolean): T[] {
@@ -216,7 +264,7 @@ export class CourseList extends React.Component<ICourseListProps, ICourseListSta
                                 styles={{ root: { height: '100%', marginTop: 2 } }}
                                 onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
                                     event.persist()
-                                    this._onShowContextualMenu(event as unknown as MouseEvent)
+                                    this._onShowContextualMenu(event as unknown as MouseEvent, item)
                                 }}
                             />
                         </Stack>
@@ -289,48 +337,10 @@ export class CourseList extends React.Component<ICourseListProps, ICourseListSta
         return item.key
     }
 
-    private _menuItems: IContextualMenuItem[] = [
-        {
-            key: 'delete',
-            text: 'Delete',
-            iconProps: {
-                iconName: 'Delete'
-            },
-            onClick: () => console.log('Delete clicked'),
-        },
-        {
-            key: 'details',
-            text: 'Details',
-            iconProps: {
-                iconName: 'Info'
-            },
-            onClick: () => console.log('Details clicked'),
-        },
-        {
-            key: 'divider_1',
-            itemType: ContextualMenuItemType.Divider,
-        },
-        {
-            key: 'add',
-            text: 'Add',
-            iconProps: {
-                iconName: 'Add'
-            },
-            onClick: () => console.log('Add clicked'),
-        },
-        {
-            key: 'refresh',
-            text: 'Refresh',
-            iconProps: {
-                iconName: 'Refresh'
-            },
-            onClick: () => console.log('Refresh clicked'),
-        },
-    ];
-    private _onItemContextMenu = (item?: any, index?: number, ev?: Event) => {
+    private _onItemContextMenu = (item?: Course, index?: number, ev?: Event) => {
         this._onHideContextualMenu()
-        if (ev) {
-            this._onShowContextualMenu(ev as unknown as MouseEvent)
+        if (ev && item) {
+            this._onShowContextualMenu(ev as unknown as MouseEvent, item)
         }
     }
 
