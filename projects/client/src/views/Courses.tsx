@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Stack, CommandBar, ICommandBarItemProps, Spinner, SpinnerSize } from '@fluentui/react'
+import { Stack, CommandBar, Selection, ICommandBarItemProps, Spinner, SpinnerSize } from '@fluentui/react'
 import { useConstCallback } from '@uifabric/react-hooks'
 import { CourseList } from '../features/courses/CourseList'
 import AddCourse from '../features/courses/AddCourse'
@@ -16,6 +16,7 @@ export const Courses: React.FunctionComponent<ICoursesProps> = ({ courses }: ICo
     const openAddCoursesPanel = useConstCallback(() => setIsAddCoursesPanelOpen(true))
     const dismissAddCoursesPanel = useConstCallback(() => setIsAddCoursesPanelOpen(false))
     const dispatch = useDispatch()
+    const selection = new Selection()
 
     const items: ICommandBarItemProps[] = [
         {
@@ -39,15 +40,27 @@ export const Courses: React.FunctionComponent<ICoursesProps> = ({ courses }: ICo
         }
     ]
 
+    const farItems: ICommandBarItemProps[] = [
+        {
+          key: 'info',
+          text: 'Details',
+          ariaLabel: 'Details',
+          iconOnly: true,
+          iconProps: { iconName: 'Info' },
+          onClick: () => console.log(selection.count),
+        },
+      ]
+
     return (
         <Stack tokens={{ childrenGap: 15 }}>
             <CommandBar
                 items={items}
+                farItems={farItems}
                 ariaLabel="Use left and right arrow keys to navigate between commands"
             />
             <AddCourse isOpen={isAddCoursesPanelOpen} dismissPanel={dismissAddCoursesPanel} />
             {courses && courses.length > 0 ? (
-                <CourseList items={courses} />
+                <CourseList selection={selection} items={courses} />
             ) : (
                 <Spinner size={SpinnerSize.large} />
             )}
