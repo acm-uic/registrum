@@ -1,11 +1,11 @@
 import { Request, Response } from 'express'
 import passport from 'passport'
-import User, { UserObject } from '../models/User'
+import User, { UserObject } from '../../models/User'
 import bcrypt from 'bcrypt'
 // * Bind Passport strategies
-import '../util/passport'
-import { isAuthenticated } from '../util/passport'
-import { Controller } from './Controller'
+import '../../util/passport'
+import { isAuthenticated } from '../../util/passport'
+import { Controller } from '../Controller'
 
 export class AuthController extends Controller {
     constructor(path: string) {
