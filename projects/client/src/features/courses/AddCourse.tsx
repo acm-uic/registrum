@@ -6,7 +6,6 @@ import {
     TagPicker,
     IBasePicker,
     ITag,
-    PrimaryButton,
     FontSizes,
     FontWeights,
     IStackStyles,
@@ -229,7 +228,6 @@ export const AddCourse: React.FunctionComponent<IAddCourse> = ({ isOpen, dismiss
                     getTextFromItem={getTextFromItem}
                     onChange={handleChangeCourseNumbers}
                 />
-                <PrimaryButton text="Search" />
             </Stack>
             <Stack tokens={searchResultsStackTokens}>
                 {courses.map((result: Course, index: number) => (
