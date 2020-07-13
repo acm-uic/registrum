@@ -2,7 +2,7 @@ import { Banner } from '../lib/Banner'
 
 describe('Banner Lib Test', () => {
     it('Static Operations', async () => {
-        jest.setTimeout(10000)
+        jest.setTimeout(100000)
         const terms = await Banner.getTerm()
         const term = terms[0].code
         await Promise.all([
@@ -15,7 +15,7 @@ describe('Banner Lib Test', () => {
     })
 
     it('Course Operations', async () => {
-        jest.setTimeout(20000)
+        jest.setTimeout(100000)
         const { code } = (await Banner.getLatestTerm()).pop()
         const banner = new Banner(code, 'CS')
         const courseReferenceNumber = (await banner.search({ courseNumber: '111' })).data[0]

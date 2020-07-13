@@ -3,9 +3,11 @@ import { Stack, CommandBar, Selection, ICommandBarItemProps } from '@fluentui/re
 import { useConstCallback } from '@uifabric/react-hooks'
 import { CourseList } from '../features/courses/CourseList'
 import AddCourse from '../features/courses/AddCourse'
+import CourseDetails from '../features/courses/CourseDetails'
 import { Course } from 'registrum-common/dist/lib/Banner'
 import { useDispatch } from '../redux/store'
 import { updateUser } from '../redux/auth/thunk'
+import { courseUnsubscribe } from '../redux/auth/thunk'
 
 interface ICoursesProps {
     courses: Course[]
@@ -15,8 +17,26 @@ export const Courses: React.FunctionComponent<ICoursesProps> = ({ courses }: ICo
     const [isAddCoursesPanelOpen, setIsAddCoursesPanelOpen] = React.useState(false)
     const openAddCoursesPanel = useConstCallback(() => setIsAddCoursesPanelOpen(true))
     const dismissAddCoursesPanel = useConstCallback(() => setIsAddCoursesPanelOpen(false))
+    const [detailsCourse, setDetailsCourse] = React.useState<Course>()
+    const [isDetailsPanelOpen, setIsDetailsPanelOpen] = React.useState(false)
+    const openDetailsPanel = useConstCallback(() => setIsDetailsPanelOpen(true))
+    const dismissDetailsPanel = useConstCallback(() => setIsDetailsPanelOpen(false))
     const dispatch = useDispatch()
-    const selection = new Selection()
+
+    const [selectedCourse, setSelectedCourse] = React.useState<Course>()
+    const selection = new Selection<Course>({
+        onSelectionChanged: () => {
+            setSelectedCourse(selection.getSelection()[0] as Course)
+        },
+        getKey: (item) => item.courseReferenceNumber
+    });
+
+    const onRefresh = () => dispatch(updateUser());
+    const onDelete = (courseReferenceNumber: string) => dispatch(courseUnsubscribe({ crn: courseReferenceNumber }))
+    const onDetails = (course?: Course) => {
+        setDetailsCourse(course)
+        openDetailsPanel()
+    }
 
     const items: ICommandBarItemProps[] = [
         {
@@ -29,14 +49,18 @@ export const Courses: React.FunctionComponent<ICoursesProps> = ({ courses }: ICo
             key: 'delete',
             text: 'Delete',
             iconProps: { iconName: 'Delete' },
-            onClick: () => console.log('Delete'),
-            disabled: true
+            onClick: () => {
+                if (selectedCourse){
+                    onDelete(selectedCourse?.courseReferenceNumber)
+                }
+            },
+            disabled: selectedCourse === undefined
         },
         {
             key: 'refresh',
             text: 'Refresh',
             iconProps: { iconName: 'Refresh' },
-            onClick: () => dispatch(updateUser())
+            onClick: onRefresh
         }
     ]
 
@@ -47,7 +71,9 @@ export const Courses: React.FunctionComponent<ICoursesProps> = ({ courses }: ICo
             ariaLabel: 'Details',
             iconOnly: true,
             iconProps: { iconName: 'Info' },
-            onClick: () => console.log(selection.count)
+            onClick: () => {
+                onDetails(selectedCourse)
+            },
         }
     ]
 
@@ -58,9 +84,27 @@ export const Courses: React.FunctionComponent<ICoursesProps> = ({ courses }: ICo
                 farItems={farItems}
                 ariaLabel="Use left and right arrow keys to navigate between commands"
             />
-            <AddCourse isOpen={isAddCoursesPanelOpen} dismissPanel={dismissAddCoursesPanel} />
 
-            <CourseList selection={selection} items={courses} />
+            <AddCourse isOpen={isAddCoursesPanelOpen} dismissPanel={dismissAddCoursesPanel} />
+            {detailsCourse ?
+                <CourseDetails
+                    isOpen={isDetailsPanelOpen}
+                    dismissPanel={dismissDetailsPanel}
+                    course={detailsCourse}
+                />
+                : null
+            }
+
+            {courses.length ?
+                <CourseList
+                    onAddCourse={openAddCoursesPanel}
+                    onRefresh={onRefresh}
+                    onDelete={onDelete}
+                    onDetails={onDetails}
+                    selection={selection}
+                    items={courses} />
+                : null
+            }
         </Stack>
     )
 }

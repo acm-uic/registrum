@@ -13,23 +13,25 @@ import {
     initializeIcons,
     mergeStyleSets,
     FontSizes,
-    IButton,
     getTheme,
-    IDetailsList,
     IconButton,
     ContextualMenu,
     ContextualMenuItemType,
-    IContextualMenuItem
+    IContextualMenuItem,
+    ISelection,
+    IObjectWithKey
 } from '@fluentui/react'
 import { Course } from 'registrum-common/dist/lib/Banner'
-import { courseUnsubscribe } from '../../redux/auth/thunk'
-import { useDispatch } from '../../redux/store'
 
 initializeIcons()
 
 interface ICourseListProps {
     items: Course[]
-    selection: Selection
+    selection: Selection<Course>
+    onAddCourse: () => void
+    onRefresh: () => void
+    onDelete: (courseReferenceNumber: string) => void
+    onDetails: (course: Course) => void
 }
 
 const theme = getTheme()
@@ -70,9 +72,8 @@ const classNames = mergeStyleSets({
     }
 })
 
-export const CourseList: React.FunctionComponent<ICourseListProps> = () => {
-    const _selection: Selection = new Selection()
-    const dispatch = useDispatch()
+export const CourseList: React.FunctionComponent<ICourseListProps> = (props: ICourseListProps) => {
+    const selection: Selection<Course> = props.selection
 
     const _columns: IColumn[] = [
         {
@@ -82,7 +83,7 @@ export const CourseList: React.FunctionComponent<ICourseListProps> = () => {
             minWidth: 60,
             maxWidth: 60,
             isResizable: true,
-            onColumnClick: _onColumnClick,
+            onColumnClick: onColumnClick,
             onRender: (item: Course) => {
                 return (
                     <>
@@ -90,8 +91,8 @@ export const CourseList: React.FunctionComponent<ICourseListProps> = () => {
                             <HoverCard
                                 expandedCardOpenDelay={300}
                                 expandingCardProps={{
-                                    onRenderCompactCard: _onRenderCompactCard,
-                                    onRenderExpandedCard: _onRenderExpandedCard,
+                                    onRenderCompactCard: onRenderCompactCard,
+                                    onRenderExpandedCard: onRenderExpandedCard,
                                     renderData: item,
                                     compactCardHeight: 120,
                                     expandedCardHeight: 200
@@ -107,7 +108,7 @@ export const CourseList: React.FunctionComponent<ICourseListProps> = () => {
                                 styles={{ root: { height: '100%', marginTop: 2 } }}
                                 onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
                                     event.persist()
-                                    _onShowContextualMenu((event as unknown) as MouseEvent, item)
+                                    onShowContextualMenu((event as unknown) as MouseEvent, item)
                                 }}
                             />
                         </Stack>
@@ -123,7 +124,7 @@ export const CourseList: React.FunctionComponent<ICourseListProps> = () => {
             minWidth: 50,
             maxWidth: 60,
             isResizable: true,
-            onColumnClick: _onColumnClick,
+            onColumnClick: onColumnClick,
             onRender: (item: Course) => {
                 return <Text>{item.subject}</Text>
             },
@@ -136,7 +137,7 @@ export const CourseList: React.FunctionComponent<ICourseListProps> = () => {
             minWidth: 40,
             maxWidth: 50,
             isResizable: true,
-            onColumnClick: _onColumnClick,
+            onColumnClick: onColumnClick,
             onRender: (item: Course) => {
                 return <Text>{item.courseNumber}</Text>
             },
@@ -151,7 +152,7 @@ export const CourseList: React.FunctionComponent<ICourseListProps> = () => {
             isResizable: true,
             isSorted: true,
             isSortedDescending: false,
-            onColumnClick: _onColumnClick,
+            onColumnClick: onColumnClick,
             onRender: (item: Course) => {
                 return (
                     <Text>
@@ -168,7 +169,7 @@ export const CourseList: React.FunctionComponent<ICourseListProps> = () => {
             minWidth: 210,
             maxWidth: 350,
             isResizable: true,
-            onColumnClick: _onColumnClick,
+            onColumnClick: onColumnClick,
             onRender: (item: Course) => {
                 return <Text>{item.courseTitle}</Text>
             },
@@ -176,7 +177,7 @@ export const CourseList: React.FunctionComponent<ICourseListProps> = () => {
         }
     ]
 
-    const [items, setItems] = React.useState<Course[]>([])
+    const [items, setItems] = React.useState<Course[]>(props.items)
     const [columns, setColumns] = React.useState<IColumn[]>(_columns)
     const [showContextualMenu, setShowContextualMenu] = React.useState<boolean>(false)
     const [contextMenuTarget, setContextMenuTarget] = React.useState<MouseEvent | undefined>(
@@ -184,7 +185,12 @@ export const CourseList: React.FunctionComponent<ICourseListProps> = () => {
     )
     const [contextMenuItems, setContextMenuItems] = React.useState<IContextualMenuItem[]>([])
 
-    const _onRenderCompactCard = (item: Course): JSX.Element => {
+    React.useEffect(() => {
+        if (props.items.length !== items.length)
+            setItems(props.items)
+    })
+
+    const onRenderCompactCard = (item: Course): JSX.Element => {
         return (
             <div className={classNames.compactCard}>
                 <div className={classNames.compactCardCourseNumber}>
@@ -195,7 +201,7 @@ export const CourseList: React.FunctionComponent<ICourseListProps> = () => {
         )
     }
 
-    const _onRenderExpandedCard = (item: Course): JSX.Element => {
+    const onRenderExpandedCard = (item: Course): JSX.Element => {
         return (
             <div className={classNames.expandedCard}>
                 <Text block>
@@ -212,7 +218,7 @@ export const CourseList: React.FunctionComponent<ICourseListProps> = () => {
         )
     }
 
-    const _getContextMenuItems = (item: Course): IContextualMenuItem[] => {
+    const getContextMenuItems = (item: Course): IContextualMenuItem[] => {
         return [
             {
                 key: 'delete',
@@ -220,7 +226,7 @@ export const CourseList: React.FunctionComponent<ICourseListProps> = () => {
                 iconProps: {
                     iconName: 'Delete'
                 },
-                onClick: () => dispatch(courseUnsubscribe({ crn: item.courseReferenceNumber }))
+                onClick: () => props.onDelete(item.courseReferenceNumber)
             },
             {
                 key: 'details',
@@ -228,7 +234,7 @@ export const CourseList: React.FunctionComponent<ICourseListProps> = () => {
                 iconProps: {
                     iconName: 'Info'
                 },
-                onClick: () => console.log('Details clicked', item)
+                onClick: () => props.onDetails(item)
             },
             {
                 key: 'divider_1',
@@ -240,7 +246,7 @@ export const CourseList: React.FunctionComponent<ICourseListProps> = () => {
                 iconProps: {
                     iconName: 'Add'
                 },
-                onClick: () => console.log('Add clicked', item)
+                onClick: props.onAddCourse
             },
             {
                 key: 'refresh',
@@ -248,22 +254,22 @@ export const CourseList: React.FunctionComponent<ICourseListProps> = () => {
                 iconProps: {
                     iconName: 'Refresh'
                 },
-                onClick: () => console.log('Refresh clicked', item)
+                onClick: props.onRefresh
             }
         ]
     }
 
-    function _onHideContextualMenu() {
+    function onHideContextualMenu() {
         setShowContextualMenu(false)
     }
 
-    function _onShowContextualMenu(ev: MouseEvent, item: Course) {
+    function onShowContextualMenu(ev: MouseEvent, item: Course) {
         setShowContextualMenu(true)
         setContextMenuTarget(ev)
-        setContextMenuItems(_getContextMenuItems(item))
+        setContextMenuItems(getContextMenuItems(item))
     }
 
-    function _copyAndSort<T>(items: T[], columnKey: string, isSortedDescending?: boolean): T[] {
+    function copyAndSort<T>(items: T[], columnKey: string, isSortedDescending?: boolean): T[] {
         const key = columnKey as keyof T
         return items
             .slice(0)
@@ -272,7 +278,7 @@ export const CourseList: React.FunctionComponent<ICourseListProps> = () => {
             )
     }
 
-    function _onColumnClick(_: React.MouseEvent<HTMLElement>, column: IColumn): void {
+    function onColumnClick(_: React.MouseEvent<HTMLElement>, column: IColumn): void {
         const newColumns: IColumn[] = columns.slice()
         const currColumn: IColumn = newColumns.filter(currCol => column.key === currCol.key)[0]
         newColumns.forEach((newCol: IColumn) => {
@@ -284,19 +290,19 @@ export const CourseList: React.FunctionComponent<ICourseListProps> = () => {
                 newCol.isSortedDescending = true
             }
         })
-        const newItems = _copyAndSort(items, currColumn.fieldName!, currColumn.isSortedDescending)
+        const newItems = copyAndSort(items, currColumn.fieldName!, currColumn.isSortedDescending)
         setColumns(newColumns)
         setItems(newItems)
     }
 
-    function _getKey(item: any): string {
-        return item.key
+    function getKey(item: Course): string {
+        return item.courseReferenceNumber
     }
 
-    function _onItemContextMenu(item?: Course, index?: number, ev?: Event) {
-        _onHideContextualMenu()
+    function onItemContextMenu(item?: Course, index?: number, ev?: Event) {
+        onHideContextualMenu()
         if (ev && item) {
-            _onShowContextualMenu((ev as unknown) as MouseEvent, item)
+            onShowContextualMenu((ev as unknown) as MouseEvent, item)
         }
     }
 
@@ -306,22 +312,21 @@ export const CourseList: React.FunctionComponent<ICourseListProps> = () => {
                 items={contextMenuItems}
                 hidden={!showContextualMenu}
                 target={contextMenuTarget}
-                onItemClick={_onHideContextualMenu}
-                onDismiss={_onHideContextualMenu}
+                onItemClick={onHideContextualMenu}
+                onDismiss={onHideContextualMenu}
             />
             <DetailsList
                 items={items}
                 columns={columns}
                 selectionMode={SelectionMode.single}
-                getKey={_getKey}
-                setKey="none"
-                selection={_selection}
+                getKey={getKey}
+                setKey="multiple"
+                selection={selection as ISelection<IObjectWithKey>}
                 layoutMode={DetailsListLayoutMode.justified}
                 isHeaderVisible={true}
-                onItemContextMenu={_onItemContextMenu}
+                onItemContextMenu={onItemContextMenu}
                 compact={false}
                 ariaLabelForSelectionColumn="Toggle selection"
-                ariaLabelForSelectAllCheckbox="Toggle selection for all items"
                 checkButtonAriaLabel="Row checkbox"
             />
         </>
