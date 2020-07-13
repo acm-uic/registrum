@@ -13,6 +13,7 @@ import compression from 'compression'
 import express from 'express'
 import cors from 'cors'
 import morgan from 'morgan'
+import { initializePassport } from 'util/passport'
 
 type Config = {
     mongoUri: string
@@ -30,18 +31,19 @@ export class App extends ExpressApp {
         this.config = config
 
         this.initializeDatabase().then(() => {
+            this.configure()
             this.initializeMiddlewares()
             this.initializeControllers()
-            this.configure()
             if (cb) cb()
         })
     }
 
-    configure = () => {
+    configure = (): void => {
+        initializePassport()
         this.app.options('*', cors)
     }
 
-    initializeDatabase = async () => {
+    initializeDatabase = async (): Promise<void> => {
         try {
             await mongoose.connect(this.config.mongoUri, {
                 useNewUrlParser: true,
@@ -54,7 +56,7 @@ export class App extends ExpressApp {
             throw '❌ MongoDB connection unsuccessful.'
         }
     }
-    initializeMiddlewares = () => {
+    initializeMiddlewares = (): void => {
         this.bindMiddlewares([
             morgan('tiny'),
             express.urlencoded({ extended: true }),
@@ -79,7 +81,7 @@ export class App extends ExpressApp {
             }
         ])
     }
-    initializeControllers = () => {
+    initializeControllers = (): void => {
         this.bindControllers([
             new ClassesController(`/classes`, { bannerUrl: this.config.bannerUrl }),
             new AuthController(`/auth`),
