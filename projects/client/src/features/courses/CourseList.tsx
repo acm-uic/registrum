@@ -17,12 +17,15 @@ import {
     getTheme,
     IDetailsList,
     IconButton,
-    ContextualMenu, ContextualMenuItemType, IContextualMenuItem
+    ContextualMenu,
+    ContextualMenuItemType,
+    IContextualMenuItem
 } from '@fluentui/react'
-import { Course, Faculty } from 'registrum-common/dist/lib/Banner'
+import { Course } from 'registrum-common/dist/lib/Banner'
+import { courseUnsubscribe } from '../../redux/auth/thunk'
+import { useDispatch } from '../../redux/store'
 
 initializeIcons()
-
 
 interface ICourseListProps {
     items: Course[]
@@ -69,7 +72,7 @@ const classNames = mergeStyleSets({
 
 export const CourseList: React.FunctionComponent<ICourseListProps> = () => {
     const _selection: Selection = new Selection()
-
+    const dispatch = useDispatch()
 
     const _columns: IColumn[] = [
         {
@@ -83,7 +86,7 @@ export const CourseList: React.FunctionComponent<ICourseListProps> = () => {
             onRender: (item: Course) => {
                 return (
                     <>
-                        <Stack horizontal horizontalAlign='space-between'>
+                        <Stack horizontal horizontalAlign="space-between">
                             <HoverCard
                                 expandedCardOpenDelay={300}
                                 expandingCardProps={{
@@ -95,14 +98,16 @@ export const CourseList: React.FunctionComponent<ICourseListProps> = () => {
                                 }}
                                 instantOpenOnClick={true}
                             >
-                                <Text styles={{ root: { fontWeight: FontWeights.bold } }}>{item.courseReferenceNumber}</Text>
+                                <Text styles={{ root: { fontWeight: FontWeights.bold } }}>
+                                    {item.courseReferenceNumber}
+                                </Text>
                             </HoverCard>
                             <IconButton
                                 iconProps={{ iconName: 'MoreVertical' }}
                                 styles={{ root: { height: '100%', marginTop: 2 } }}
                                 onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
                                     event.persist()
-                                    _onShowContextualMenu(event as unknown as MouseEvent, item)
+                                    _onShowContextualMenu((event as unknown) as MouseEvent, item)
                                 }}
                             />
                         </Stack>
@@ -174,14 +179,10 @@ export const CourseList: React.FunctionComponent<ICourseListProps> = () => {
     const [items, setItems] = React.useState<Course[]>([])
     const [columns, setColumns] = React.useState<IColumn[]>(_columns)
     const [showContextualMenu, setShowContextualMenu] = React.useState<boolean>(false)
-    const [contextMenuTarget, setContextMenuTarget] = React.useState<MouseEvent | undefined>(undefined)
+    const [contextMenuTarget, setContextMenuTarget] = React.useState<MouseEvent | undefined>(
+        undefined
+    )
     const [contextMenuItems, setContextMenuItems] = React.useState<IContextualMenuItem[]>([])
-
-    // const componentDidUpdate(prevProps: ICourseListProps) {
-    //     if (props.items !== prevProps.items) {
-    //         setState({ items: props.items })
-    //     }
-    // }
 
     const _onRenderCompactCard = (item: Course): JSX.Element => {
         return (
@@ -219,7 +220,7 @@ export const CourseList: React.FunctionComponent<ICourseListProps> = () => {
                 iconProps: {
                     iconName: 'Delete'
                 },
-                onClick: () => console.log('Delete clicked', item),
+                onClick: () => dispatch(courseUnsubscribe({ crn: item.courseReferenceNumber }))
             },
             {
                 key: 'details',
@@ -227,11 +228,11 @@ export const CourseList: React.FunctionComponent<ICourseListProps> = () => {
                 iconProps: {
                     iconName: 'Info'
                 },
-                onClick: () => console.log('Details clicked', item),
+                onClick: () => console.log('Details clicked', item)
             },
             {
                 key: 'divider_1',
-                itemType: ContextualMenuItemType.Divider,
+                itemType: ContextualMenuItemType.Divider
             },
             {
                 key: 'add',
@@ -239,7 +240,7 @@ export const CourseList: React.FunctionComponent<ICourseListProps> = () => {
                 iconProps: {
                     iconName: 'Add'
                 },
-                onClick: () => console.log('Add clicked', item),
+                onClick: () => console.log('Add clicked', item)
             },
             {
                 key: 'refresh',
@@ -247,10 +248,9 @@ export const CourseList: React.FunctionComponent<ICourseListProps> = () => {
                 iconProps: {
                     iconName: 'Refresh'
                 },
-                onClick: () => console.log('Refresh clicked', item),
-            },
+                onClick: () => console.log('Refresh clicked', item)
+            }
         ]
-
     }
 
     function _onHideContextualMenu() {
@@ -264,26 +264,30 @@ export const CourseList: React.FunctionComponent<ICourseListProps> = () => {
     }
 
     function _copyAndSort<T>(items: T[], columnKey: string, isSortedDescending?: boolean): T[] {
-        const key = columnKey as keyof T;
-        return items.slice(0).sort((a: T, b: T) => ((isSortedDescending ? a[key] < b[key] : a[key] > b[key]) ? 1 : -1));
+        const key = columnKey as keyof T
+        return items
+            .slice(0)
+            .sort((a: T, b: T) =>
+                (isSortedDescending ? a[key] < b[key] : a[key] > b[key]) ? 1 : -1
+            )
     }
 
     function _onColumnClick(_: React.MouseEvent<HTMLElement>, column: IColumn): void {
-        const newColumns: IColumn[] = columns.slice();
-        const currColumn: IColumn = newColumns.filter(currCol => column.key === currCol.key)[0];
+        const newColumns: IColumn[] = columns.slice()
+        const currColumn: IColumn = newColumns.filter(currCol => column.key === currCol.key)[0]
         newColumns.forEach((newCol: IColumn) => {
             if (newCol === currColumn) {
-                currColumn.isSortedDescending = !currColumn.isSortedDescending;
-                currColumn.isSorted = true;
+                currColumn.isSortedDescending = !currColumn.isSortedDescending
+                currColumn.isSorted = true
             } else {
-                newCol.isSorted = false;
-                newCol.isSortedDescending = true;
+                newCol.isSorted = false
+                newCol.isSortedDescending = true
             }
-        });
-        const newItems = _copyAndSort(items, currColumn.fieldName!, currColumn.isSortedDescending);
+        })
+        const newItems = _copyAndSort(items, currColumn.fieldName!, currColumn.isSortedDescending)
         setColumns(newColumns)
         setItems(newItems)
-    };
+    }
 
     function _getKey(item: any): string {
         return item.key
@@ -292,7 +296,7 @@ export const CourseList: React.FunctionComponent<ICourseListProps> = () => {
     function _onItemContextMenu(item?: Course, index?: number, ev?: Event) {
         _onHideContextualMenu()
         if (ev && item) {
-            _onShowContextualMenu(ev as unknown as MouseEvent, item)
+            _onShowContextualMenu((ev as unknown) as MouseEvent, item)
         }
     }
 
