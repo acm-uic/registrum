@@ -13,7 +13,7 @@ import compression from 'compression'
 import express from 'express'
 import cors from 'cors'
 import morgan from 'morgan'
-import { initializePassport } from 'util/passport'
+import { initializePassport } from './util/passport'
 
 type Config = {
     mongoUri: string
