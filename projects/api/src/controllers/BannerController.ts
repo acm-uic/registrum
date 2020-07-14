@@ -3,7 +3,7 @@ import { isAuthenticated } from '../util/passport'
 import User, { UserObject } from '../models/User'
 import { notifyUser } from '../util/notifier'
 import { BannerClient } from '../util/BannerClient'
-import { Controller } from './Controller'
+import { Controller } from 'registrum-common/dist/classes/Controller'
 import { AxiosInstance } from 'axios'
 
 export type BannerControllerConfig = {

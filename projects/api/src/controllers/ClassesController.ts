@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { Controller } from './Controller'
+import { Controller } from 'registrum-common/dist/classes/Controller'
 import { BannerClient } from '../util/BannerClient'
 import { AxiosInstance } from 'axios'
 

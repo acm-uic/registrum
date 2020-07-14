@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { isAuthenticated } from '../util/passport'
 import User, { UserObject, SubscriptionsObject } from '../models/User'
-import { Controller } from './Controller'
+import { Controller } from 'registrum-common/dist/classes/Controller'
 
 export class PushServiceController extends Controller {
     constructor(path: string) {
