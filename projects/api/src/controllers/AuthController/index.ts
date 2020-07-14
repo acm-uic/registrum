@@ -21,14 +21,14 @@ export class AuthController extends Controller {
         this.router.put('/user', isAuthenticated, UserRoutes.PUT)
         this.router.delete('/user', isAuthenticated, UserRoutes.DELETE)
 
-        // * All routes under /auth/course
-        this.router.get('/course', isAuthenticated, null)
-        this.router.post('/course', isAuthenticated, null)
-        this.router.delete('/course', isAuthenticated, null)
+        // // * All routes under /auth/course
+        // this.router.get('/course', isAuthenticated, null)
+        // this.router.post('/course', isAuthenticated, null)
+        // this.router.delete('/course', isAuthenticated, null)
 
-        this.router.get('/device', isAuthenticated, null)
-        this.router.post('/device', isAuthenticated, null)
-        this.router.delete('/device', isAuthenticated, null)
+        // this.router.get('/device', isAuthenticated, null)
+        // this.router.post('/device', isAuthenticated, null)
+        // this.router.delete('/device', isAuthenticated, null)
     }
 
     // * Remove the password field from object
