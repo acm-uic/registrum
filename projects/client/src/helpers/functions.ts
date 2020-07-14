@@ -1,6 +1,7 @@
-import { initializeSW } from '../serviceWorker'
+import { initializeSW } from '../sw'
 
 export const getSubscriptionObject = async () => {
+    return null
     //* navigator --> the core of service workers
     if ('serviceWorker' in navigator) {
         try {
