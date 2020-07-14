@@ -90,7 +90,7 @@ describe('Class Tests', () => {
         })
         axiosCookieJarSupport(client)
 
-        const response = await client.post('/auth/signup', {
+        const response = await client.post('/auth/user', {
             firstname: 'John',
             lastname: 'Doe',
             email: 'registrum@example.com',
@@ -132,7 +132,7 @@ describe('Class Tests', () => {
     })
 
     beforeEach(async () => {
-        await client.post('/auth/login', {
+        await client.post('/auth', {
             email: 'registrum@example.com',
             password: 'theRealApp1$'
         })
@@ -144,7 +144,7 @@ describe('Class Tests', () => {
     })
 
     afterEach(async () => {
-        await client.get('/auth/logout')
+        await client.delete('/auth')
     })
 
     it('Correctly subscribe to class', async () => {
@@ -154,7 +154,7 @@ describe('Class Tests', () => {
         })
 
         // * Make sure CRN is in subscription list
-        const { data: user } = await client.get('/auth')
+        const { data: user } = await client.get('/auth/user')
 
         // * Make sure class has CRN
         expect(user.subscriptions).toContain(chosenClass.courseReferenceNumber)
@@ -172,7 +172,7 @@ describe('Class Tests', () => {
         })
 
         // * Make sure CRN is not in subscription list
-        const { data: user } = await client.get('/auth')
+        const { data: user } = await client.get('/auth/user')
 
         // * Make sure class does not have CRN
         expect(user.subscriptions).not.toContain(chosenClass.courseReferenceNumber)
@@ -190,7 +190,7 @@ describe('Class Tests', () => {
         })
 
         // * Make sure CRN is not in subscription list twice
-        const user: UserObject = (await client.get('/auth')).data
+        const user: UserObject = (await client.get('/auth/user')).data
 
         // * Make sure class does not have CRN
         let count = 0
@@ -243,7 +243,7 @@ describe('Class Tests', () => {
             })
 
             // * Make sure user subscriptions contain both CRNs
-            const { subscriptions } = (await client.get('/auth')).data
+            const { subscriptions } = (await client.get('/auth/user')).data
             console.log(subscriptions)
             // * Make sure both subscriptions registered in system
             expect(subscriptions).toContain(chosenClass.courseReferenceNumber)

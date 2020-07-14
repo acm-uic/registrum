@@ -218,7 +218,7 @@ describe('Authentication Tests', () => {
             })
 
             expect(response.status).toBe(401)
-            expect(response.data).toBe('Password not valid')
+            expect(response.data).toBe('Invalid Password')
         })
 
         // Attempting to change password with invalid new password
@@ -300,7 +300,6 @@ describe('Authentication Tests', () => {
             const response = await client.delete('/')
 
             expect(response.status).toBe(200)
-            expect(response.data).toBe('OK')
         })
 
         // Attempting to login with incorrect email

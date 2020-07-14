@@ -6,7 +6,8 @@ import { AuthController } from '..'
 export const GET: Handler[] = [
     async (req: Request, res: Response): Promise<void> => {
         // * Get the user from the database using the email and remove password hash field
-        const user = await User.findOne({ email: req.body.email })
+        const { _id } = req.user as UserObject
+        const user = await User.findOne({ _id: _id })
         const clientUser = AuthController.prepareClientObject(user)
 
         // * Send the user object to client

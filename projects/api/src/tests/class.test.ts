@@ -87,7 +87,7 @@ describe('Class Tests', () => {
         })
         axiosCookieJarSupport(client)
 
-        const response = await client.post('/auth/signup', {
+        const response = await client.post('/auth/user', {
             firstname: 'John',
             lastname: 'Doe',
             email: 'registrum@example.com',
