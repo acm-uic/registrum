@@ -26,13 +26,16 @@ export const Courses: React.FunctionComponent<ICoursesProps> = ({ courses }: ICo
     const [selectedCourse, setSelectedCourse] = React.useState<Course>()
     const selection = new Selection<Course>({
         onSelectionChanged: () => {
-            setSelectedCourse(selection.getSelection()[0] as Course)
+            const course = selection.getSelection()[0] as Course
+            setSelectedCourse(course)
+            setDetailsCourse(course)
         },
-        getKey: (item) => item.courseReferenceNumber
-    });
+        getKey: item => item.courseReferenceNumber
+    })
 
-    const onRefresh = () => dispatch(updateUser());
-    const onDelete = (courseReferenceNumber: string) => dispatch(courseUnsubscribe({ crn: courseReferenceNumber }))
+    const onRefresh = () => dispatch(updateUser())
+    const onDelete = (courseReferenceNumber: string) =>
+        dispatch(courseUnsubscribe({ crn: courseReferenceNumber }))
     const onDetails = (course?: Course) => {
         setDetailsCourse(course)
         openDetailsPanel()
@@ -50,7 +53,7 @@ export const Courses: React.FunctionComponent<ICoursesProps> = ({ courses }: ICo
             text: 'Delete',
             iconProps: { iconName: 'Delete' },
             onClick: () => {
-                if (selectedCourse){
+                if (selectedCourse) {
                     onDelete(selectedCourse?.courseReferenceNumber)
                 }
             },
@@ -71,9 +74,7 @@ export const Courses: React.FunctionComponent<ICoursesProps> = ({ courses }: ICo
             ariaLabel: 'Details',
             iconOnly: true,
             iconProps: { iconName: 'Info' },
-            onClick: () => {
-                onDetails(selectedCourse)
-            },
+            onClick: openDetailsPanel
         }
     ]
 
@@ -84,27 +85,22 @@ export const Courses: React.FunctionComponent<ICoursesProps> = ({ courses }: ICo
                 farItems={farItems}
                 ariaLabel="Use left and right arrow keys to navigate between commands"
             />
-
-            <AddCourse isOpen={isAddCoursesPanelOpen} dismissPanel={dismissAddCoursesPanel} />
-            {detailsCourse ?
-                <CourseDetails
-                    isOpen={isDetailsPanelOpen}
-                    dismissPanel={dismissDetailsPanel}
-                    course={detailsCourse}
-                />
-                : null
-            }
-
-            {courses.length ?
+            {courses.length ? (
                 <CourseList
                     onAddCourse={openAddCoursesPanel}
                     onRefresh={onRefresh}
                     onDelete={onDelete}
                     onDetails={onDetails}
                     selection={selection}
-                    items={courses} />
-                : null
-            }
+                    items={courses}
+                />
+            ) : null}
+            <CourseDetails
+                isOpen={isDetailsPanelOpen}
+                dismissPanel={dismissDetailsPanel}
+                course={detailsCourse}
+            />
+            <AddCourse isOpen={isAddCoursesPanelOpen} dismissPanel={dismissAddCoursesPanel} />
         </Stack>
     )
 }

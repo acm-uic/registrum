@@ -186,8 +186,7 @@ export const CourseList: React.FunctionComponent<ICourseListProps> = (props: ICo
     const [contextMenuItems, setContextMenuItems] = React.useState<IContextualMenuItem[]>([])
 
     React.useEffect(() => {
-        if (props.items.length !== items.length)
-            setItems(props.items)
+        if (props.items.length !== items.length) setItems(props.items)
     })
 
     const onRenderCompactCard = (item: Course): JSX.Element => {
@@ -308,26 +307,26 @@ export const CourseList: React.FunctionComponent<ICourseListProps> = (props: ICo
 
     return (
         <>
-            <ContextualMenu
-                items={contextMenuItems}
-                hidden={!showContextualMenu}
-                target={contextMenuTarget}
-                onItemClick={onHideContextualMenu}
-                onDismiss={onHideContextualMenu}
-            />
             <DetailsList
                 items={items}
                 columns={columns}
                 selectionMode={SelectionMode.single}
                 getKey={getKey}
                 setKey="multiple"
-                selection={selection as ISelection<IObjectWithKey>}
+                selection={(selection as unknown) as ISelection<IObjectWithKey>}
                 layoutMode={DetailsListLayoutMode.justified}
                 isHeaderVisible={true}
                 onItemContextMenu={onItemContextMenu}
                 compact={false}
                 ariaLabelForSelectionColumn="Toggle selection"
                 checkButtonAriaLabel="Row checkbox"
+            />
+            <ContextualMenu
+                items={contextMenuItems}
+                hidden={!showContextualMenu}
+                target={contextMenuTarget}
+                onItemClick={onHideContextualMenu}
+                onDismiss={onHideContextualMenu}
             />
         </>
     )

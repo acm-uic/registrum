@@ -21,11 +21,16 @@ export interface ISettingsProps {
 
 export const Settings: React.FunctionComponent<ISettingsProps> = ({ user }: ISettingsProps) => {
     return (
-        <Stack horizontalAlign="center" verticalAlign="center" verticalFill tokens={{childrenGap: 15}}>
+        <Stack
+            horizontalAlign="center"
+            verticalAlign="center"
+            verticalFill
+            tokens={{ childrenGap: 15 }}
+        >
             <Text variant="xxLarge" styles={boldStyle}>
                 Account
             </Text>
-            <Stack tokens={{childrenGap: 10}}>
+            <Stack tokens={{ childrenGap: 10 }}>
                 <Persona
                     text={user.firstName}
                     secondaryText={user.email}
