@@ -1,5 +1,19 @@
 import * as React from 'react'
-import { Stack, CommandBar, Selection, ICommandBarItemProps } from '@fluentui/react'
+import {
+    Stack,
+    CommandBar,
+    Selection,
+    ICommandBarItemProps,
+    CommandBarButton,
+    initializeIcons,
+    IButtonStyles,
+    IStackStyles,
+    IIconStyles,
+    IStackTokens,
+    getTheme,
+    Icon,
+    Text
+} from '@fluentui/react'
 import { useConstCallback } from '@uifabric/react-hooks'
 import { CourseList } from '../features/courses/CourseList'
 import AddCourse from '../features/courses/AddCourse'
@@ -8,6 +22,8 @@ import { Course } from 'registrum-common/dist/lib/Banner'
 import { useDispatch } from '../redux/store'
 import { updateUser } from '../redux/auth/thunk'
 import { courseUnsubscribe } from '../redux/auth/thunk'
+
+initializeIcons()
 
 interface ICoursesProps {
     courses: Course[]
@@ -78,23 +94,68 @@ export const Courses: React.FunctionComponent<ICoursesProps> = ({ courses }: ICo
         }
     ]
 
+    const theme = getTheme()
+
+    const noCoursesAddButtonStyles: IButtonStyles = {
+        root: {
+            width: 70,
+            margin: '500 auto',
+            padding: 10
+        }
+    }
+
+    const noCoursesStackStyles: IStackStyles = {
+        root: {
+            // width: 300,
+            paddingTop: 50,
+            margin: '0 auto',
+            textAlign: 'center'
+        }
+    }
+
+    const noCoursesIconStyles: IIconStyles = {
+        root: {
+            fontSize: 50,
+            color: theme.palette.neutralSecondary
+        }
+    }
+
+    const noCoursesStackTokens: IStackTokens = {
+        childrenGap: 30
+    }
+
     return (
         <Stack tokens={{ childrenGap: 15 }}>
-            <CommandBar
-                items={items}
-                farItems={farItems}
-                ariaLabel="Use left and right arrow keys to navigate between commands"
-            />
             {courses.length ? (
-                <CourseList
-                    onAddCourse={openAddCoursesPanel}
-                    onRefresh={onRefresh}
-                    onDelete={onDelete}
-                    onDetails={onDetails}
-                    selection={selection}
-                    items={courses}
-                />
-            ) : null}
+                <>
+                    <CommandBar
+                        items={items}
+                        farItems={farItems}
+                        ariaLabel="Use left and right arrow keys to navigate between commands"
+                    />
+                    <CourseList
+                        onAddCourse={openAddCoursesPanel}
+                        onRefresh={onRefresh}
+                        onDelete={onDelete}
+                        onDetails={onDetails}
+                        selection={selection}
+                        items={courses}
+                    />
+                </>
+            ) : (
+                    <Stack styles={noCoursesStackStyles} tokens={noCoursesStackTokens}>
+                        <Icon styles={noCoursesIconStyles} iconName='AddNotes' />
+                        <Text block variant={'large'}>
+                            To start tracking a course, press the Add Button
+                        </Text>
+                        <CommandBarButton
+                            styles={noCoursesAddButtonStyles}
+                            iconProps={{ iconName: 'Add' }}
+                            text='Add'
+                            onClick={openAddCoursesPanel}
+                        />
+                    </Stack>
+                )}
             <CourseDetails
                 isOpen={isDetailsPanelOpen}
                 dismissPanel={dismissDetailsPanel}
