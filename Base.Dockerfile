@@ -11,6 +11,7 @@ RUN apk add --no-cache \
     automake \
     bash \
     g++ \
+    git \
     libc6-compat \
     libjpeg-turbo-dev \
     libpng-dev \
