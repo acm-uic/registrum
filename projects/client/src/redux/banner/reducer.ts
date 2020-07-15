@@ -34,7 +34,7 @@ export const BannerReducer = (state = initialState, action: BannerActionTypes): 
         case ADD_COURSE_NUMBERS:
             return { ...state, courseNumbers: [...state.courseNumbers, ...action.payload] }
         case ADD_COURSES:
-            return { ...state, courses: [...state.courses, ...action.payload] }
+            return { ...state, courses: action.payload }
         default:
             return state
     }

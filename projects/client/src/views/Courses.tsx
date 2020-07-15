@@ -106,7 +106,6 @@ export const Courses: React.FunctionComponent<ICoursesProps> = ({ courses }: ICo
 
     const noCoursesStackStyles: IStackStyles = {
         root: {
-            // width: 300,
             paddingTop: 50,
             margin: '0 auto',
             textAlign: 'center'

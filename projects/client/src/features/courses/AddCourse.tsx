@@ -21,6 +21,7 @@ import { useSelector, useDispatch } from '../../redux/store'
 import { Course } from 'registrum-common/dist/lib/Banner'
 import { getCourseNumbers, getCourses } from '../../redux/banner/thunk'
 import { courseSubscribe } from '../../redux/auth/thunk'
+import uniq from 'uniq'
 
 export interface IAddCourse {
     isOpen: boolean
@@ -31,7 +32,6 @@ export const AddCourse: React.FunctionComponent<IAddCourse> = ({ isOpen, dismiss
     const { terms, subjects, courseNumbers, courses } = useSelector(state => state.banner)
     const [selectedTerms, setSelectedTerms] = React.useState<ITag[]>([])
     const [selectedSubjects, setSelectedSubjects] = React.useState<ITag[]>([])
-    const [selectedCourseNumbers, setSelectedCourseNumbers] = React.useState<ITag[]>([])
     const dispatch = useDispatch()
 
     const handleChangeSubjects = (items?: ITag[]) => {
@@ -47,11 +47,8 @@ export const AddCourse: React.FunctionComponent<IAddCourse> = ({ isOpen, dismiss
     }
 
     const handleChangeCourseNumbers = (items?: ITag[]) => {
-        if (items) {
-            setSelectedCourseNumbers(items)
-
+        if (items && items.length) {
             items.forEach(({ key }) => {
-                // console.log(key)
                 const [term, subject, courseNumber] = (key as string).split(' ')
 
                 dispatch(

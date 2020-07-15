@@ -1,9 +1,28 @@
 import * as React from 'react'
 import { Link as RouterLink } from 'react-router-dom'
-import { Text, Link, Stack, FontWeights, PrimaryButton, DefaultButton } from '@fluentui/react'
+import {
+    Text,
+    Link,
+    Stack,
+    FontWeights,
+    PrimaryButton,
+    DefaultButton,
+    IStackStyles,
+    getTheme
+} from '@fluentui/react'
+
+const theme = getTheme()
 
 const boldStyle = {
     root: { fontWeight: FontWeights.semibold }
+}
+
+const stackStyles: IStackStyles = {
+    root: {
+        paddingTop: 100,
+        maxWidth: 500,
+        margin: '0 auto'
+    }
 }
 
 export const HomePage: React.FunctionComponent = () => {
@@ -13,6 +32,7 @@ export const HomePage: React.FunctionComponent = () => {
             verticalAlign="center"
             verticalFill
             tokens={{ childrenGap: 15 }}
+            styles={stackStyles}
         >
             <Text variant="xxLarge" styles={boldStyle}>
                 Welcome to Registrum
