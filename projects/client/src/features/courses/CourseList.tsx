@@ -10,7 +10,6 @@ import {
     IColumn,
     Stack,
     Icon,
-    initializeIcons,
     mergeStyleSets,
     FontSizes,
     getTheme,
@@ -22,8 +21,6 @@ import {
     IObjectWithKey
 } from '@fluentui/react'
 import { Course } from 'registrum-common/dist/lib/Banner'
-
-initializeIcons()
 
 interface ICourseListProps {
     items: Course[]

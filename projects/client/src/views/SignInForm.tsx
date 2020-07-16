@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Text, Stack, FontWeights, PrimaryButton, TextField } from '@fluentui/react'
+import { Text, Stack, FontWeights, PrimaryButton, TextField, Link } from '@fluentui/react'
 
 import { signInUser } from '../redux/auth/thunk'
 import { useDispatch } from '../redux/store'
@@ -77,6 +77,7 @@ export const SignInForm: React.FunctionComponent = () => {
                 <PrimaryButton type="submit" onClick={onClickHandler}>
                     Sign In
                 </PrimaryButton>
+                <Text>Don't have an account? <Link href='/signup'>Sign up.</Link></Text>
             </Stack>
         </Stack>
     )

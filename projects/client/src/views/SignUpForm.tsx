@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Text, Stack, FontWeights, PrimaryButton, TextField } from '@fluentui/react'
+import { Text, Stack, FontWeights, PrimaryButton, TextField, Link } from '@fluentui/react'
 import { useDispatch } from '../redux/store'
 import { signUpUser } from '../redux/auth/thunk'
 
@@ -32,7 +32,7 @@ export const SignUpForm: React.FunctionComponent = () => {
             <Text variant="xxLarge" styles={boldStyle}>
                 Sign Up
             </Text>
-            <Stack tokens={{ childrenGap: 10 }}>
+            <Stack tokens={{ childrenGap: 10 }} styles={{ root: { width: '90%', maxWidth: 300 } }}>
                 <TextField
                     name="firstname"
                     label="First Name"
@@ -73,6 +73,7 @@ export const SignUpForm: React.FunctionComponent = () => {
                 <PrimaryButton type="submit" onClick={handleSubmit}>
                     Sign Up
                 </PrimaryButton>
+                <Text>Already have an account? <Link href='/signin'>Sign in.</Link></Text>
             </Stack>
         </Stack>
     )
