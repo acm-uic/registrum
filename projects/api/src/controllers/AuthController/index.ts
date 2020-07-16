@@ -1,8 +1,7 @@
 import { UserObject } from '../../models/User'
 import { Controller } from 'registrum-common/dist/classes/Controller'
 import { isAuthenticated } from '../../util/passport'
-import * as UserRoutes from './Routes/User'
-import * as AuthRoutes from './Routes/Auth'
+import { AuthRoutes, UserRoutes } from './Routes'
 
 export class AuthController extends Controller {
     constructor(path: string) {
