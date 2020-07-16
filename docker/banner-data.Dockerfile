@@ -35,6 +35,7 @@ COPY . .
 
 RUN rush link
 RUN rush build
+RUN rush test
 
 FROM node:12-alpine as banner-data
 ENV NODE_ENV=production
