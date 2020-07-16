@@ -1,2 +1,3 @@
-export * as AuthRoutes from './Auth'
-export * as UserRoutes from './User'
+export { AuthRoutes } from './Auth'
+export { UserRoutes } from './User'
+export { DeviceRoutes } from './Device'

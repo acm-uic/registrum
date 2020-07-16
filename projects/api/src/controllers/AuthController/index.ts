@@ -1,7 +1,7 @@
 import { UserObject } from '../../models/User'
 import { Controller } from 'registrum-common/dist/classes/Controller'
 import { isAuthenticated } from '../../util/passport'
-import { AuthRoutes, UserRoutes } from './Routes'
+import { AuthRoutes, UserRoutes, DeviceRoutes } from './Routes'
 
 export class AuthController extends Controller {
     constructor(path: string) {
@@ -25,9 +25,10 @@ export class AuthController extends Controller {
         // this.router.post('/course', isAuthenticated, null)
         // this.router.delete('/course', isAuthenticated, null)
 
-        // this.router.get('/device', isAuthenticated, null)
-        // this.router.post('/device', isAuthenticated, null)
-        // this.router.delete('/device', isAuthenticated, null)
+        // * All routes under /auth/device
+        this.router.get('/device', isAuthenticated, DeviceRoutes.GET)
+        this.router.post('/device', isAuthenticated, DeviceRoutes.POST)
+        this.router.delete('/device', isAuthenticated, DeviceRoutes.DELETE)
     }
 
     // * Remove the password field from object
