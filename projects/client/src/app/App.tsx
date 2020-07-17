@@ -31,7 +31,7 @@ const App = (): JSX.Element => {
             <Router>
                 <NavBar user={user} />
                 <Switch>
-                    <Route path="/settings">{user ? <Settings user={user} /> : <></>}</Route>
+                    {user && <Route path="/settings"><Settings user={user} /></Route>}
                     {!user && <Route path="/signin" component={SignInForm} />}
                     {!user && <Route path="/signup" component={SignUpForm} />}
                     <Route path="/" exact>

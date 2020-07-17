@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Text, Stack, FontWeights, PrimaryButton, TextField, Link } from '@fluentui/react'
-
+import { withRouter } from 'react-router-dom'
 import { signInUser } from '../redux/auth/thunk'
 import { useDispatch } from '../redux/store'
 
@@ -8,7 +8,7 @@ const boldStyle = {
     root: { fontWeight: FontWeights.semibold }
 }
 
-export const SignInForm: React.FunctionComponent = () => {
+export const SignInForm = withRouter(({ history }) => {
     const [email, setEmail] = React.useState<string>('')
     const [password, setPassword] = React.useState<string>('')
     const dispatch = useDispatch()
@@ -29,6 +29,11 @@ export const SignInForm: React.FunctionComponent = () => {
 
     const validatePassword = (value: string): string | undefined => {
         return undefined
+    }
+
+    const onLinkClick = (event: React.MouseEvent<any>, url: string) => {
+        event.preventDefault();
+        history.push(url);
     }
 
     return (
@@ -77,10 +82,10 @@ export const SignInForm: React.FunctionComponent = () => {
                 <PrimaryButton type="submit" onClick={onClickHandler}>
                     Sign In
                 </PrimaryButton>
-                <Text>Don't have an account? <Link href='/signup'>Sign up.</Link></Text>
+                <Text>Don't have an account? <Link onClick={e => onLinkClick(e, '/signup')}>Sign up.</Link></Text>
             </Stack>
         </Stack>
     )
-}
+})
 
 export default SignInForm

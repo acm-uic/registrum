@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Link as RouterLink } from 'react-router-dom'
+import { withRouter, RouteComponentProps } from 'react-router-dom'
 import {
     Text,
     Link,
@@ -25,7 +25,13 @@ const stackStyles: IStackStyles = {
     }
 }
 
-export const HomePage: React.FunctionComponent = () => {
+export const HomePage = withRouter(({ history }) => {
+
+    const onLinkClick = (event: React.MouseEvent<any>, url: string) => {
+        event.preventDefault();
+        history.push(url);
+    }
+
     return (
         <Stack
             horizontalAlign="center"
@@ -41,18 +47,18 @@ export const HomePage: React.FunctionComponent = () => {
                 To continue, sign in. If you're a new user, register an account.
             </Text>
             <Stack horizontal tokens={{ childrenGap: 15 }}>
-                <RouterLink to="/signin" component={PrimaryButton}>
+                <PrimaryButton onClick={event => onLinkClick(event, '/signin')}>
                     Sign In
-                </RouterLink>
-                <RouterLink to="/signup" component={DefaultButton}>
+                </PrimaryButton>
+                <DefaultButton onClick={event => onLinkClick(event, '/signup')}>
                     Sign Up
-                </RouterLink>
+                </DefaultButton>
             </Stack>
             <Text variant="large" styles={boldStyle}>
                 <Link href="https://github.com/acm-uic/registrum">GitHub</Link>
             </Text>
         </Stack>
     )
-}
+})
 
 export default HomePage
