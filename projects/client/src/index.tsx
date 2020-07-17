@@ -27,9 +27,9 @@ if (process.env.NODE_ENV === 'development' && module.hot) {
 
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js').then(registration => {
+        navigator.serviceWorker.register('/service-worker.js').then(registration => {
             console.log('SW registered: ', registration);
-            registration.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: APPLICATION_SERVER_KEY });
+            registration.pushManager.subscribe({ userVisibleOnly: true });
         }).catch(registrationError => {
             console.log('SW registration failed: ', registrationError);
         });

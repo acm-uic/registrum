@@ -12,9 +12,6 @@ interface Configuration extends WebpackConfiguration {
 }
 
 const gitRevisionPlugin = new GitRevisionPlugin({ branch: true })
-const gcm_sender_id = '565395438650'
-const webPushPublic = process.env.WEB_PUSH_PUBLIC
-const webPushPrivate = process.env.WEB_PUSH_PRIVATE
 
 const config: Configuration = {
     entry: './src/index.tsx',
@@ -43,7 +40,7 @@ const config: Configuration = {
     resolve: { extensions: ['*', '.js', '.jsx', '.ts', '.tsx'] },
     output: {
         path: path.resolve(__dirname, 'dist/'),
-        filename: 'bundle.js'
+        filename: 'bundle.[hash].js'
     },
     devServer: {
         historyApiFallback: true,
@@ -56,13 +53,10 @@ const config: Configuration = {
     devtool: 'inline-source-map',
     plugins: [
         new CleanWebpackPlugin(),
-        gitRevisionPlugin,
         new DefinePlugin({
             'VERSION': JSON.stringify(gitRevisionPlugin.version()),
             'COMMITHASH': JSON.stringify(gitRevisionPlugin.commithash()),
-            'BRANCH': JSON.stringify(gitRevisionPlugin.branch()),
-            'WEB_PUSH_PUBLIC': webPushPublic,
-            'WEB_PUSH_PRIVATE': webPushPrivate
+            'BRANCH': JSON.stringify(gitRevisionPlugin.branch())
         }),
         new HtmlWebpackPlugin({
             title: 'Registrum',
@@ -77,7 +71,6 @@ const config: Configuration = {
             display: 'fullscreen',
             theme_color: '#d90000',
             background_color: '#ffffff',
-            gcm_sender_id,
             crossorigin: 'use-credentials',
             icons: [
                 {
@@ -100,8 +93,8 @@ const config: Configuration = {
             ]
         } as any),
         new InjectManifest({
-            swSrc: './src/sw.ts',
-            swDest: 'sw.js',
+            swSrc: './src/service-worker.ts',
+            swDest: 'service-worker.js',
             maximumFileSizeToCacheInBytes: 100 * 1024 * 1024
         }),
         new HotModuleReplacementPlugin()
