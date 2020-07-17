@@ -6,6 +6,7 @@ import { CleanWebpackPlugin } from 'clean-webpack-plugin'
 import { InjectManifest } from 'workbox-webpack-plugin'
 import WebpackPwaManifest from 'webpack-pwa-manifest'
 import GitRevisionPlugin from 'git-revision-webpack-plugin'
+import TerserPlugin from 'terser-webpack-plugin'
 
 interface Configuration extends WebpackConfiguration {
     devServer?: WebpackDevServerConfiguration
@@ -13,9 +14,11 @@ interface Configuration extends WebpackConfiguration {
 
 const gitRevisionPlugin = new GitRevisionPlugin({ branch: true })
 
+const mode = process.env.NODE_ENV === 'production' ? 'production' : 'development'
+
 const config: Configuration = {
     entry: './src/index.tsx',
-    mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
+    mode,
     module: {
         rules: [
             {
@@ -50,7 +53,16 @@ const config: Configuration = {
             '/api': 'http://localhost:4000/'
         }
     },
-    devtool: 'inline-source-map',
+    devtool: mode === 'development' ? 'inline-source-map' : undefined,
+    optimization: {
+        minimizer: [
+            new TerserPlugin({
+                cache: true,
+                parallel: true,
+                sourceMap: mode === 'development'
+            }),
+        ],
+    },
     plugins: [
         new CleanWebpackPlugin(),
         new DefinePlugin({

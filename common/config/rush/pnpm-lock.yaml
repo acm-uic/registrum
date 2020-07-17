@@ -41,6 +41,7 @@ dependencies:
   '@types/react-redux': 7.1.9
   '@types/react-router-dom': 5.1.5
   '@types/supertest': 2.0.10
+  '@types/terser-webpack-plugin': 3.0.0
   '@types/tough-cookie': 4.0.0
   '@types/uniq': 0.0.27
   '@types/web-push': 3.3.0
@@ -102,6 +103,7 @@ dependencies:
   style-loader: 1.2.1_webpack@4.43.0
   supertest: 4.0.2
   svg-inline-loader: 0.8.2
+  terser-webpack-plugin: 3.0.7_webpack@4.43.0
   tough-cookie: 4.0.0
   ts-jest: 26.1.3_jest@26.1.0+typescript@3.9.7
   ts-node: 8.10.2_typescript@3.9.7
@@ -2430,6 +2432,13 @@ packages:
     dev: false
     resolution:
       integrity: sha512-W+bw9ds02rAQaMvaLYxAbJ6cvguW/iJXNT6lTssS1ps6QdrMKttqEAMEG/b5CR8TZl3/L7/lH0ZV5nNR1LXikA==
+  /@types/terser-webpack-plugin/3.0.0:
+    dependencies:
+      '@types/webpack': 4.41.21
+      terser: 4.8.0
+    dev: false
+    resolution:
+      integrity: sha512-K5C7izOT8rR4qiE2vfXcQNEJN4lT9cq/2qJgpMUWR2HsjDW/KVrHx2CaHuaXvaqDNsRmdELPLaxeJHiI4GjVrA==
   /@types/tmp/0.1.0:
     dev: false
     resolution:
@@ -11414,6 +11423,25 @@ packages:
       webpack: ^4.0.0
     resolution:
       integrity: sha512-U4mACBHIegmfoEe5fdongHESNJWqsGU+W0S/9+BmYGVQDw1+c2Ow05TpMhxjPK1sRb7cuYq1BPl1e5YHJMTCqA==
+  /terser-webpack-plugin/3.0.7_webpack@4.43.0:
+    dependencies:
+      cacache: 15.0.5
+      find-cache-dir: 3.3.1
+      jest-worker: 26.1.0
+      p-limit: 3.0.2
+      schema-utils: 2.7.0
+      serialize-javascript: 4.0.0
+      source-map: 0.6.1
+      terser: 4.8.0
+      webpack: 4.43.0_webpack@4.43.0
+      webpack-sources: 1.4.3
+    dev: false
+    engines:
+      node: '>= 10.13.0'
+    peerDependencies:
+      webpack: ^4.0.0 || ^5.0.0
+    resolution:
+      integrity: sha512-5JqibUOctE6Ou4T00IVGYTQJBOhu24jz0PpqYeitQJJ3hlZY2ZKSwzzuqjmBH8MzbdWMgIefpmHwTkvwm6Q4CQ==
   /terser/4.8.0:
     dependencies:
       commander: 2.20.3
@@ -12844,6 +12872,7 @@ packages:
       '@types/react-dom': 16.9.8
       '@types/react-redux': 7.1.9
       '@types/react-router-dom': 5.1.5
+      '@types/terser-webpack-plugin': 3.0.0
       '@types/uniq': 0.0.27
       '@types/webpack': 4.41.21
       '@types/webpack-dev-server': 3.11.0
@@ -12878,6 +12907,7 @@ packages:
       regenerator-runtime: 0.13.5
       style-loader: 1.2.1_webpack@4.43.0
       svg-inline-loader: 0.8.2
+      terser-webpack-plugin: 3.0.7_webpack@4.43.0
       ts-node: 8.10.2_typescript@3.9.7
       typescript: 3.9.7
       uniq: 1.0.1
@@ -12900,7 +12930,7 @@ packages:
     peerDependencies:
       eslint: '*'
     resolution:
-      integrity: sha512-lHiL5HdOqDHXmQ5bVxXr74Qq0YWs1pjKX4RUCWoQHJfcvqUpu0S9XMtnH0DJQez92oCN/dUxvbhUNXoDF50+lg==
+      integrity: sha512-uEDzgNmdvV6jDFqIO20wyiJdTzSPbFTZmkDt+X3Fc4NEiPuFkOau5MXywgzm4D7auM3jSzq395Y3hLhY2VnyEQ==
       tarball: 'file:projects/registrum-client.tgz'
     version: 0.0.0
   'file:projects/registrum-common.tgz':
@@ -12980,6 +13010,7 @@ specifiers:
   '@types/react-redux': ^7.1.9
   '@types/react-router-dom': ^5.1.5
   '@types/supertest': ^2.0.9
+  '@types/terser-webpack-plugin': ^3.0.0
   '@types/tough-cookie': ^4.0.0
   '@types/uniq': ^0.0.27
   '@types/web-push': ~3.3.0
@@ -13041,6 +13072,7 @@ specifiers:
   style-loader: ^1.2.1
   supertest: ^4.0.2
   svg-inline-loader: ^0.8.2
+  terser-webpack-plugin: ^3.0.7
   tough-cookie: ^4.0.0
   ts-jest: ^26.0.0
   ts-node: ^8.10.1
