@@ -84,7 +84,10 @@ export class App extends ExpressApp {
     initializeControllers = (): void => {
         this.bindControllers([
             new ClassesController(`/classes`, { bannerUrl: this.config.bannerUrl }),
-            new AuthController(`/auth`),
+            new AuthController(`/auth`, {
+                notifyUrl: `${this.config.apiHost}${this.config.basePath}/banner`,
+                bannerUrl: this.config.bannerUrl
+            }),
             new BannerController(`/banner`, {
                 notifyUrl: `${this.config.apiHost}${this.config.basePath}/banner`,
                 bannerUrl: this.config.bannerUrl
