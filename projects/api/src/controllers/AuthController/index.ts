@@ -1,11 +1,26 @@
 import { UserObject } from '../../models/User'
 import { Controller } from 'registrum-common/dist/classes/Controller'
 import { isAuthenticated } from '../../util/passport'
-import { AuthRoutes, UserRoutes, DeviceRoutes } from './Routes'
+import { AuthRoutes, UserRoutes, DeviceRoutes, CourseRoutes } from './Routes'
+
+export type AuthControllerOptions = {
+    notifyUrl: string
+    bannerUrl: string
+}
 
 export class AuthController extends Controller {
-    constructor(path: string) {
+    private notifyURL: string
+    private bannerURL: string
+    private courseRoutes: CourseRoutes
+
+    constructor(path: string, config: AuthControllerOptions) {
         super(path)
+
+        this.notifyURL = config.notifyUrl
+        this.bannerURL = config.bannerUrl
+
+        this.courseRoutes = new CourseRoutes(config)
+
         this.#initializeRoutes()
     }
 
@@ -20,10 +35,10 @@ export class AuthController extends Controller {
         this.router.put('/user', isAuthenticated, UserRoutes.PUT)
         this.router.delete('/user', isAuthenticated, UserRoutes.DELETE)
 
-        // // * All routes under /auth/course
-        // this.router.get('/course', isAuthenticated, null)
-        // this.router.post('/course', isAuthenticated, null)
-        // this.router.delete('/course', isAuthenticated, null)
+        // * All routes under /auth/course
+        this.router.get('/course', isAuthenticated, CourseRoutes.GET)
+        this.router.post('/course', isAuthenticated, this.courseRoutes.POST)
+        this.router.delete('/course', isAuthenticated, this.courseRoutes.DELETE)
 
         // * All routes under /auth/device
         this.router.get('/device', isAuthenticated, DeviceRoutes.GET)
