@@ -15,20 +15,36 @@ export class DeviceRoutes {
 
     static POST: Handler[] = [
         async (req: Request, res: Response): Promise<void> => {
-            throw new Error('Not Implemented')
+            const { _id } = req.user as UserObject
+            const deviceEndpoint = JSON.parse(req.body.subscription) as SubscriptionsObject
+
+            try {
+                await User.updateOne(
+                    { _id },
+                    { $addToSet: { subscriptionObjects: deviceEndpoint } }
+                )
+
+                // * Let them know that it was successful
+                res.status(200).end()
+            } catch (er) {
+                res.status(501).end(er.message)
+            }
         }
     ]
+
     static DELETE: Handler[] = [
         async (req: Request, res: Response): Promise<void> => {
             const { _id } = req.user as UserObject
-            const deviceEndpoints = JSON.parse(req.body.subscription) as SubscriptionsObject
+            const deviceEndpoint = JSON.parse(req.body.subscription) as SubscriptionsObject
 
-            const updatedUser = await User.updateOne(
-                { _id },
-                { $pull: { subscriptionObjects: deviceEndpoints } }
-            )
+            try {
+                await User.updateOne({ _id }, { $pull: { subscriptionObjects: deviceEndpoint } })
 
-            throw new Error('Not Implemented')
+                // * Let them know that it was successful
+                res.status(200).end()
+            } catch (er) {
+                res.status(501).end(er.message)
+            }
         }
     ]
 }
