@@ -6,9 +6,9 @@ import { store } from './redux/store'
 import './index.css'
 import './appVersion'
 
-const root = document.createElement('div');
-root.id = 'root';
-document.body.appendChild(root);
+const root = document.createElement('div')
+root.id = 'root'
+document.body.appendChild(root)
 
 const render = () => {
     ReactDOM.render(
@@ -26,12 +26,31 @@ if (process.env.NODE_ENV === 'development' && module.hot) {
 }
 
 if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/service-worker.js').then(registration => {
-            console.log('SW registered: ', registration);
-            registration.pushManager.subscribe({ userVisibleOnly: true });
-        }).catch(registrationError => {
-            console.log('SW registration failed: ', registrationError);
-        });
-    });
+    navigator.serviceWorker
+        .register('/service-worker.js')
+        .then(async registration => {
+            await registration.update()
+            console.log('SW registered: ', registration)
+
+            if (!process.env.WEBPUSHPUBLIC) {
+                return
+            }
+
+            registration.pushManager
+                .subscribe({
+                    userVisibleOnly: true,
+                    applicationServerKey: process.env.WEBPUSHPUBLIC
+                })
+                .then(scr => {
+                    console.info('Subscribed to push notification: ', scr)
+                    console.info(process.env.WEBPUSHPUBLIC || 'NOT AVAILABLE')
+                    // * Subscribed
+                })
+                .catch(err => {
+                    console.error('Failed to subscribe the user: ', err)
+                })
+        })
+        .catch(registrationError => {
+            console.log('SW registration failed: ', registrationError)
+        })
 }
