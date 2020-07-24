@@ -111,11 +111,12 @@ const config: Configuration = {
                 }
             ]
         }),
-        mode === 'development' &&
-            new Dotenv({
-                path: '.env'
-            }),
         new HotModuleReplacementPlugin(),
+        new Dotenv({
+            defaults: true,
+            systemvars: true,
+            silent: true
+        }),
         new InjectManifest({
             swSrc: './src/service-worker.ts',
             swDest: 'service-worker.js',

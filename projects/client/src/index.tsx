@@ -43,8 +43,6 @@ if ('serviceWorker' in navigator) {
                 })
                 .then(scr => {
                     console.info('Subscribed to push notification: ', scr)
-                    console.info(process.env.WEBPUSHPUBLIC || 'NOT AVAILABLE')
-                    // * Subscribed
                 })
                 .catch(err => {
                     console.error('Failed to subscribe the user: ', err)
