@@ -4,7 +4,7 @@ import { CacheFirst, StaleWhileRevalidate } from 'workbox-strategies'
 import { CacheableResponsePlugin } from 'workbox-cacheable-response'
 import { ExpirationPlugin } from 'workbox-expiration'
 
-declare let self: Window & typeof globalThis & ServiceWorkerGlobalScope
+declare let self: ServiceWorkerGlobalScope
 
 // Cache the underlying font files with a cache-first strategy for 1 year.
 registerRoute(
@@ -48,17 +48,30 @@ registerRoute(
     })
 )
 
-self.addEventListener('push', (event: PushEvent) => {
-    const message = event.data?.text()
-
-    // * Setup the title and options
-    const title = 'Registrum: Class Status'
-    const options = {
-        body: message
+self.addEventListener('push', async (event: PushEvent) => {
+    // * Ask for permission
+    if (Notification.permission === 'default') {
+        await Notification.requestPermission()
     }
 
-    // * Show the notification
-    event.waitUntil(self.registration.showNotification(title, options))
+    // * Permission granted -> Subscribe
+    if (Notification.permission === 'granted') {
+        console.log('Permissions for Notification granted')
+
+        const message = event.data?.text()
+
+        // * Setup the title and options
+        const title = 'Registrum: Class Status'
+        const options = {
+            body: message
+        }
+
+        // * Show the notification
+        event.waitUntil(self.registration.showNotification(title, options))
+    } else {
+        // ! Permissions for Notification not granted
+        return
+    }
 })
 
 precacheAndRoute(self.__WB_MANIFEST || [])

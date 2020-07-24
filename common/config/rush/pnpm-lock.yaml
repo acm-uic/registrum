@@ -22,6 +22,7 @@ dependencies:
   '@types/compression': 1.7.0
   '@types/copy-webpack-plugin': 6.0.0
   '@types/cors': 2.8.6
+  '@types/dotenv-webpack': 1.8.0
   '@types/eslint': 6.8.1
   '@types/express': 4.17.7
   '@types/express-session': 1.17.0
@@ -2105,6 +2106,12 @@ packages:
     dev: false
     resolution:
       integrity: sha512-EGlKlgMhnLt/cM4DbUSafFdrkeJoC9Mvnj0PUCU7tFmTjMjNRT957kXCx0wYm3JuEq4o4ZsS5vG+NlkM2DMd2A==
+  /@types/dotenv-webpack/1.8.0:
+    dependencies:
+      '@types/webpack': 4.41.21
+    dev: false
+    resolution:
+      integrity: sha512-MQbyRnVjS1LheFMMm/k5ogBt61J748t7aM19ZS2iDJQHasg6x15MU0ssBp51yQHOyyOqP4/vppNNlHXnJ4Vi3A==
   /@types/eslint-visitor-keys/1.0.0:
     dev: false
     resolution:
@@ -12865,6 +12872,7 @@ packages:
       '@fluentui/react': 7.123.1_35ebc47dfa16f592f1d24c56b3dd1b57
       '@reduxjs/toolkit': 1.4.0
       '@types/copy-webpack-plugin': 6.0.0
+      '@types/dotenv-webpack': 1.8.0
       '@types/git-revision-webpack-plugin': 3.0.0
       '@types/jest': 26.0.4
       '@types/node': 14.0.23
@@ -12930,7 +12938,7 @@ packages:
     peerDependencies:
       eslint: '*'
     resolution:
-      integrity: sha512-uEDzgNmdvV6jDFqIO20wyiJdTzSPbFTZmkDt+X3Fc4NEiPuFkOau5MXywgzm4D7auM3jSzq395Y3hLhY2VnyEQ==
+      integrity: sha512-blg8NyggcDGpO9SMeekdpeFFJptgPhS1SVaRpCcg4WVgTxYoHrP+9aXSeCcKzRKdwa7lUfIphVH71+RgS+Pk/A==
       tarball: 'file:projects/registrum-client.tgz'
     version: 0.0.0
   'file:projects/registrum-common.tgz':
@@ -12991,6 +12999,7 @@ specifiers:
   '@types/compression': ^1.7.0
   '@types/copy-webpack-plugin': ^6.0.0
   '@types/cors': ^2.8.6
+  '@types/dotenv-webpack': ^1.8.0
   '@types/eslint': ^6.8.1
   '@types/express': ^4.17.6
   '@types/express-session': ^1.17.0

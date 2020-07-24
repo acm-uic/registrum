@@ -1,5 +1,9 @@
 import * as path from 'path'
-import { Configuration as WebpackConfiguration, HotModuleReplacementPlugin, DefinePlugin } from 'webpack'
+import {
+    Configuration as WebpackConfiguration,
+    HotModuleReplacementPlugin,
+    DefinePlugin
+} from 'webpack'
 import { Configuration as WebpackDevServerConfiguration } from 'webpack-dev-server'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import { CleanWebpackPlugin } from 'clean-webpack-plugin'
@@ -7,11 +11,14 @@ import { InjectManifest } from 'workbox-webpack-plugin'
 import WebpackPwaManifest from 'webpack-pwa-manifest'
 import GitRevisionPlugin from 'git-revision-webpack-plugin'
 import TerserPlugin from 'terser-webpack-plugin'
+import Dotenv from 'dotenv-webpack'
 
+// * Include DevServer Options into Webpack
 interface Configuration extends WebpackConfiguration {
     devServer?: WebpackDevServerConfiguration
 }
 
+// * Get git information through GitRevisionPlugin
 const gitRevisionPlugin = new GitRevisionPlugin({ branch: true })
 
 const mode = process.env.NODE_ENV === 'production' ? 'production' : 'development'
@@ -60,15 +67,15 @@ const config: Configuration = {
                 cache: true,
                 parallel: true,
                 sourceMap: mode === 'development'
-            }),
-        ],
+            })
+        ]
     },
     plugins: [
         new CleanWebpackPlugin(),
         new DefinePlugin({
-            'VERSION': JSON.stringify(gitRevisionPlugin.version()),
-            'COMMITHASH': JSON.stringify(gitRevisionPlugin.commithash()),
-            'BRANCH': JSON.stringify(gitRevisionPlugin.branch())
+            VERSION: JSON.stringify(gitRevisionPlugin.version()),
+            COMMITHASH: JSON.stringify(gitRevisionPlugin.commithash()),
+            BRANCH: JSON.stringify(gitRevisionPlugin.branch())
         }),
         new HtmlWebpackPlugin({
             title: 'Registrum',
@@ -103,13 +110,18 @@ const config: Configuration = {
                     destination: path.join('icons', 'android')
                 }
             ]
-        } as any),
+        }),
+        new HotModuleReplacementPlugin(),
+        new Dotenv({
+            defaults: true,
+            systemvars: true,
+            silent: true
+        }),
         new InjectManifest({
             swSrc: './src/service-worker.ts',
             swDest: 'service-worker.js',
             maximumFileSizeToCacheInBytes: 100 * 1024 * 1024
-        }),
-        new HotModuleReplacementPlugin()
+        })
     ]
 }
 
