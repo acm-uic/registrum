@@ -1,28 +1,14 @@
 {
-    "editor.rulers": [
-        100
-    ],
-    "eslint.validate": [
-        "javascript",
-        "typescript",
-        "typescriptreact"
-    ],
+    "editor.rulers": [100],
+    "eslint.validate": ["javascript", "typescript", "typescriptreact"],
     "files.trimTrailingWhitespace": true,
     "search.exclude": {
         "**/node_modules": true,
-        "**/bower_components": true,
         "**/dist": true,
         "**/coverage": true
     },
     "typescript.referencesCodeLens.enabled": true,
     "eslint.alwaysShowStatus": true,
-    "eslint.workingDirectories": [
-        "projects/api",
-        "projects/client",
-        "projects/banner",
-        "projects/banner-data",
-        "projects/common"
-    ],
     "editor.codeActionsOnSave": {
         "source.fixAll.eslint": true
     },

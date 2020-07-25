@@ -8,10 +8,8 @@
         "lint:fix": "npm run lint -- --fix",
         "start": "node dist/index.js",
         "test": "jest --silent --passWithNoTests",
-        "watch": "concurrently -n ts,node \"npm run watch:ts\" \"npm run watch:node\"",
-        "watch:node": "nodemon --watch dist dist/index.js",
-        "watch:test": "npm run test -- --watch-files src --watch",
-        "watch:ts": "tsc -w --preserveWatchOutput"
+        "watch": "nodemon --watch 'src/**/*.ts' --ignore 'src/**/*.spec.ts' --exec 'ts-node' src/index.ts",
+        "watch:test": "npm run test -- --watch-files src --watch"
     },
     "dependencies": {
         "@bmiddha/webhooks": "^1.1.6",
@@ -24,7 +22,7 @@
         "mongoose": "^5.9.15",
         "morgan": "^1.10.0",
         "node-fetch": "^2.6.0",
-        "registrum-common": "^0.1.0",
+        "registrum-common": "workspace:^0.1.0",
         "tough-cookie": "^4.0.0"
     },
     "devDependencies": {
@@ -43,16 +41,12 @@
         "@typescript-eslint/parser": "^3.5.0",
         "chai": "^4.2.0",
         "codecov": "^3.7.0",
-        "concurrently": "^5.2.0",
-        "eslint": "^7.0.0",
-        "eslint-config-prettier": "^6.11.0",
-        "eslint-plugin-prettier": "^3.1.4",
+        "eslint": "^7.5.0",
         "ioredis": "^4.17.1",
         "jest": "^26.0.1",
         "nodemon": "^2.0.4",
-        "prettier": "^2.0.5",
         "ts-jest": "^26.0.0",
         "ts-node": "^8.10.1",
-        "typescript": "^3.9.6"
+        "typescript": "^3.9.7"
     }
 }

@@ -1,40 +1,47 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/rush/v5/rush.schema.json",
-  "rushVersion": "5.23.2",
-  "pnpmVersion": "4.14.4",
-  // "npmVersion": "4.5.0",
-  // "yarnVersion": "1.9.4",
-  "pnpmOptions": {},
-  "gitPolicy": {},
-  "ensureConsistentVersions": true,
-  "repository": {},
-  "eventHooks": {
-    "preRushInstall": [],
-    "postRushInstall": [],
-    "preRushBuild": [],
-    "postRushBuild": []
-  },
-  "variants": [],
-  "projects": [
-    {
-      "packageName": "registrum-banner-data",
-      "projectFolder": "projects/banner-data"
+    "$schema": "https://developer.microsoft.com/json-schemas/rush/v5/rush.schema.json",
+    "rushVersion": "5.30.1",
+    "pnpmVersion": "4.14.4",
+    "pnpmOptions": {
+        "strictPeerDependencies": true,
+        "preventManualShrinkwrapChanges": true,
+        "useWorkspaces": true
     },
-    {
-      "packageName": "registrum-banner",
-      "projectFolder": "projects/banner"
+    "nodeSupportedVersionRange": ">=12.13.0 <13.0.0",
+    "gitPolicy": {},
+    "ensureConsistentVersions": true,
+    "projectFolderMinDepth": 2,
+    "projectFolderMaxDepth": 2,
+    "repository": {
+        "url": "https://github.com/acm-uic/registrum.git"
     },
-    {
-      "packageName": "registrum-client",
-      "projectFolder": "projects/client"
+    "eventHooks": {
+        "preRushInstall": [],
+        "postRushInstall": [],
+        "preRushBuild": [],
+        "postRushBuild": []
     },
-    {
-      "packageName": "registrum-api",
-      "projectFolder": "projects/api"
-    },
-    {
-      "packageName": "registrum-common",
-      "projectFolder": "projects/common"
-    }
-  ]
+    "variants": [],
+    "projects": [
+        {
+            "packageName": "registrum-banner-data",
+            "projectFolder": "projects/banner-data"
+        },
+        {
+            "packageName": "registrum-banner",
+            "projectFolder": "projects/banner"
+        },
+        {
+            "packageName": "registrum-client",
+            "projectFolder": "projects/client"
+        },
+        {
+            "packageName": "registrum-api",
+            "projectFolder": "projects/api"
+        },
+        {
+            "packageName": "registrum-common",
+            "projectFolder": "projects/common"
+        }
+    ]
 }
