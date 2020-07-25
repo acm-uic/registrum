@@ -1,10 +1,10 @@
 {
   "private": true,
   "scripts": {
-    "build": "lerna run build --no-bail --stream",
-    "test": "lerna run test --no-bail --stream",
+    "build": "lerna run build --stream",
+    "test": "lerna run test --stream",
     "clean": "git clean -ffdX",
-    "lint": "lerna run lint --no-bail --stream",
+    "lint": "lerna run lint --stream",
     "prettier": "prettier --write ."
   },
   "workspaces": {
