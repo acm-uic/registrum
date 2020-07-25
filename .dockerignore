@@ -11,8 +11,5 @@ docker-compose*.yml
 */node_modules
 */dist
 */build
-*/.rush
-*/*.build.log
-*/*.build.error.log
 */.nyc_output
 */coverage

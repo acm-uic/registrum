@@ -192,9 +192,5 @@ $RECYCLE.BIN/
 package-lock.json
 yarn.lock
 
-# Rush temporary files
-common/temp/
-**/.rush/temp/
-
 # K8s Secrets.yaml
 Secrets.yaml

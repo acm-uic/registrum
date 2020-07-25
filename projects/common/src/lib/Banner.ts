@@ -176,7 +176,7 @@ export class Banner {
   constructor(term: string, subject?: string) {
     this.#term = term;
     this.#subject = subject || '';
-    this.#clearCookie();
+    this.#cookieJar = new CookieJar();
     axiosCookieJarSupport(axios);
     this.#api = axios.create({ withCredentials: true, jar: this.#cookieJar });
   }
@@ -279,7 +279,7 @@ export class Banner {
     ).data;
   };
 
-  public static getLatestTerm = async (numberOfTerms: number = 1): Promise<Term[]> =>
+  public static getLatestTerm = async (numberOfTerms = 1): Promise<Term[]> =>
     (await Banner.getTerm()).sort((a, b) => parseInt(a.code) - parseInt(b.code)).slice(-numberOfTerms);
   public static getTerm = async (params?: GetTermProps): Promise<GetTermResponse> =>
     await Banner.staticOperations('getTerms', params);

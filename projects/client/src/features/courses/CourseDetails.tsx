@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { Stack, Panel, Text, PanelType } from '@fluentui/react';
 
 import { Course } from 'registrum-common/dist/lib/Banner';

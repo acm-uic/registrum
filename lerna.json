@@ -1,8 +1,10 @@
 {
-  "packages": ["apps/*", "packages/*", "scripts", "packages/fluentui/*"],
+  "packages": [
+    "projects/*"
+  ],
   "npmClient": "yarn",
   "useWorkspaces": true,
-  "version": "0.0.0",
+  "version": "independent",
   "hooks": {
     "pre-commit": "pretty-quick --staged"
   }

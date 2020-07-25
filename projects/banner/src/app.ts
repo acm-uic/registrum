@@ -3,7 +3,7 @@ import { HookController } from './controllers/HookController';
 import { BannerController } from './controllers/BannerController';
 import compression from 'compression';
 import mongoose from 'mongoose';
-import * as express from 'express';
+import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
 

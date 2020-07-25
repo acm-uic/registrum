@@ -16,4 +16,3 @@ export const appVersion = {
   branch: BRANCH
 };
 
-window.appVersion = appVersion;

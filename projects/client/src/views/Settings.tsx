@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { Text, Stack, FontWeights, PrimaryButton, Persona, TextField, Checkbox } from '@fluentui/react';
 import { IUser } from '../interfaces/IUser';
 import { getGravatarImageUrl } from '../helpers/Gravatar';

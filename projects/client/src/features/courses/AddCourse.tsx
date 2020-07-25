@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import {
   Stack,
   Panel,
@@ -81,8 +81,8 @@ export const AddCourse: React.FunctionComponent<IAddCourse> = ({ isOpen, dismiss
   const _onFilterChanged = (optionsList: ITag[], filter: string, selectedItems?: ITag[]) => {
     return filter
       ? optionsList
-          .filter(tag => tag.name.toLowerCase().indexOf(filter.toLowerCase()) !== -1)
-          .filter(tag => !listContainsDocument(tag, selectedItems))
+        .filter(tag => tag.name.toLowerCase().indexOf(filter.toLowerCase()) !== -1)
+        .filter(tag => !listContainsDocument(tag, selectedItems))
       : [];
   };
 

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { Text, Stack, FontWeights, PrimaryButton, TextField, Link } from '@fluentui/react';
 import { withRouter } from 'react-router-dom';
 import { useDispatch } from '../redux/store';

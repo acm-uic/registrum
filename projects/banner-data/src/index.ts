@@ -1,5 +1,5 @@
-import * as dotenv from 'dotenv'
-import * as cron from 'node-cron'
+import dotenv from 'dotenv'
+import cron from 'node-cron'
 import mongoose from 'mongoose'
 import { BannerData, BannerDataConfig } from './BannerData'
 import { ArgumentParser } from 'argparse'

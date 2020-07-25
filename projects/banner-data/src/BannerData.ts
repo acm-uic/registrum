@@ -29,20 +29,24 @@ export class BannerData {
         const { maxPageSize, waitBetweenPages } = this.#config
         let count = 0
         const res = await this.#getPage(banner, maxPageSize, 0)
-        const { success, totalCount, pageOffset, pageMaxSize, sectionsFetchedCount } = res
-        console.log(`${progress[count++ % progress.length]} ${success}, ${totalCount}, \
-${pageOffset}, ${pageMaxSize}, ${sectionsFetchedCount}`)
-        let received = res.data.length
-        while (received < res.totalCount) {
-            const page = await this.#getPage(banner, maxPageSize, received)
-            const { success, totalCount, pageOffset, pageMaxSize, sectionsFetchedCount } = page
+        if (res) {
+
+            const { success, totalCount, pageOffset, pageMaxSize, sectionsFetchedCount } = res
             console.log(`${progress[count++ % progress.length]} ${success}, ${totalCount}, \
 ${pageOffset}, ${pageMaxSize}, ${sectionsFetchedCount}`)
-            res.data = [...res.data, ...page.data]
-            received += page.data.length
-            await new Promise(resolve => setTimeout(resolve, waitBetweenPages))
+            let received = res.data.length
+            while (received < res.totalCount) {
+                const page = await this.#getPage(banner, maxPageSize, received)
+                if (!page) continue;
+                const { success, totalCount, pageOffset, pageMaxSize, sectionsFetchedCount } = page
+                console.log(`${progress[count++ % progress.length]} ${success}, ${totalCount}, \
+${pageOffset}, ${pageMaxSize}, ${sectionsFetchedCount}`)
+                res.data = [...res.data, ...page.data]
+                received += page.data.length
+                await new Promise(resolve => setTimeout(resolve, waitBetweenPages))
+            }
+            return res
         }
-        return res
     }
 
     #getPage = async (banner: Banner, size: number, offset: number) => {
@@ -115,26 +119,28 @@ ${pageOffset}, ${pageMaxSize}, ${sectionsFetchedCount}`)
             console.log(term.code)
             const banner = new Banner(term.code)
 
-            const courses: SearchResponse = await this.#getAllPages(banner)
-            const res = courses.data.map(course => {
-                return {
-                    ...course,
-                    _id: course.courseReferenceNumber
-                }
-            })
-            await CourseModel.collection.bulkWrite(
-                res.map(r => {
+            const courses: SearchResponse | undefined = await this.#getAllPages(banner)
+            if (courses) {
+                const res = courses.data.map(course => {
                     return {
-                        updateOne: {
-                            filter: {
-                                _id: r._id
-                            },
-                            update: { $set: r },
-                            upsert: true
-                        }
+                        ...course,
+                        _id: course.courseReferenceNumber
                     }
                 })
-            )
+                await CourseModel.collection.bulkWrite(
+                    res.map(r => {
+                        return {
+                            updateOne: {
+                                filter: {
+                                    _id: r._id
+                                },
+                                update: { $set: r },
+                                upsert: true
+                            }
+                        }
+                    })
+                )
+            }
             await new Promise(resolve => setTimeout(resolve, this.#config.waitBetweenTerms))
         }
     }

@@ -1,10 +1,10 @@
 {
   "private": true,
   "scripts": {
-    "build": "lerna run build --stream",
-    "test": "lerna run test --stream",
-    "clean": "lerna run clean --stream",
-    "lint": "lerna run lint --stream",
+    "build": "lerna run build --no-bail --stream",
+    "test": "lerna run test --no-bail --stream",
+    "clean": "git clean -ffdX",
+    "lint": "lerna run lint --no-bail --stream",
     "prettier": "prettier --write ."
   },
   "workspaces": {
@@ -13,6 +13,7 @@
     ]
   },
   "devDependencies": {
+    "codecov": "^3.7.2",
     "lerna": "^3.22.1",
     "prettier": "^2.0.5",
     "pretty-quick": "^2.0.1"

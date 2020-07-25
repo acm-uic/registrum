@@ -1,10 +1,12 @@
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import React from 'react';
+import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import App from './app/App';
 import { store } from './redux/store';
 import './index.css';
-import './appVersion';
+import { appVersion } from './appVersion';
+
+window.appVersion = appVersion;
 
 const root = document.createElement('div');
 root.id = 'root';

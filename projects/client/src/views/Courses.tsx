@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import {
   Stack,
   CommandBar,
@@ -142,19 +142,19 @@ export const Courses: React.FunctionComponent<ICoursesProps> = ({ courses }: ICo
           />
         </>
       ) : (
-        <Stack styles={noCoursesStackStyles} tokens={noCoursesStackTokens}>
-          <Icon styles={noCoursesIconStyles} iconName="AddNotes" />
-          <Text block variant={'large'}>
-            To start tracking a course, press the Add Button
+          <Stack styles={noCoursesStackStyles} tokens={noCoursesStackTokens}>
+            <Icon styles={noCoursesIconStyles} iconName="AddNotes" />
+            <Text block variant={'large'}>
+              To start tracking a course, press the Add Button
           </Text>
-          <CommandBarButton
-            styles={noCoursesAddButtonStyles}
-            iconProps={{ iconName: 'Add' }}
-            text="Add"
-            onClick={openAddCoursesPanel}
-          />
-        </Stack>
-      )}
+            <CommandBarButton
+              styles={noCoursesAddButtonStyles}
+              iconProps={{ iconName: 'Add' }}
+              text="Add"
+              onClick={openAddCoursesPanel}
+            />
+          </Stack>
+        )}
       <CourseDetails isOpen={isDetailsPanelOpen} dismissPanel={dismissDetailsPanel} course={detailsCourse} />
       <AddCourse isOpen={isAddCoursesPanelOpen} dismissPanel={dismissAddCoursesPanel} />
     </Stack>

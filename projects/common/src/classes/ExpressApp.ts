@@ -1,4 +1,4 @@
-import * as express from 'express';
+import express from 'express';
 import { Controller } from './Controller';
 
 type Middleware = (req: express.Request, res: express.Response, next: express.NextFunction) => void;
