@@ -18,7 +18,7 @@
         "dotenv": "^8.2.0",
         "mongoose": "^5.9.15",
         "node-cron": "^2.0.3",
-        "registrum-common": "workspace:^0.1.0",
+        "registrum-common": "^0.1.0",
         "tough-cookie": "^4.0.0"
     },
     "devDependencies": {

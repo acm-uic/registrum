@@ -6,10 +6,10 @@ spec:
   selector:
     app: registrum-client
   ports:
-    - name: "http"
+    - name: 'http'
       port: 80
       targetPort: 80
-    - name: "https"
+    - name: 'https'
       port: 443
       targetPort: 443
   type: LoadBalancer

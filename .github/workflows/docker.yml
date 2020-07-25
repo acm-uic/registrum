@@ -1,95 +1,95 @@
 name: Docker CI/CD
 
 on:
-    push:
-    create:
-    release:
-    pull_request:
-    workflow_dispatch:
-        inputs:
-            tag:
-                description: 'Docker image tag'
-                required: false
-            webhook:
-                description: 'WebHook to trigger'
-                required: false
+  push:
+  create:
+  release:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Docker image tag'
+        required: false
+      webhook:
+        description: 'WebHook to trigger'
+        required: false
 
 jobs:
-    build-test-rush:
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v2
-            - name: Use Node.js 12.x
-              uses: actions/setup-node@v1
-              with:
-                  node-version: 12.x
-            - name: Get pnpm cache directory
-              id: pnpm-cache
-              run: |
-                  echo "::set-output name=dir::common/temp/pnpm-store"
-            - uses: actions/cache@v2
-              with:
-                  path: common/temp/pnpm-store
-                  key: ${{ runner.os }}-node-${{ hashFiles('common/config/rush/pnpm-lock.yaml') }}
-                  restore-keys: |
-                      ${{ runner.os }}-node-
-            - name: rush install
-              run: node common/scripts/install-run-rush.js install --no-link
-            - name: rush link
-              run: node common/scripts/install-run-rush.js link
-            - name: rush lint
-              run: node common/scripts/install-run-rush.js lint
-            - name: rush build
-              run: node common/scripts/install-run-rush.js build --verbose
-            - name: rush test
-              run: node common/scripts/install-run-rush.js test
-            - name: rush coverage
-              run: node common/scripts/install-run-rush.js coverage
-              env:
-                  CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+  build-test-rush:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js 12.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+      - name: Get pnpm cache directory
+        id: pnpm-cache
+        run: |
+          echo "::set-output name=dir::common/temp/pnpm-store"
+      - uses: actions/cache@v2
+        with:
+          path: common/temp/pnpm-store
+          key: ${{ runner.os }}-node-${{ hashFiles('common/config/rush/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: rush install
+        run: node common/scripts/install-run-rush.js install --no-link
+      - name: rush link
+        run: node common/scripts/install-run-rush.js link
+      - name: rush lint
+        run: node common/scripts/install-run-rush.js lint
+      - name: rush build
+        run: node common/scripts/install-run-rush.js build --verbose
+      - name: rush test
+        run: node common/scripts/install-run-rush.js test
+      - name: rush coverage
+        run: node common/scripts/install-run-rush.js coverage
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
-    build-push-docker:
-        runs-on: ubuntu-latest
-        needs:
-            - build-test-rush
-        strategy:
-            fail-fast: false
-            matrix:
-                project: [api, banner, banner-data, client]
+  build-push-docker:
+    runs-on: ubuntu-latest
+    needs:
+      - build-test-rush
+    strategy:
+      fail-fast: false
+      matrix:
+        project: [api, banner, banner-data, client]
 
-        steps:
-            - uses: actions/checkout@v2
-            - uses: satackey/action-docker-layer-caching@v0.0.3
-            - name: build-image
-              uses: docker/build-push-action@v1
-              with:
-                  username: ${{ secrets.REGISTRY_USER }}
-                  password: ${{ secrets.REGISTRY_PASSWORD }}
-                  registry: ${{ secrets.REGISTRY_HOST }}
-                  repository: ${{ github.repository }}/${{ matrix.project }}
-                  build_args: CLIENT_WEBPUSHPUBLIC=${{ secrets.WEBPUSHPUBLIC }}
-                  dockerfile: docker/${{ matrix.project }}.Dockerfile
-                  context: projects/${{ matrix.project }}
-                  add_git_labels: true
-                  tag_with_ref: true
-                  push: ${{ (startsWith(github.ref, 'refs/tags/') || (github.ref == 'refs/heads/master') || (github.ref == 'refs/heads/staging')) }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: satackey/action-docker-layer-caching@v0.0.3
+      - name: build-image
+        uses: docker/build-push-action@v1
+        with:
+          username: ${{ secrets.REGISTRY_USER }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+          registry: ${{ secrets.REGISTRY_HOST }}
+          repository: ${{ github.repository }}/${{ matrix.project }}
+          build_args: CLIENT_WEBPUSHPUBLIC=${{ secrets.WEBPUSHPUBLIC }}
+          dockerfile: docker/${{ matrix.project }}.Dockerfile
+          context: projects/${{ matrix.project }}
+          add_git_labels: true
+          tag_with_ref: true
+          push: ${{ (startsWith(github.ref, 'refs/tags/') || (github.ref == 'refs/heads/master') || (github.ref == 'refs/heads/staging')) }}
 
-    trigger-hooks:
-        runs-on: ubuntu-latest
-        needs:
-            - build-push-docker
-        steps:
-            - name: Trigger Hooks - master
-              if: github.ref == 'refs/heads/master'
-              run: |
-                  curl -X POST -H "Content-Type: application/json" -d "{}" '${{ secrets.MASTER_HOOK }}'
+  trigger-hooks:
+    runs-on: ubuntu-latest
+    needs:
+      - build-push-docker
+    steps:
+      - name: Trigger Hooks - master
+        if: github.ref == 'refs/heads/master'
+        run: |
+          curl -X POST -H "Content-Type: application/json" -d "{}" '${{ secrets.MASTER_HOOK }}'
 
-            - name: Trigger Hooks - staging
-              if: github.ref == 'refs/heads/staging'
-              run: |
-                  curl -X POST -H "Content-Type: application/json" -d "{}" '${{ secrets.STAGING_HOOK }}'
+      - name: Trigger Hooks - staging
+        if: github.ref == 'refs/heads/staging'
+        run: |
+          curl -X POST -H "Content-Type: application/json" -d "{}" '${{ secrets.STAGING_HOOK }}'
 
-            - name: Trigger Hooks - release
-              if: startsWith(github.ref, 'refs/tags/v')
-              run: |
-                  curl -X POST -H "Content-Type: application/json" -d "{}" '${{ secrets.PROD_HOOK }}'
+      - name: Trigger Hooks - release
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          curl -X POST -H "Content-Type: application/json" -d "{}" '${{ secrets.PROD_HOOK }}'

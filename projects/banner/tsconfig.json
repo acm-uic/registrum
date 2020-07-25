@@ -10,7 +10,7 @@
     "declaration": true,
     "lib": ["es2020"],
     "outDir": "dist",
-    "baseUrl": "src",
+    "baseUrl": "src"
   },
   "include": ["src/**/*"]
 }
