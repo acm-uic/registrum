@@ -1,12 +1,9 @@
 import { Document, Schema, model } from 'mongoose'
+import * as mongoose from 'mongoose'
 
-// * Class Subscription Interface
-export interface ClassSubscription {
-    crn: string
-}
+import Course from '../models/Course'
 
-// * typescript interface for subscription object
-// fixme: trying to make an array of these won't work
+// * Interface for subscription object
 export interface SubscriptionsObject extends Document {
     endpoint: string
     keys: {
@@ -33,7 +30,12 @@ const UserSchema: Schema = new Schema({
     lastname: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    subscriptions: [String],
+    subscriptions: [
+        {
+            type: mongoose.Schema.Types.String,
+            ref: Course
+        }
+    ],
     subscriptionObjects: [
         {
             endpoint: String,
