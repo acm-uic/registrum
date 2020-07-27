@@ -2,7 +2,7 @@ import axios, { AxiosInstance } from 'axios'
 import { App } from '../App'
 import mongoose from 'mongoose'
 import { MongoMemoryServer } from 'mongodb-memory-server'
-import { Class } from '../models/interfaces/Class'
+import { Course } from 'registrum-common/dist/lib/Banner'
 import { Server } from 'http'
 import mockApp from './mockbanner'
 import { UserObject } from '../models/User'
@@ -26,7 +26,7 @@ describe('Class Tests', () => {
     let client: AxiosInstance
     let bannerServer: Server
     let bannerPort: number
-    let chosenClass: Class
+    let chosenClass: Course
 
     beforeAll(async () => {
         mongoUri = await mongoServer.getUri()
@@ -100,7 +100,7 @@ describe('Class Tests', () => {
         expect(response.status).toBe(200)
 
         // * Retrieve classes for CS401
-        const classes = (await client.get(`/classes/listing/220208/CS/401`)).data as Class[]
+        const classes = (await client.get(`/classes/listing/220208/CS/401`)).data as Course[]
 
         // * Pick random class
         chosenClass = classes[Math.floor(Math.random() * classes.length)]
@@ -219,7 +219,7 @@ describe('Class Tests', () => {
     it('correctly retrieve status list', async () => {
         try {
             // * Pick second class
-            let secondClass: Class = null
+            let secondClass: Course = null
 
             while (
                 !secondClass ||
