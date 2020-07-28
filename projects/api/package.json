@@ -3,12 +3,13 @@
     "version": "0.1.0",
     "private": true,
     "scripts": {
-        "build": "tsc",
+        "build": "npm run clean && tsc",
         "lint": "eslint \"src/**/*.{js,ts}\"",
         "lint:fix": "npm run lint -- --fix",
         "start": "node dist/index.js",
+        "clean": "rm -rf dist",
         "test": "jest --silent --passWithNoTests",
-        "watch": "concurrently -n ts,node \"npm run watch:ts\" \"npm run watch:node\"",
+        "watch": "npm run build && concurrently -n ts,node \"npm run watch:ts\" \"npm run watch:node\"",
         "watch:node": "nodemon --watch dist dist/index.js",
         "watch:test": "npm run test -- --watchAll",
         "watch:ts": "tsc -w --preserveWatchOutput"
