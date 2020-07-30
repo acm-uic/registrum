@@ -50,6 +50,13 @@ const UserSchema: Schema = new Schema({
     pushNotificationsEnabled: { type: Boolean, default: true }
 })
 
-// Export the model
+UserSchema.pre('find', function () {
+    this.populate('subscriptions')
+})
+UserSchema.pre('findOne', function () {
+    this.populate('subscriptions')
+})
+
+// * Export the model
 const User = model<UserObject>('User', UserSchema)
 export default User

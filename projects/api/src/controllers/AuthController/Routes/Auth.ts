@@ -2,7 +2,6 @@ import { Handler, Request, Response } from 'express'
 import passport from 'passport'
 
 import User from '../../../models/User'
-import { AuthController } from '..'
 
 export class AuthRoutes {
     static LOGIN: Handler[] = [
@@ -10,12 +9,11 @@ export class AuthRoutes {
         passport.authenticate('local', { failureFlash: false }),
 
         async (req: Request, res: Response): Promise<void> => {
-            // * Get the user from the database using the email and remove password hash field
-            const user = await User.findOne({ email: req.body.email })
-            const clientUser = AuthController.prepareClientObject(user)
+            // * Get the user from the database using the email
+            const user = await User.findOne({ email: req.body.email }, '-_id -password -__v')
 
             // * Send the user object to client
-            res.status(200).send(clientUser)
+            res.status(200).send(user)
         }
     ]
 
