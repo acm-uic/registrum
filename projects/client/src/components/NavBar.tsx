@@ -6,10 +6,9 @@ import {
     IContextualMenuProps,
     IContextualMenuItem,
     getTheme,
-    Link,
     mergeStyleSets
 } from '@fluentui/react'
-import { withRouter, RouteComponentProps } from 'react-router-dom'
+import { withRouter, RouteComponentProps, Link } from 'react-router-dom'
 import Logo from '../logo.svg'
 import { getGravatarImageUrl } from '../helpers/Gravatar'
 import { IUser } from '../interfaces/IUser'
@@ -25,25 +24,18 @@ export const NavBar = withRouter((props: INavBarProps & RouteComponentProps) => 
 
     const dispatch = useDispatch()
 
-    const onLinkClick = (event: React.MouseEvent<any> | React.KeyboardEvent<any>, url: string) => {
-        event.preventDefault()
-        history.push(url)
-    }
-
     const menuItems: IContextualMenuItem[] = [
         {
             key: 'settings',
             text: 'Settings',
             iconProps: { iconName: 'Settings' },
-            onClick: e => e && onLinkClick(e, '/settings')
+            onClick: () => history.push('/settings')
         },
         {
             key: 'signOut',
             text: 'Sign Out',
             iconProps: { iconName: 'SignOut' },
-            onClick: () => {
-                dispatch(signOutUser())
-            }
+            onClick: () => dispatch(signOutUser())
         }
     ]
 
@@ -66,7 +58,7 @@ export const NavBar = withRouter((props: INavBarProps & RouteComponentProps) => 
                 verticalAlign="center"
                 tokens={{ childrenGap: 30 }}
             >
-                <Link onClick={e => onLinkClick(e, '/')}>
+                <Link to="/">
                     <Logo height={50} className={classNames.logo} />
                 </Link>
                 {user && (
