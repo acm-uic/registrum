@@ -1,17 +1,25 @@
 {
-  "name": "root",
   "private": true,
-  "workspaces": [
-    "projects/*"
-  ],
-  "husky": {
-    "hooks": {
-      "pre-commit": "pretty-quick --staged"
-    }
+  "scripts": {
+    "build": "lerna run build --stream",
+    "test": "lerna run test --stream",
+    "clean": "git clean -ffdX",
+    "lint": "lerna run lint --stream",
+    "prettier": "prettier --write ."
+  },
+  "workspaces": {
+    "packages": [
+      "projects/*"
+    ],
+    "nohoist": [
+      "**/workbox*",
+      "**/workbox*/**"
+    ]
   },
   "devDependencies": {
-    "husky": "^4.2.5",
+    "codecov": "^3.7.2",
     "lerna": "^3.22.1",
+    "prettier": "^2.0.5",
     "pretty-quick": "^2.0.1"
   }
 }

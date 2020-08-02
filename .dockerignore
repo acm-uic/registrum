@@ -1,6 +1,5 @@
 .github
 .vscode
-common/temp
 k8s
 design-assets
 .vscode
@@ -8,11 +7,8 @@ build-images.ps1
 docker-compose*.yml
 *Dockerfile
 *.md
-*/node_modules
-*/dist
-*/build
-*/.rush
-*/*.build.log
-*/*.build.error.log
-*/.nyc_output
-*/coverage
+node_modules
+**/**/dist
+**/**/build
+**/**/.nyc_output
+**/**/coverage
