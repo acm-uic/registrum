@@ -1,3 +1,6 @@
+pnpm-lock.yaml
+common
+
 #-------------------------------------------------------------------------------------------------------------------
 # Keep this section in sync with .gitignore
 #-------------------------------------------------------------------------------------------------------------------
@@ -195,7 +198,6 @@ $RECYCLE.BIN/
 # npm and yarn lock files
 package-lock.json
 yarn.lock
-pnpm-lock.yaml
 
 # K8s Secrets.yaml
 Secrets.yaml
