@@ -3,7 +3,8 @@ import {
     ADD_TERMS,
     ADD_SUBJECTS,
     ADD_COURSE_NUMBERS,
-    ADD_COURSES
+    ADD_COURSES,
+    SET_LOADING
 } from './types'
 import { Subject, Term, Course } from 'registrum-common/dist/lib/Banner'
 import { CourseNumber } from '../../interfaces/CourseNumber'
@@ -31,4 +32,8 @@ export const addCourses = (courses: Course[]): BannerActionTypes => ({
     payload: courses
 })
 
-// * Populates the listing with the payload
+// * Sets the loading status
+export const setLoading = (status: boolean): BannerActionTypes => ({
+    type: SET_LOADING,
+    payload: status
+})

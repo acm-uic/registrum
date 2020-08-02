@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 import { AppThunk } from '../store'
-import { setTerms, setSubjects, addCourses, addCourseNumbers } from './actions'
+import { setTerms, setSubjects, addCourses, addCourseNumbers, setLoading } from './actions'
 import { Subject, Term, Course } from 'registrum-common/dist/lib/Banner'
 import { GetCoursesProps, GetCourseNumbersProps } from './types'
 import { CourseNumber } from '../../interfaces/CourseNumber'
@@ -22,21 +22,27 @@ export const getTerms = (): AppThunk => async (dispatch, getState) => {
     // * Term have already been pulled
     if (terms.length > 0) return
 
+    // * Set loading status to true
+    dispatch(setLoading(true))
+
     try {
         const response = await client.get('classes/terms')
 
         if (response.status === 200) {
             // * Destructure response from API
-            const terms = response.data as Term[]
+            const data = response.data as Term[]
 
             // * Add the terms into the banner state
-            dispatch(setTerms(terms))
+            dispatch(setTerms(data))
         }
     } catch (err) {
         // * Log the error message
         console.error(err.message)
 
         // toast('🚨 Could not connect to the API', { type: 'error' })
+    } finally {
+        // * Set loading status to false
+        dispatch(setLoading(false))
     }
 }
 
@@ -46,21 +52,27 @@ export const getSubjects = (): AppThunk => async (dispatch, getState) => {
     // * Term have already been pulled
     if (subjects.length > 0) return
 
+    // * Set loading status to true
+    dispatch(setLoading(true))
+
     try {
         const response = await client.get('classes/subjects')
 
         if (response.status === 200) {
             // * Destructure response from API
-            const subjects = response.data as Subject[]
+            const data = response.data as Subject[]
 
             // * Add the subjects into the banner state
-            dispatch(setSubjects(subjects))
+            dispatch(setSubjects(data))
         }
     } catch (err) {
         // * Log the error message
         console.error(err.message)
 
         // toast('🚨 Could not connect to the API', { type: 'error' })
+    } finally {
+        // * Set loading status to false
+        dispatch(setLoading(false))
     }
 }
 
@@ -82,6 +94,9 @@ export const getCourseNumbers = (data: GetCourseNumbersProps): AppThunk => async
         courseNumbers.filter(c => c.subject == subject && c.term === term).length > 0
     if (courseNumbersExist) return
 
+    // * Set loading status to true
+    dispatch(setLoading(true))
+
     try {
         const response = await client.get(`classes/list/${term}/${subject}`)
 
@@ -98,6 +113,9 @@ export const getCourseNumbers = (data: GetCourseNumbersProps): AppThunk => async
         console.error(err.message)
 
         // toast('🚨 Could not connect to the API', { type: 'error' })
+    } finally {
+        // * Set loading status to false
+        dispatch(setLoading(false))
     }
 }
 
@@ -106,23 +124,26 @@ export const getCourses = (data: GetCoursesProps): AppThunk => async (dispatch, 
     const { term, subject, courseNumber } = data
     const { terms, subjects, courses, courseNumbers } = getState().banner
 
-    // // * Check for bad terms or subjects
-    // const isTermValid = terms.find(t => t.code == term.toString())
-    // const isSubjectValid = subjects.find(s => s.code == subject)
-    // const isCourseNumberValid = courseNumbers.find(
-    //     c => c.number === courseNumber && c.subject == subject && c.term === term
-    // )
-    // if (!isSubjectValid || !isTermValid || !isCourseNumberValid) return
+    // * Check for bad terms or subjects
+    const isTermValid = terms.find(t => t.code == term.toString())
+    const isSubjectValid = subjects.find(s => s.code == subject)
+    const isCourseNumberValid = courseNumbers.find(
+        c => c.number === courseNumber && c.subject == subject && c.term === term
+    )
+    if (!isSubjectValid || !isTermValid || !isCourseNumberValid) return
 
-    // // * Check if the query has been already made and return if yes
-    // const coursesExist =
-    //     courses.filter(
-    //         l =>
-    //             l.subject === subject &&
-    //             l.term === isTermValid.description &&
-    //             l.courseNumber === courseNumber.toString()
-    //     ).length > 0
-    // if (coursesExist) return
+    // * Check if the query has been already made and return if yes
+    const coursesExist =
+        courses.filter(
+            l =>
+                l.subject === subject &&
+                l.term === isTermValid.code &&
+                l.courseNumber === courseNumber.toString()
+        ).length > 0
+    if (coursesExist) return
+
+    // * Set loading status to true
+    dispatch(setLoading(true))
 
     try {
         const response = await client.get(`classes/listing/${term}/${subject}/${courseNumber}`)
@@ -137,5 +158,8 @@ export const getCourses = (data: GetCoursesProps): AppThunk => async (dispatch, 
         console.error(err.message)
 
         // toast('🚨 Could not connect to the API', { type: 'error' })
+    } finally {
+        // * Set loading status to false
+        dispatch(setLoading(false))
     }
 }

@@ -4,7 +4,8 @@ import {
     ADD_TERMS,
     ADD_SUBJECTS,
     ADD_COURSE_NUMBERS,
-    ADD_COURSES
+    ADD_COURSES,
+    SET_LOADING
 } from './types'
 import { CourseNumber } from '../../interfaces/CourseNumber'
 
@@ -14,6 +15,7 @@ export interface BannerState {
     subjects: Subject[]
     courseNumbers: CourseNumber[]
     courses: Course[]
+    loading: boolean
 }
 
 // * Default values for the Banner reducer
@@ -21,7 +23,8 @@ const initialState: BannerState = {
     terms: [],
     subjects: [],
     courseNumbers: [],
-    courses: []
+    courses: [],
+    loading: false
 }
 
 // * Changes state based on action type
@@ -35,6 +38,8 @@ export const BannerReducer = (state = initialState, action: BannerActionTypes): 
             return { ...state, courseNumbers: [...state.courseNumbers, ...action.payload] }
         case ADD_COURSES:
             return { ...state, courses: action.payload }
+        case SET_LOADING:
+            return { ...state, loading: action.payload }
         default:
             return state
     }
