@@ -1,5 +1,5 @@
 import { IUser } from '../../interfaces/IUser'
-import { SET_USER, UNSET_USER, UserActionTypes, SET_COURSES } from './types'
+import { SET_USER, UNSET_USER, UserActionTypes, SET_COURSES, SET_LOADING } from './types'
 import { Course } from 'registrum-common/dist/lib/Banner'
 
 // * Type for the AuthState
@@ -25,6 +25,8 @@ export const AuthReducer = (state = initialState, action: UserActionTypes): Auth
             return { ...state, user: null }
         case SET_COURSES:
             return { ...state, courses: action.payload }
+        case SET_LOADING:
+            return { ...state, loading: action.payload }
         default:
             return state
     }

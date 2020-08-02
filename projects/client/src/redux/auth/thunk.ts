@@ -2,7 +2,7 @@ import axios from 'axios'
 
 import { IUser } from '../../interfaces/IUser'
 import { AppThunk } from '../store'
-import { setUser, unsetUser, setCourses } from './actions'
+import { setUser, unsetUser, setCourses, setLoading } from './actions'
 import { SignUpProps, SignInProps, CourseSubscribeProps, CourseUnsubscribeProps } from './types'
 import { getSubscriptionObject } from '../../helpers/functions'
 import { Course } from 'registrum-common/dist/lib/Banner'
@@ -21,6 +21,9 @@ export const client = axios.create({
 export const updateUser = (): AppThunk => async (dispatch, getState) => {
     const { auth } = getState()
 
+    // * Set loading to true
+    dispatch(setLoading(true))
+
     try {
         // * Retrieve updated user object
         const response = await client.get('auth/')
@@ -37,7 +40,6 @@ export const updateUser = (): AppThunk => async (dispatch, getState) => {
         // * User has update or
         if (response.status === 200) {
             if (shouldUpdate) dispatch(setUser(user))
-            dispatch(getUserCourses())
         }
     } catch (err) {
         // * Log the error message
@@ -47,6 +49,11 @@ export const updateUser = (): AppThunk => async (dispatch, getState) => {
 
         // * Set user to null
         dispatch(unsetUser())
+    } finally {
+        // * Set loading to false
+        dispatch(setLoading(false))
+
+        if (getState().auth.user) dispatch(getUserCourses())
     }
 }
 
@@ -55,6 +62,9 @@ export const signUpUser = (data: SignUpProps): AppThunk => async (dispatch, getS
 
     // * User is already logged in
     if (auth.user) return
+
+    // * Set loading to true
+    dispatch(setLoading(true))
 
     try {
         // * Try to register the user
@@ -88,6 +98,9 @@ export const signUpUser = (data: SignUpProps): AppThunk => async (dispatch, getS
         console.error(err.message)
 
         // toast('🚨 Could not connect to the API', { type: 'error' })
+    } finally {
+        // * Set loading to false
+        dispatch(setLoading(false))
     }
 }
 
@@ -96,6 +109,9 @@ export const signInUser = (data: SignInProps): AppThunk => async (dispatch, getS
 
     // * User is already logged in
     if (auth.user) return
+
+    // * Set loading to true
+    dispatch(setLoading(true))
 
     try {
         // * Logging in user --> they must be logged in before sending over browser subscription object
@@ -128,6 +144,9 @@ export const signInUser = (data: SignInProps): AppThunk => async (dispatch, getS
         console.error(err.message)
 
         // toast('🚨 Could not connect to the API', { type: 'error' })
+    } finally {
+        // * Set loading to false
+        dispatch(setLoading(false))
     }
 }
 
@@ -136,6 +155,9 @@ export const signOutUser = (): AppThunk => async (dispatch, getState) => {
 
     // * No user logged in
     if (auth.user === null) return
+
+    // * Set loading to false
+    dispatch(setLoading(true))
 
     try {
         // * checking browser if service workers are supported
@@ -167,6 +189,9 @@ export const signOutUser = (): AppThunk => async (dispatch, getState) => {
         console.error(err.message)
 
         // toast('🚨 Could not connect to the API', { type: 'error' })
+    } finally {
+        // * Set loading to false
+        dispatch(setLoading(false))
     }
 }
 
@@ -175,6 +200,9 @@ export const getUserCourses = (): AppThunk => async (dispatch, getState) => {
 
     // * No user logged in
     if (!user) return
+
+    // * Set loading to true
+    dispatch(setLoading(true))
 
     try {
         // * Grab class data for use
@@ -189,7 +217,6 @@ export const getUserCourses = (): AppThunk => async (dispatch, getState) => {
 
         if (response.status === 401) {
             // * User expired
-
             // * Set user to null
             dispatch(unsetUser())
         }
@@ -198,6 +225,9 @@ export const getUserCourses = (): AppThunk => async (dispatch, getState) => {
         console.error(err.message)
 
         // toast('🚨 Could not connect to the API', { type: 'error' })
+    } finally {
+        // * Set loading to false
+        dispatch(setLoading(false))
     }
 }
 
@@ -209,6 +239,9 @@ export const courseSubscribe = (data: CourseSubscribeProps): AppThunk => async (
 
     // * No user logged in
     if (!user) return
+
+    // * Set loading to true
+    dispatch(setLoading(true))
 
     try {
         // * Subscribe to the specific class
@@ -230,6 +263,9 @@ export const courseSubscribe = (data: CourseSubscribeProps): AppThunk => async (
         console.error(err.message)
 
         // toast('🚨 Could not connect to the API', { type: 'error' })
+    } finally {
+        // * Set loading to false
+        dispatch(setLoading(false))
     }
 }
 
@@ -241,6 +277,9 @@ export const courseUnsubscribe = (data: CourseUnsubscribeProps): AppThunk => asy
 
     // * No user logged in
     if (!user) return
+
+    // * Set loading to true
+    dispatch(setLoading(true))
 
     try {
         // * Unsubscribe to the specific class
@@ -262,5 +301,8 @@ export const courseUnsubscribe = (data: CourseUnsubscribeProps): AppThunk => asy
         console.error(err.message)
 
         // toast('🚨 Could not connect to the API', { type: 'error' })
+    } finally {
+        // * Set loading to false
+        dispatch(setLoading(false))
     }
 }
