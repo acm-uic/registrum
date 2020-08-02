@@ -7,7 +7,7 @@ import Settings from '../views/Settings'
 import Courses from '../views/Courses'
 import NavBar from '../components/NavBar'
 import { useSelector, useDispatch } from '../redux/store'
-import { updateUser, getUserCourses } from '../redux/auth/thunk'
+import { updateUser } from '../redux/auth/thunk'
 import { getTerms, getSubjects } from '../redux/banner/thunk'
 
 const App = (): JSX.Element => {
