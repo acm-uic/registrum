@@ -4,7 +4,14 @@
   "workspaces": [
     "projects/*"
   ],
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
+  },
   "devDependencies": {
-    "lerna": "^3.22.1"
+    "husky": "^4.2.5",
+    "lerna": "^3.22.1",
+    "pretty-quick": "^2.0.1"
   }
 }
