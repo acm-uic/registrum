@@ -26,10 +26,9 @@ const stackStyles: IStackStyles = {
 }
 
 export const HomePage = withRouter(({ history }) => {
-
     const onLinkClick = (event: React.MouseEvent<any>, url: string) => {
-        event.preventDefault();
-        history.push(url);
+        event.preventDefault()
+        history.push(url)
     }
 
     return (

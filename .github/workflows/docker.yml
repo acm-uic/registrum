@@ -6,12 +6,12 @@ jobs:
   build-images:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: docker build
-      shell: pwsh
-      run: |
-        docker build -t registrum_base -f Base.Dockerfile .
-        $projects=@("api", "banner", "banner-data", "client")
-        foreach($project in $projects) {
-          docker build --target $project .
-        }
+      - uses: actions/checkout@v2
+      - name: docker build
+        shell: pwsh
+        run: |
+          docker build -t registrum_base -f Base.Dockerfile .
+          $projects=@("api", "banner", "banner-data", "client")
+          foreach($project in $projects) {
+            docker build --target $project .
+          }

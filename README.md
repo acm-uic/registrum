@@ -129,10 +129,10 @@ docker-compose restart mongo
 
 The docker dev containers expose the following services:
 
-| Service Name    | Ports | Description                                |
-| --------------- | ----- | ------------------------------------------ |
-| MongoDB Server  | 27017 | MongoDB server needed by the API           |
-| Mongo Express   | 8081  | MongoDB Web Client                         |
+| Service Name   | Ports | Description                      |
+| -------------- | ----- | -------------------------------- |
+| MongoDB Server | 27017 | MongoDB server needed by the API |
+| Mongo Express  | 8081  | MongoDB Web Client               |
 
 ## Getting a development environment up
 

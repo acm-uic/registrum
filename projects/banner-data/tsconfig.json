@@ -1,16 +1,16 @@
 {
-  "compilerOptions": {
-    "module": "commonjs",
-    "allowSyntheticDefaultImports": true,
-    "target": "es2019",
-    "noImplicitAny": true,
-    "esModuleInterop": true,
-    "sourceMap": true,
-    "moduleResolution": "node",
-    "declaration": true,
-    "lib": ["es2020"],
-    "outDir": "dist",
-    "baseUrl": "src",
-  },
-  "include": ["src/**/*"]
+    "compilerOptions": {
+        "module": "commonjs",
+        "allowSyntheticDefaultImports": true,
+        "target": "es2019",
+        "noImplicitAny": true,
+        "esModuleInterop": true,
+        "sourceMap": true,
+        "moduleResolution": "node",
+        "declaration": true,
+        "lib": ["es2020"],
+        "outDir": "dist",
+        "baseUrl": "src"
+    },
+    "include": ["src/**/*"]
 }

@@ -195,6 +195,7 @@ $RECYCLE.BIN/
 # npm and yarn lock files
 package-lock.json
 yarn.lock
+pnpm-lock.yaml
 
 # K8s Secrets.yaml
 Secrets.yaml

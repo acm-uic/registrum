@@ -1,7 +1,6 @@
-version: "3"
+version: '3'
 
 services:
-
   api:
     image: acmuic.azurecr.io/acm-uic/registrum/api:latest
     restart: always
