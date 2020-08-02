@@ -4,8 +4,9 @@ import { Course } from 'registrum-common/dist/lib/Banner'
 
 export const SET_USER = 'SET_USER'
 export const UNSET_USER = 'UNSET_USER'
-
 export const SET_COURSES = 'SET_COURSES'
+
+export const SET_LOADING = 'SET_LOADING'
 
 // * Set the user
 interface SetUserAction extends Action {
@@ -24,8 +25,14 @@ interface SetCoursesAction extends Action {
     payload: Course[]
 }
 
+// * Set Loading status
+interface SetLoadingAction extends Action {
+    type: typeof SET_LOADING
+    payload: boolean
+}
+
 // * Cumulative Type
-export type UserActionTypes = SetUserAction | UnsetUserAction | SetCoursesAction
+export type UserActionTypes = SetUserAction | UnsetUserAction | SetCoursesAction | SetLoadingAction
 
 // * Data needed to register a new user
 export type SignUpProps = {

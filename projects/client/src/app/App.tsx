@@ -22,16 +22,19 @@ const App = (): JSX.Element => {
         if (user) {
             dispatch(getTerms())
             dispatch(getSubjects())
-            dispatch(getUserCourses())
         }
     }, [user])
 
     return (
         <div className="App">
             <Router>
-                <NavBar user={user} />
+                <NavBar user={user || undefined} />
                 <Switch>
-                    {user && <Route path="/settings"><Settings user={user} /></Route>}
+                    {user && (
+                        <Route path="/settings">
+                            <Settings user={user} />
+                        </Route>
+                    )}
                     {!user && <Route path="/signin" component={SignInForm} />}
                     {!user && <Route path="/signup" component={SignUpForm} />}
                     <Route path="/" exact>

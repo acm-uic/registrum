@@ -5,6 +5,7 @@ import App from './app/App'
 import { store } from './redux/store'
 import './index.css'
 import './appVersion'
+import { encode } from './helpers/functions'
 
 const root = document.createElement('div')
 root.id = 'root'
@@ -39,7 +40,7 @@ if ('serviceWorker' in navigator) {
             registration.pushManager
                 .subscribe({
                     userVisibleOnly: true,
-                    applicationServerKey: process.env.WEBPUSHPUBLIC
+                    applicationServerKey: encode(process.env.WEBPUSHPUBLIC)
                 })
                 .then(scr => {
                     console.info('Subscribed to push notification: ', scr)

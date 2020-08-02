@@ -23,3 +23,17 @@ export const getSubscriptionObject = async (): Promise<string | null> => {
         return null
     }
 }
+
+// * Converting public key
+export const encode = (str: string): Uint8Array => {
+    const padding = '='.repeat((4 - (str.length % 4)) % 4)
+    const base64 = (str + padding).replace(/\-/g, '+').replace(/_/g, '/')
+
+    const rawData = atob(base64)
+    const bArray = new Uint8Array(rawData.length)
+
+    for (let i = 0; i < rawData.length; ++i) {
+        bArray[i] = rawData.charCodeAt(i)
+    }
+    return bArray
+}

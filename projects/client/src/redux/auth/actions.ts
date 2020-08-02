@@ -1,5 +1,5 @@
 import { IUser } from '../../interfaces/IUser'
-import { UserActionTypes, SET_USER, UNSET_USER, SET_COURSES } from './types'
+import { UserActionTypes, SET_USER, UNSET_USER, SET_COURSES, SET_LOADING } from './types'
 import { Course } from 'registrum-common/dist/lib/Banner'
 
 // * Set the user in state to the user in the payload
@@ -16,4 +16,9 @@ export const unsetUser = (): UserActionTypes => ({
 export const setCourses = (courses: Course[]): UserActionTypes => ({
     type: SET_COURSES,
     payload: courses
+})
+
+export const setLoading = (status: boolean): UserActionTypes => ({
+    type: SET_LOADING,
+    payload: status
 })
