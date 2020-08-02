@@ -5,7 +5,8 @@
     "test": "lerna run test --stream",
     "clean": "git clean -ffdX",
     "lint": "lerna run lint --stream",
-    "prettier": "prettier --write ."
+    "prettier": "prettier --write .",
+    "coverage": "codecov"
   },
   "workspaces": {
     "packages": [
