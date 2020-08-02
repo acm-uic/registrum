@@ -24,7 +24,7 @@ export const store = createStore(
     {},
     // * Only use redux dev tools on development builds
     process.env.NODE_ENV === 'development'
-        ? composeWithDevTools(applyMiddleware(thunk))
+        ? composeWithDevTools({ trace: true })(applyMiddleware(thunk))
         : applyMiddleware(thunk)
 )
 
