@@ -32,8 +32,8 @@ export const SignInForm = withRouter(({ history }) => {
     }
 
     const onLinkClick = (event: React.MouseEvent<any>, url: string) => {
-        event.preventDefault();
-        history.push(url);
+        event.preventDefault()
+        history.push(url)
     }
 
     return (
@@ -82,7 +82,10 @@ export const SignInForm = withRouter(({ history }) => {
                 <PrimaryButton type="submit" onClick={onClickHandler}>
                     Sign In
                 </PrimaryButton>
-                <Text>Don't have an account? <Link onClick={e => onLinkClick(e, '/signup')}>Sign up.</Link></Text>
+                <Text>
+                    Don't have an account?{' '}
+                    <Link onClick={e => onLinkClick(e, '/signup')}>Sign up.</Link>
+                </Text>
             </Stack>
         </Stack>
     )

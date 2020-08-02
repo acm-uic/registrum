@@ -10,44 +10,44 @@ jobs:
   publish-app-images:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: Update version.json
-      shell: pwsh
-      run: |
-        $VersionInfo=@{
-          rev="${{ github.sha }}".Substring(0,8)
-          sha="${{ github.sha }}"
-          branch="${{ github.ref }}".Split("refs/heads/")[1]
-          tag="${{ github.ref }}".Split("refs/tags/")[1]
-        }
-        $VersionInfo | ConvertTo-Json > ./projects/client/src/version.json
-    - name: docker build, push
-      shell: pwsh
-      run: |
-        $branch="${{ github.ref }}".Split("refs/heads/")[1]
-        Write-Host branch: $branch
+      - uses: actions/checkout@v2
+      - name: Update version.json
+        shell: pwsh
+        run: |
+          $VersionInfo=@{
+            rev="${{ github.sha }}".Substring(0,8)
+            sha="${{ github.sha }}"
+            branch="${{ github.ref }}".Split("refs/heads/")[1]
+            tag="${{ github.ref }}".Split("refs/tags/")[1]
+          }
+          $VersionInfo | ConvertTo-Json > ./projects/client/src/version.json
+      - name: docker build, push
+        shell: pwsh
+        run: |
+          $branch="${{ github.ref }}".Split("refs/heads/")[1]
+          Write-Host branch: $branch
 
-        $rev="${{ github.sha }}".Substring(0,8)
-        Write-Host rev: $rev
+          $rev="${{ github.sha }}".Substring(0,8)
+          Write-Host rev: $rev
 
-        docker login ${{ secrets.REGISTRY_HOST }} --username ${{ secrets.REGISTRY_USER }} --password ${{ secrets.REGISTRY_PASSWORD }}
+          docker login ${{ secrets.REGISTRY_HOST }} --username ${{ secrets.REGISTRY_USER }} --password ${{ secrets.REGISTRY_PASSWORD }}
 
-        docker build --build-arg CLIENT_WEBPUSHPUBLIC=${{ secrets.WEBPUSHPUBLIC }} -t registrum_base -f Base.Dockerfile .
+          docker build --build-arg CLIENT_WEBPUSHPUBLIC=${{ secrets.WEBPUSHPUBLIC }} -t registrum_base -f Base.Dockerfile .
 
-        $projects=@("api", "banner", "banner-data", "client")
-        foreach($project in $projects) {
-          Write-Host Working on $project ...
-          docker build --target $project -t acmuic.azurecr.io/${{ github.repository }}/$($project):$branch .
-          docker push acmuic.azurecr.io/${{ github.repository }}/$($project):$branch
-        }
+          $projects=@("api", "banner", "banner-data", "client")
+          foreach($project in $projects) {
+            Write-Host Working on $project ...
+            docker build --target $project -t acmuic.azurecr.io/${{ github.repository }}/$($project):$branch .
+            docker push acmuic.azurecr.io/${{ github.repository }}/$($project):$branch
+          }
 
-    - name: Trigger Hooks - master
-      shell: pwsh
-      if: github.ref == 'refs/heads/master'
-      run: |
-        curl -X POST -H "Content-Type: application/json" -d "{}" '${{ secrets.MASTER_HOOK }}'
-    - name: Trigger Hooks - staging
-      shell: pwsh
-      if: github.ref == 'refs/heads/staging'
-      run: |
-        curl -X POST -H "Content-Type: application/json" -d "{}" '${{ secrets.STAGING_HOOK }}'
+      - name: Trigger Hooks - master
+        shell: pwsh
+        if: github.ref == 'refs/heads/master'
+        run: |
+          curl -X POST -H "Content-Type: application/json" -d "{}" '${{ secrets.MASTER_HOOK }}'
+      - name: Trigger Hooks - staging
+        shell: pwsh
+        if: github.ref == 'refs/heads/staging'
+        run: |
+          curl -X POST -H "Content-Type: application/json" -d "{}" '${{ secrets.STAGING_HOOK }}'

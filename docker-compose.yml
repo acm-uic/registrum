@@ -1,37 +1,37 @@
-version: "3.7"
+version: '3.7'
 
 services:
-    mongo:
-        image: mongo
-        container_name: mongo
-        hostname: mongo
-        restart: always
-        networks:
-            - registrum-net
-        volumes:
-            - mongo-data:/data/db/
-        ports:
-            - 27017:27017
-        healthcheck:
-            test: test $$(echo "rs.initiate().ok || rs.status().ok" | mongo) -eq 1
-            interval: 10s
-            start_period: 10s
-        command: ["--replSet", "rs0", "--bind_ip_all"]
+  mongo:
+    image: mongo
+    container_name: mongo
+    hostname: mongo
+    restart: always
+    networks:
+      - registrum-net
+    volumes:
+      - mongo-data:/data/db/
+    ports:
+      - 27017:27017
+    healthcheck:
+      test: test $$(echo "rs.initiate().ok || rs.status().ok" | mongo) -eq 1
+      interval: 10s
+      start_period: 10s
+    command: ['--replSet', 'rs0', '--bind_ip_all']
 
-    mongo-express:
-        image: mongo-express
-        restart: always
-        environment:
-            - ME_CONFIG_MONGODB_SERVER=mongo
-        ports:
-            - 8081:8081
-        depends_on:
-            - mongo
-        networks:
-            - registrum-net
+  mongo-express:
+    image: mongo-express
+    restart: always
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=mongo
+    ports:
+      - 8081:8081
+    depends_on:
+      - mongo
+    networks:
+      - registrum-net
 
 networks:
-    registrum-net:
+  registrum-net:
 
 volumes:
-    mongo-data:
+  mongo-data:
