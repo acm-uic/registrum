@@ -52,7 +52,6 @@ jobs:
           registry: ${{ secrets.REGISTRY_HOST }}
           repository: ${{ github.repository }}/${{ matrix.project }}
           build_args: CLIENT_WEBPUSHPUBLIC=${{ secrets.WEBPUSHPUBLIC }}
-          dockerfile: docker/Dockerfile
           add_git_labels: true
           tag_with_ref: true
           push: ${{ (startsWith(github.ref, 'refs/tags/') || (github.ref == 'refs/heads/master') || (github.ref == 'refs/heads/staging')) }}
@@ -73,6 +72,6 @@ jobs:
           curl -X POST -H "Content-Type: application/json" -d "{}" '${{ secrets.STAGING_HOOK }}'
 
       - name: Trigger Hooks - release
-        if: startsWith(github.ref, 'refs/tags/v')
+        if: startsWith(github.ref, 'refs/tags/')
         run: |
           curl -X POST -H "Content-Type: application/json" -d "{}" '${{ secrets.PROD_HOOK }}'
