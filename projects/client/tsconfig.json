@@ -20,9 +20,9 @@
         "noEmit": true,
         "jsx": "react",
         "typeRoots": [
-            "./src/interfaces/assets.d.ts",
+            "src/images/index.d.ts",
             "./node_modules/@types"
-        ],
+        ]
     },
     "baseUrl": "src",
     "include": [

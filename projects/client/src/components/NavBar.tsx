@@ -9,7 +9,7 @@ import {
     mergeStyleSets
 } from '@fluentui/react'
 import { withRouter, RouteComponentProps, Link } from 'react-router-dom'
-import Logo from '../logo.svg'
+import Logo from '../images/logo.svg'
 import { getGravatarImageUrl } from '../helpers/Gravatar'
 import { IUser } from '../interfaces/IUser'
 import { useDispatch } from '../redux/store'
