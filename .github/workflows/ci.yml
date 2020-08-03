@@ -57,6 +57,7 @@ jobs:
           build_args: CLIENT_WEBPUSHPUBLIC=${{ secrets.WEBPUSHPUBLIC }}
           add_git_labels: true
           tag_with_ref: true
+          target: ${{ matrix.project }}
           push: ${{ (startsWith(github.ref, 'refs/tags/') || (github.ref == 'refs/heads/master') || (github.ref == 'refs/heads/staging')) }}
 
   trigger-hooks:
