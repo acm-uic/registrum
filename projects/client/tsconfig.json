@@ -1,7 +1,12 @@
 {
     "compilerOptions": {
         "target": "esnext",
-        "lib": ["WebWorker", "dom", "dom.iterable", "esnext"],
+        "lib": [
+            "WebWorker",
+            "dom",
+            "dom.iterable",
+            "esnext"
+        ],
         "module": "CommonJS",
         "allowJs": true,
         "skipLibCheck": true,
@@ -13,8 +18,14 @@
         "resolveJsonModule": true,
         "isolatedModules": true,
         "noEmit": true,
-        "jsx": "react"
+        "jsx": "react",
+        "typeRoots": [
+            "./src/interfaces/assets.d.ts",
+            "./node_modules/@types"
+        ],
     },
     "baseUrl": "src",
-    "include": ["src"]
+    "include": [
+        "src"
+    ]
 }
