@@ -81,37 +81,35 @@ export const CourseList: React.FunctionComponent<ICourseListProps> = (props: ICo
             maxWidth: 60,
             isResizable: true,
             onColumnClick: onColumnClick,
-            onRender: (item: Course) => {
-                return (
-                    <>
-                        <Stack horizontal horizontalAlign="space-between">
-                            <HoverCard
-                                expandedCardOpenDelay={300}
-                                expandingCardProps={{
-                                    onRenderCompactCard: onRenderCompactCard,
-                                    onRenderExpandedCard: onRenderExpandedCard,
-                                    renderData: item,
-                                    compactCardHeight: 120,
-                                    expandedCardHeight: 200
-                                }}
-                                instantOpenOnClick={true}
-                            >
-                                <Text styles={{ root: { fontWeight: FontWeights.bold } }}>
-                                    {item.courseReferenceNumber}
-                                </Text>
-                            </HoverCard>
-                            <IconButton
-                                iconProps={{ iconName: 'MoreVertical' }}
-                                styles={{ root: { height: '100%', marginTop: 2 } }}
-                                onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
-                                    event.persist()
-                                    onShowContextualMenu((event as unknown) as MouseEvent, item)
-                                }}
-                            />
-                        </Stack>
-                    </>
-                )
-            },
+            onRender: (item: Course) => (
+                <>
+                    <Stack horizontal horizontalAlign="space-between">
+                        <HoverCard
+                            expandedCardOpenDelay={300}
+                            expandingCardProps={{
+                                onRenderCompactCard: onRenderCompactCard,
+                                onRenderExpandedCard: onRenderExpandedCard,
+                                renderData: item,
+                                compactCardHeight: 120,
+                                expandedCardHeight: 200
+                            }}
+                            instantOpenOnClick={true}
+                        >
+                            <Text styles={{ root: { fontWeight: FontWeights.bold } }}>
+                                {item.courseReferenceNumber}
+                            </Text>
+                        </HoverCard>
+                        <IconButton
+                            iconProps={{ iconName: 'MoreVertical' }}
+                            styles={{ root: { height: '100%', marginTop: 2 } }}
+                            onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
+                                event.persist()
+                                onShowContextualMenu((event as unknown) as MouseEvent, item)
+                            }}
+                        />
+                    </Stack>
+                </>
+            ),
             isPadded: true
         },
         {
@@ -122,9 +120,7 @@ export const CourseList: React.FunctionComponent<ICourseListProps> = (props: ICo
             maxWidth: 60,
             isResizable: true,
             onColumnClick: onColumnClick,
-            onRender: (item: Course) => {
-                return <Text>{item.subject}</Text>
-            },
+            onRender: (item: Course) => <Text>{item.subject}</Text>,
             isPadded: true
         },
         {
@@ -135,9 +131,7 @@ export const CourseList: React.FunctionComponent<ICourseListProps> = (props: ICo
             maxWidth: 50,
             isResizable: true,
             onColumnClick: onColumnClick,
-            onRender: (item: Course) => {
-                return <Text>{item.courseNumber}</Text>
-            },
+            onRender: (item: Course) => <Text>{item.courseNumber}</Text>,
             isPadded: true
         },
         {
@@ -150,13 +144,11 @@ export const CourseList: React.FunctionComponent<ICourseListProps> = (props: ICo
             isSorted: true,
             isSortedDescending: false,
             onColumnClick: onColumnClick,
-            onRender: (item: Course) => {
-                return (
-                    <Text>
-                        {item.seatsAvailable} / {item.maximumEnrollment}
-                    </Text>
-                )
-            },
+            onRender: (item: Course) => (
+                <Text>
+                    {item.seatsAvailable} / {item.maximumEnrollment}
+                </Text>
+            ),
             isPadded: true
         },
         {
@@ -167,9 +159,7 @@ export const CourseList: React.FunctionComponent<ICourseListProps> = (props: ICo
             maxWidth: 350,
             isResizable: true,
             onColumnClick: onColumnClick,
-            onRender: (item: Course) => {
-                return <Text>{item.courseTitle}</Text>
-            },
+            onRender: (item: Course) => <Text>{item.courseTitle}</Text>,
             isPadded: true
         }
     ]

@@ -1,1 +1,2 @@
-export const getGravatarImageUrl = (hash: string) => `https://www.gravatar.com/avatar/${hash}`
+export const getGravatarImageUrl = (hash: string): string =>
+    `https://www.gravatar.com/avatar/${hash}`

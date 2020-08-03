@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Stack, Panel, Text, PanelType } from '@fluentui/react'
+import { Stack, Panel, Text } from '@fluentui/react'
 
 import { Course } from 'registrum-common/dist/lib/Banner'
 
@@ -13,7 +13,7 @@ export const DetailsCourse: React.FunctionComponent<IDetailsCourse> = ({
     isOpen,
     dismissPanel,
     course
-}) => {
+}: IDetailsCourse) => {
     return (
         <Panel
             isLightDismiss

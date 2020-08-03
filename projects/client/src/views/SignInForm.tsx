@@ -1,6 +1,6 @@
 import * as React from 'react'
-import { Text, Stack, FontWeights, PrimaryButton, TextField, Link } from '@fluentui/react'
-import { withRouter } from 'react-router-dom'
+import { Text, Stack, FontWeights, PrimaryButton, TextField } from '@fluentui/react'
+import { Link } from 'react-router-dom'
 import { signInUser } from '../redux/auth/thunk'
 import { useDispatch } from '../redux/store'
 
@@ -8,12 +8,12 @@ const boldStyle = {
     root: { fontWeight: FontWeights.semibold }
 }
 
-export const SignInForm = withRouter(({ history }) => {
+export const SignInForm = (): JSX.Element => {
     const [email, setEmail] = React.useState<string>('')
     const [password, setPassword] = React.useState<string>('')
     const dispatch = useDispatch()
 
-    const onClickHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const onClickHandler = () => {
         dispatch(
             signInUser({
                 email,
@@ -22,18 +22,13 @@ export const SignInForm = withRouter(({ history }) => {
         )
     }
 
-    const validateEmail = (email: string): string | undefined => {
+    const validateEmail = (val: string): string | undefined => {
         const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-        return !re.test(String(email).toLowerCase()) ? 'Invalid Email Address' : undefined
+        return !re.test(String(val).toLowerCase()) ? 'Invalid Email Address' : undefined
     }
 
-    const validatePassword = (value: string): string | undefined => {
-        return undefined
-    }
-
-    const onLinkClick = (event: React.MouseEvent<any>, url: string) => {
-        event.preventDefault()
-        history.push(url)
+    const validatePassword = (val: string): string | undefined => {
+        return val.length > 8 ? undefined : 'Need Longer Password'
     }
 
     return (
@@ -83,12 +78,14 @@ export const SignInForm = withRouter(({ history }) => {
                     Sign In
                 </PrimaryButton>
                 <Text>
-                    Don't have an account?{' '}
-                    <Link onClick={e => onLinkClick(e, '/signup')}>Sign up.</Link>
+                    Don&lsquo;t have an account?{' '}
+                    <Link to="/signup" style={{ textDecoration: 'none' }}>
+                        Sign up.
+                    </Link>
                 </Text>
             </Stack>
         </Stack>
     )
-})
+}
 
 export default SignInForm

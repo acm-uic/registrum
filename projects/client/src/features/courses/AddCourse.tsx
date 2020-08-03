@@ -21,14 +21,16 @@ import { useSelector, useDispatch } from '../../redux/store'
 import { Course } from 'registrum-common/dist/lib/Banner'
 import { getCourseNumbers, getCourses } from '../../redux/banner/thunk'
 import { courseSubscribe } from '../../redux/auth/thunk'
-import uniq from 'uniq'
 
 export interface IAddCourse {
     isOpen: boolean
     dismissPanel: () => void
 }
 
-export const AddCourse: React.FunctionComponent<IAddCourse> = ({ isOpen, dismissPanel }) => {
+export const AddCourse: React.FunctionComponent<IAddCourse> = ({
+    isOpen,
+    dismissPanel
+}: IAddCourse) => {
     const { terms, subjects, courseNumbers, courses } = useSelector(state => state.banner)
     const [selectedTerms, setSelectedTerms] = React.useState<ITag[]>([])
     const [selectedSubjects, setSelectedSubjects] = React.useState<ITag[]>([])
