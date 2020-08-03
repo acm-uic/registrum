@@ -1,19 +1,19 @@
 interface AppVersion {
-    version: string
-    commit: string
-    branch: string
+  version: string;
+  commit: string;
+  branch: string;
 }
 
 declare global {
-    interface Window {
-        appVersion: AppVersion
-    }
+  interface Window {
+    appVersion: AppVersion;
+  }
 }
 
 export const appVersion = {
-    version: VERSION,
-    commit: COMMITHASH,
-    branch: BRANCH
-}
+  version: VERSION,
+  commit: COMMITHASH,
+  branch: BRANCH
+};
 
-window.appVersion = appVersion
+window.appVersion = appVersion;

@@ -1,31 +1,21 @@
 {
-    "compilerOptions": {
-        "target": "esnext",
-        "lib": [
-            "WebWorker",
-            "dom",
-            "dom.iterable",
-            "esnext"
-        ],
-        "module": "CommonJS",
-        "allowJs": true,
-        "skipLibCheck": true,
-        "allowSyntheticDefaultImports": true,
-        "strict": true,
-        "forceConsistentCasingInFileNames": true,
-        "moduleResolution": "node",
-        "esModuleInterop": true,
-        "resolveJsonModule": true,
-        "isolatedModules": true,
-        "noEmit": true,
-        "jsx": "react",
-        "typeRoots": [
-            "src/images/index.d.ts",
-            "./node_modules/@types"
-        ]
-    },
-    "baseUrl": "src",
-    "include": [
-        "src"
-    ]
+  "compilerOptions": {
+    "target": "esnext",
+    "lib": ["WebWorker", "dom", "dom.iterable", "esnext"],
+    "module": "CommonJS",
+    "allowJs": true,
+    "skipLibCheck": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react",
+    "typeRoots": ["src/images/index.d.ts", "./node_modules/@types"]
+  },
+  "baseUrl": "src",
+  "include": ["src"]
 }

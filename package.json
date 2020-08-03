@@ -8,6 +8,11 @@
     "prettier": "prettier --write .",
     "coverage": "codecov"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn prettier"
+    }
+  },
   "workspaces": {
     "packages": [
       "projects/*"
@@ -19,6 +24,7 @@
   },
   "devDependencies": {
     "codecov": "^3.7.2",
+    "husky": "^4.2.5",
     "lerna": "^3.22.1",
     "prettier": "^2.0.5",
     "pretty-quick": "^2.0.1"
