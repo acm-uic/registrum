@@ -1,0 +1,8 @@
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: registrum-banner-cluster-ip-service
+# spec:
+#   type: ClusterIP
+#   selector:
+#     component: registrum-banner

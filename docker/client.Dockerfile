@@ -18,7 +18,6 @@ COPY .git/ .git/
 
 RUN yarn build
 
-FROM nginx:alpine as client
+FROM nginx:alpine
 
-COPY --from=build /usr/src/app/projects/client/nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build /usr/src/app/projects/client/dist /usr/share/nginx/html

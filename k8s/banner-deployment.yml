@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: registrum-banner-deployment
+spec:
+  selector:
+    matchLabels:
+      component: registrum-banner
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        component: registrum-banner
+    spec:
+      containers:
+        - name: registrum-banner
+          image: acmuic.azurecr.io/acm-uic/registrum/banner:master
+          imagePullPolicy: Always
+          env:
+            - name: MONGODB_URI
+              valueFrom:
+                secretKeyRef:
+                  name: registrum-secrets
+                  key: MONGODB_URI
+            - name: BANNER_BASE_PATH
+              value: /banner
+      imagePullSecrets:
+        - name: regcred
