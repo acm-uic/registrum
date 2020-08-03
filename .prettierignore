@@ -1,5 +1,4 @@
-pnpm-lock.yaml
-common
+yarn.lock
 
 #-------------------------------------------------------------------------------------------------------------------
 # Keep this section in sync with .gitignore
@@ -195,9 +194,9 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-# npm and yarn lock files
-package-lock.json
-yarn.lock
+# Rush temporary files
+common/temp/
+**/.rush/temp/
 
 # K8s Secrets.yaml
 Secrets.yaml
