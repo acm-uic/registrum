@@ -52,8 +52,7 @@ jobs:
           registry: ${{ secrets.REGISTRY_HOST }}
           repository: ${{ github.repository }}/${{ matrix.project }}
           build_args: CLIENT_WEBPUSHPUBLIC=${{ secrets.WEBPUSHPUBLIC }}
-          dockerfile: docker/${{ matrix.project }}.Dockerfile
-          context: projects/${{ matrix.project }}
+          dockerfile: docker/Dockerfile
           add_git_labels: true
           tag_with_ref: true
           push: ${{ (startsWith(github.ref, 'refs/tags/') || (github.ref == 'refs/heads/master') || (github.ref == 'refs/heads/staging')) }}
