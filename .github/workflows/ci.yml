@@ -61,7 +61,6 @@ jobs:
           dockerfile: docker/${{ matrix.project }}.Dockerfile
           add_git_labels: true
           tag_with_ref: true
-          target: ${{ matrix.project }}
           push: ${{ (startsWith(github.ref, 'refs/tags/') || (github.ref == 'refs/heads/master') || (github.ref == 'refs/heads/staging')) }}
 
   trigger-hooks:
