@@ -8,14 +8,8 @@
   "editor.formatOnPaste": true,
   "editor.renderWhitespace": "boundary",
   "editor.detectIndentation": true,
-  "editor.rulers": [
-    100
-  ],
-  "eslint.validate": [
-    "javascript",
-    "typescript",
-    "typescriptreact"
-  ],
+  "editor.rulers": [100],
+  "eslint.validate": ["javascript", "typescript", "typescriptreact"],
   "files.trimTrailingWhitespace": true,
   "search.exclude": {
     "**/node_modules": true,
