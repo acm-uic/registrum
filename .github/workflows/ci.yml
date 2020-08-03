@@ -44,11 +44,6 @@ jobs:
         project: [api, banner, banner-data, client]
     steps:
       - uses: actions/checkout@v2
-      - name: Pull base images
-        run: |
-          docker pull node:12-alpine
-          docker pull nginx:alpine
-      - uses: satackey/action-docker-layer-caching@v0.0.4
       - name: Build and push Docker images
         uses: docker/build-push-action@v1
         with:
