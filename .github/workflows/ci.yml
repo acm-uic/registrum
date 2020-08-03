@@ -88,7 +88,8 @@ jobs:
             --cache-to "type=local,dest=/tmp/.buildx-cache" \
             --output "type=image,push=${PUSH}" \
             --platform linux/amd64 \
-            ${TAGS} ${{ matrix.project }}
+            --target ${{ matrix.project }} \
+            ${TAGS} .
 
   trigger-hooks:
     runs-on: ubuntu-latest
