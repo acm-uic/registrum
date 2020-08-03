@@ -15,7 +15,7 @@
         "@babel/runtime": "^7.10.4",
         "@fluentui/react": "^7.121.12",
         "@reduxjs/toolkit": "^1.4.0",
-        "@uifabric/react-cards": "^0.109.109",
+        "@uifabric/react-cards": "^0.110.11",
         "@uifabric/react-hooks": "^7.4.12",
         "axios": "^0.19.2",
         "react": "^16.13.1",
