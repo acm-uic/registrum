@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Text, Stack, FontWeights, PrimaryButton, TextField } from '@fluentui/react'
-import { withRouter, Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { useDispatch } from '../redux/store'
 import { signUpUser } from '../redux/auth/thunk'
 
@@ -8,7 +8,7 @@ const boldStyle = {
     root: { fontWeight: FontWeights.semibold }
 }
 
-export const SignUpForm = withRouter(() => {
+export const SignUpForm = (): JSX.Element => {
     const [firstname, setFirstname] = React.useState('')
     const [lastname, setLastname] = React.useState('')
     const [email, setEmail] = React.useState('')
@@ -83,6 +83,6 @@ export const SignUpForm = withRouter(() => {
             </Stack>
         </Stack>
     )
-})
+}
 
 export default SignUpForm
