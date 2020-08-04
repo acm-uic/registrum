@@ -2,4 +2,12 @@
 
 [![CI](https://github.com/acm-uic/registrum/workflows/CI/badge.svg)](https://github.com/acm-uic/registrum/actions?query=workflow%3ACI)
 [![codecov](https://codecov.io/gh/acm-uic/registrum/branch/master/graph/badge.svg?token=5aYe8JnyLU)](https://codecov.io/gh/acm-uic/registrum)
-[![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=acm-uic/registrum)](https://dependabot.com)
+
+## Description
+
+Registrum is a web application written in TypeScript using Node.js and React.js. It's objective is to simplify managing courses at UIC.
+
+## Features
+
+- Course Information
+- Push Notifications for seat availability
