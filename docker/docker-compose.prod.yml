@@ -5,7 +5,9 @@ services:
     image: acmuic.azurecr.io/acm-uic/registrum/api:latest
     restart: always
     environment:
+      - BANNER_URL=http://banner:4001/banner
       - API_BASE_PATH=/api
+    env_file: .env
     networks:
       - registrum-net
 
@@ -14,22 +16,32 @@ services:
     restart: always
     environment:
       - BANNER_BASE_PATH=/banner
+    env_file: .env
     networks:
       - registrum-net
 
   banner-data:
     image: acmuic.azurecr.io/acm-uic/registrum/banner-data:latest
     restart: always
+    env_file: .env
     networks:
       - registrum-net
 
   client:
     image: acmuic.azurecr.io/acm-uic/registrum/client:latest
     restart: always
+    networks:
+      - registrum-net
+
+  nginx:
+    image: nginx
+    restart: always
     ports:
       - 8080:80
     networks:
       - registrum-net
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
 
 networks:
   registrum-net:

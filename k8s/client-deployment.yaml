@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: registrum-client-deployment
+spec:
+  selector:
+    matchLabels:
+      component: registrum-client
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        component: registrum-client
+    spec:
+      containers:
+        - name: registrum-client
+          image: registrum-client:temp
+          ports:
+            - containerPort: 80
+      imagePullSecrets:
+        - name: regcred
