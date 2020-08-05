@@ -9,18 +9,12 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
-    reviewers:
-      - acm-uic/registrum
   - package-ecosystem: "npm"
     directory: "/"
     versioning-strategy: increase
     schedule:
       interval: "daily"
-    reviewers:
-      - acm-uic/registrum
   - package-ecosystem: "docker"
     directory: "/docker"
     schedule:
       interval: "daily"
-    reviewers:
-      - acm-uic/registrum
