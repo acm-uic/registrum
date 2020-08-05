@@ -13,7 +13,7 @@
   "dependencies": {
     "@babel/plugin-transform-runtime": "^7.10.4",
     "@babel/runtime": "^7.11.1",
-    "@fluentui/react": "^7.121.12",
+    "@fluentui/react": "^7.124.3",
     "@reduxjs/toolkit": "^1.4.0",
     "@uifabric/react-cards": "^0.110.11",
     "@uifabric/react-hooks": "^7.7.1",
