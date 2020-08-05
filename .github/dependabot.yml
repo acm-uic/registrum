@@ -5,6 +5,12 @@
 
 version: 2
 updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    reviewers:
+      - acm-uic/registrum
   - package-ecosystem: "npm"
     directory: "/"
     versioning-strategy: increase
@@ -15,6 +21,6 @@ updates:
   - package-ecosystem: "docker"
     directory: "/docker"
     schedule:
-      interval: "weekly"
+      interval: "daily"
     reviewers:
       - acm-uic/registrum
