@@ -19,6 +19,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: github-actions-up-and-running/pr-comment@v1.0.0
+        if: github.actor == 'dependabot[bot]' || github.actor == 'dependabot-preview[bot]'
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           message: '@dependabot squash and merge'
