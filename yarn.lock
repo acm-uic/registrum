@@ -3387,13 +3387,13 @@
     office-ui-fabric-react "^7.124.2"
     tslib "^1.10.0"
 
-"@uifabric/react-hooks@^7.4.12", "@uifabric/react-hooks@^7.7.0":
-  version "7.7.0"
-  resolved "https://registry.yarnpkg.com/@uifabric/react-hooks/-/react-hooks-7.7.0.tgz#2f35ac97b207ffedcd7121e85a93d52b32089660"
-  integrity sha512-33iFd2mcS/XVGSQYyjBO5KKwFVq1WvG7KCio6vZXB/q2Rj9TWdkjLtsrM0C3YUDTS+vlKYSp1RuE/+tH00+8jQ==
+"@uifabric/react-hooks@^7.7.0", "@uifabric/react-hooks@^7.7.1":
+  version "7.7.1"
+  resolved "https://registry.yarnpkg.com/@uifabric/react-hooks/-/react-hooks-7.7.1.tgz#6e5c03e2775bbfc7f7d6fe58cea4454cd9fe6d71"
+  integrity sha512-tCf10AaRrTpa/cMkPdS25HoPsyJiE1cK+G9Ezdf60jHB4m7OkUsnudRRArgUW7ozS19g7Ii532r2hsP8aN4dlw==
   dependencies:
     "@uifabric/set-version" "^7.0.19"
-    "@uifabric/utilities" "^7.25.0"
+    "@uifabric/utilities" "^7.25.1"
     tslib "^1.10.0"
 
 "@uifabric/set-version@^7.0.19":
@@ -3424,10 +3424,10 @@
     office-ui-fabric-react "^7.124.2"
     tslib "^1.10.0"
 
-"@uifabric/utilities@^7.25.0":
-  version "7.25.0"
-  resolved "https://registry.yarnpkg.com/@uifabric/utilities/-/utilities-7.25.0.tgz#a4401cf4c35c9565c3962aa2231ca5c74c58c6d7"
-  integrity sha512-11QJq2dyYojVRxT/QvocI1m5tqqyeoX5K9HmqSGaAq5AIJBqdAUeFAIUuXAn7Gze7X+aLTFVF4Yxthh/ebVthw==
+"@uifabric/utilities@^7.25.0", "@uifabric/utilities@^7.25.1":
+  version "7.25.1"
+  resolved "https://registry.yarnpkg.com/@uifabric/utilities/-/utilities-7.25.1.tgz#43593ed98abcf9a685495130212c15f1dbeba4cf"
+  integrity sha512-lnQGiYEpQM5/ylOeKFpHj/nk9+ht7AKLMFZGxMnst+0dR3kI11bh3YIxpN8auQqxrdQ+ttzA+7/cwTqna2DPHw==
   dependencies:
     "@uifabric/merge-styles" "^7.16.4"
     "@uifabric/set-version" "^7.0.19"
