@@ -1,0 +1,24 @@
+name: Auto Merge Dependabot
+
+on:
+  pull_request
+
+jobs:
+  approve:
+    name: Approve PR
+    runs-on: ubuntu-latest
+    steps:
+      - uses: hmarr/auto-approve-action@v2.0.0
+        if: github.actor == 'dependabot[bot]' || github.actor == 'dependabot-preview[bot]'
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+  comment:
+    name: Add merge comment
+    needs: approve
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: github-actions-up-and-running/pr-comment@v1.0.0
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          message: '@dependabot squash and merge'
