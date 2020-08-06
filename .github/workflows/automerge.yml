@@ -19,7 +19,6 @@ jobs:
   merge-me:
     name: automerge
     runs-on: ubuntu-latest
-    if: github.actor == 'dependabot[bot]'
     steps:
       - name: Merge me!
         uses: ridedott/merge-me-action@master
