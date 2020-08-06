@@ -2480,29 +2480,29 @@
     estree-walker "^1.0.1"
     picomatch "^2.2.2"
 
-"@sendgrid/client@^7.2.2":
-  version "7.2.2"
-  resolved "https://registry.yarnpkg.com/@sendgrid/client/-/client-7.2.2.tgz#40e236c08fcf458a5b20d2f960fa045f0ca24e63"
-  integrity sha512-O2ensbYCZu7B7vMqcyaf5O8XqhDEyzwDYOxBvQYUenAqtpO+Fo5Xq6ZcZ+brCTxHQe1ytKQ9UCNKm/IZohRSPw==
+"@sendgrid/client@^7.2.3":
+  version "7.2.3"
+  resolved "https://registry.yarnpkg.com/@sendgrid/client/-/client-7.2.3.tgz#6cbd0648711eedd36d96507c46caf707c9dde4c1"
+  integrity sha512-HGU/vipv5i/j4Nm/HAXCrFi7gwEuaUukfqlF8SZ4A6jtyKJfa7emV2H4dMvMO/vzqcH4E7Gl+5sDdIi9v8j88g==
   dependencies:
-    "@sendgrid/helpers" "^7.2.0"
+    "@sendgrid/helpers" "^7.2.3"
     axios "^0.19.2"
 
-"@sendgrid/helpers@^7.2.0":
-  version "7.2.0"
-  resolved "https://registry.yarnpkg.com/@sendgrid/helpers/-/helpers-7.2.0.tgz#75cbde76815fa0f8b7966b3e2a0650fc125c3276"
-  integrity sha512-Ps8rc3xFpaQvIWoW1zlWi9G7QnxYwXFOeq0915DzXf5knoiOgXdFk/XBXbCFjr2lf/JIzjgFUtAV/dN8Z8jzHw==
+"@sendgrid/helpers@^7.2.3":
+  version "7.2.3"
+  resolved "https://registry.yarnpkg.com/@sendgrid/helpers/-/helpers-7.2.3.tgz#0a6b803a2df81208f28505adb35e229d2a064e2d"
+  integrity sha512-MMi7AtCs0uMzoYeKkyKOoONRjGDWbEYFF05d7OAohKglWFfbphE1dULHazHRQ/AnHcJFXMzb5rWL/PaDjeZwxg==
   dependencies:
     chalk "^2.0.1"
     deepmerge "^4.2.2"
 
-"@sendgrid/mail@^7.1.1":
-  version "7.2.2"
-  resolved "https://registry.yarnpkg.com/@sendgrid/mail/-/mail-7.2.2.tgz#a9d64fb0d240330e6c98d1e868e65e5a220c5183"
-  integrity sha512-DFXyMEY0c8iXi2lfIfuuQZlRUrlAriE7yeh8D5MDyIPmmHuNKRfKe9Buu/5vT37iWZM2N2BNFdAKPWNUgXRkDQ==
+"@sendgrid/mail@^7.2.3":
+  version "7.2.3"
+  resolved "https://registry.yarnpkg.com/@sendgrid/mail/-/mail-7.2.3.tgz#e76b9b64a11030d7d0898c0dd0c8519bcfa519c0"
+  integrity sha512-ZuVYzXI+3M02w6Qsu562aJXzwhoymMJ589is0yaL+Y+VMMMdM/cFlgwLcNFbmuvsRw9qBrjy5S2HpdeB5E8vtA==
   dependencies:
-    "@sendgrid/client" "^7.2.2"
-    "@sendgrid/helpers" "^7.2.0"
+    "@sendgrid/client" "^7.2.3"
+    "@sendgrid/helpers" "^7.2.3"
 
 "@sindresorhus/is@^0.14.0":
   version "0.14.0"
