@@ -2480,29 +2480,29 @@
     estree-walker "^1.0.1"
     picomatch "^2.2.2"
 
-"@sendgrid/client@^7.2.2":
-  version "7.2.2"
-  resolved "https://registry.yarnpkg.com/@sendgrid/client/-/client-7.2.2.tgz#40e236c08fcf458a5b20d2f960fa045f0ca24e63"
-  integrity sha512-O2ensbYCZu7B7vMqcyaf5O8XqhDEyzwDYOxBvQYUenAqtpO+Fo5Xq6ZcZ+brCTxHQe1ytKQ9UCNKm/IZohRSPw==
+"@sendgrid/client@^7.2.3":
+  version "7.2.3"
+  resolved "https://registry.yarnpkg.com/@sendgrid/client/-/client-7.2.3.tgz#6cbd0648711eedd36d96507c46caf707c9dde4c1"
+  integrity sha512-HGU/vipv5i/j4Nm/HAXCrFi7gwEuaUukfqlF8SZ4A6jtyKJfa7emV2H4dMvMO/vzqcH4E7Gl+5sDdIi9v8j88g==
   dependencies:
-    "@sendgrid/helpers" "^7.2.0"
+    "@sendgrid/helpers" "^7.2.3"
     axios "^0.19.2"
 
-"@sendgrid/helpers@^7.2.0":
-  version "7.2.0"
-  resolved "https://registry.yarnpkg.com/@sendgrid/helpers/-/helpers-7.2.0.tgz#75cbde76815fa0f8b7966b3e2a0650fc125c3276"
-  integrity sha512-Ps8rc3xFpaQvIWoW1zlWi9G7QnxYwXFOeq0915DzXf5knoiOgXdFk/XBXbCFjr2lf/JIzjgFUtAV/dN8Z8jzHw==
+"@sendgrid/helpers@^7.2.3":
+  version "7.2.3"
+  resolved "https://registry.yarnpkg.com/@sendgrid/helpers/-/helpers-7.2.3.tgz#0a6b803a2df81208f28505adb35e229d2a064e2d"
+  integrity sha512-MMi7AtCs0uMzoYeKkyKOoONRjGDWbEYFF05d7OAohKglWFfbphE1dULHazHRQ/AnHcJFXMzb5rWL/PaDjeZwxg==
   dependencies:
     chalk "^2.0.1"
     deepmerge "^4.2.2"
 
-"@sendgrid/mail@^7.1.1":
-  version "7.2.2"
-  resolved "https://registry.yarnpkg.com/@sendgrid/mail/-/mail-7.2.2.tgz#a9d64fb0d240330e6c98d1e868e65e5a220c5183"
-  integrity sha512-DFXyMEY0c8iXi2lfIfuuQZlRUrlAriE7yeh8D5MDyIPmmHuNKRfKe9Buu/5vT37iWZM2N2BNFdAKPWNUgXRkDQ==
+"@sendgrid/mail@^7.2.3":
+  version "7.2.3"
+  resolved "https://registry.yarnpkg.com/@sendgrid/mail/-/mail-7.2.3.tgz#e76b9b64a11030d7d0898c0dd0c8519bcfa519c0"
+  integrity sha512-ZuVYzXI+3M02w6Qsu562aJXzwhoymMJ589is0yaL+Y+VMMMdM/cFlgwLcNFbmuvsRw9qBrjy5S2HpdeB5E8vtA==
   dependencies:
-    "@sendgrid/client" "^7.2.2"
-    "@sendgrid/helpers" "^7.2.0"
+    "@sendgrid/client" "^7.2.3"
+    "@sendgrid/helpers" "^7.2.3"
 
 "@sindresorhus/is@^0.14.0":
   version "0.14.0"
@@ -3324,14 +3324,14 @@
   dependencies:
     eslint-visitor-keys "^1.1.0"
 
-"@uifabric/azure-themes@^7.2.3":
-  version "7.2.3"
-  resolved "https://registry.yarnpkg.com/@uifabric/azure-themes/-/azure-themes-7.2.3.tgz#6b000419654aafe49cca091681e75c2db4813413"
-  integrity sha512-Um+VSU0NxBA5fmv4Wug8Pz/PNNeuqDl9H6rDRy6fTTy6ytZNJpm2nLbwdVEYupUeikM2i6o6KQcDFOVA+ZnvYg==
+"@uifabric/azure-themes@^7.2.5":
+  version "7.2.5"
+  resolved "https://registry.yarnpkg.com/@uifabric/azure-themes/-/azure-themes-7.2.5.tgz#352a061fe5d19473465c9d5a61775becd20b4450"
+  integrity sha512-tgBvIYRcGUBqcctQmhbVSNhQPNPco2KYeohukLX09qruM74+BFeW3DL2xIq+KNxoN6ByHSuluoTzk2OJ4ONKfQ==
   dependencies:
     "@uifabric/merge-styles" "^7.16.4"
     "@uifabric/set-version" "^7.0.19"
-    office-ui-fabric-react "^7.124.3"
+    office-ui-fabric-react "^7.126.0"
     tslib "^1.10.0"
 
 "@uifabric/file-type-icons@^7.4.9":
@@ -3371,20 +3371,20 @@
     "@uifabric/set-version" "^7.0.19"
     tslib "^1.10.0"
 
-"@uifabric/react-cards@^0.110.13":
-  version "0.110.13"
-  resolved "https://registry.yarnpkg.com/@uifabric/react-cards/-/react-cards-0.110.13.tgz#6bcad9d2848164ee8315fe89a28d500dcea159eb"
-  integrity sha512-WIQhxvA7NWwItR2/i5uNDAI07adluFbVNsaXL11so9hJZOwY4E3QBUr3ilrTx4UTOIhzNSqiJZJ+BEHggaeDiA==
+"@uifabric/react-cards@^0.110.15":
+  version "0.110.15"
+  resolved "https://registry.yarnpkg.com/@uifabric/react-cards/-/react-cards-0.110.15.tgz#11fd622c23ef4e9636a9e639d3be3f15465e09f1"
+  integrity sha512-mmEoRaZiR46yrottdUOQZD9BVsuvf9l479Orxl4EPjofo9Fpj1eeA3FZB7f9oa0eUDR4XEdBpDMEkeZKgTs8xA==
   dependencies:
     "@microsoft/load-themed-styles" "^1.10.26"
-    "@uifabric/azure-themes" "^7.2.3"
+    "@uifabric/azure-themes" "^7.2.5"
     "@uifabric/file-type-icons" "^7.4.9"
     "@uifabric/foundation" "^7.7.42"
     "@uifabric/set-version" "^7.0.19"
     "@uifabric/styling" "^7.14.8"
-    "@uifabric/theme-samples" "^7.0.116"
+    "@uifabric/theme-samples" "^7.0.118"
     "@uifabric/utilities" "^7.25.1"
-    office-ui-fabric-react "^7.124.3"
+    office-ui-fabric-react "^7.126.0"
     tslib "^1.10.0"
 
 "@uifabric/react-hooks@^7.7.1":
@@ -3414,14 +3414,14 @@
     "@uifabric/utilities" "^7.25.1"
     tslib "^1.10.0"
 
-"@uifabric/theme-samples@^7.0.116":
-  version "7.0.116"
-  resolved "https://registry.yarnpkg.com/@uifabric/theme-samples/-/theme-samples-7.0.116.tgz#3e08ae5f592d27c89a64df5d30c7a1c55ac7bfcc"
-  integrity sha512-yg3UfekUf4yzAZo92yf9fHO9J3Epc+50KUqNwInUATM0B1fWyw4uB2Q7LLFGnTuEC81J45T3J8U399RNx/lzXg==
+"@uifabric/theme-samples@^7.0.118":
+  version "7.0.118"
+  resolved "https://registry.yarnpkg.com/@uifabric/theme-samples/-/theme-samples-7.0.118.tgz#ee47ad2bb4444389c69686bc472366fa228dee22"
+  integrity sha512-2pwJtMAsmZr4lKhkmryX8McyiF0a62PZA9Tmw/fV81hHJBgQG3PxZWq+hm+kYwYcQr8LuX3tiY3pKB33jhy0Ew==
   dependencies:
     "@uifabric/set-version" "^7.0.19"
-    "@uifabric/variants" "^7.1.106"
-    office-ui-fabric-react "^7.124.3"
+    "@uifabric/variants" "^7.1.108"
+    office-ui-fabric-react "^7.126.0"
     tslib "^1.10.0"
 
 "@uifabric/utilities@^7.25.1":
@@ -3434,13 +3434,13 @@
     prop-types "^15.7.2"
     tslib "^1.10.0"
 
-"@uifabric/variants@^7.1.106":
-  version "7.1.106"
-  resolved "https://registry.yarnpkg.com/@uifabric/variants/-/variants-7.1.106.tgz#5b703d6de7c06f966f59f1626168cd5461e5549e"
-  integrity sha512-nxFzf30PX1AHqUJMGNJXo8kkIbtH0+OwUppqEwyVNa1823O/kj6OwHIEjkTHQhRuqKo7XT4qFElhNHNlC4S0/w==
+"@uifabric/variants@^7.1.108":
+  version "7.1.108"
+  resolved "https://registry.yarnpkg.com/@uifabric/variants/-/variants-7.1.108.tgz#79d2a89590acb2eeeee24ebf78860c873d1ec3ce"
+  integrity sha512-FypBWhmSn/1/Gba5QGHM2hBwxyloAjjByEF/rI1mG3GKC/KuHUhPXuVPhdmhJzJPgeJNg+WeyF2mDYAYd7RJ9g==
   dependencies:
     "@uifabric/set-version" "^7.0.19"
-    office-ui-fabric-react "^7.124.3"
+    office-ui-fabric-react "^7.126.0"
     tslib "^1.10.0"
 
 "@webassemblyjs/ast@1.9.0":
