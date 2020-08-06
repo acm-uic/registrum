@@ -1112,13 +1112,13 @@
     "@uifabric/utilities" "^7.25.1"
     tslib "^1.10.0"
 
-"@fluentui/react@^7.124.3":
-  version "7.124.3"
-  resolved "https://registry.yarnpkg.com/@fluentui/react/-/react-7.124.3.tgz#e0b3f748655fee1c816473e4849c92b3b322453c"
-  integrity sha512-llEw1KvUx3gBHFw67wbzzJRoewMyvQn1F/tAdnwcU7nFINx37rAEgdKngoQqP8DLcOopS882UiMvp85Nm93wCQ==
+"@fluentui/react@^7.126.0":
+  version "7.126.0"
+  resolved "https://registry.yarnpkg.com/@fluentui/react/-/react-7.126.0.tgz#d2a379a639b145f7f9e2cd67b037b4d108e751be"
+  integrity sha512-zH3ZhL82y1BmG8U30ykAHCLCuxbX71nJHJvlFQSaRUMWQWnzzk7AaLw94OIGa2WOjI5mDUvFHdiJ37nYyCr0Qg==
   dependencies:
     "@uifabric/set-version" "^7.0.19"
-    office-ui-fabric-react "^7.124.3"
+    office-ui-fabric-react "^7.126.0"
     tslib "^1.10.0"
 
 "@hapi/address@2.x.x":
