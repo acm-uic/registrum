@@ -44,7 +44,7 @@
     "@types/express-session": "^1.17.0",
     "@types/helmet": "^0.0.47",
     "@types/jest": "^26.0.9",
-    "@types/mongoose": "^5.7.21",
+    "@types/mongoose": "^5.7.35",
     "@types/morgan": "^1.9.0",
     "@types/node": "^14.0.14",
     "@types/passport": "^1.0.3",
