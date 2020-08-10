@@ -27,7 +27,7 @@
     "@types/argparse": "^1.0.38",
     "@types/chai": "^4.2.11",
     "@types/jest": "^26.0.9",
-    "@types/mongoose": "^5.7.35",
+    "@types/mongoose": "^5.7.36",
     "@types/node": "^14.0.14",
     "@types/node-cron": "^2.0.3",
     "@types/tough-cookie": "^4.0.0",
