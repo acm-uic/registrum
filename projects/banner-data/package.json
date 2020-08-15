@@ -14,7 +14,7 @@
     "watch:ts": "tsc -w --preserveWatchOutput"
   },
   "dependencies": {
-    "argparse": "^1.0.10",
+    "argparse": "^2.0.0",
     "axios": "^0.19.2",
     "axios-cookiejar-support": "^1.0.0",
     "dotenv": "^8.2.0",
