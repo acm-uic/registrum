@@ -13,7 +13,7 @@ const baseURL = `${basePath}/`;
 // * Single axios client for continuity
 export const client = axios.create({
   baseURL,
-  validateStatus: e => e === 200 || e === 401,
+  validateStatus: e => e === 200 || e === 401 || e === 400,
   withCredentials: true
 });
 
