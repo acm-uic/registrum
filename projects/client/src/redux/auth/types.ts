@@ -1,12 +1,13 @@
-import { IUser } from '../../interfaces/IUser';
 import { Action } from 'redux';
 import { Course } from 'registrum-common/dist/lib/Banner';
+import { IUser } from '../../interfaces/IUser';
 
 export const SET_USER = 'SET_USER';
 export const UNSET_USER = 'UNSET_USER';
 export const SET_COURSES = 'SET_COURSES';
 
 export const SET_LOADING = 'SET_LOADING';
+export const SET_ERROR = 'SET_ERROR';
 
 // * Set the user
 interface SetUserAction extends Action {
@@ -31,8 +32,19 @@ interface SetLoadingAction extends Action {
   payload: boolean;
 }
 
+// * Set the error message
+interface SetErrorAction extends Action {
+  type: typeof SET_ERROR;
+  payload?: string;
+}
+
 // * Cumulative Type
-export type UserActionTypes = SetUserAction | UnsetUserAction | SetCoursesAction | SetLoadingAction;
+export type UserActionTypes =
+  | SetUserAction
+  | UnsetUserAction
+  | SetCoursesAction
+  | SetLoadingAction
+  | SetErrorAction;
 
 // * Data needed to register a new user
 export type SignUpProps = {

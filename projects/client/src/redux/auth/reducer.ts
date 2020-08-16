@@ -1,12 +1,13 @@
-import { IUser } from '../../interfaces/IUser';
-import { SET_USER, UNSET_USER, UserActionTypes, SET_COURSES, SET_LOADING } from './types';
 import { Course } from 'registrum-common/dist/lib/Banner';
+import { IUser } from '../../interfaces/IUser';
+import { SET_COURSES, SET_ERROR, SET_LOADING, SET_USER, UNSET_USER, UserActionTypes } from './types';
 
 // * Type for the AuthState
 export interface AuthState {
   user: IUser | null;
   loading: boolean;
   courses: Course[];
+  error?: string;
 }
 
 // * Default values for the Auth reducer
@@ -27,6 +28,8 @@ export const AuthReducer = (state = initialState, action: UserActionTypes): Auth
       return { ...state, courses: action.payload };
     case SET_LOADING:
       return { ...state, loading: action.payload };
+    case SET_ERROR:
+      return { ...state, error: action.payload };
     default:
       return state;
   }
