@@ -1,13 +1,13 @@
 import axios, { AxiosInstance } from 'axios';
-import { App } from '../App';
-import mongoose from 'mongoose';
-import { MongoMemoryServer } from 'mongodb-memory-server';
-import { Class } from '../models/interfaces/Class';
-import { Server } from 'http';
-import mockApp from './mockbanner';
-import { UserObject } from '../models/User';
-import { CookieJar } from 'tough-cookie';
 import axiosCookieJarSupport from 'axios-cookiejar-support';
+import { Server } from 'http';
+import { MongoMemoryServer } from 'mongodb-memory-server';
+import mongoose from 'mongoose';
+import { Course } from 'registrum-common/dist/lib/Banner';
+import { CookieJar } from 'tough-cookie';
+import { App } from '../App';
+import { UserObject } from '../models/User';
+import mockApp from './mockbanner';
 
 // May require additional time for downloading MongoDB binaries
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 600000;
@@ -26,7 +26,7 @@ describe('Class Tests', () => {
   let client: AxiosInstance;
   let bannerServer: Server;
   let bannerPort: number;
-  let chosenClass: Class;
+  let chosenClass: Course;
 
   beforeAll(async () => {
     mongoUri = await mongoServer.getUri();
@@ -219,7 +219,7 @@ describe('Class Tests', () => {
   it('correctly retrieve status list', async () => {
     try {
       // * Pick second class
-      let secondClass: Class = null;
+      let secondClass: Course = null;
 
       while (!secondClass || secondClass.courseReferenceNumber === chosenClass.courseReferenceNumber) {
         // * Get class list
@@ -251,8 +251,8 @@ describe('Class Tests', () => {
       console.log(statuslist);
       // // * Make sure statuses contain
       // const statusCRNs = Array.from(
-      //     statuslist as Class[],
-      //     (status: Class) => status.courseReferenceNumber
+      //     statuslist as Course[],
+      //     (status: Course) => status.courseReferenceNumber
       // )
       // console.log(statuslist)
       // // * Make sure both CRNs in status list
