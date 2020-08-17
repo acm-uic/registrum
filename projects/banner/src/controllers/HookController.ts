@@ -1,9 +1,9 @@
-import { Request, Response } from 'express';
 import { WebHooks } from '@bmiddha/webhooks';
+import { Request, Response } from 'express';
 import mongoose from 'mongoose';
 import { Controller } from 'registrum-common/dist/classes/Controller';
-import { CourseSchema } from 'registrum-common/dist/schemas/Banner';
 import { Course } from 'registrum-common/dist/lib/Banner';
+import { CourseSchema } from 'registrum-common/dist/schemas/Banner';
 
 export class HookController extends Controller {
   #webHooks: WebHooks;
@@ -18,9 +18,8 @@ export class HookController extends Controller {
   #initWatcher = () => {
     const CourseModel = mongoose.model<Course & mongoose.Document>('Course', CourseSchema);
     CourseModel.watch().on('change', (data: any) => {
-      console.log(data.operationType);
       if (data && data.fullDocument && data.fullDocument.courseReferenceNumber) {
-        console.log('triggering');
+        console.log(`${data.fullDocument.courseReferenceNumber} updated`);
         this.#webHooks.trigger(data.fullDocument.courseReferenceNumber, data.fullDocument);
       }
     });

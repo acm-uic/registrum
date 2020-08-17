@@ -1,9 +1,9 @@
-import { Banner, SearchResponse, Course, Subject, Term } from 'registrum-common/dist/lib/Banner';
-import { Hook } from 'registrum-common/dist/types/Hook';
+import { Document, model } from 'mongoose';
+import { Banner, Course, SearchResponse, Subject, Term } from 'registrum-common/dist/lib/Banner';
 import { CourseSchema, SubjectSchema, TermSchema } from 'registrum-common/dist/schemas/Banner';
 import { HookSchema } from 'registrum-common/dist/schemas/Hook';
+import { Hook } from 'registrum-common/dist/types/Hook';
 
-import { Document, model } from 'mongoose';
 export const TermModel = model<Term & Document>('Term', TermSchema);
 export const SubjectModel = model<Subject & Document>('Subject', SubjectSchema);
 export const CourseModel = model<Course & Document>('Course', CourseSchema);
@@ -140,7 +140,9 @@ ${pageOffset}, ${pageMaxSize}, ${sectionsFetchedCount}`);
   };
 
   updateCourses = async () => {
+    console.log('updating courses');
     const crns = (await HookModel.find({})).map(hook => hook._id);
+    console.log(crns);
     const dbCourses = await CourseModel.find({
       _id: {
         $in: crns
