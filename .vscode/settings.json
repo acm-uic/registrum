@@ -9,6 +9,14 @@
   "editor.renderWhitespace": "boundary",
   "editor.detectIndentation": true,
   "editor.rulers": [100],
+  "eslint.lintTask.enable": true,
+  "eslint.workingDirectories": [
+    "./projects/client",
+    "./projects/api",
+    "./projects/banner",
+    "./projects/banner-data",
+    "./projects/common"
+  ],
   "eslint.validate": ["javascript", "typescript", "typescriptreact"],
   "files.trimTrailingWhitespace": true,
   "search.exclude": {
