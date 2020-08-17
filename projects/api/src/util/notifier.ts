@@ -1,28 +1,21 @@
-import { UserObject } from '../models/User';
+import 'dotenv/config';
+import { Course } from 'registrum-common/dist/lib/Banner';
 import webpush from 'web-push';
+import { UserObject } from '../models/User';
 
 const sgMail = require('@sendgrid/mail');
-import 'dotenv/config';
 
 // sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 
-interface ClassJSON {
-  courseReferenceNumber: string;
-  seatsAvailable: number;
-}
-
 //* this route is sending email notification and looping over subscription objects to send push notifications
-export const notifyUser = async (user: UserObject, classData: ClassJSON) => {
-  console.log(classData);
-
-  // * Cast class data to classJSON interface
-  const classJSON = classData;
-
+export const notifyUser = async (user: UserObject, course: Course) => {
   // * Determine status message
-  const statusMessage = classJSON.seatsAvailable > 0 ? 'OPEN' : 'CLOSED';
+  const statusMessage =
+    course.crossList !== null ? course.crossListAvailable : course.seatsAvailable > 0 ? 'OPEN' : 'CLOSED';
 
-  // * Destructure needed elements off of ClassJSON
-  const { courseReferenceNumber } = classJSON;
+  // * Destructure needed elements off of course
+  const { courseReferenceNumber } = course;
+  console.log(`notifying for ${courseReferenceNumber} status ${statusMessage}`);
 
   // * If user has email notifications enabled, send email notification
   if (user.emailNotificationsEnabled) {

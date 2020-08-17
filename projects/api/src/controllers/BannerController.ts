@@ -1,10 +1,10 @@
-import { Request, Response } from 'express';
-import { isAuthenticated } from '../util/passport';
-import User, { UserObject } from '../models/User';
-import { notifyUser } from '../util/notifier';
-import { BannerClient } from '../util/BannerClient';
-import { Controller } from './Controller';
 import { AxiosInstance } from 'axios';
+import { Request, Response } from 'express';
+import User, { UserObject } from '../models/User';
+import { BannerClient } from '../util/BannerClient';
+import { notifyUser } from '../util/notifier';
+import { isAuthenticated } from '../util/passport';
+import { Controller } from './Controller';
 
 export type BannerControllerConfig = {
   notifyUrl: string;
@@ -104,7 +104,7 @@ export class BannerController extends Controller {
     this.router.post('/notify/:id/:crn', async (req: Request, res: Response) => {
       // * Grab needed params off of request
       const { id: _id } = req.params;
-      const classJSON = req.body;
+      const courseDocument = req.body;
 
       try {
         // * Resolve updated user
@@ -112,7 +112,7 @@ export class BannerController extends Controller {
 
         console.log(user.email);
         // * Send user notification
-        await notifyUser(user, classJSON);
+        await notifyUser(user, courseDocument);
 
         // * Notification successful
         res.status(200).send('NOTIFICATION SUCCESSFUL');
