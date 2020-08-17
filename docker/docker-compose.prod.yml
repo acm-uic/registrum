@@ -29,19 +29,11 @@ services:
 
   client:
     image: acmuic.azurecr.io/acm-uic/registrum/client:latest
-    restart: always
-    networks:
-      - registrum-net
-
-  nginx:
-    image: nginx
-    restart: always
     ports:
       - 8080:80
+    restart: always
     networks:
       - registrum-net
-    volumes:
-      - ./nginx.conf:/etc/nginx/conf.d/default.conf
 
 networks:
   registrum-net:

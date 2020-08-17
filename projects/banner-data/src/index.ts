@@ -1,83 +1,83 @@
-import * as dotenv from 'dotenv';
-import * as cron from 'node-cron';
-import mongoose from 'mongoose';
-import { BannerData, BannerDataConfig } from './BannerData';
 import { ArgumentParser } from 'argparse';
+import * as dotenv from 'dotenv';
+import mongoose from 'mongoose';
+import * as cron from 'node-cron';
+import { BannerData, BannerDataConfig } from './BannerData';
 
 dotenv.config();
 
 const defaultConfig = {
   now: false,
-  cronCourses: '0 * * * *',
+  cronCourses: '*/5 * * * *',
   cronDb: '0 0 * * *',
   pageRetryCount: 5,
-  pageRetryTime: 5000,
+  pageRetryTime: 1000,
   maxPageSize: 500,
-  waitBetweenPages: 100,
+  waitBetweenPages: 0,
   termsToUpdate: 3,
-  waitBetweenTerms: 120000
+  waitBetweenTerms: 5000
 };
 
 const parser = new ArgumentParser({
   addHelp: true
 });
 
-parser.addArgument(['--now'], {
+parser.addArgument('--now', {
   help: `Perform one-off sync immediately. Cannot be used with --cron.\n
         Example: --now`,
   action: 'storeTrue',
   defaultValue: false
 });
-parser.addArgument(['--cron-db'], {
+parser.addArgument('--cron-db', {
   help: `Sync schedule in cron syntax. Cannot be used with --now. \
         Default: ${defaultConfig.cronDb}. \
-        Example: --cron-db 0 * * * *`,
+        Example: --cron-db 0 0 * * *`,
   type: 'string',
   defaultValue: defaultConfig.cronDb
 });
-parser.addArgument(['--cron-courses'], {
+parser.addArgument('--cron-courses', {
   help: `Sync schedule in cron syntax. Cannot be used with --now. \
         Default: ${defaultConfig.cronCourses}. \
-        Example: --cron-courses 0 * * * *`,
+        Example: --cron-courses */10 * * * *`,
   type: 'string',
   defaultValue: defaultConfig.cronCourses
 });
-parser.addArgument(['--page-retry-count'], {
+parser.addArgument('--page-retry-count', {
   help: `Number of attempts to re-fetch from banner if unsuccessful. \
         Default: ${defaultConfig.pageRetryCount}. \
         Example: --page-retry-count 10`,
   type: 'int',
   defaultValue: defaultConfig.pageRetryCount
 });
-parser.addArgument(['--page-retry-time'], {
+parser.addArgument('--page-retry-time', {
   help: `Number of milliseconds to wait between page request retry if unsuccessful. \
         Default: ${defaultConfig.pageRetryCount}. \
         Example: --page-retry-time 100`,
   type: 'int',
   defaultValue: defaultConfig.pageRetryCount
 });
-parser.addArgument(['--wait-between-pages'], {
+parser.addArgument('--wait-between-pages', {
   help: `Number of milliseconds to wait between page requests to banner. \
         Default: ${defaultConfig.waitBetweenPages}. \
         Example: --wait-between-pages 100`,
   type: 'int',
   defaultValue: defaultConfig.waitBetweenPages
 });
-parser.addArgument(['--wait-between-terms'], {
+parser.addArgument('--wait-between-terms', {
   help: `Number of milliseconds to wait between term requests to banner. \
         Default: ${defaultConfig.waitBetweenTerms}. \
         Example: --wait-between-terms 100`,
   type: 'int',
   defaultValue: defaultConfig.waitBetweenTerms
 });
-parser.addArgument(['--max-page-size'], {
+parser.addArgument('--max-page-size', {
   help: `Max page size for banner search requests. \
         Default: ${defaultConfig.maxPageSize}. \
         Example: --max-page-size 100`,
   type: 'int',
   defaultValue: defaultConfig.maxPageSize
 });
-parser.addArgument(['--terms-to-update'], {
+parser.addArgument('--terms-to-update', {
   help: `Number of terms to update in database. \
         Default: ${defaultConfig.termsToUpdate}. \
         Example: --terms-to-update 3`,
@@ -134,7 +134,7 @@ const boot = async () => {
     console.log(`⏲ Scheduling DB Update Task to run ${config.cronDb}`);
     cron.schedule(config.cronDb, bannerData.updateDb);
   }
-  await mongoose.connection?.close();
+  // await mongoose.connection?.close();
 };
 
 boot();
