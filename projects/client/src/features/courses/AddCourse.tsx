@@ -1,26 +1,25 @@
-import * as React from 'react';
 import {
-  Stack,
-  Panel,
-  Text,
-  TagPicker,
-  IBasePicker,
-  ITag,
   FontSizes,
   FontWeights,
-  IStackStyles,
+  getTheme,
+  IBasePicker,
   Icon,
-  IStackTokens,
-  ITextStyles,
   IIconStyles,
-  getTheme
+  IStackStyles,
+  IStackTokens,
+  ITag,
+  ITextStyles,
+  Panel,
+  Stack,
+  TagPicker,
+  Text
 } from '@fluentui/react';
-
-import { Card, ICardTokens, ICardSectionStyles, ICardSectionTokens } from '@uifabric/react-cards';
-import { useSelector, useDispatch } from '../../redux/store';
-import { Course } from 'registrum-common/dist/lib/Banner';
-import { getCourseNumbers, getCourses } from '../../redux/banner/thunk';
+import { Card, ICardSectionStyles, ICardSectionTokens, ICardTokens } from '@uifabric/react-cards';
+import * as React from 'react';
+import { Course, Faculty } from 'registrum-common/dist/lib/Banner';
 import { courseSubscribe } from '../../redux/auth/thunk';
+import { getCourseNumbers, getCourses } from '../../redux/banner/thunk';
+import { useDispatch, useSelector } from '../../redux/store';
 
 export interface IAddCourse {
   isOpen: boolean;
@@ -237,11 +236,17 @@ export const AddCourse: React.FunctionComponent<IAddCourse> = ({ isOpen, dismiss
                 <Text block>
                   <Icon iconName="Edit" /> {result.courseReferenceNumber}
                 </Text>
+                {result.faculty
+                  .map((faculty: Faculty) => faculty.displayName)
+                  .map((name: string) => (
+                    <Text block key={name}>
+                      <Icon iconName="Contact" /> {name}
+                    </Text>
+                  ))}
                 <Text block>
-                  <Icon iconName="Contact" /> {result.faculty[0]?.displayName || 'Unknown'}
-                </Text>
-                <Text block>
-                  <Icon iconName="ProgressLoopOuter" /> {result.seatsAvailable} / {result.maximumEnrollment}
+                  <Icon iconName="ProgressLoopOuter" />{' '}
+                  {result.crossList !== null ? result.crossListAvailable : result.seatsAvailable} /{' '}
+                  {result.crossList !== null ? result.crossListCapacity : result.maximumEnrollment}
                 </Text>
               </Stack>
             </Card.Section>

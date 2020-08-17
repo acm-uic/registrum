@@ -1,26 +1,26 @@
-import * as React from 'react';
 import {
-  Text,
-  FontWeights,
-  DetailsList,
-  HoverCard,
-  DetailsListLayoutMode,
-  Selection,
-  SelectionMode,
-  IColumn,
-  Stack,
-  Icon,
-  mergeStyleSets,
-  FontSizes,
-  getTheme,
-  IconButton,
   ContextualMenu,
   ContextualMenuItemType,
+  DetailsList,
+  DetailsListLayoutMode,
+  FontSizes,
+  FontWeights,
+  getTheme,
+  HoverCard,
+  IColumn,
+  Icon,
+  IconButton,
   IContextualMenuItem,
+  IObjectWithKey,
   ISelection,
-  IObjectWithKey
+  mergeStyleSets,
+  Selection,
+  SelectionMode,
+  Stack,
+  Text
 } from '@fluentui/react';
-import { Course } from 'registrum-common/dist/lib/Banner';
+import * as React from 'react';
+import { Course, Faculty } from 'registrum-common/dist/lib/Banner';
 
 interface ICourseListProps {
   items: Course[];
@@ -111,25 +111,18 @@ export const CourseList: React.FunctionComponent<ICourseListProps> = (props: ICo
       isPadded: true
     },
     {
-      key: 'subject',
-      name: 'Subject',
-      fieldName: 'subject',
-      minWidth: 50,
-      maxWidth: 60,
+      key: 'subjectCourse',
+      name: 'Course',
+      fieldName: 'subjectCourse',
+      minWidth: 70,
+      maxWidth: 90,
       isResizable: true,
       onColumnClick: onColumnClick,
-      onRender: (item: Course) => <Text>{item.subject}</Text>,
-      isPadded: true
-    },
-    {
-      key: 'courseNumber',
-      name: 'Number',
-      fieldName: 'courseNumber',
-      minWidth: 40,
-      maxWidth: 50,
-      isResizable: true,
-      onColumnClick: onColumnClick,
-      onRender: (item: Course) => <Text>{item.courseNumber}</Text>,
+      onRender: (item: Course) => (
+        <Text>
+          {item.subject} {item.courseNumber}
+        </Text>
+      ),
       isPadded: true
     },
     {
@@ -144,7 +137,8 @@ export const CourseList: React.FunctionComponent<ICourseListProps> = (props: ICo
       onColumnClick: onColumnClick,
       onRender: (item: Course) => (
         <Text>
-          {item.seatsAvailable} / {item.maximumEnrollment}
+          {item.crossList !== null ? item.crossListAvailable : item.seatsAvailable} /{' '}
+          {item.crossList !== null ? item.crossListCapacity : item.maximumEnrollment}
         </Text>
       ),
       isPadded: true
@@ -189,11 +183,17 @@ export const CourseList: React.FunctionComponent<ICourseListProps> = (props: ICo
         <Text block>
           <Icon iconName="Edit" /> {item.courseReferenceNumber}
         </Text>
+        {item.faculty
+          .map((faculty: Faculty) => faculty.displayName)
+          .map((name: string) => (
+            <Text block key={name}>
+              <Icon iconName="Contact" /> {name}
+            </Text>
+          ))}
         <Text block>
-          <Icon iconName="Contact" /> {item.faculty[0]?.displayName || 'Unknown'}
-        </Text>
-        <Text block>
-          <Icon iconName="ProgressLoopOuter" /> {item.seatsAvailable} / {item.maximumEnrollment}
+          <Icon iconName="ProgressLoopOuter" />{' '}
+          {item.crossList !== null ? item.crossListAvailable : item.seatsAvailable} /{' '}
+          {item.crossList !== null ? item.crossListCapacity : item.maximumEnrollment}
         </Text>
       </div>
     );
