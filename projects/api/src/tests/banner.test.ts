@@ -100,7 +100,7 @@ describe('Class Tests', () => {
     expect(response.status).toBe(200);
 
     // * Retrieve classes for CS401
-    const classes = (await client.get(`/classes/listing/220208/CS/401`)).data as Class[];
+    const classes = (await client.get(`/classes/listing/220208/CS/401`)).data as Course[];
 
     // * Pick random class
     chosenClass = classes[Math.floor(Math.random() * classes.length)];
