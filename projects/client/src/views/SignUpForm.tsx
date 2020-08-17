@@ -1,14 +1,24 @@
+import {
+  FontWeights,
+  MessageBar,
+  MessageBarType,
+  PrimaryButton,
+  Stack,
+  Text,
+  TextField
+} from '@fluentui/react';
 import * as React from 'react';
-import { Text, Stack, FontWeights, PrimaryButton, TextField } from '@fluentui/react';
 import { Link } from 'react-router-dom';
-import { useDispatch } from '../redux/store';
 import { signUpUser } from '../redux/auth/thunk';
+import { useDispatch, useSelector } from '../redux/store';
 
 const boldStyle = {
   root: { fontWeight: FontWeights.semibold }
 };
 
 export const SignUpForm = (): JSX.Element => {
+  const { error } = useSelector(state => state.auth);
+
   const [firstname, setFirstname] = React.useState('');
   const [lastname, setLastname] = React.useState('');
   const [email, setEmail] = React.useState('');
@@ -27,6 +37,7 @@ export const SignUpForm = (): JSX.Element => {
         Sign Up
       </Text>
       <Stack tokens={{ childrenGap: 10 }} styles={{ root: { width: '90%', maxWidth: 300 } }}>
+        {error && <MessageBar messageBarType={MessageBarType.error}>{error}</MessageBar>}
         <TextField
           name="firstname"
           label="First Name"
@@ -63,7 +74,6 @@ export const SignUpForm = (): JSX.Element => {
             setPassword(val || '');
           }}
         />
-        <TextField name="confirm-password" label="Confirm Password" type="password" />
         <PrimaryButton type="submit" onClick={handleSubmit}>
           Sign Up
         </PrimaryButton>

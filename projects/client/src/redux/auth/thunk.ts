@@ -1,11 +1,10 @@
 import axios from 'axios';
-
+import { Course } from 'registrum-common/dist/lib/Banner';
+import { getSubscriptionObject } from '../../helpers/functions';
 import { IUser } from '../../interfaces/IUser';
 import { AppThunk } from '../store';
-import { setUser, unsetUser, setCourses, setLoading } from './actions';
-import { SignUpProps, SignInProps, CourseSubscribeProps, CourseUnsubscribeProps } from './types';
-import { getSubscriptionObject } from '../../helpers/functions';
-import { Course } from 'registrum-common/dist/lib/Banner';
+import { setCourses, setError, setLoading, setUser, unsetUser } from './actions';
+import { CourseSubscribeProps, CourseUnsubscribeProps, SignInProps, SignUpProps } from './types';
 
 // * Setting the path for the api calls
 const basePath = process.env.API_BASE_PATH || '/api';
@@ -14,7 +13,7 @@ const baseURL = `${basePath}/`;
 // * Single axios client for continuity
 export const client = axios.create({
   baseURL,
-  validateStatus: () => true,
+  validateStatus: e => e === 200 || e === 401 || e === 400,
   withCredentials: true
 });
 
@@ -31,6 +30,7 @@ export const updateUser = (): AppThunk => async (dispatch, getState) => {
 
     // * If cookie has expired and a user is present
     if (response.status === 401 && auth.user !== null) {
+      dispatch(setError('Your credentials expired'));
       dispatch(unsetUser());
     }
 
@@ -40,12 +40,14 @@ export const updateUser = (): AppThunk => async (dispatch, getState) => {
     // * User has update or
     if (response.status === 200) {
       if (shouldUpdate) dispatch(setUser(user));
+
+      // * No errors
+      dispatch(setError());
     }
   } catch (err) {
     // * Log the error message
-    console.error(err.message);
-
-    // toast('🚨 Could not connect to the API', { type: 'error' })
+    console.error('HEllo', err.message);
+    dispatch(setError('🚨 Could not connect to the API'));
 
     // * Set user to null
     dispatch(unsetUser());
@@ -77,9 +79,6 @@ export const signUpUser = (data: SignUpProps): AppThunk => async (dispatch, getS
       // * Set user data
       dispatch(setUser(user));
 
-      // * Give client notification
-      // toast('🎉 Successfully registered', { type: 'success' })
-
       if (user.emailNotificationsEnabled && 'serviceWorker' in navigator) {
         //* Get subscription from navigator object
         const subscription = await getSubscriptionObject();
@@ -89,15 +88,17 @@ export const signUpUser = (data: SignUpProps): AppThunk => async (dispatch, getS
           await client.post('/push-service/save-client-subscriptions', { subscription });
         }
       }
+
+      // * No errors
+      dispatch(setError());
     } else {
       // * Email already used or bad input
-      // toast(response.data, { type: 'info' })
+      dispatch(setError(response.data));
     }
   } catch (err) {
     // * Log the error message
     console.error(err.message);
-
-    // toast('🚨 Could not connect to the API', { type: 'error' })
+    dispatch(setError('🚨 Could not connect to the API'));
   } finally {
     // * Set loading to false
     dispatch(setLoading(false));
@@ -136,14 +137,17 @@ export const signInUser = (data: SignInProps): AppThunk => async (dispatch, getS
           await client.post('/push-service/save-client-subscriptions', { subscription });
         }
       }
+
+      // * No errors
+      dispatch(setError());
     } else if (response.status === 401) {
-      // toast('Invalid Email / Password', { type: 'info' })
+      // * Email already used or bad input
+      dispatch(setError('Invalid Email / Password'));
     }
   } catch (err) {
     // * Log the error message
     console.error(err.message);
-
-    // toast('🚨 Could not connect to the API', { type: 'error' })
+    dispatch(setError('🚨 Could not connect to the API'));
   } finally {
     // * Set loading to false
     dispatch(setLoading(false));
@@ -179,7 +183,8 @@ export const signOutUser = (): AppThunk => async (dispatch, getState) => {
 
     // * Checking if server successfully signed out
     if (response.status === 200 || response.status === 401) {
-      // toast('👋 Signed out successfully', { type: 'success' })
+      // * No errors
+      dispatch(setError());
 
       // * Set user to null
       dispatch(unsetUser());
@@ -187,8 +192,7 @@ export const signOutUser = (): AppThunk => async (dispatch, getState) => {
   } catch (err) {
     // * Log the error message
     console.error(err.message);
-
-    // toast('🚨 Could not connect to the API', { type: 'error' })
+    dispatch(setError('🚨 Could not connect to the API'));
   } finally {
     // * Set loading to false
     dispatch(setLoading(false));
@@ -211,20 +215,23 @@ export const getUserCourses = (): AppThunk => async (dispatch, getState) => {
     if (response.status === 200) {
       const courses = response.data as Course[];
 
+      // * No errors
+      dispatch(setError());
+
       // * Add the courses to redux
       dispatch(setCourses(courses));
     }
 
     if (response.status === 401) {
-      // * User expired
-      // * Set user to null
+      dispatch(setError('Your credentials expired'));
+
+      // * User expired: Set user to null
       dispatch(unsetUser());
     }
   } catch (err) {
     // * Log the error message
     console.error(err.message);
-
-    // toast('🚨 Could not connect to the API', { type: 'error' })
+    dispatch(setError('🚨 Could not connect to the API'));
   } finally {
     // * Set loading to false
     dispatch(setLoading(false));
@@ -245,21 +252,23 @@ export const courseSubscribe = (data: CourseSubscribeProps): AppThunk => async (
     const response = await client.post('/banner/subscribe', data);
 
     if (response.status === 200) {
+      // * No errors
+      dispatch(setError());
+
       // * Update user
       dispatch(updateUser());
     }
 
     if (response.status === 401) {
-      // * User expired
+      dispatch(setError('Your credentials expired'));
 
-      // * Set user to null
+      // * User expired: Set user to null
       dispatch(unsetUser());
     }
   } catch (err) {
     // * Log the error message
     console.error(err.message);
-
-    // toast('🚨 Could not connect to the API', { type: 'error' })
+    dispatch(setError('🚨 Could not connect to the API'));
   } finally {
     // * Set loading to false
     dispatch(setLoading(false));
@@ -280,21 +289,23 @@ export const courseUnsubscribe = (data: CourseUnsubscribeProps): AppThunk => asy
     const response = await client.post('/banner/unsubscribe', data);
 
     if (response.status === 200) {
+      // * No errors
+      dispatch(setError());
+
       // * Update user
       dispatch(updateUser());
     }
 
     if (response.status === 401) {
-      // * User expired
+      dispatch(setError('Your credentials expired'));
 
-      // * Set user to null
+      // * User expired: Set user to null
       dispatch(unsetUser());
     }
   } catch (err) {
     // * Log the error message
     console.error(err.message);
-
-    // toast('🚨 Could not connect to the API', { type: 'error' })
+    dispatch(setError('🚨 Could not connect to the API'));
   } finally {
     // * Set loading to false
     dispatch(setLoading(false));

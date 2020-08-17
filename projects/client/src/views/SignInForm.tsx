@@ -1,14 +1,23 @@
+import {
+  FontWeights,
+  MessageBar,
+  MessageBarType,
+  PrimaryButton,
+  Stack,
+  Text,
+  TextField
+} from '@fluentui/react';
 import * as React from 'react';
-import { Text, Stack, FontWeights, PrimaryButton, TextField } from '@fluentui/react';
 import { Link } from 'react-router-dom';
 import { signInUser } from '../redux/auth/thunk';
-import { useDispatch } from '../redux/store';
+import { useDispatch, useSelector } from '../redux/store';
 
 const boldStyle = {
   root: { fontWeight: FontWeights.semibold }
 };
 
 export const SignInForm = (): JSX.Element => {
+  const { error } = useSelector(state => state.auth);
   const [email, setEmail] = React.useState<string>('');
   const [password, setPassword] = React.useState<string>('');
   const dispatch = useDispatch();
@@ -27,16 +36,13 @@ export const SignInForm = (): JSX.Element => {
     return !re.test(String(val).toLowerCase()) ? 'Invalid Email Address' : undefined;
   };
 
-  const validatePassword = (val: string): string | undefined => {
-    return val.length > 8 ? undefined : 'Need Longer Password';
-  };
-
   return (
     <Stack horizontalAlign="center" verticalAlign="center" verticalFill tokens={{ childrenGap: 15 }}>
       <Text variant="xxLarge" styles={boldStyle}>
         Sign In
       </Text>
       <Stack tokens={{ childrenGap: 10 }} styles={{ root: { width: '90%', maxWidth: 300 } }}>
+        {error && <MessageBar messageBarType={MessageBarType.error}>{error}</MessageBar>}
         <TextField
           name="email"
           label="Email Address"
@@ -55,7 +61,6 @@ export const SignInForm = (): JSX.Element => {
           label="Password"
           type="password"
           value={password}
-          onGetErrorMessage={validatePassword}
           onChange={(_: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => {
             setPassword(newValue || '');
           }}
