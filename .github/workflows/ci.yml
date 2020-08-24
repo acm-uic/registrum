@@ -86,7 +86,7 @@ jobs:
     if: github.actor == 'dependabot[bot]' && github.event == 'pull_request'
     steps:
       - name: merge
-        uses: actions/github-script@v2.0.1
+        uses: actions/github-script@v3
         with:
           script: |
             github.pullRequests.createReview({
