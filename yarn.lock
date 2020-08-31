@@ -3386,16 +3386,16 @@
     "@uifabric/set-version" "^7.0.22"
     tslib "^1.10.0"
 
-"@uifabric/react-cards@^0.112.0":
-  version "0.112.0"
-  resolved "https://registry.yarnpkg.com/@uifabric/react-cards/-/react-cards-0.112.0.tgz#944146b25b945048b98ef7ee886b72e19f0c08dd"
-  integrity sha512-3aqxAsSFVBuELtCOcZDv3mO/lsBmErZ3sEwty/4uTyXHgyl81fHZuLUnWtCMlnVVFAKSjPK17uw/J4cUZ3zRew==
+"@uifabric/react-cards@^0.112.1":
+  version "0.112.1"
+  resolved "https://registry.yarnpkg.com/@uifabric/react-cards/-/react-cards-0.112.1.tgz#2050dd82e44385038f32ad875fad2570f6b80758"
+  integrity sha512-raBdKxkasEmCa3uTNwO5lQ6HYIQCU/SQ3CsVmsY9aQMxxluXeVtlaOwzNhXbrd2r3QDHO5PX7RQbSLhcl9JQLQ==
   dependencies:
     "@microsoft/load-themed-styles" "^1.10.26"
     "@uifabric/file-type-icons" "^7.6.0"
     "@uifabric/foundation" "^7.9.0"
     "@uifabric/set-version" "^7.0.22"
-    office-ui-fabric-react "^7.133.0"
+    office-ui-fabric-react "^7.133.1"
     tslib "^1.10.0"
 
 "@uifabric/react-hooks@^7.11.0":
@@ -10420,10 +10420,10 @@ octokit-pagination-methods@^1.1.0:
   resolved "https://registry.yarnpkg.com/octokit-pagination-methods/-/octokit-pagination-methods-1.1.0.tgz#cf472edc9d551055f9ef73f6e42b4dbb4c80bea4"
   integrity sha512-fZ4qZdQ2nxJvtcasX7Ghl+WlWS/d9IgnBIwFZXVNNZUmzpno91SX5bc5vuxiuKoCtK78XxGGNuSCrDC7xYB3OQ==
 
-office-ui-fabric-react@^7.128.1, office-ui-fabric-react@^7.133.0:
-  version "7.133.0"
-  resolved "https://registry.yarnpkg.com/office-ui-fabric-react/-/office-ui-fabric-react-7.133.0.tgz#28e8e1eed9e251c9de4b508729985d78ac945455"
-  integrity sha512-F6Bdv1jV++BAarNCD38EQj8mQ5MGnRAvmfrArkYZ7mSaW5+sgJ5TdF0ODkN+cWFU4n4taPSibC5150dvLg/wpA==
+office-ui-fabric-react@^7.128.1, office-ui-fabric-react@^7.133.1:
+  version "7.133.1"
+  resolved "https://registry.yarnpkg.com/office-ui-fabric-react/-/office-ui-fabric-react-7.133.1.tgz#22125025fad6e6bd8b5761bbbbf81f6b8fedae79"
+  integrity sha512-rd5fFzL0yzjWYtE8VQV3LxI6FXMJSa9zVA+/PM4BXwZJDe4EHQzpYgOUqUdZcU/HDfq6DiVMTRYP/w2mlZSfXQ==
   dependencies:
     "@fluentui/date-time-utilities" "^7.6.1"
     "@fluentui/react-focus" "^7.14.0"
