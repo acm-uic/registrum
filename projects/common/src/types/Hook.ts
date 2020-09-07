@@ -1,4 +1,4 @@
 export type Hook = {
-    key: string
-    urls: string[]
-}
+  key: string;
+  urls: string[];
+};

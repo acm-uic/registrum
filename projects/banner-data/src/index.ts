@@ -10,82 +10,51 @@ const defaultConfig = {
   now: false,
   cronCourses: '*/5 * * * *',
   cronDb: '0 0 * * *',
-  pageRetryCount: 5,
-  pageRetryTime: 1000,
-  maxPageSize: 500,
-  waitBetweenPages: 0,
   termsToUpdate: 3,
+  maxPageSize: 500,
   waitBetweenTerms: 5000
 };
 
 const parser = new ArgumentParser({
-  addHelp: true
+  add_help: true
 });
 
-parser.addArgument('--now', {
+parser.add_argument('-n', '--now', {
   help: `Perform one-off sync immediately. Cannot be used with --cron.\n
         Example: --now`,
   action: 'storeTrue',
-  defaultValue: false
+  default: false
 });
-parser.addArgument('--cron-db', {
+parser.add_argument('-d', '--cron-db', {
   help: `Sync schedule in cron syntax. Cannot be used with --now. \
         Default: ${defaultConfig.cronDb}. \
         Example: --cron-db 0 0 * * *`,
   type: 'string',
-  defaultValue: defaultConfig.cronDb
+  default: defaultConfig.cronDb
 });
-parser.addArgument('--cron-courses', {
+parser.add_argument('-c', '--cron-courses', {
   help: `Sync schedule in cron syntax. Cannot be used with --now. \
         Default: ${defaultConfig.cronCourses}. \
         Example: --cron-courses */10 * * * *`,
   type: 'string',
-  defaultValue: defaultConfig.cronCourses
+  default: defaultConfig.cronCourses
 });
-parser.addArgument('--page-retry-count', {
-  help: `Number of attempts to re-fetch from banner if unsuccessful. \
-        Default: ${defaultConfig.pageRetryCount}. \
-        Example: --page-retry-count 10`,
-  type: 'int',
-  defaultValue: defaultConfig.pageRetryCount
-});
-parser.addArgument('--page-retry-time', {
-  help: `Number of milliseconds to wait between page request retry if unsuccessful. \
-        Default: ${defaultConfig.pageRetryCount}. \
-        Example: --page-retry-time 100`,
-  type: 'int',
-  defaultValue: defaultConfig.pageRetryCount
-});
-parser.addArgument('--wait-between-pages', {
-  help: `Number of milliseconds to wait between page requests to banner. \
-        Default: ${defaultConfig.waitBetweenPages}. \
-        Example: --wait-between-pages 100`,
-  type: 'int',
-  defaultValue: defaultConfig.waitBetweenPages
-});
-parser.addArgument('--wait-between-terms', {
-  help: `Number of milliseconds to wait between term requests to banner. \
-        Default: ${defaultConfig.waitBetweenTerms}. \
-        Example: --wait-between-terms 100`,
-  type: 'int',
-  defaultValue: defaultConfig.waitBetweenTerms
-});
-parser.addArgument('--max-page-size', {
+parser.add_argument('-s', '--max-page-size', {
   help: `Max page size for banner search requests. \
         Default: ${defaultConfig.maxPageSize}. \
         Example: --max-page-size 100`,
   type: 'int',
-  defaultValue: defaultConfig.maxPageSize
+  default: defaultConfig.maxPageSize
 });
-parser.addArgument('--terms-to-update', {
+parser.add_argument('-t', '--terms-to-update', {
   help: `Number of terms to update in database. \
         Default: ${defaultConfig.termsToUpdate}. \
         Example: --terms-to-update 3`,
   type: 'int',
-  defaultValue: defaultConfig.termsToUpdate
+  default: defaultConfig.termsToUpdate
 });
 
-const args = parser.parseArgs();
+const args = parser.parse_args();
 
 const mongoUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/registrum';
 

@@ -1,6 +1,6 @@
-import { Schema } from 'mongoose'
+import { Schema } from 'mongoose';
 
 export const HookSchema = new Schema({
-    _id: String,
-    urls: [String]
-})
+  _id: String,
+  urls: [String]
+});
