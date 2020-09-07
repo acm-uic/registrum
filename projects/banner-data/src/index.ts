@@ -97,13 +97,13 @@ const boot = async () => {
   if (config.now) {
     console.log('🔥 Performing one-off sync now');
     await bannerData.updateDb();
+    await mongoose.connection.close();
   } else {
     console.log(`⏲ Scheduling Courses Update Task to run ${config.cronCourses}`);
     cron.schedule(config.cronCourses, bannerData.updateCourses);
     console.log(`⏲ Scheduling DB Update Task to run ${config.cronDb}`);
     cron.schedule(config.cronDb, bannerData.updateDb);
   }
-  // await mongoose.connection?.close();
 };
 
 boot();
