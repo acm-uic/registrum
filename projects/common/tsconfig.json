@@ -7,7 +7,7 @@
     "sourceMap": true,
     "moduleResolution": "node",
     "declaration": true,
-    "lib": ["es2020"],
+    "lib": ["ES2020", "DOM"],
     "outDir": "dist",
     "baseUrl": ".",
     "paths": {

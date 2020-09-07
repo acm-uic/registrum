@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "esnext",
-    "lib": ["WebWorker", "dom", "dom.iterable", "esnext"],
+    "lib": ["WebWorker", "DOM", "DOM.Iterable", "ES2020"],
     "module": "CommonJS",
     "allowJs": true,
     "skipLibCheck": true,
