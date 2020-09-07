@@ -139,10 +139,8 @@ ${pageOffset}, ${pageMaxSize}, ${sectionsFetchedCount}`);
     }
   };
 
-  updateCourses = async () => {
-    console.log('updating courses');
+  updateCourses = async (): void => {
     const crns = (await HookModel.find({})).map(hook => hook._id);
-    console.log(crns);
     const dbCourses = await CourseModel.find({
       _id: {
         $in: crns
