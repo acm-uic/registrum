@@ -14,7 +14,6 @@
     "watch:ts": "tsc -w --preserveWatchOutput"
   },
   "dependencies": {
-    "@sendgrid/mail": "^7.2.5",
     "axios": "^0.20.0",
     "axios-cookiejar-support": "^1.0.1",
     "bcrypt": "^5.0.0",
