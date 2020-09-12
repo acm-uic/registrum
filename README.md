@@ -11,3 +11,9 @@ Registrum is a web application written in TypeScript using Node.js and React.js.
 
 - Course Information
 - Push Notifications for seat availability
+
+## Getting Started
+
+- Install yarn: `npm i -g yarn`
+- Install dependencies: `yarn install`
+- Build Projects: `yarn build`
