@@ -22,21 +22,21 @@ const parser = new ArgumentParser({
 parser.add_argument('-n', '--now', {
   help: `Perform one-off sync immediately. Cannot be used with --cron.\n
         Example: --now`,
-  action: 'storeTrue',
+  action: 'store_true',
   default: false
 });
 parser.add_argument('-d', '--cron-db', {
   help: `Sync schedule in cron syntax. Cannot be used with --now. \
         Default: ${defaultConfig.cronDb}. \
         Example: --cron-db 0 0 * * *`,
-  type: 'string',
+  type: String,
   default: defaultConfig.cronDb
 });
 parser.add_argument('-c', '--cron-courses', {
   help: `Sync schedule in cron syntax. Cannot be used with --now. \
         Default: ${defaultConfig.cronCourses}. \
         Example: --cron-courses */10 * * * *`,
-  type: 'string',
+  type: String,
   default: defaultConfig.cronCourses
 });
 parser.add_argument('-s', '--max-page-size', {

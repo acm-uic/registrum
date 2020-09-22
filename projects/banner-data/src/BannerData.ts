@@ -24,7 +24,7 @@ export class BannerData {
     this.#config = config;
   }
 
-  #getAllPages = async (banner: Banner) => {
+  #getAllPages = async (banner: Banner): Promise<SearchResponse> => {
     const progress = '✨ 🚀 🌮 🧪 🎸 😎 🔫 💩 👽 👾 🤖 💥 🔥 🌈 👻'.split(' ');
     const { maxPageSize, waitBetweenPages } = this.#config;
     let count = 0;
@@ -45,7 +45,7 @@ ${pageOffset}, ${pageMaxSize}, ${sectionsFetchedCount}`);
     return res;
   };
 
-  #getPage = async (banner: Banner, size: number, offset: number) => {
+  #getPage = async (banner: Banner, size: number, offset: number): Promise<SearchResponse> => {
     const { pageRetryTime, pageRetryCount } = this.#config;
     for (let retryCount = 0; retryCount < pageRetryCount; retryCount++) {
       const res = await banner.search({
@@ -57,17 +57,38 @@ ${pageOffset}, ${pageMaxSize}, ${sectionsFetchedCount}`);
       await new Promise(resolve => setTimeout(resolve, pageRetryTime));
     }
   };
-  updateTerms = async () => {
+  updateTerms = async (): Promise<void> => {
     const terms = await Banner.getLatestTerm(this.#config.termsToUpdate);
-    const res = terms.map(term => {
-      return {
-        ...term,
-        _id: term.code
-      };
-    });
+    const res = terms.map(term => ({
+      ...term,
+      _id: term.code
+    }));
     await TermModel.collection.bulkWrite(
-      res.map(r => {
-        return {
+      res.map(r => ({
+        updateOne: {
+          filter: {
+            _id: r._id
+          },
+          update: { $set: r },
+          upsert: true
+        }
+      }))
+    );
+  };
+
+  updateSubjects = async (): Promise<void> => {
+    const terms = await Banner.getLatestTerm(this.#config.termsToUpdate);
+    for (const term of terms) {
+      console.log(term.code);
+      const subjects = await Banner.getSubject({
+        term: term.code
+      });
+      const res = subjects.map(subject => ({
+        ...subject,
+        _id: subject.code
+      }));
+      await SubjectModel.collection.bulkWrite(
+        res.map(r => ({
           updateOne: {
             filter: {
               _id: r._id
@@ -75,41 +96,12 @@ ${pageOffset}, ${pageMaxSize}, ${sectionsFetchedCount}`);
             update: { $set: r },
             upsert: true
           }
-        };
-      })
-    );
-  };
-
-  updateSubjects = async () => {
-    const terms = await Banner.getLatestTerm(this.#config.termsToUpdate);
-    for (const term of terms) {
-      console.log(term.code);
-      const subjects = await Banner.getSubject({
-        term: term.code
-      });
-      const res = subjects.map(subject => {
-        return {
-          ...subject,
-          _id: subject.code
-        };
-      });
-      await SubjectModel.collection.bulkWrite(
-        res.map(r => {
-          return {
-            updateOne: {
-              filter: {
-                _id: r._id
-              },
-              update: { $set: r },
-              upsert: true
-            }
-          };
-        })
+        }))
       );
     }
   };
 
-  updateAllCourses = async () => {
+  updateAllCourses = async (): Promise<void> => {
     const terms = await Banner.getLatestTerm(this.#config.termsToUpdate);
     for (const term of terms) {
       console.log(term.code);
@@ -123,23 +115,21 @@ ${pageOffset}, ${pageMaxSize}, ${sectionsFetchedCount}`);
         };
       });
       await CourseModel.collection.bulkWrite(
-        res.map(r => {
-          return {
-            updateOne: {
-              filter: {
-                _id: r._id
-              },
-              update: { $set: r },
-              upsert: true
-            }
-          };
-        })
+        res.map(r => ({
+          updateOne: {
+            filter: {
+              _id: r._id
+            },
+            update: { $set: r },
+            upsert: true
+          }
+        }))
       );
       await new Promise(resolve => setTimeout(resolve, this.#config.waitBetweenTerms));
     }
   };
 
-  updateCourses = async (): void => {
+  updateCourses = async (): Promise<void> => {
     const crns = (await HookModel.find({})).map(hook => hook._id);
     const dbCourses = await CourseModel.find({
       _id: {
@@ -163,28 +153,24 @@ ${pageOffset}, ${pageMaxSize}, ${sectionsFetchedCount}`);
         })
       )
     ).flat(1);
-    const res = bannerCourses.map(course => {
-      return {
-        ...course,
-        _id: course.courseReferenceNumber
-      };
-    });
+    const res = bannerCourses.map(course => ({
+      ...course,
+      _id: course.courseReferenceNumber
+    }));
     await CourseModel.collection.bulkWrite(
-      res.map(r => {
-        return {
-          updateOne: {
-            filter: {
-              _id: r._id
-            },
-            update: { $set: r },
-            upsert: true
-          }
-        };
-      })
+      res.map(r => ({
+        updateOne: {
+          filter: {
+            _id: r._id
+          },
+          update: { $set: r },
+          upsert: true
+        }
+      }))
     );
   };
 
-  updateDb = async () => {
+  updateDb = async (): Promise<void> => {
     console.log('Updating Terms');
     await this.updateTerms();
     console.log('Updated Terms');
