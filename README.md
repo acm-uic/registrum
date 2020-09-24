@@ -26,7 +26,7 @@ Registrum is a web application written in TypeScript using Node.js and React.js.
   <a rel="noopener" target="_blank"><img src="https://i.imgur.com/M8W3v3G.png"></a>
   <a rel="noopener" target="_blank"><img src="https://i.imgur.com/EnQVHVU.png"></a>
   <a rel="noopener" target="_blank"><img src="https://i.imgur.com/05WJq6c.png"></a>
-  <a rel="noopener" target="_blank"><img width="50%" height="50%" src="https://i.imgur.com/wV8jfXy.png"></a>
+  <a rel="noopener" target="_blank"><img width="30%" height="30%" src="https://i.imgur.com/wV8jfXy.png"></a>
 
 
 </p>
