@@ -16,7 +16,7 @@
     "@fluentui/react": "^7.138.0",
     "@reduxjs/toolkit": "^1.4.0",
     "@uifabric/react-cards": "^0.112.13",
-    "@uifabric/react-hooks": "^7.12.0",
+    "@uifabric/react-hooks": "^7.13.6",
     "axios": "^0.20.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
