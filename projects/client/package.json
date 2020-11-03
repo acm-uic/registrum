@@ -85,7 +85,7 @@
     "webpack-pwa-manifest": "^4.2.0",
     "workbox-webpack-plugin": "^5.1.4",
     "terser-webpack-plugin": "^4.2.0",
-    "@types/terser-webpack-plugin": "^4.1.0",
+    "@types/terser-webpack-plugin": "^5.0.1",
     "@types/dotenv-webpack": "^1.8.0"
   }
 }

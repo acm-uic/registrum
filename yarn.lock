@@ -3137,13 +3137,13 @@
   resolved "https://registry.yarnpkg.com/@types/tapable/-/tapable-1.0.6.tgz#a9ca4b70a18b270ccb2bc0aaafefd1d486b7ea74"
   integrity sha512-W+bw9ds02rAQaMvaLYxAbJ6cvguW/iJXNT6lTssS1ps6QdrMKttqEAMEG/b5CR8TZl3/L7/lH0ZV5nNR1LXikA==
 
-"@types/terser-webpack-plugin@^4.1.0":
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/@types/terser-webpack-plugin/-/terser-webpack-plugin-4.1.0.tgz#c1c195a19d1850153d5eda3e01b29df0701d0979"
-  integrity sha512-BOHN8/GPYi0e3ch3LHf+O/pkzbc0WKnNuYdNdDmfi+vbcgXpG9Hq6zEJ0C1HwQyYIowVEqMW08/X23c43a47Pw==
+"@types/terser-webpack-plugin@^5.0.1":
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/@types/terser-webpack-plugin/-/terser-webpack-plugin-5.0.1.tgz#15a3b01ad3497a8ed449b35f06f257a2b2ab5c5d"
+  integrity sha512-kDxwsSDm5eVffzPpbu7uWSW2xVKmNAJ5YK6j7gdgww98rV+eGGhS9Wi0qNp0ZqCr923hI8JuSce2QO8pcdn3gQ==
   dependencies:
     "@types/webpack" "*"
-    terser "^4.6.13"
+    terser "^5.3.8"
 
 "@types/tmp@^0.2.0":
   version "0.2.0"
@@ -12633,7 +12633,7 @@ source-map-resolve@^0.5.0:
     source-map-url "^0.4.0"
     urix "^0.1.0"
 
-source-map-support@^0.5.17, source-map-support@^0.5.6, source-map-support@~0.5.12:
+source-map-support@^0.5.17, source-map-support@^0.5.6, source-map-support@~0.5.12, source-map-support@~0.5.19:
   version "0.5.19"
   resolved "https://registry.yarnpkg.com/source-map-support/-/source-map-support-0.5.19.tgz#a98b62f86dcaf4f67399648c085291ab9e8fed61"
   integrity sha512-Wonm7zOCIJzBGQdB+thsPar0kYuCIzYvxZwlBa87yi/Mdjv7Tip2cyVbLj5o0cFPN4EVkuTwb3GDDyUx2DGnGw==
@@ -12656,7 +12656,7 @@ source-map@^0.6.0, source-map@^0.6.1, source-map@~0.6.0, source-map@~0.6.1:
   resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.6.1.tgz#74722af32e9614e9c287a8d0bbde48b5e2f1a263"
   integrity sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==
 
-source-map@^0.7.3:
+source-map@^0.7.3, source-map@~0.7.2:
   version "0.7.3"
   resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.7.3.tgz#5302f8169031735226544092e64981f751750383"
   integrity sha512-CkCj6giN3S+n9qrYiBTX5gystlENnRW5jZeNLHpe6aue+SrHcG5VYwujhW9s4dY31mEGsxBDrHR6oI69fTXsaQ==
@@ -13287,7 +13287,7 @@ terser-webpack-plugin@^4.2.0:
     terser "^5.3.0"
     webpack-sources "^1.4.3"
 
-terser@^4.1.2, terser@^4.6.13, terser@^4.6.2, terser@^4.6.3:
+terser@^4.1.2, terser@^4.6.2, terser@^4.6.3:
   version "4.8.0"
   resolved "https://registry.yarnpkg.com/terser/-/terser-4.8.0.tgz#63056343d7c70bb29f3af665865a46fe03a0df17"
   integrity sha512-EAPipTNeWsb/3wLPeup1tVPaXfIaU68xMnVdPafIL1TV05OhASArYyIfFvnvJCNrR2NIOvDVNNTFRa+Re2MWyw==
@@ -13296,14 +13296,14 @@ terser@^4.1.2, terser@^4.6.13, terser@^4.6.2, terser@^4.6.3:
     source-map "~0.6.1"
     source-map-support "~0.5.12"
 
-terser@^5.3.0:
-  version "5.3.1"
-  resolved "https://registry.yarnpkg.com/terser/-/terser-5.3.1.tgz#f50fe20ab48b15234fe9bdd86b10148ad5fca787"
-  integrity sha512-yD80f4hdwCWTH5mojzxe1q8bN1oJbsK/vfJGLcPZM/fl+/jItIVNKhFIHqqR71OipFWMLgj3Kc+GIp6CeIqfnA==
+terser@^5.3.0, terser@^5.3.8:
+  version "5.3.8"
+  resolved "https://registry.yarnpkg.com/terser/-/terser-5.3.8.tgz#991ae8ba21a3d990579b54aa9af11586197a75dd"
+  integrity sha512-zVotuHoIfnYjtlurOouTazciEfL7V38QMAOhGqpXDEg6yT13cF4+fEP9b0rrCEQTn+tT46uxgFsTZzhygk+CzQ==
   dependencies:
     commander "^2.20.0"
-    source-map "~0.6.1"
-    source-map-support "~0.5.12"
+    source-map "~0.7.2"
+    source-map-support "~0.5.19"
 
 test-exclude@^6.0.0:
   version "6.0.0"
