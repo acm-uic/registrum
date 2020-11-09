@@ -21,7 +21,7 @@
     "tough-cookie": "^4.0.0"
   },
   "devDependencies": {
-    "@types/chai": "^4.2.12",
+    "@types/chai": "^4.2.14",
     "@types/express": "^4.17.8",
     "@types/jest": "^26.0.13",
     "@types/mongoose": "^5.7.36",
