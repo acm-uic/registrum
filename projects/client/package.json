@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@babel/plugin-transform-runtime": "^7.12.1",
-    "@babel/runtime": "^7.11.2",
+    "@babel/runtime": "^7.12.5",
     "@fluentui/react": "^7.147.1",
     "@reduxjs/toolkit": "^1.4.0",
     "@uifabric/react-cards": "^0.112.13",
@@ -44,7 +44,7 @@
     "@babel/preset-env": "^7.11.5",
     "@babel/preset-react": "^7.10.4",
     "@babel/preset-typescript": "^7.10.4",
-    "@babel/runtime": "^7.11.2",
+    "@babel/runtime": "^7.12.5",
     "@types/copy-webpack-plugin": "^6.0.0",
     "@types/git-revision-webpack-plugin": "^3.0.0",
     "@types/jest": "^26.0.13",
