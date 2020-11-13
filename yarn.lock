@@ -3311,10 +3311,10 @@
     "@types/workbox-strategies" "*"
     "@types/workbox-streams" "*"
 
-"@types/workbox-webpack-plugin@^5.1.4":
-  version "5.1.4"
-  resolved "https://registry.yarnpkg.com/@types/workbox-webpack-plugin/-/workbox-webpack-plugin-5.1.4.tgz#446530962fb0e7f045be8280a564702a8a534e80"
-  integrity sha512-MXUrweAEJDy7F0moFJ9T5KEoDEu4wU8U2BhtnwXiY8lfY7Ht+A8PkdD1qKWmSoL2aWZJwQv+N6ZCGHlKSFZx7g==
+"@types/workbox-webpack-plugin@^5.1.5":
+  version "5.1.5"
+  resolved "https://registry.yarnpkg.com/@types/workbox-webpack-plugin/-/workbox-webpack-plugin-5.1.5.tgz#3c54ebf8864b4039dab7fe7cb5cf6acd7fbc31fd"
+  integrity sha512-FLFbhnilR3MXCkaRx7D9rxeRlvHwTl6bMnRa1gJux1wSFbTRb9E1K1kQeyxCYuuUAqk3C/QABCg1FAl4onZrDQ==
 
 "@types/yargs-parser@*":
   version "15.0.0"
