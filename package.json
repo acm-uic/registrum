@@ -6,7 +6,8 @@
     "clean": "git clean -ffdX",
     "lint": "lerna run lint --stream",
     "prettier": "prettier --write .",
-    "coverage": "codecov"
+    "coverage": "codecov",
+    "gen-web-push": "npx web-push generate-vapid-keys --json > web-push-keys.json"
   },
   "husky": {
     "hooks": {
