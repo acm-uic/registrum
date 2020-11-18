@@ -52,6 +52,8 @@ const config: Configuration = {
     historyApiFallback: true,
     port: 3000,
     hotOnly: true,
+    disableHostCheck: true,
+    host: '0.0.0.0',
     proxy: {
       '/api': 'http://localhost:4000/'
     }
@@ -60,9 +62,7 @@ const config: Configuration = {
   optimization: {
     minimizer: [
       new TerserPlugin({
-        cache: true,
-        parallel: true,
-        sourceMap: mode === 'development'
+        parallel: true
       })
     ]
   },
