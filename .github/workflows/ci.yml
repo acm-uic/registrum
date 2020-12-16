@@ -96,14 +96,8 @@ jobs:
       - name: Trigger Hooks - main
         if: github.ref == 'refs/heads/main'
         run: |
-          curl -X POST -H "Content-Type: application/json" -d "{}" '${{ secrets.main_HOOK }}'
-
-      - name: Trigger Hooks - staging
-        if: github.ref == 'refs/heads/staging'
-        run: |
-          curl -X POST -H "Content-Type: application/json" -d "{}" '${{ secrets.STAGING_HOOK }}'
-
+          curl -X POST -H "Content-Type: application/json" -d "{}" '${{ secrets.EDGE_HOOK }}'
       - name: Trigger Hooks - release
-        if: startsWith(github.ref, 'refs/tags/')
+        if: startsWith(github.ref, 'refs/tags/v')
         run: |
           curl -X POST -H "Content-Type: application/json" -d "{}" '${{ secrets.PROD_HOOK }}'
