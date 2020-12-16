@@ -12,10 +12,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Use Node.js 12.x
+      - name: Use Node.js 14.x
         uses: actions/setup-node@v2.1.3
         with:
-          node-version: 12.x
+          node-version: 14.x
       - name: Restore Package Cache
         uses: actions/cache@v2
         with:
@@ -45,7 +45,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Login docker registry
-        uses: docker/login-action@v1 
+        uses: docker/login-action@v1
         with:
           registry: ${{ secrets.REGISTRY_HOST }}
           username: ${{ secrets.REGISTRY_USER }}

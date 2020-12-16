@@ -89,16 +89,19 @@ export class BannerController extends Controller {
       const _id = (req.user as UserObject)._id;
 
       // * Grab updated user
-      const user: UserObject = await User.findOne({ _id });
-      // * Serialize CRNs
-      const crns: string[] = user.subscriptions;
+      const user = await User.findOne({ _id });
 
-      // * Grab class JSONs from banner API
-      const { data: classes } = await this.#bannerClient.post('/course', {
-        courseReferenceNumbers: crns
-      });
-      // * Send class JSONs
-      res.send(classes);
+      if (user) {
+        // * Serialize CRNs
+        const crns: string[] = user.subscriptions;
+
+        // * Grab class JSONs from banner API
+        const { data: classes } = await this.#bannerClient.post('/course', {
+          courseReferenceNumbers: crns
+        });
+        // * Send class JSONs
+        res.send(classes);
+      }
     });
 
     this.router.post('/notify/:id/:crn', async (req: Request, res: Response) => {
@@ -109,13 +112,14 @@ export class BannerController extends Controller {
       try {
         // * Resolve updated user
         const user = await User.findOne({ _id });
+        if (user) {
+          console.log(user.email);
+          // * Send user notification
+          await notifyUser(user, courseDocument);
 
-        console.log(user.email);
-        // * Send user notification
-        await notifyUser(user, courseDocument);
-
-        // * Notification successful
-        res.status(200).send('NOTIFICATION SUCCESSFUL');
+          // * Notification successful
+          res.status(200).send('NOTIFICATION SUCCESSFUL');
+        }
       } catch (err) {
         // ! Error notifying user
         res.status(400).send(err.message);

@@ -1,10 +1,10 @@
 import axios, { AxiosInstance } from 'axios';
 import axiosCookieJarSupport from 'axios-cookiejar-support';
-import { CookieJar } from 'tough-cookie';
-import { App } from '../App';
-import mongoose from 'mongoose';
 import { Server } from 'http';
 import { MongoMemoryServer } from 'mongodb-memory-server';
+import mongoose from 'mongoose';
+import { CookieJar } from 'tough-cookie';
+import { App } from '../App';
 import mockApp from './mockbanner';
 
 // May require additional time for downloading MongoDB binaries
@@ -34,17 +34,20 @@ describe('Class Tests', () => {
     // * Find banner port
     bannerPort = await new Promise(resolve => {
       bannerServer.on('listening', () => {
-        const addressInfo = bannerServer.address().valueOf() as {
-          address: string;
-          family: string;
-          port: number;
-        };
-        resolve(addressInfo.port);
+        const serverAddr = bannerServer.address();
+        if (serverAddr) {
+          const addressInfo = serverAddr.valueOf() as {
+            address: string;
+            family: string;
+            port: number;
+          };
+          resolve(addressInfo.port);
+        }
       });
     });
 
     // * Wait for app to initialize
-    await new Promise(resolve => {
+    await new Promise<void>(resolve => {
       // * Create the app with the configurations
       expressApp = new App(
         {
@@ -65,12 +68,15 @@ describe('Class Tests', () => {
     // * Find app port
     port = await new Promise(resolve => {
       server.on('listening', () => {
-        const addressInfo = server.address().valueOf() as {
-          address: string;
-          family: string;
-          port: number;
-        };
-        resolve(addressInfo.port);
+        const serverAddr = server.address();
+        if (serverAddr) {
+          const addressInfo = serverAddr.valueOf() as {
+            address: string;
+            family: string;
+            port: number;
+          };
+          resolve(addressInfo.port);
+        }
       });
     });
     baseURL = `http://localhost:${port}${basePath}/`;
@@ -98,21 +104,21 @@ describe('Class Tests', () => {
 
   afterAll(async () => {
     // * Remove all users from DB
-    await new Promise(resolve => {
+    await new Promise<void>(resolve => {
       mongoose.connection.db.dropCollection('users', () => {
         resolve();
       });
     });
 
     // * Close DB Connection
-    await new Promise(resolve => {
+    await new Promise<void>(resolve => {
       mongoose.connection.close(() => {
         resolve();
       });
     });
 
     // * We wait until all threads have been run once to ensure the connection closes.
-    await new Promise(resolve => setImmediate(resolve));
+    await new Promise<void>(resolve => setImmediate(resolve));
 
     // * Close Server
     server.close();

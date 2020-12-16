@@ -1,5 +1,5 @@
 import { Document, model } from 'mongoose';
-import { Banner, Course, SearchResponse, Subject, Term } from 'registrum-common/dist/lib/Banner';
+import { Banner, Course, Subject, Term } from 'registrum-common/dist/lib/Banner';
 import { CourseSchema, SubjectSchema, TermSchema } from 'registrum-common/dist/schemas/Banner';
 import { HookSchema } from 'registrum-common/dist/schemas/Hook';
 import { Hook } from 'registrum-common/dist/types/Hook';
@@ -29,20 +29,24 @@ export class BannerData {
     const { maxPageSize, waitBetweenPages } = this.#config;
     let count = 0;
     const res = await this.#getPage(banner, maxPageSize, 0);
-    const { success, totalCount, pageOffset, pageMaxSize, sectionsFetchedCount } = res;
-    console.log(`${progress[count++ % progress.length]} ${success}, ${totalCount}, \
-${pageOffset}, ${pageMaxSize}, ${sectionsFetchedCount}`);
-    let received = res.data.length;
-    while (received < res.totalCount) {
-      const page = await this.#getPage(banner, maxPageSize, received);
-      const { success, totalCount, pageOffset, pageMaxSize, sectionsFetchedCount } = page;
+    if (res) {
+      const { success, totalCount, pageOffset, pageMaxSize, sectionsFetchedCount } = res;
       console.log(`${progress[count++ % progress.length]} ${success}, ${totalCount}, \
 ${pageOffset}, ${pageMaxSize}, ${sectionsFetchedCount}`);
-      res.data = [...res.data, ...page.data];
-      received += page.data.length;
-      await new Promise(resolve => setTimeout(resolve, waitBetweenPages));
+      let received = res.data.length;
+      while (received < res.totalCount) {
+        const page = await this.#getPage(banner, maxPageSize, received);
+        if (page) {
+          const { success, totalCount, pageOffset, pageMaxSize, sectionsFetchedCount } = page;
+          console.log(`${progress[count++ % progress.length]} ${success}, ${totalCount}, \
+          ${pageOffset}, ${pageMaxSize}, ${sectionsFetchedCount}`);
+          res.data = [...res.data, ...page.data];
+          received += page.data.length;
+          await new Promise(resolve => setTimeout(resolve, waitBetweenPages));
+        }
+      }
+      return res;
     }
-    return res;
   };
 
   #getPage = async (banner: Banner, size: number, offset: number) => {
@@ -114,28 +118,29 @@ ${pageOffset}, ${pageMaxSize}, ${sectionsFetchedCount}`);
     for (const term of terms) {
       console.log(term.code);
       const banner = new Banner(term.code);
-
-      const courses: SearchResponse = await this.#getAllPages(banner);
-      const res = courses.data.map(course => {
-        return {
-          ...course,
-          _id: course.courseReferenceNumber
-        };
-      });
-      await CourseModel.collection.bulkWrite(
-        res.map(r => {
+      const courses = await this.#getAllPages(banner);
+      if (courses) {
+        const res = courses.data.map(course => {
           return {
-            updateOne: {
-              filter: {
-                _id: r._id
-              },
-              update: { $set: r },
-              upsert: true
-            }
+            ...course,
+            _id: course.courseReferenceNumber
           };
-        })
-      );
-      await new Promise(resolve => setTimeout(resolve, this.#config.waitBetweenTerms));
+        });
+        await CourseModel.collection.bulkWrite(
+          res.map(r => {
+            return {
+              updateOne: {
+                filter: {
+                  _id: r._id
+                },
+                update: { $set: r },
+                upsert: true
+              }
+            };
+          })
+        );
+        await new Promise(resolve => setTimeout(resolve, this.#config.waitBetweenTerms));
+      }
     }
   };
 

@@ -176,7 +176,7 @@ export class Banner {
   constructor(term: string, subject?: string) {
     this.#term = term;
     this.#subject = subject || '';
-    this.#clearCookie();
+    this.#cookieJar = new CookieJar();
     axiosCookieJarSupport(axios);
     this.#api = axios.create({ withCredentials: true, jar: this.#cookieJar });
   }

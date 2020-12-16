@@ -1,7 +1,7 @@
+import bcrypt from 'bcrypt';
 import { Request, Response } from 'express';
 import passport from 'passport';
 import User, { UserObject } from '../models/User';
-import bcrypt from 'bcrypt';
 // * Bind Passport strategies
 import '../util/passport';
 import { isAuthenticated } from '../util/passport';
@@ -35,16 +35,16 @@ export class AuthController extends Controller {
   #initializeRoutes = () => {
     // * All routes under /auth/*
     this.router.get('/', isAuthenticated, async (req: Request, res: Response) => {
-      res
-        .status(200)
-        .json(AuthController.stripData(await User.findOne({ _id: (req.user as UserObject)._id })));
+      const user = await User.findOne({ _id: (req.user as UserObject)._id });
+      if (user) res.status(200).json(AuthController.stripData(user));
     });
     /* Login by passport.authenticate */
     this.router.post(
       '/login',
       passport.authenticate('local', { failureFlash: false }),
       async (req: Request, res: Response) => {
-        res.status(200).json(AuthController.stripData(await User.findOne({ email: req.body.email })));
+        const user = await User.findOne({ email: req.body.email });
+        if (user) res.status(200).json(AuthController.stripData(user));
       }
     );
 
@@ -123,7 +123,7 @@ export class AuthController extends Controller {
       const userDatabaseEntry = await User.findOne({ _id: user._id });
 
       // * Make sure provided password is correct
-      if (!(await bcrypt.compare(userPassword, userDatabaseEntry.password))) {
+      if (!(userDatabaseEntry && (await bcrypt.compare(userPassword, userDatabaseEntry.password)))) {
         res.status(401).send('Password not valid');
         return;
       }
@@ -174,7 +174,7 @@ export class AuthController extends Controller {
         }
 
         // * Update in mongoose
-        let updatedUser = await User.findOneAndUpdate({ _id: user._id }, updates, {
+        let updatedUser: any = await User.findOneAndUpdate({ _id: user._id }, updates, {
           new: true
         });
 

@@ -1,10 +1,10 @@
 import axios, { AxiosInstance } from 'axios';
 import axiosCookieJarSupport from 'axios-cookiejar-support';
+import { Server } from 'http';
+import { MongoMemoryServer } from 'mongodb-memory-server';
+import mongoose from 'mongoose';
 import { CookieJar } from 'tough-cookie';
 import { App } from '../App';
-import mongoose from 'mongoose';
-import { MongoMemoryServer } from 'mongodb-memory-server';
-import { Server } from 'http';
 
 // May require additional time for downloading MongoDB binaries
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 600000;
@@ -27,7 +27,7 @@ describe('Authentication Tests', () => {
     // mongoUri = 'mongodb://localhost:27017/testing'
 
     // * Wait for app to initialize
-    await new Promise(resolve => {
+    await new Promise<void>(resolve => {
       // * Create the app with the configurations
       expressApp = new App(
         {
@@ -48,12 +48,15 @@ describe('Authentication Tests', () => {
     // * Find app port
     port = await new Promise(resolve => {
       server.on('listening', () => {
-        const addressInfo = server.address().valueOf() as {
-          address: string;
-          family: string;
-          port: number;
-        };
-        resolve(addressInfo.port);
+        const serverAddr = server.address();
+        if (serverAddr) {
+          const addressInfo = serverAddr.valueOf() as {
+            address: string;
+            family: string;
+            port: number;
+          };
+          resolve(addressInfo.port);
+        }
       });
     });
     baseURL = `http://localhost:${port}${basePath}/auth`;
@@ -74,21 +77,21 @@ describe('Authentication Tests', () => {
 
   afterAll(async () => {
     // * Remove all users from DB
-    await new Promise(resolve => {
+    await new Promise<void>(resolve => {
       mongoose.connection.db.dropCollection('users', () => {
         resolve();
       });
     });
 
     // * Close DB Connection
-    await new Promise(resolve => {
+    await new Promise<void>(resolve => {
       mongoose.connection.close(() => {
         resolve();
       });
     });
 
     // * Close Server
-    await new Promise(resolve => {
+    await new Promise<void>(resolve => {
       server.close(() => {
         resolve();
       });

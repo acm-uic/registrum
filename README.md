@@ -18,7 +18,6 @@ Registrum is a web application written in TypeScript using Node.js and React.js.
 - Install dependencies: `yarn install`
 - Build Projects: `yarn build`
 
-
 ## Screenshots
 
 <p align="center">
@@ -28,7 +27,5 @@ Registrum is a web application written in TypeScript using Node.js and React.js.
   <a rel="noopener" target="_blank"><img src="https://i.imgur.com/05WJq6c.png"></a>
   <a rel="noopener" target="_blank"><img width="30%" height="30%" src="https://i.imgur.com/wV8jfXy.png"></a>
 
-
 </p>
 </p>
-

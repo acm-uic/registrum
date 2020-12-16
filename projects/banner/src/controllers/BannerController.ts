@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { Controller } from 'registrum-common/dist/classes/Controller';
-import { TermModel, SubjectModel, CourseModel } from '../interfaces/Models';
+import { CourseModel, SubjectModel, TermModel } from '../interfaces/Models';
 
 export class BannerController extends Controller {
   constructor(path: string) {
@@ -21,7 +21,7 @@ export class BannerController extends Controller {
     if (!subject && !courseNumber && !term) {
       response.status(400).send('Params not provided!');
     } else {
-      const filter = {
+      const filter: any = {
         subject: { $in: subject },
         courseNumber: { $in: courseNumber },
         term: { $in: term }

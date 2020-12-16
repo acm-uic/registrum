@@ -37,17 +37,20 @@ describe('Class Tests', () => {
     // * Find banner port
     bannerPort = await new Promise(resolve => {
       bannerServer.on('listening', () => {
-        const addressInfo = bannerServer.address().valueOf() as {
-          address: string;
-          family: string;
-          port: number;
-        };
-        resolve(addressInfo.port);
+        const serverAddr = bannerServer.address();
+        if (serverAddr) {
+          const addressInfo = serverAddr.valueOf() as {
+            address: string;
+            family: string;
+            port: number;
+          };
+          resolve(addressInfo.port);
+        }
       });
     });
 
     // * Wait for app to initialize
-    await new Promise(resolve => {
+    await new Promise<void>(resolve => {
       // * Create the app with the configurations
       expressApp = new App(
         {
@@ -68,12 +71,15 @@ describe('Class Tests', () => {
     // * Find app port
     port = await new Promise(resolve => {
       server.on('listening', () => {
-        const addressInfo = server.address().valueOf() as {
-          address: string;
-          family: string;
-          port: number;
-        };
-        resolve(addressInfo.port);
+        const serverAddr = server.address();
+        if (serverAddr) {
+          const addressInfo = serverAddr.valueOf() as {
+            address: string;
+            family: string;
+            port: number;
+          };
+          resolve(addressInfo.port);
+        }
       });
     });
     baseURL = `http://localhost:${port}${basePath}/`;
@@ -93,8 +99,8 @@ describe('Class Tests', () => {
     const response = await client.post('/auth/signup', {
       firstname: 'John',
       lastname: 'Doe',
-      email: 'registrum@example.com',
-      password: 'theRealApp1$'
+      email: 'registrum2@example.com',
+      password: 'theRealApp2$'
     });
 
     expect(response.status).toBe(200);
@@ -104,25 +110,26 @@ describe('Class Tests', () => {
 
     // * Pick random class
     chosenClass = classes[Math.floor(Math.random() * classes.length)];
+    console.log(chosenClass);
   });
 
   afterAll(async () => {
     // * Remove all users from DB
-    await new Promise(resolve => {
+    await new Promise<void>(resolve => {
       mongoose.connection.db.dropCollection('users', () => {
         resolve();
       });
     });
 
     // * Close DB Connection
-    await new Promise(resolve => {
+    await new Promise<void>(resolve => {
       mongoose.connection.close(() => {
         resolve();
       });
     });
 
     // * We wait until all threads have been run once to ensure the connection closes.
-    await new Promise(resolve => setImmediate(resolve));
+    await new Promise<void>(resolve => setImmediate(resolve));
 
     // * Close Others
     await mongoose.disconnect();
@@ -133,8 +140,8 @@ describe('Class Tests', () => {
 
   beforeEach(async () => {
     await client.post('/auth/login', {
-      email: 'registrum@example.com',
-      password: 'theRealApp1$'
+      email: 'registrum2@example.com',
+      password: 'theRealApp2$'
     });
 
     // * Unsubscribe from class
@@ -219,7 +226,7 @@ describe('Class Tests', () => {
   it('correctly retrieve status list', async () => {
     try {
       // * Pick second class
-      let secondClass: Course = null;
+      let secondClass: Course | null = null;
 
       while (!secondClass || secondClass.courseReferenceNumber === chosenClass.courseReferenceNumber) {
         // * Get class list

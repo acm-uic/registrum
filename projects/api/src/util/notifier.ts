@@ -7,6 +7,11 @@ const sgMail = require('@sendgrid/mail');
 
 // sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 
+const gcmapi = process.env.GCMAPI;
+const webPushEmail = process.env.WEBPUSHEMAIL;
+const webPushPublic = process.env.WEBPUSHPUBLIC;
+const webPushPrivate = process.env.WEBPUSHPRIVATE;
+
 //* this route is sending email notification and looping over subscription objects to send push notifications
 export const notifyUser = async (user: UserObject, course: Course) => {
   // * Determine status message
@@ -35,14 +40,14 @@ export const notifyUser = async (user: UserObject, course: Course) => {
     }
   }
 
-  if (user.pushNotificationsEnabled) {
+  if (user.pushNotificationsEnabled && gcmapi && webPushEmail && webPushPrivate && webPushPublic) {
     // * GCMAPIKey is a cloud messaging id from google cloud console or firebase to help deliver the message
     // * GCMAPIKey must also be declared in manifest.json file as "gcm_sender_id"
-    webpush.setGCMAPIKey(process.env.GCMAPI);
+    webpush.setGCMAPIKey(gcmapi);
 
     //* 2nd and 3rd arugment are keys generated once by web push only once
     //* 2nd arugment: public key & 3rd arugment: private key for server
-    webpush.setVapidDetails(process.env.WEBPUSHEMAIL, process.env.WEBPUSHPUBLIC, process.env.WEBPUSHPRIVATE);
+    webpush.setVapidDetails(webPushEmail, webPushPublic, webPushPrivate);
 
     //* Loop over subscription objects for the user and send push notifications
     //* database will have collection of subscription objects that represent different browsers they're logged into

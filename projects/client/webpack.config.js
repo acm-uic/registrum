@@ -1,25 +1,20 @@
-import * as path from 'path';
-import { Configuration as WebpackConfiguration, HotModuleReplacementPlugin, DefinePlugin } from 'webpack';
-import { Configuration as WebpackDevServerConfiguration } from 'webpack-dev-server';
-import HtmlWebpackPlugin from 'html-webpack-plugin';
-import { CleanWebpackPlugin } from 'clean-webpack-plugin';
-import { InjectManifest } from 'workbox-webpack-plugin';
-import WebpackPwaManifest from 'webpack-pwa-manifest';
-import GitRevisionPlugin from 'git-revision-webpack-plugin';
-import TerserPlugin from 'terser-webpack-plugin';
-import Dotenv from 'dotenv-webpack';
-
-// * Include DevServer Options into Webpack
-interface Configuration extends WebpackConfiguration {
-  devServer?: WebpackDevServerConfiguration;
-}
+/* eslint-disable @typescript-eslint/no-var-requires */
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const Dotenv = require('dotenv-webpack');
+const GitRevisionPlugin = require('git-revision-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { DefinePlugin, HotModuleReplacementPlugin } = require('webpack');
+const WebpackPwaManifest = require('webpack-pwa-manifest');
+const { InjectManifest } = require('workbox-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
+const path = require('path');
 
 // * Get git information through GitRevisionPlugin
 const gitRevisionPlugin = new GitRevisionPlugin({ branch: true });
 
 const mode = process.env.NODE_ENV === 'production' ? 'production' : 'development';
 
-const config: Configuration = {
+const config = {
   entry: './src/index.tsx',
   mode,
   module: {
@@ -46,7 +41,7 @@ const config: Configuration = {
   resolve: { extensions: ['*', '.js', '.jsx', '.ts', '.tsx'] },
   output: {
     path: path.resolve(__dirname, 'dist/'),
-    filename: 'bundle.[hash].js'
+    filename: 'bundle.[contenthash].js'
   },
   devServer: {
     historyApiFallback: true,
@@ -58,13 +53,8 @@ const config: Configuration = {
   },
   devtool: mode === 'development' ? 'inline-source-map' : undefined,
   optimization: {
-    minimizer: [
-      new TerserPlugin({
-        cache: true,
-        parallel: true,
-        sourceMap: mode === 'development'
-      })
-    ]
+    minimize: true,
+    minimizer: [new TerserPlugin()]
   },
   plugins: [
     new CleanWebpackPlugin(),
@@ -121,4 +111,4 @@ const config: Configuration = {
   ]
 };
 
-export default config;
+module.exports = config;

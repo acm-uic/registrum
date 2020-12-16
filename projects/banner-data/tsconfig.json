@@ -1,16 +1,6 @@
 {
+  "extends": "@tsconfig/node14/tsconfig.json",
   "compilerOptions": {
-    "module": "commonjs",
-    "allowSyntheticDefaultImports": true,
-    "target": "es2019",
-    "noImplicitAny": true,
-    "esModuleInterop": true,
-    "sourceMap": true,
-    "moduleResolution": "node",
-    "declaration": true,
-    "lib": ["ES2020", "DOM"],
-    "outDir": "dist",
-    "baseUrl": "src"
-  },
-  "include": ["src/**/*"]
+    "outDir": "dist"
+  }
 }
