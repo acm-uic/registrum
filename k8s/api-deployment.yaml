@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: registrum-api
-          image: acmuic.azurecr.io/acm-uic/registrum/api:master
+          image: acmuic.azurecr.io/acm-uic/registrum/api:main
           imagePullPolicy: Always
           ports:
             - containerPort: 4000

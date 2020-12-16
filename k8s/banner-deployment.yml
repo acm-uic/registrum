@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: registrum-banner
-          image: acmuic.azurecr.io/acm-uic/registrum/banner:master
+          image: acmuic.azurecr.io/acm-uic/registrum/banner:main
           imagePullPolicy: Always
           env:
             - name: MONGODB_URI
