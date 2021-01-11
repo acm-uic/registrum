@@ -25,7 +25,7 @@
     "@types/chai": "^4.2.14",
     "@types/express": "^4.17.9",
     "@types/jest": "^26.0.19",
-    "@types/node": "^14.14.14",
+    "@types/node": "^14.14.20",
     "@types/tough-cookie": "^4.0.0",
     "@typescript-eslint/eslint-plugin": "^4.10.0",
     "@typescript-eslint/parser": "^4.10.0",

@@ -35,7 +35,7 @@
     "@types/ioredis": "^4.17.9",
     "@types/jest": "^26.0.19",
     "@types/morgan": "^1.9.2",
-    "@types/node": "^14.14.14",
+    "@types/node": "^14.14.20",
     "@types/node-fetch": "^2.5.7",
     "@types/tough-cookie": "^4.0.0",
     "@typescript-eslint/eslint-plugin": "^4.10.0",
